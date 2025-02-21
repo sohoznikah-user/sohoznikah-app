@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Label } from "../ui/label";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Slider } from "../ui/slider";
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 
 export function HomeSearchBiodata() {
   const [range, setRange] = useState<[number, number]>([18, 80]);
@@ -92,7 +92,12 @@ export function HomeSearchBiodata() {
           </Select>
         </div>
         <div className="w-full max-w-md mx-auto space-y-4">
-          <p className="text-center text-sm text-gray-700">বয়স</p>
+          <Label
+            className="block font-medium text-[#1f4f69]"
+            htmlFor="religious"
+          >
+            বয়স
+          </Label>
           <div className="flex">
             <div className="text-[#1f4f69]">{range[0]}</div>
             <Slider
