@@ -45,7 +45,7 @@ export default function BioCard({ id }: BiodatasPageCardProps) {
             <span>৫'৩০"</span>
           </div>
           <div className="flex justify-between">
-            <span>শিক্ষা:</span>
+            <span>স্থায়ী ঠিকানা:</span>
             <span>BSC in EEE</span>
           </div>
           <div className="flex justify-between">

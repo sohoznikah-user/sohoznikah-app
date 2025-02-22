@@ -5,12 +5,18 @@ import HeaderSection from "./(viewBioDataComponents)/HeaderSection";
 import PersonalInfo from "./(viewBioDataComponents)/PersonalInfo";
 import FamilyInfo from "./(viewBioDataComponents)/FamilyInfo";
 import AddressInfo from "./(viewBioDataComponents)/AddressInfo";
-import EducationInfo from "./(viewBioDataComponents)/EducationInfo";
-import OccupationInfo from "./(viewBioDataComponents)/OccupationInfo";
+import EducationAndOccupationInfo from "./(viewBioDataComponents)/EducationAndOccupationInfo";
 import FooterSection from "./(viewBioDataComponents)/FooterSection";
+import PrimaryInfo from "./(viewBioDataComponents)/PrimaryInfo";
+import GeneralInfo from "./(viewBioDataComponents)/GeneralInfo";
+import ReligionInfo from "./(viewBioDataComponents)/ReligionInfo";
+import MaritalInfo from "./(viewBioDataComponents)/MaritalInfo";
+import PartnerInfo from "./(viewBioDataComponents)/PartnerInfo";
 
 export default function BiodataPage() {
   const tabs = [
+    "প্রাথমিক তথ্য",
+    "সাধারণ তথ্য",
     "ঠিকানা",
     "শিক্ষা ও পেশা",
     "পারিবারিক তথ্য",
@@ -18,7 +24,6 @@ export default function BiodataPage() {
     "ব্যক্তিগত তথ্য",
     "বিয়ে সংক্রান্ত তথ্য",
     "যেমন জীবনসঙ্গী আশা করেন",
-    "কর্তৃপক্ষের জিজ্ঞাসা",
   ];
 
   return (
@@ -43,22 +48,15 @@ export default function BiodataPage() {
         </Tabs>
 
         <div className="w-full max-w-5xl mx-auto p-4 space-y-6">
-          <Card className="border-gray-200 bg-[#fcfcfc] text-black">
-            <CardContent className="px-6 py-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-1/2">বায়োডাটা কার জন্য তৈরী করেছেন?</div>
-                <div className="w-1/2 pl-2 border-l border-gray-200">
-                  নিজের জন্য
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
+          <PrimaryInfo />
+          <GeneralInfo />
           <AddressInfo />
-          <EducationInfo />
-          <OccupationInfo />
+          <EducationAndOccupationInfo />
           <FamilyInfo />
+          <ReligionInfo />
           <PersonalInfo />
+          <MaritalInfo />
+          <PartnerInfo />
         </div>
       </div>
       <FooterSection />

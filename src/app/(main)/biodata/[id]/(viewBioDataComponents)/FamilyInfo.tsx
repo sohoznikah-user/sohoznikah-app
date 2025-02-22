@@ -10,48 +10,48 @@ export default function FamilyInfo() {
       </CardHeader>
       <CardContent className="px-6 py-4 space-y-2">
         <div className="flex items-center space-x-2">
+          <div className="w-1/2">আপনার পিতা-মাতা উভয়েই জীবিত আছেন?</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+        </div>
+        <div className="flex items-center space-x-2">
           <div className="w-1/2">পিতার পেশা:</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">
-            নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য
-            নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য
-            নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য
-          </div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">মাতার পেশা:</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">ভাই কয়জন?</div>
+          <div className="w-1/2">আপনারা ভাই-বোন কতজন?</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">বোন কয়জন?</div>
+          <div className="w-1/2">ভাই-বোন কে কি করেন?</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">ভাইদের সম্পর্কে তথ্য:</div>
+          <div className="w-1/2">চাচা মামাদের পেশা:</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">বোনদের সম্পর্কে তথ্য:</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">চাচা মামাদের সম্পর্কে তথ্য:</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2">পরিবারের ধরণ:</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">যৌথ পরিবার</div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">পরিবারের অর্থনৈতিক অবস্থা:</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            নিম্ন মধ্যবিত্ত
+          </div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">পারিবারিক পরিবেশ এবং বৈশিষ্ট্য:</div>
+          <div className="w-1/2">
+            আপনি সহ আপনার পরিবারের নিজস্ব বাড়িতে থাকা হয় নাকি ভাড়া বাড়িতে?
+          </div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">
-            পরিবারের সামাজিক ও অর্থনৈতিক অবস্থার বর্ণনা:
+            আপনাদের বাড়ি-ঘরের বা সম্পত্তির হাল্কা বিবরন দিন:
           </div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>

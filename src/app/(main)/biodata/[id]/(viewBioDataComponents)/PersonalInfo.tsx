@@ -10,19 +10,7 @@ export default function PersonalInfo() {
       </CardHeader>
       <CardContent className="px-6 py-4 space-y-2">
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">দাঁড়ি রয়েছে কি?</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">
-            নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য
-            নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য
-            নিজের জন্য নিজের জন্য নিজের জন্য নিজের জন্য
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়া হয়?</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">শুদ্ধভাবে কুরআন তেলাওয়াত করতে পারেন?</div>
+          <div className="w-1/2">আপনার কি দাড়ি পছন্দ?/দাড়ি রেখেছেন কি?</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
@@ -33,13 +21,47 @@ export default function PersonalInfo() {
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">
-            রাজনীতি নিয়ে আপনার দৃষ্টিভঙ্গি কি? এর সাথে যুক্ত থাকলে বিস্তারিত
+            নাটক/সিনেমা/সিরিয়াল/গান/খেলা এসবের কোনটি দেখেন বা শুনেন?
+          </div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-1/2">মানসিক বা শারীরিক কোনো রোগ আছে কি?</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-1/2">নিজের কিছু গুণাবলী চিহ্নিত করুন</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            শান্ত-শিষ্ট, ধৈর্যশীল, ইমোশনাল
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-1/2">
+            নারী-পুরুষ সমঅধীকার বিষয়টাকে আপনি কিভাবে দেখেন?
           </div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">
-            নাটক/সিনেমা/সিরিয়াল/গান/খেলা এসবের কোনটি দেখেন বা শুনেন?
+            সমকামিতা বা LGBTQ সম্পর্কে আপনার ধারণা কি?
+          </div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-1/2">
+            আপনার ক্ষেত্রে প্রযোজ্য এমন বিশেষ কোনো অবস্থা বা কার্যক্রম:
+          </div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            আমি একজন সমাজ সেবক, আমি বন্ধ্যা-ইনফার্টিলিটি
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-1/2">নিজের মতো করে নিজের সম্পর্কে কিছু লিখুন:</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+        </div>
+        {/* <div className="flex items-center space-x-2">
+          <div className="w-1/2">
+            রাজনীতি নিয়ে আপনার দৃষ্টিভঙ্গি কি? এর সাথে যুক্ত থাকলে বিস্তারিত
           </div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
@@ -48,11 +70,7 @@ export default function PersonalInfo() {
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">মানসিক বা শারীরিক কোনো রোগ আছে কি?</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">পাসামাজিক বা ধর্মীয় কোনো কাজে যুক্ত আছেন?</div>
+          <div className="w-1/2">সামাজিক বা ধর্মীয় কোনো কাজে যুক্ত আছেন?</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
@@ -63,10 +81,6 @@ export default function PersonalInfo() {
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">দৈনন্দিন খাবারে কি কি পছন্দ এবং অপছন্দ?</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">নিজের কিছু গুণাবলী চিহ্নিত করুন</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
@@ -84,23 +98,9 @@ export default function PersonalInfo() {
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">
-            ফেমিনিজম/নারীবাদী, LGBTQ সম্পর্কে আপনার ধারণা কি?
-          </div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">আপনার বিশেষ কোনো অবস্থা বা কার্যক্রম</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
           <div className="w-1/2">আপনার আগ্রহ ও শখ কি কি?</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">নিজের সম্পর্কে বিশেষ কিছু</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );
