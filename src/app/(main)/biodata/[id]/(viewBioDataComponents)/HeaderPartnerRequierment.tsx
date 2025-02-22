@@ -1,12 +1,8 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Heart, IdCard, Send, Mail, CircleChevronDown } from "lucide-react";
-import Image from "next/image";
-import male from "@/assets/images/male.svg";
-import Link from "next/link";
 
 export default function HeaderPartnerRequierment() {
   return (
-    <Card className="w-96 bg-white text-black border-none rounded-4xl">
+    <Card className="w-1/2 bg-white text-black border-none rounded-4xl">
       <CardHeader className="flex items-center">
         <div className="text-lg text-white bg-[#016ca7] p-4 rounded-xl">
           যেমন জীবনসঙ্গী আশা করেন

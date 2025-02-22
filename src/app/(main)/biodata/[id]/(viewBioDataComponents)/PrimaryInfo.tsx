@@ -31,10 +31,6 @@ export default function PrimaryInfo() {
           <div className="w-1/2">মাতার নাম:</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">পাত্র/পাত্রীর অভিভাবকের মোবাইল নম্বর:</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
       </CardContent>
     </Card>
   );

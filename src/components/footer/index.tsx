@@ -5,7 +5,7 @@ import logo from "@/assets/images/logo-white.svg";
 
 export function Footer() {
   return (
-    <footer className="mt-5 bg-[#307fa7] text-white text-center py-4 flex justify-center space-x-8">
+    <footer className="bg-[#307fa7] text-white text-center py-4 flex justify-center space-x-8">
       <div className="min-w-72 flex flex-col">
         <div className="underline text-xl mb-5">লিংকসমূহ</div>
         <div className="flex justify-between text-left">

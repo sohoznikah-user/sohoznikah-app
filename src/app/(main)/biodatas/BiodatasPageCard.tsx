@@ -17,9 +17,13 @@ export default function BioCard({ id }: BiodatasPageCardProps) {
     >
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-4">
-          <Image src={male} alt="Male" width={100} height={40} priority />
-          <div className="flex flex-col items-end space-y-2">
+          <div className="w-1/3">
             <Heart className="w-8 h-8 text-[#E25A6F]" fill="#E25A6F" />
+          </div>
+          <div className="w-1/3 flex items-center justify-center">
+            <Image src={male} alt="Male" width={80} height={40} priority />
+          </div>
+          <div className="w-1/3 flex flex-col items-end space-y-2">
             <Badge className="text-[#00b754]">Verified</Badge>
             <Badge className="text-[#016ca7]">Seen</Badge>
           </div>

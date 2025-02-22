@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Heart,
   IdCard,
@@ -15,9 +15,9 @@ import HeaderShortBio from "./HeaderShortBio";
 
 export default function HeaderSection() {
   return (
-    <div className="py-12 bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
-      <div className="max-w-6xl mx-auto flex justify-between space-x-8">
-        <div className="w-75 flex flex-col space-y-6">
+    <div className="py-12 flex justify-center bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
+      <div className="min-w-7xl flex space-x-8">
+        <div className="w-1/4 flex flex-col space-y-8">
           <Card className="bg-white text-black border-none rounded-4xl">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center space-y-4">
@@ -97,8 +97,10 @@ export default function HeaderSection() {
             </CardContent>
           </Card>
         </div>
-        <HeaderShortBio />
-        <HeaderPartnerRequierment />
+        <div className="w-3/4 flex space-x-8">
+          <HeaderShortBio />
+          <HeaderPartnerRequierment />
+        </div>
       </div>
     </div>
   );

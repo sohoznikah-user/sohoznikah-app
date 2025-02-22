@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import HeaderSection from "./(viewBioDataComponents)/HeaderSection";
 import PersonalInfo from "./(viewBioDataComponents)/PersonalInfo";
@@ -29,11 +28,9 @@ export default function BiodataPage() {
   return (
     <>
       <HeaderSection />
-      <div className="py-12 max-w-6xl mx-auto">
-        <div className="text-4xl text-center text-black mb-8">
-          সম্পূর্ণ বায়োডাটা
-        </div>
-        <Tabs defaultValue="ঠিকানা" className="w-full">
+      <div className="py-12 flex flex-col items-center justify-center space-y-6">
+        <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
+        <Tabs defaultValue="ঠিকানা" className="max-w-7xl">
           <TabsList className="flex flex-wrap h-auto space-x-2 bg-[#f6f6f6] rounded-2xl p-2">
             {tabs.map((tab) => (
               <TabsTrigger
@@ -47,7 +44,7 @@ export default function BiodataPage() {
           </TabsList>
         </Tabs>
 
-        <div className="w-full max-w-5xl mx-auto p-4 space-y-6">
+        <div className="w-full max-w-6xl space-y-6">
           <PrimaryInfo />
           <GeneralInfo />
           <AddressInfo />

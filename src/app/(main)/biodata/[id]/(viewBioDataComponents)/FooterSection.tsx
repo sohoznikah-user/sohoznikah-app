@@ -1,28 +1,15 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Heart,
-  IdCard,
-  Send,
-  Mail,
-  CircleChevronDown,
-  Copy,
-} from "lucide-react";
-import Image from "next/image";
-import male from "@/assets/images/male.svg";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-import HeaderPartnerRequierment from "./HeaderPartnerRequierment";
-import HeaderShortBio from "./HeaderShortBio";
-
 export default function FooterSection() {
   return (
-    <div className="py-12 max-w-6xl mx-auto">
+    <div className="py-12 flex flex-col items-center justify-center">
       <div className="text-4xl text-center text-[#004972] mb-4">
         বায়োডাটা পছন্দ হয়েছে?
       </div>
       <div className="text-md text-center text-black mb-8">
         আপনি আগ্রহী হলে আপনার জন্য ৩টি অপশন রয়েছে।
       </div>
-      <div className="max-w-5xl w-full mx-auto flex space-x-4 text-black">
+      <div className="max-w-6xl flex space-x-6 text-black">
         <Card className="w-1/3 border-gray-200 bg-white text-black p-2">
           <CardContent className="px-6 py-4">
             <div className="flex flex-col items-center space-y-4">

@@ -50,7 +50,7 @@ export function Navbar() {
   };
 
   return (
-    <div className="sticky top-0 flex items-center z-10 justify-center p-4 text-[#1f4f69] bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
+    <div className="sticky top-0 flex items-center z-20 justify-center p-4 text-[#1f4f69] bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
       <NavigationMenu className="min-w-96">
         <NavigationMenuList className="flex space-x-2 justify-center">
           {menuItems.map((item, index) => (
@@ -71,21 +71,19 @@ export function Navbar() {
       </div>
 
       <div className="min-w-96 flex justify-end space-x-4">
+        <Link
+          href="/register"
+          className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+        >
+          বায়োডাটা তৈরী করুন
+        </Link>
         {!authenticated && (
-          <>
-            <Link
-              href="/login"
-              className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all"
-            >
-              Login
-            </Link>
-            <Link
-              href="/register"
-              className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
-            >
-              বায়োডাটা তৈরী করুন
-            </Link>
-          </>
+          <Link
+            href="/login"
+            className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all"
+          >
+            Login
+          </Link>
         )}
         {authenticated && (
           <DropdownMenu>
