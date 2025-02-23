@@ -20,7 +20,7 @@ export default function DashboardMainContactUs() {
         ))}
       </TabsList>
       {tabs.map((x) => (
-        <TabsContent value={x}>
+        <TabsContent key={x} value={x}>
           <ContactUsCard />
         </TabsContent>
       ))}
