@@ -21,7 +21,7 @@ export default function FamilyInfo() {
   ];
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
-      <div className="text-3xl text-center text-black">প্রাথমিক তথ্য</div>
+      <div className="text-3xl text-center text-black">পারিবারিক তথ্য</div>
       <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
         <div className="flex items-center space-y-2">
           <Label
@@ -117,10 +117,7 @@ export default function FamilyInfo() {
           />
         </div>
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             পরিবারের ধরণ:
           </Label>
           <Select>
@@ -141,10 +138,7 @@ export default function FamilyInfo() {
           </Select>
         </div>
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             পরিবারের অর্থনৈতিক অবস্থা:
           </Label>
           <Select>

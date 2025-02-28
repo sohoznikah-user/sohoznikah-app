@@ -2,7 +2,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import male from "@/assets/images/male.svg";
+import male from "@/assets/images/male-5.svg";
 import { Heart } from "lucide-react";
 
 export interface BiodatasPageCardProps {

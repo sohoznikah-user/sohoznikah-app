@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AddressInfo from "../(biodataFormComponents)/AddressInfo";
-import EducationAndOccupationInfo from "../(biodataFormComponents)/EducationAndOccupationInfo";
 import FamilyInfo from "../(biodataFormComponents)/FamilyInfo";
 import FirstWords from "../(biodataFormComponents)/FirstWords";
 import GeneralInfo from "../(biodataFormComponents)/GeneralInfo";
@@ -11,6 +10,8 @@ import PersonalInfo from "../(biodataFormComponents)/PersonalInfo";
 import PrimaryInfo from "../(biodataFormComponents)/PrimaryInfo";
 import ProfilePic from "../(biodataFormComponents)/ProfilePic";
 import ReligionInfo from "../(biodataFormComponents)/ReligionInfo";
+import EducationInfo from "../(biodataFormComponents)/EducationInfo";
+import OccupationInfo from "../(biodataFormComponents)/OccupationInfo";
 
 export default function CreateBiodataPage() {
   const tabs = [
@@ -18,7 +19,8 @@ export default function CreateBiodataPage() {
     "প্রাথমিক তথ্য",
     "সাধারণ তথ্য",
     "ঠিকানা",
-    "শিক্ষা ও পেশা",
+    "শিক্ষাগত যোগ্যতা",
+    "পেশা",
     "পারিবারিক তথ্য",
     "ধর্মীয় লাইফস্টাইল",
     "ব্যক্তিগত তথ্য",
@@ -54,8 +56,11 @@ export default function CreateBiodataPage() {
         <TabsContent value="ঠিকানা" className="mt-4">
           <AddressInfo />
         </TabsContent>
-        <TabsContent value="শিক্ষা ও পেশা" className="mt-4">
-          <EducationAndOccupationInfo />
+        <TabsContent value="শিক্ষাগত যোগ্যতা" className="mt-4">
+          <EducationInfo />
+        </TabsContent>
+        <TabsContent value="পেশা" className="mt-4">
+          <OccupationInfo />
         </TabsContent>
         <TabsContent value="পারিবারিক তথ্য" className="mt-4">
           <FamilyInfo />

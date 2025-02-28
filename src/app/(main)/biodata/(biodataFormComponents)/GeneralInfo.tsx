@@ -1,6 +1,15 @@
+"use client";
+
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Select,
   SelectContent,
@@ -8,9 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 
 export default function GeneralInfo() {
   const isMale = true;
+  const [date, setDate] = useState<Date>();
+
   let maritalStatuses = [];
   if (isMale) {
     maritalStatuses = ["অবিবাহিত", "বিবাহিত", "ডিভোর্সড", "বিপত্নীক"];
@@ -70,7 +84,7 @@ export default function GeneralInfo() {
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
-      <div className="text-3xl text-center text-black">প্রাথমিক তথ্য</div>
+      <div className="text-3xl text-center text-black">সাধারণ তথ্য</div>
       <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
         <div className="flex items-center space-y-2">
           <Label
@@ -80,17 +94,35 @@ export default function GeneralInfo() {
             <div>জন্ম তারিখ:</div>
             <div className="text-xs">(আসল, সার্টিফিকেট অনুযায়ী নয়)</div>
           </Label>
-          <Input
-            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-            id="emailMobileNumber"
-            type="text"
-          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                className={cn(
+                  "p-6 w-full bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]",
+                  !date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date ? format(date, "PPP") : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                className="bg-[#005889]"
+                classNames={{
+                  day_selected: "bg-[#E25A6F]",
+                  day_today: "bg-white text-black",
+                }}
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             বৈবাহিক অবস্থা:
           </Label>
           <Select>
@@ -111,10 +143,7 @@ export default function GeneralInfo() {
           </Select>
         </div>
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             গাত্রবর্ণ:
           </Label>
           <Select>
@@ -135,10 +164,7 @@ export default function GeneralInfo() {
           </Select>
         </div>
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             উচ্চতা:
           </Label>
           <Select>
@@ -172,10 +198,7 @@ export default function GeneralInfo() {
           />
         </div>
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             রক্তের গ্রুপ:
           </Label>
           <Select>
@@ -196,10 +219,7 @@ export default function GeneralInfo() {
           </Select>
         </div>
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             জাতীয়তা:
           </Label>
           <Select>

@@ -8,7 +8,7 @@ import {
   Copy,
 } from "lucide-react";
 import Image from "next/image";
-import male from "@/assets/images/male.svg";
+import male from "@/assets/images/male-5.svg";
 import Link from "next/link";
 import HeaderPartnerRequierment from "./HeaderPartnerRequierment";
 import HeaderShortBio from "./HeaderShortBio";

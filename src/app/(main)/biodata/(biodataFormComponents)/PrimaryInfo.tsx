@@ -11,15 +11,13 @@ import {
 
 export default function PrimaryInfo() {
   const biodataTypes = ["পাত্রের বায়োডাটা", "পাত্রীর বায়োডাটা"];
+
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">প্রাথমিক তথ্য</div>
       <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
         <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3  mr-3 text-md space-y-1"
-            htmlFor="biodataType"
-          >
+          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
             বায়োডাটার ধরন:
           </Label>
           <Select>
