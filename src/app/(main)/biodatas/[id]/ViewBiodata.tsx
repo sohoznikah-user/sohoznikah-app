@@ -1,16 +1,16 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import HeaderSection from "./(viewBioDataComponents)/HeaderSection";
-import PersonalInfo from "./(viewBioDataComponents)/PersonalInfo";
-import FamilyInfo from "./(viewBioDataComponents)/FamilyInfo";
-import AddressInfo from "./(viewBioDataComponents)/AddressInfo";
-import EducationAndOccupationInfo from "./(viewBioDataComponents)/EducationAndOccupationInfo";
-import FooterSection from "./(viewBioDataComponents)/FooterSection";
-import PrimaryInfo from "./(viewBioDataComponents)/PrimaryInfo";
-import GeneralInfo from "./(viewBioDataComponents)/GeneralInfo";
-import ReligionInfo from "./(viewBioDataComponents)/ReligionInfo";
-import MaritalInfo from "./(viewBioDataComponents)/MaritalInfo";
-import PartnerInfo from "./(viewBioDataComponents)/PartnerInfo";
+import HeaderSection from "./viewBioDataComponents/HeaderSection";
+import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
+import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
+import AddressInfo from "./viewBioDataComponents/AddressInfo";
+import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
+import FooterSection from "./viewBioDataComponents/FooterSection";
+import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
+import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
+import ReligionInfo from "./viewBioDataComponents/ReligionInfo";
+import MaritalInfo from "./viewBioDataComponents/MaritalInfo";
+import PartnerInfo from "./viewBioDataComponents/PartnerInfo";
 
 export default function BiodataPage() {
   const tabs = [

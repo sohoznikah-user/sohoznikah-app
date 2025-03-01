@@ -1,15 +1,22 @@
+"use client";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import male from "@/assets/images/male-5.svg";
 import { Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export interface BiodatasPageCardProps {
   id: number;
 }
 
 export default function BioCard({ id }: BiodatasPageCardProps) {
+  const router = useRouter();
+
+  const handleOnClick = () => {
+    router.push("/biodatas/asd");
+  };
   return (
     <Card
       key={id}
@@ -59,7 +66,10 @@ export default function BioCard({ id }: BiodatasPageCardProps) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full text-white bg-[#E25A6F]  hover:bg-[#D14A5F]">
+        <Button
+          className="w-full text-white bg-[#E25A6F]  hover:bg-[#D14A5F]"
+          onClick={handleOnClick}
+        >
           বায়োডাটা দেখুন
         </Button>
       </CardFooter>

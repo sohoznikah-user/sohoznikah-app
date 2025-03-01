@@ -1,7 +1,7 @@
-import BiodatasPageFilters from "./BiodatasPageFilters";
-import BiodatasPageSearchByBiodataNo from "./SearchByBiodataNo";
-import BiodatasPageCard from "./BiodatasPageCard";
-import BiodatasPageAppliedFilters from "./BiodatasPageAppliedFilters";
+import BiodatasPageFilters from "./listPageComponentes/BiodatasPageFilters";
+import BiodatasPageSearchByBiodataNo from "./listPageComponentes/SearchByBiodataNo";
+import BiodatasPageCard from "./listPageComponentes/BiodatasPageCard";
+import BiodatasPageAppliedFilters from "./listPageComponentes/BiodatasPageAppliedFilters";
 
 export default function BiodatasPage() {
   return (
@@ -9,11 +9,8 @@ export default function BiodatasPage() {
       <div className="mt-12 text-3xl text-center text-black mb-4">
         বায়োডাটা সমূহ
       </div>
-      <main className="flex justify-between flex-grow">
-        {/* Left Sidebar */}
+      <div className="flex justify-between">
         <BiodatasPageFilters />
-
-        {/* Main content */}
         <div className="flex-grow max-w-7xl">
           <div className="flex justify-end items-center mb-6">
             <BiodatasPageSearchByBiodataNo />
@@ -24,10 +21,8 @@ export default function BiodatasPage() {
             ))}
           </div>
         </div>
-
-        {/* Right Sidebar */}
         <BiodatasPageAppliedFilters />
-      </main>
+      </div>
     </>
   );
 }

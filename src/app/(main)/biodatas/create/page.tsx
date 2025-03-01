@@ -1,17 +1,17 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AddressInfo from "../(biodataFormComponents)/AddressInfo";
-import FamilyInfo from "../(biodataFormComponents)/FamilyInfo";
-import FirstWords from "../(biodataFormComponents)/FirstWords";
-import GeneralInfo from "../(biodataFormComponents)/GeneralInfo";
-import FinalWords from "../(biodataFormComponents)/FinalWords";
-import MaritalInfo from "../(biodataFormComponents)/MaritalInfo";
-import PartnerInfo from "../(biodataFormComponents)/PartnerInfo";
-import PersonalInfo from "../(biodataFormComponents)/PersonalInfo";
-import PrimaryInfo from "../(biodataFormComponents)/PrimaryInfo";
-import ProfilePic from "../(biodataFormComponents)/ProfilePic";
-import ReligionInfo from "../(biodataFormComponents)/ReligionInfo";
-import EducationInfo from "../(biodataFormComponents)/EducationInfo";
-import OccupationInfo from "../(biodataFormComponents)/OccupationInfo";
+import AddressInfo from "../biodataFormComponents/AddressInfo";
+import FamilyInfo from "../biodataFormComponents/FamilyInfo";
+import FirstWords from "../biodataFormComponents/FirstWords";
+import GeneralInfo from "../biodataFormComponents/GeneralInfo";
+import FinalWords from "../biodataFormComponents/FinalWords";
+import MaritalInfo from "../biodataFormComponents/MaritalInfo";
+import PartnerInfo from "../biodataFormComponents/PartnerInfo";
+import PersonalInfo from "../biodataFormComponents/PersonalInfo";
+import PrimaryInfo from "../biodataFormComponents/PrimaryInfo";
+import ProfilePic from "../biodataFormComponents/ProfilePic";
+import ReligionInfo from "../biodataFormComponents/ReligionInfo";
+import EducationInfo from "../biodataFormComponents/EducationInfo";
+import OccupationInfo from "../biodataFormComponents/OccupationInfo";
 
 export default function CreateBiodataPage() {
   const tabs = [
@@ -31,7 +31,7 @@ export default function CreateBiodataPage() {
   ];
 
   return (
-    <main className="flex-grow text-[#1f4f69] flex justify-center mt-4 mb-12">
+    <div className="text-[#1f4f69] flex justify-center mt-4 mb-12">
       <Tabs defaultValue="কিছু কথা" className="max-w-7xl">
         <TabsList className="flex flex-wrap space-y-1 h-auto bg-[#f6f6f6] rounded-2xl p-2">
           {tabs.map((tab) => (
@@ -84,6 +84,6 @@ export default function CreateBiodataPage() {
           <FinalWords />
         </TabsContent>
       </Tabs>
-    </main>
+    </div>
   );
 }

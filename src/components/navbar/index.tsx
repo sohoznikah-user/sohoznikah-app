@@ -72,7 +72,7 @@ export function Navbar() {
 
       <div className="min-w-96 flex justify-end space-x-4">
         <Link
-          href="/biodata/create"
+          href="/biodatas/create"
           className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
         >
           বায়োডাটা তৈরী করুন
