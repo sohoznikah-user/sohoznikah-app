@@ -80,7 +80,7 @@ export default function OccupationInfo() {
           />
         </div>
       </div>
-      <div className="max-w-5xl w-ful space-x-2">
+      <div className="max-w-4xl w-full space-x-2">
         <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
           Previous
         </Button>

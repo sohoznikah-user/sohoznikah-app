@@ -22,12 +22,9 @@ export default function FamilyInfo() {
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">পারিবারিক তথ্য</div>
-      <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             আপনার পিতা-মাতা উভয়েই জীবিত আছেন?
           </Label>
           <Input
@@ -36,11 +33,8 @@ export default function FamilyInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>পিতার পেশা:</div>
             <div className="text-xs">
               <div>-চাকরিজীবী হলে পদবি সহ কি ধরণের চাকরি তা লিখবেন।</div>
@@ -53,11 +47,8 @@ export default function FamilyInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>মাতার পেশা:</div>
             <div className="text-xs">
               <div>-চাকরিজীবী হলে পদবি সহ কি ধরণের চাকরি তা লিখবেন।</div>
@@ -70,11 +61,8 @@ export default function FamilyInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             আপনারা ভাই-বোন কতজন?
           </Label>
           <Input
@@ -83,11 +71,8 @@ export default function FamilyInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>ভাই-বোন কে কি করেন?</div>
             <div className="text-xs">
               <div>(এভাবে লিখুন:</div>
@@ -101,11 +86,8 @@ export default function FamilyInfo() {
             id="emailMobileNumber"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>চাচা মামাদের পেশা:</div>
             <div className="text-xs">
               <div>(নিচে নিচে লিখতে পারেন।)</div>
@@ -116,8 +98,8 @@ export default function FamilyInfo() {
             id="emailMobileNumber"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             পরিবারের ধরণ:
           </Label>
           <Select>
@@ -137,8 +119,8 @@ export default function FamilyInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             পরিবারের অর্থনৈতিক অবস্থা:
           </Label>
           <Select>
@@ -158,11 +140,8 @@ export default function FamilyInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             আপনি সহ আপনার পরিবারের নিজস্ব বাড়িতে থাকা হয় নাকি ভাড়া বাড়িতে?
           </Label>
           <Input
@@ -171,11 +150,8 @@ export default function FamilyInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             আপনাদের বাড়ি-ঘরের বা সম্পত্তির হাল্কা বিবরন দিন:
           </Label>
           <Textarea
@@ -183,11 +159,8 @@ export default function FamilyInfo() {
             id="emailMobileNumber"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>
               পারিবারিক বিষয়ে আরো কিছু জানাতে চাইলে এখানে লিখুন, অন্যথায় খালি
               রাখুন।
@@ -206,7 +179,7 @@ export default function FamilyInfo() {
           />
         </div>
       </div>
-      <div className="max-w-5xl w-ful space-x-2">
+      <div className="max-w-4xl w-full space-x-2">
         <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
           Previous
         </Button>

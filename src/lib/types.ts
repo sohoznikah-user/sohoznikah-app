@@ -1,16 +1,13 @@
 import { z } from "zod";
-import {
-  firstWordForm,
-  biodataCreateForm,
-  biodataEditForm,
-} from "./validations";
+import { firstWordForm, biodataForm, primaryInfoForm } from "./validations";
 
 export type FirstWordForm = z.infer<typeof firstWordForm>;
+export type PrimaryInfoForm = z.infer<typeof primaryInfoForm>;
 
-export type BiodataCreateForm = z.infer<typeof biodataCreateForm>;
-export type BiodataEditForm = z.infer<typeof biodataEditForm>;
+export type BiodataForm = z.infer<typeof biodataForm>;
 
 export interface BiodataFormProps {
-  biodataForm: BiodataCreateForm | BiodataEditForm;
-  setBiodataForm: (data: BiodataCreateForm | BiodataEditForm) => void;
+  biodataForm: BiodataForm;
+  setBiodataForm: (data: BiodataForm) => void;
+  setCurrentStep: (step: string) => void;
 }

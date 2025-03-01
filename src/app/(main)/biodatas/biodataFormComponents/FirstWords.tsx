@@ -1,14 +1,50 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { BiodataFormProps, FirstWordForm } from "@/lib/types";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { firstWordForm } from "@/lib/validations";
+import { useEffect } from "react";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { steps } from "../steps";
 
-export default function FirstWords() {
+export default function FirstWords({
+  biodataForm,
+  setBiodataForm,
+  setCurrentStep,
+}: BiodataFormProps) {
+  const form = useForm<FirstWordForm>({
+    resolver: zodResolver(firstWordForm),
+    defaultValues: {
+      preApprovalAcceptTerms: false,
+      preApprovalOathTruthfulInfo: false,
+      preApprovalOathLegalResponsibility: false,
+    },
+  });
+
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      const isValid = await form.trigger();
+      if (!isValid) return;
+      setBiodataForm({ ...biodataForm, ...values });
+    });
+    return unsubscribe;
+  }, [form, biodataForm, setBiodataForm]);
+
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-[#004972]">
         বায়োডাটা তৈরির পূর্বে কিছু গুরুত্বপূর্ণ কথা
       </div>
-      <div className="max-w-5xl w-full space-y-4 text-sm text-black">
+      <div className="max-w-4xl w-full space-y-4 text-sm text-black">
         <div>
           আপনি যখন সহজনিকাহ ম্যাট্রিমনিতে জীবনসঙ্গী খুঁজতে এসেছেন, এর মানে হলো,
           আপনি বিবাহের একটি অত্যন্ত গুরুত্বপূর্ণ অধ্যায় অতিবাহিত করছেন। চাকরির
@@ -35,7 +71,7 @@ export default function FirstWords() {
           </span>
         </div>
       </div>
-      <div className="max-w-5xl w-full bg-[#f6f6f6] py-6 px-12 space-y-4 text-black rounded-4xl">
+      <div className="max-w-4xl w-full bg-[#f6f6f6] py-6 px-12 space-y-4 text-black rounded-4xl">
         <div className="text-[#005A8B] text-xl">
           বায়োডাটা অ্যাপ্রুভ হওয়ার শর্তসমূহ:
         </div>
@@ -65,33 +101,88 @@ export default function FirstWords() {
           </ol>
         </div>
       </div>
-      <div className="max-w-5xl w-full bg-[#f6f6f6] p-6 space-y-4 text-black rounded-4xl">
-        <div className="text-[#005A8B] text-xl">প্রতিশ্রুতি নামা:</div>
-        <div className="text-[#cd0000] space-y-3">
-          <div className="flex items-center space-x-2">
-            <Checkbox id="preApprove1" />
-            <Label htmlFor="preApprove1">
-              আমি শর্তসমূহ পড়েছি এবং তা মেনে চলার প্রতিশ্রুতি দিচ্ছি।
-            </Label>
+      <Form {...form}>
+        <form className="max-w-4xl w-full bg-[#f6f6f6] p-6 space-y-4 text-black rounded-4xl">
+          <div className="text-[#005A8B] text-xl">প্রতিশ্রুতি নামা:</div>
+          <div className="text-[#cd0000] space-y-3">
+            <FormField
+              control={form.control}
+              name="preApprovalAcceptTerms"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="leading-4.5">
+                      আমি শর্তসমূহ পড়েছি এবং তা মেনে চলার প্রতিশ্রুতি দিচ্ছি।
+                    </FormLabel>
+
+                    {/* <FormDescription>
+                      Describe what this resume is for.
+                    </FormDescription> */}
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="preApprovalOathTruthfulInfo"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="leading-4.5">
+                      আমি আল্লাহর নামে শপথ করছি যে, বায়োডাটায় সকল তথ্য সত্য
+                      প্রদান করবো।
+                    </FormLabel>
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="preApprovalOathLegalResponsibility"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="leading-4.5">
+                      আমি আরও শপথ করছি যে, কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী
+                      যেকোনো আইনী জটিলতা এবং পরকালীন সকল দায়ভার আমি বহন করবো।
+                    </FormLabel>
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="preApprove2" />
-            <Label htmlFor="preApprove2">
-              আমি আল্লাহর নামে শপথ করছি যে, বায়োডাটায় সকল তথ্য সত্য প্রদান
-              করবো।
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="preApprove3" />
-            <Label htmlFor="preApprove3">
-              আমি আরও শপথ করছি যে, কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী যেকোনো
-              আইনী জটিলতা এবং পরকালীন সকল দায়ভার আমি বহন করবো।
-            </Label>
-          </div>
-        </div>
-      </div>
-      <div className="max-w-5xl w-ful">
-        <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
+        </form>
+      </Form>
+
+      <div className="max-w-4xl w-full space-x-2 flex justify-center">
+        <Button
+          className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
+          onClick={() => setCurrentStep(steps[1].key)}
+        >
           Next
         </Button>
       </div>

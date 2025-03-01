@@ -6,7 +6,7 @@ export default function FinalWords() {
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-[#004972]">শেষ কথা</div>
-      <div className="max-w-5xl w-full bg-[#f6f6f6] p-10 space-y-4 text-black rounded-4xl">
+      <div className="max-w-4xl w-full bg-[#f6f6f6] p-10 space-y-4 text-black rounded-4xl">
         <div className="text-[#005A8B] text-xl text-center">
           প্রতিশ্রুতি নামা
         </div>
@@ -39,7 +39,7 @@ export default function FinalWords() {
           </div>
         </div>
       </div>
-      <div className="max-w-5xl w-ful">
+      <div className="max-w-4xl w-ful">
         <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
           Submit abd Send For Approval
         </Button>

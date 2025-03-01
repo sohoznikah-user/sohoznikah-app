@@ -86,7 +86,7 @@ export default function GeneralInfo() {
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">সাধারণ তথ্য</div>
       <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="flex flex-col space-y-4">
+        <div className="w-full flex flex-col space-y-4">
           <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>জন্ম তারিখ:</div>
             <div className="text-xs">(আসল, সার্টিফিকেট অনুযায়ী নয়)</div>
@@ -234,7 +234,7 @@ export default function GeneralInfo() {
           </Select>
         </div>
       </div>
-      <div className="max-w-5xl w-ful space-x-2">
+      <div className="max-w-4xl w-full space-x-2">
         <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
           Previous
         </Button>
