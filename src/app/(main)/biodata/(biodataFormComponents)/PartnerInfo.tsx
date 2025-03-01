@@ -161,12 +161,9 @@ export default function PartnerInfo() {
       <div className="text-3xl text-center text-black">
         যেমন জীবনসঙ্গী আশা করেন
       </div>
-      <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             কাঙ্খিত বয়স:
           </Label>
           <Input
@@ -175,11 +172,8 @@ export default function PartnerInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             কাঙ্খিত গাত্রবর্ণ:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -191,8 +185,8 @@ export default function PartnerInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             কাঙ্খিত উচ্চতা:
           </Label>
           <Select>
@@ -212,11 +206,8 @@ export default function PartnerInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             শিক্ষাগত যোগ্যতা:
           </Label>
           <Input
@@ -225,11 +216,8 @@ export default function PartnerInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             দ্বীনি শিক্ষাগত যোগ্যতা:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -241,11 +229,8 @@ export default function PartnerInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             কাঙ্খিত ঠিকানা:
           </Label>
           <Input
@@ -254,11 +239,8 @@ export default function PartnerInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             বৈবাহিক অবস্থা:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -270,11 +252,8 @@ export default function PartnerInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             আপনি কোন কোন বিশেষ ক্যাটাগরিতে আগ্রহী?
           </Label>
           <div className="w-full flex flex-wrap">
@@ -286,11 +265,8 @@ export default function PartnerInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             ধর্মীয় লাইফস্টাইল:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -302,11 +278,8 @@ export default function PartnerInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             পেশা:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -318,11 +291,8 @@ export default function PartnerInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             পরিবারের অর্থনৈতিক অবস্থা:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -334,12 +304,12 @@ export default function PartnerInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             আল্লাহ যাদেরকে গাঢ় ত্বক বা কালো বর্ণ দিয়েছেন, এরকম পাত্রীর প্রতি
             আপনি আগ্রহী?
           </Label>
-          <RadioGroup className="w-full flex flex-wrap mb-2 gap-0">
+          <RadioGroup className="w-full flex flex-wrap gap-0">
             {blackSkinOptions.map((x) => (
               <div key={x} className="w-1/3 flex items-center space-x-2">
                 <RadioGroupItem value={x} id={x} />
@@ -349,14 +319,11 @@ export default function PartnerInfo() {
           </RadioGroup>
         </div>
         {!isMale && (
-          <div className="flex items-center space-y-2">
-            <Label
-              className="w-1/3 mr-3 text-md space-y-1"
-              htmlFor="biodataType"
-            >
+          <div className="flex flex-col space-y-4">
+            <Label className="text-md space-y-1" htmlFor="biodataType">
               মাসনা বা দ্বিতীয় বিবাহে আগ্রহী এমন পাত্রের প্রতি আগ্রহী আছেন?
             </Label>
-            <RadioGroup className="w-full flex flex-wrap mb-2 gap-0">
+            <RadioGroup className="w-full flex flex-wrap gap-0">
               {secondMarriageOptions.map((x) => (
                 <div key={x} className="w-1/3 flex items-center space-x-2">
                   <RadioGroupItem value={x} id={x} />
@@ -367,11 +334,11 @@ export default function PartnerInfo() {
           </div>
         )}
 
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             জীবনসঙ্গী নির্বাচনে শহর নাকি গ্রাম, কোনটিকে প্রাধান্য দিবেন?
           </Label>
-          <RadioGroup className="w-full flex flex-wrap mb-2 gap-0">
+          <RadioGroup className="w-full flex flex-wrap gap-0">
             {partnerLocationOptions.map((x) => (
               <div key={x} className="w-1/3 flex items-center space-x-2">
                 <RadioGroupItem value={x} id={x} />
@@ -380,11 +347,8 @@ export default function PartnerInfo() {
             ))}
           </RadioGroup>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>জীবনসঙ্গীর যে বৈশিষ্ট্য বা গুণাবলী আশা করেন:</div>
             <div className="text-xs">
               (অর্থাৎ কাঙ্খিত জীবনসঙ্গীর স্বভাব, দ্বীনদারিতা, চারিত্রীক গুণাবলী

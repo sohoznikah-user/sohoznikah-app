@@ -3,7 +3,7 @@ import AddressInfo from "../(biodataFormComponents)/AddressInfo";
 import FamilyInfo from "../(biodataFormComponents)/FamilyInfo";
 import FirstWords from "../(biodataFormComponents)/FirstWords";
 import GeneralInfo from "../(biodataFormComponents)/GeneralInfo";
-import LastWords from "../(biodataFormComponents)/LastWords";
+import FinalWords from "../(biodataFormComponents)/FinalWords";
 import MaritalInfo from "../(biodataFormComponents)/MaritalInfo";
 import PartnerInfo from "../(biodataFormComponents)/PartnerInfo";
 import PersonalInfo from "../(biodataFormComponents)/PersonalInfo";
@@ -81,7 +81,7 @@ export default function CreateBiodataPage() {
           <ProfilePic />
         </TabsContent>
         <TabsContent value="শেষ কথা" className="mt-4">
-          <LastWords />
+          <FinalWords />
         </TabsContent>
       </Tabs>
     </main>

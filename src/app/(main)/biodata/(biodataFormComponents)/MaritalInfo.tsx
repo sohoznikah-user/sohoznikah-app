@@ -26,12 +26,9 @@ export default function MaritalInfo() {
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">বিয়ে সংক্রান্ত তথ্য</div>
-      <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>অভিভাবক আপনার বিয়েতে রাজি আছেন?</div>
             <div className="text-xs">
               (যদি অভিভাবক রাজি নাও থাকে তাহলে এর কারণ লিখুন এবং সেক্ষেত্রে আপনি
@@ -45,11 +42,8 @@ export default function MaritalInfo() {
         </div>
         {isMale && (
           <>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 বিয়ের পর স্ত্রীকে পড়াশোনা করতে দিতে চান?
               </Label>
               <Input
@@ -58,11 +52,8 @@ export default function MaritalInfo() {
                 type="text"
               />
             </div>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 বিয়ের পর স্ত্রী চাইলে চাকরি বা ব্যবসা করতে দিবেন?
               </Label>
               <div className="w-full flex flex-wrap">
@@ -77,11 +68,8 @@ export default function MaritalInfo() {
                 ))}
               </div>
             </div>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 বিয়ের পর স্ত্রীকে নিয়ে কোথায় থাকবেন?
               </Label>
               <Input
@@ -90,11 +78,8 @@ export default function MaritalInfo() {
                 type="text"
               />
             </div>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 বাড়িতে বা বাহিরে স্ত্রী পর্দা করতে চাইলে পর্দার ব্যবস্থা রাখতে
                 পারবেন?
               </Label>
@@ -104,11 +89,8 @@ export default function MaritalInfo() {
                 type="text"
               />
             </div>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক বা
                 উপহার বা অর্থ আশা করবেন কিনা?
               </Label>
@@ -122,11 +104,8 @@ export default function MaritalInfo() {
         )}
         {!isMale && (
           <>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 বিয়ের পর পড়াশোনা চালিয়ে যেতে চান? (ছাত্রী হলে)
               </Label>
               <Input
@@ -135,11 +114,8 @@ export default function MaritalInfo() {
                 type="text"
               />
             </div>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 আপনি কি বিয়ের পর চাকরি বা ব্যবসা করতে ইচ্ছুক?
               </Label>
               <div className="w-full flex flex-wrap">
@@ -154,11 +130,8 @@ export default function MaritalInfo() {
                 ))}
               </div>
             </div>
-            <div className="flex items-center space-y-2">
-              <Label
-                className="w-1/3 mr-3 text-md space-y-1"
-                htmlFor="emailMobileNumber"
-              >
+            <div className="flex flex-col space-y-4">
+              <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
                 যৌথ বা একক পরিবারে থাকার ব্যাপারে আপনি কোনটি পছন্দ করেন?
               </Label>
               <Input
@@ -169,11 +142,8 @@ export default function MaritalInfo() {
             </div>
           </>
         )}
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             {isMale ? "পাত্রীপক্ষ" : "পাত্রপক্ষ"} অনলাইনে আপনার ছবি দেখতে চাইলে
             দেখাতে রাজি আছেন?
           </Label>
@@ -183,11 +153,8 @@ export default function MaritalInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>
               বিয়ে সংক্রান্ত আরো কিছু জানাতে চাইলে এখানে লিখুন: অন্যথায় খালি
               রাখুন।

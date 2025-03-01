@@ -59,13 +59,21 @@ export default function PersonalInfo() {
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">ব্যক্তিগত তথ্য</div>
-      <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
+      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
         {isMale && (
-          <div className="flex items-center space-y-2">
-            <Label
-              className="w-1/3 mr-3 text-md space-y-1"
-              htmlFor="emailMobileNumber"
-            >
+          <div className="flex flex-col space-y-4">
+            <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
+              আপনি দাড়ি রেখেছেন কি?
+            </Label>
+            <Textarea
+              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+              id="emailMobileNumber"
+            />
+          </div>
+        )}
+        {!isMale && (
+          <div className="flex flex-col space-y-4">
+            <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
               আপনার কি দাড়ি পছন্দ?
             </Label>
             <Input
@@ -75,25 +83,8 @@ export default function PersonalInfo() {
             />
           </div>
         )}
-        {!isMale && (
-          <div className="flex items-center space-y-2">
-            <Label
-              className="w-1/3 mr-3 text-md space-y-1"
-              htmlFor="emailMobileNumber"
-            >
-              আপনি দাড়ি রেখেছেন কি?
-            </Label>
-            <Textarea
-              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-              id="emailMobileNumber"
-            />
-          </div>
-        )}
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             বাড়ির বাহিরে সাধারণত কী ধরণের পোশাক পড়তে পছন্দ করেন?
           </Label>
           <Input
@@ -102,11 +93,8 @@ export default function PersonalInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             নাটক/সিনেমা/সিরিয়াল/গান/খেলা এসবের কোনটি দেখেন বা শুনেন?
           </Label>
           <Input
@@ -115,11 +103,8 @@ export default function PersonalInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             মানসিক বা শারীরিক কোনো রোগ আছে কি? থাকলে বিস্তারিত লিখুন।
           </Label>
           <Textarea
@@ -127,11 +112,8 @@ export default function PersonalInfo() {
             id="emailMobileNumber"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             নিজের কিছু গুণাবলী চিহ্নিত করুন:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -143,11 +125,8 @@ export default function PersonalInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             নারী-পুরুষ সমঅধীকার বিষয়টাকে আপনি কিভাবে দেখেন?
           </Label>
           <Input
@@ -156,11 +135,8 @@ export default function PersonalInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             সমকামিতা বা LGBTQ সম্পর্কে আপনার ধারণা কি?
           </Label>
           <Input
@@ -169,18 +145,17 @@ export default function PersonalInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             আপনার ক্ষেত্রে প্রযোজ্য এমন বিশেষ কোনো অবস্থা বা কার্যক্রম:
           </Label>
           <div className="w-full flex flex-wrap">
             {specialCatagories.map((x) => (
               <div key={x} className="w-1/3 flex items-center space-x-2 mb-4">
                 <Checkbox id={x} />
-                <Label htmlFor={x}>{x}</Label>
+                <Label className="leading-5" htmlFor={x}>
+                  {x}
+                </Label>
               </div>
             ))}
           </div>

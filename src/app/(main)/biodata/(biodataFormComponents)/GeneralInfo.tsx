@@ -85,12 +85,9 @@ export default function GeneralInfo() {
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">সাধারণ তথ্য</div>
-      <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>জন্ম তারিখ:</div>
             <div className="text-xs">(আসল, সার্টিফিকেট অনুযায়ী নয়)</div>
           </Label>
@@ -121,8 +118,8 @@ export default function GeneralInfo() {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             বৈবাহিক অবস্থা:
           </Label>
           <Select>
@@ -142,8 +139,8 @@ export default function GeneralInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             গাত্রবর্ণ:
           </Label>
           <Select>
@@ -163,8 +160,8 @@ export default function GeneralInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             উচ্চতা:
           </Label>
           <Select>
@@ -184,11 +181,8 @@ export default function GeneralInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             ওজন
           </Label>
           <Input
@@ -197,8 +191,8 @@ export default function GeneralInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             রক্তের গ্রুপ:
           </Label>
           <Select>
@@ -218,8 +212,8 @@ export default function GeneralInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             জাতীয়তা:
           </Label>
           <Select>

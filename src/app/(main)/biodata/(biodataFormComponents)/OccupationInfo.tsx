@@ -41,9 +41,9 @@ export default function OccupationInfo() {
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">পেশা</div>
-      <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             আপনার পেশা:
           </Label>
           <div className="w-full flex flex-wrap">
@@ -55,11 +55,8 @@ export default function OccupationInfo() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>পেশা নিয়ে বিস্তারিত লিখুন:</div>
             <div className="text-xs">
               (অর্থাৎ আপনার কর্মস্থল কোথায়, কি ধরণের কাজে দায়িত্বরত আছেন বা পদবি
@@ -71,11 +68,8 @@ export default function OccupationInfo() {
             id="emailMobileNumber"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>মাসিক আয়:</div>
             <div className="text-xs">(পেশা না থাকলে খালি রাখুন।)</div>
           </Label>

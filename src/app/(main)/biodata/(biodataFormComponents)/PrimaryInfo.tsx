@@ -15,9 +15,9 @@ export default function PrimaryInfo() {
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">প্রাথমিক তথ্য</div>
-      <div className="max-w-5xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="flex items-center space-y-2">
-          <Label className="w-1/3 mr-3 text-md space-y-1" htmlFor="biodataType">
+      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="biodataType">
             বায়োডাটার ধরন:
           </Label>
           <Select>
@@ -37,11 +37,8 @@ export default function PrimaryInfo() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>বায়োডাটা কার জন্য তৈরী করছেন?</div>
             <div className="text-xs">
               (যেমনঃ নিজের জন্য/বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য ইত্যাদি)
@@ -50,14 +47,12 @@ export default function PrimaryInfo() {
           <Input
             className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
             id="emailMobileNumber"
+            placeholder="নিজের জন্য"
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>পাত্র/পাত্রীর সম্পূর্ণ নাম:</div>
             <div className="text-xs">
               (NID কার্ডে যে নাম আছে। নাম বায়োডাটায় প্রকাশ করা হবে না। শুধুমাত্র
@@ -71,11 +66,8 @@ export default function PrimaryInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>পিতার নাম:</div>
             <div className="text-xs">
               (পূর্ণ নাম লিখবেন। বায়োডাটায় প্রকাশ করা হবে না।)
@@ -87,11 +79,8 @@ export default function PrimaryInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>মাতার নাম:</div>
             <div className="text-xs">
               (পূর্ণ নাম লিখবেন। বায়োডাটায় প্রকাশ করা হবে না।)
@@ -103,11 +92,8 @@ export default function PrimaryInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>ইমেইল আইডি:</div>
             <div className="text-xs">
               (পাত্র/পাত্রীর সাথে আমাদের যোগাযোগের জন্য প্রয়োজন হবে। অপরপক্ষ
@@ -121,11 +107,8 @@ export default function PrimaryInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>পাত্র/পাত্রীর মোবাইল নম্বর:</div>
             <div className="text-xs">
               (মোবাইল নম্বর শুধুমাত্র ভেরিফিকেশনের জন্য আমাদের কাছে থাকবে। কাউকে
@@ -138,11 +121,8 @@ export default function PrimaryInfo() {
             type="text"
           />
         </div>
-        <div className="flex items-center space-y-2">
-          <Label
-            className="w-1/3 mr-3 text-md space-y-1"
-            htmlFor="emailMobileNumber"
-          >
+        <div className="flex flex-col space-y-4">
+          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
             <div>পাত্র/পাত্রীর অভিভাবকের মোবাইল নম্বর:</div>
             <div className="text-xs">
               <div>কমপক্ষে ২ টি সচল নম্বর দিন। এভাবে লিখুন:</div>
