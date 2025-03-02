@@ -3,7 +3,6 @@
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -17,228 +16,321 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect } from "react";
+import { BiodataFormProps, GeneralInfoForm } from "@/lib/types";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { steps } from "../steps";
+import { generalInfoForm } from "@/lib/validations";
+import {
+  maritalStatuses,
+  skinTones,
+  heights,
+  bloodGroups,
+  nationalities,
+} from "@/lib/consts";
 
-export default function GeneralInfo() {
-  const isMale = true;
-  const [date, setDate] = useState<Date>();
+export default function GeneralInfo({
+  biodataForm,
+  setBiodataForm,
+  setCurrentStep,
+}: BiodataFormProps) {
+  const form = useForm<GeneralInfoForm>({
+    resolver: zodResolver(generalInfoForm),
+    defaultValues: {
+      dateOfBirth: biodataForm.dateOfBirth || "",
+      maritalStatus: biodataForm.maritalStatus || "",
+      skinTone: biodataForm.skinTone || "",
+      height: biodataForm.height || "",
+      weight: biodataForm.weight || "",
+      bloodGroup: biodataForm.bloodGroup || "",
+      nationality: biodataForm.nationality || "",
+    },
+  });
 
-  let maritalStatuses = [];
-  if (isMale) {
-    maritalStatuses = ["অবিবাহিত", "বিবাহিত", "ডিভোর্সড", "বিপত্নীক"];
-  } else {
-    maritalStatuses = ["অবিবাহিত", "ডিভোর্সড", "বিধবা"];
-  }
-  const skinTones = [
-    "গাঢ় ত্বক",
-    "শ্যামলা",
-    "উজ্জ্বল শ্যামলা",
-    "ফর্সা",
-    "উজ্জ্বল ফর্সা",
-  ];
-  const heights = [
-    "৪ ফুটের কম",
-    "৪'",
-    "৪'১\"",
-    "৪'২\"",
-    "৪'৩\"",
-    "৪'৪\"",
-    "৪'৫\"",
-    "৪'৬\"",
-    "৪'৭\"",
-    "৪'৮\"",
-    "৪'৯\"",
-    "৪'১০\"",
-    "৪'১১\"",
-    "৫'",
-    "৫'১\"",
-    "৫'২\"",
-    "৫'৩\"",
-    "৫'৪\"",
-    "৫'৫\"",
-    "৫'৬\"",
-    "৫'৭\"",
-    "৫'৮\"",
-    "৫'৯\"",
-    "৫'১০\"",
-    "৫'১১\"",
-    "৬'",
-    "৬'১\"",
-    "৬'২\"",
-    "৬'৩\"",
-    "৬'৪\"",
-    "৬'৫\"",
-    "৬'৬\"",
-    "৬'৭\"",
-    "৬'৮\"",
-    "৬'৯\"",
-    "৬'১০\"",
-    "৬'১১\"",
-    "৭'",
-    "৭ ফুটের বেশি",
-  ];
-  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-  const nationalities = ["বাংলাদেশী", "ফরেইন সিটিজেন"];
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      const isValid = await form.trigger();
+      if (!isValid) return;
+      setBiodataForm({ ...biodataForm, ...values });
+    });
+    return unsubscribe;
+  }, [form, biodataForm, setBiodataForm]);
+
+  const handleNextClick = async () => {
+    const isValid = await form.trigger();
+    if (!isValid) return;
+    setCurrentStep(steps[3].key);
+  };
+
+  const maritalStatusOptions = maritalStatuses.filter((x) =>
+    x.for.includes(biodataForm.biodataType)
+  );
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">সাধারণ তথ্য</div>
-      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
-        <div className="w-full flex flex-col space-y-4">
-          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
-            <div>জন্ম তারিখ:</div>
-            <div className="text-xs">(আসল, সার্টিফিকেট অনুযায়ী নয়)</div>
-          </Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                className={cn(
-                  "p-6 w-full bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                className="bg-[#005889]"
-                classNames={{
-                  day_selected: "bg-[#E25A6F]",
-                  day_today: "bg-white text-black",
-                }}
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-        <div className="flex flex-col space-y-4">
-          <Label className="text-md space-y-1" htmlFor="biodataType">
-            বৈবাহিক অবস্থা:
-          </Label>
-          <Select>
-            <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
-              <SelectValue placeholder="বৈবাহিক অবস্থা" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-              {maritalStatuses.map((x) => (
-                <SelectItem
-                  key={x}
-                  className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                  value={x}
-                >
-                  {x}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col space-y-4">
-          <Label className="text-md space-y-1" htmlFor="biodataType">
-            গাত্রবর্ণ:
-          </Label>
-          <Select>
-            <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
-              <SelectValue placeholder="গাত্রবর্ণ" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-              {skinTones.map((x) => (
-                <SelectItem
-                  key={x}
-                  className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                  value={x}
-                >
-                  {x}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col space-y-4">
-          <Label className="text-md space-y-1" htmlFor="biodataType">
-            উচ্চতা:
-          </Label>
-          <Select>
-            <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
-              <SelectValue placeholder="উচ্চতা" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-              {heights.map((x) => (
-                <SelectItem
-                  key={x}
-                  className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                  value={x}
-                >
-                  {x}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col space-y-4">
-          <Label className="text-md space-y-1" htmlFor="emailMobileNumber">
-            ওজন
-          </Label>
-          <Input
-            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-            id="emailMobileNumber"
-            type="text"
+      <Form {...form}>
+        <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+          <FormField
+            control={form.control}
+            name="dateOfBirth"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    <div>জন্ম তারিখ:</div>
+                    <div className="text-xs">(আসল, সার্টিফিকেট অনুযায়ী নয়)</div>
+                  </FormLabel>
+                  <FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          className={cn(
+                            "p-6 w-full bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>জন্ম তারিখ</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          className="bg-[#005889]"
+                          classNames={{
+                            day_selected: "bg-[#E25A6F]",
+                            day_today: "bg-white text-black",
+                          }}
+                          mode="single"
+                          selected={
+                            field.value ? new Date(field.value) : undefined
+                          }
+                          onSelect={(date) =>
+                            field.onChange(date?.toISOString())
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <Label className="text-md space-y-1" htmlFor="biodataType">
-            রক্তের গ্রুপ:
-          </Label>
-          <Select>
-            <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
-              <SelectValue placeholder="রক্তের গ্রুপ" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-              {bloodGroups.map((x) => (
-                <SelectItem
-                  key={x}
-                  className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                  value={x}
-                >
-                  {x}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col space-y-4">
-          <Label className="text-md space-y-1" htmlFor="biodataType">
-            জাতীয়তা:
-          </Label>
-          <Select>
-            <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
-              <SelectValue placeholder="জাতীয়তা" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-              {nationalities.map((x) => (
-                <SelectItem
-                  key={x}
-                  className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                  value={x}
-                >
-                  {x}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <div className="max-w-4xl w-full space-x-2">
-        <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
+          <FormField
+            control={form.control}
+            name="maritalStatus"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    বৈবাহিক অবস্থা:
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                        <SelectValue placeholder="বৈবাহিক অবস্থা" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                        {maritalStatusOptions.map((x) => (
+                          <SelectItem
+                            key={x.id}
+                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                            value={x.id}
+                          >
+                            {x.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="skinTone"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    গাত্রবর্ণ:
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                        <SelectValue placeholder="গাত্রবর্ণ" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                        {skinTones.map((x) => (
+                          <SelectItem
+                            key={x.id}
+                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                            value={x.id}
+                          >
+                            {x.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="height"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    উচ্চতা:
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                        <SelectValue placeholder="উচ্চতা" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                        {heights.map((x) => (
+                          <SelectItem
+                            key={x.id}
+                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                            value={x.id}
+                          >
+                            {x.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    ওজন:
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="ওজন"
+                    />
+                  </FormControl>
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bloodGroup"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    রক্তের গ্রুপ:
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                        <SelectValue placeholder="রক্তের গ্রুপ" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                        {bloodGroups.map((x) => (
+                          <SelectItem
+                            key={x.id}
+                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                            value={x.id}
+                          >
+                            {x.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nationality"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    জাতীয়তা:
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                        <SelectValue placeholder="জাতীয়তা" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                        {nationalities.map((x) => (
+                          <SelectItem
+                            key={x.id}
+                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                            value={x.id}
+                          >
+                            {x.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+      <div className="max-w-4xl w-full space-x-2 flex justify-center">
+        <Button
+          className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
+          onClick={() => setCurrentStep(steps[1].key)}
+        >
           Previous
         </Button>
-        <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
+        <Button
+          className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
+          onClick={handleNextClick}
+          disabled={!form.formState.isValid}
+        >
           Next
         </Button>
       </div>

@@ -39,12 +39,46 @@ export const primaryInfoForm = z.object({
   mobile: requiredString.min(1, {
     message: "মোবাইল নম্বর প্রদান করা আবশ্যক।",
   }),
-  guardianMobile: requiredString.min(1, {
-    message: "অভিভাবকের মোবাইল নম্বর প্রদান করা আবশ্যক।",
+  guardianContact: z
+    .array(
+      z.object({
+        guardianName: requiredString.min(1, {
+          message: "অভিভাবকের নাম নম্বর প্রদান করা আবশ্যক।",
+        }),
+        guardianMobile: requiredString.min(1, {
+          message: "অভিভাবকের মোবাইল নম্বর প্রদান করা আবশ্যক।",
+        }),
+      })
+    )
+    .min(2, { message: "কমপক্ষে ২ জন অভিভাবকের তথ্য প্রয়োজন।" }),
+});
+
+export const generalInfoForm = z.object({
+  dateOfBirth: requiredString.min(1, {
+    message: "জন্ম তারিখ প্রদান করা আবশ্যক।",
+  }),
+  maritalStatus: requiredString.min(1, {
+    message: "বৈবাহিক অবস্থা নির্বাচন করা আবশ্যক।",
+  }),
+  skinTone: requiredString.min(1, {
+    message: "গায়ের রং প্রদান করা আবশ্যক।",
+  }),
+  height: requiredString.min(1, {
+    message: "উচ্চতা প্রদান করা আবশ্যক।",
+  }),
+  weight: requiredString.min(1, {
+    message: "ওজন প্রদান করা আবশ্যক।",
+  }),
+  bloodGroup: requiredString.min(1, {
+    message: "রক্তের গ্রুপ নির্বাচন করা আবশ্যক।",
+  }),
+  nationality: requiredString.min(1, {
+    message: "জাতীয়তা প্রদান করা আবশ্যক।",
   }),
 });
 
 export const biodataForm = z.object({
   ...firstWordForm.shape,
   ...primaryInfoForm.shape,
+  ...generalInfoForm.shape,
 });

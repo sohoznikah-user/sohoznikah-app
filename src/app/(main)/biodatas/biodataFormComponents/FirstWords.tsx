@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,9 +23,11 @@ export default function FirstWords({
   const form = useForm<FirstWordForm>({
     resolver: zodResolver(firstWordForm),
     defaultValues: {
-      preApprovalAcceptTerms: false,
-      preApprovalOathTruthfulInfo: false,
-      preApprovalOathLegalResponsibility: false,
+      preApprovalAcceptTerms: biodataForm.preApprovalAcceptTerms || false,
+      preApprovalOathTruthfulInfo:
+        biodataForm.preApprovalOathTruthfulInfo || false,
+      preApprovalOathLegalResponsibility:
+        biodataForm.preApprovalOathLegalResponsibility || false,
     },
   });
 
@@ -38,6 +39,12 @@ export default function FirstWords({
     });
     return unsubscribe;
   }, [form, biodataForm, setBiodataForm]);
+
+  const handleNextClick = async () => {
+    const isValid = await form.trigger();
+    if (!isValid) return;
+    setCurrentStep(steps[1].key);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
@@ -125,7 +132,6 @@ export default function FirstWords({
                       Describe what this resume is for.
                     </FormDescription> */}
                   </div>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -147,7 +153,6 @@ export default function FirstWords({
                       প্রদান করবো।
                     </FormLabel>
                   </div>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -169,7 +174,6 @@ export default function FirstWords({
                       যেকোনো আইনী জটিলতা এবং পরকালীন সকল দায়ভার আমি বহন করবো।
                     </FormLabel>
                   </div>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -181,7 +185,8 @@ export default function FirstWords({
       <div className="max-w-4xl w-full space-x-2 flex justify-center">
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
-          onClick={() => setCurrentStep(steps[1].key)}
+          onClick={handleNextClick}
+          disabled={!form.formState.isValid}
         >
           Next
         </Button>
