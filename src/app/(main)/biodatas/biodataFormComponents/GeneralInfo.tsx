@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
-import { useEffect } from "react";
 import { BiodataFormProps, GeneralInfoForm } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,29 +47,22 @@ export default function GeneralInfo({
   const form = useForm<GeneralInfoForm>({
     resolver: zodResolver(generalInfoForm),
     defaultValues: {
-      dateOfBirth: biodataForm.dateOfBirth || "",
-      maritalStatus: biodataForm.maritalStatus || "",
-      skinTone: biodataForm.skinTone || "",
-      height: biodataForm.height || "",
-      weight: biodataForm.weight || "",
-      bloodGroup: biodataForm.bloodGroup || "",
-      nationality: biodataForm.nationality || "",
+      dateOfBirth: biodataForm?.dateOfBirth || "",
+      maritalStatus: biodataForm?.maritalStatus || "",
+      skinTone: biodataForm?.skinTone || "",
+      height: biodataForm?.height || "",
+      weight: biodataForm?.weight || "",
+      bloodGroup: biodataForm?.bloodGroup || "",
+      nationality: biodataForm?.nationality || "",
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
-      if (!isValid) return;
-      setBiodataForm({ ...biodataForm, ...values });
-    });
-    return unsubscribe;
-  }, [form, biodataForm, setBiodataForm]);
-
   const handleNextClick = async () => {
     const isValid = await form.trigger();
-    if (!isValid) return;
-    setCurrentStep(steps[3].key);
+    if (isValid) {
+      setBiodataForm({ ...biodataForm, ...form.getValues() });
+      setCurrentStep(steps[3].key);
+    }
   };
 
   const maritalStatusOptions = maritalStatuses.filter((x) =>
@@ -329,7 +321,6 @@ export default function GeneralInfo({
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
-          disabled={!form.formState.isValid}
         >
           Next
         </Button>

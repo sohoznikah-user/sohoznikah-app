@@ -265,3 +265,25 @@ export const nationalities = [
     title: "ফরেইন সিটিজেন",
   },
 ];
+
+export const addressTypes = [
+  {
+    id: "1",
+    title: "বাংলাদেশ",
+  },
+  {
+    id: "2",
+    title: "বিদেশ",
+  },
+];
+
+export const citizenshipOptions = [
+  {
+    id: "1",
+    title: "হ্যা",
+  },
+  {
+    id: "2",
+    title: "না",
+  },
+];

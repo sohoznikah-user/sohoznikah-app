@@ -18,7 +18,6 @@ import {
 import { biodataTypes } from "@/lib/consts";
 import { BiodataFormProps, PrimaryInfoForm } from "@/lib/types";
 import { primaryInfoForm } from "@/lib/validations";
-import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { steps } from "../steps";
@@ -32,16 +31,16 @@ export default function PrimaryInfo({
   const form = useForm<PrimaryInfoForm>({
     resolver: zodResolver(primaryInfoForm),
     defaultValues: {
-      biodataType: biodataForm.biodataType || "",
-      biodataFor: biodataForm.biodataFor || "",
-      fullName: biodataForm.fullName || "",
-      fatherName: biodataForm.fatherName || "",
-      motherName: biodataForm.motherName || "",
-      email: biodataForm.email || "",
-      mobile: biodataForm.mobile || "",
+      biodataType: biodataForm?.biodataType || "",
+      biodataFor: biodataForm?.biodataFor || "",
+      fullName: biodataForm?.fullName || "",
+      fatherName: biodataForm?.fatherName || "",
+      motherName: biodataForm?.motherName || "",
+      email: biodataForm?.email || "",
+      mobile: biodataForm?.mobile || "",
       guardianContact:
-        biodataForm.guardianContact?.length > 0
-          ? biodataForm.guardianContact.map((x) => {
+        biodataForm?.guardianContact?.length > 0
+          ? biodataForm?.guardianContact.map((x) => {
               return {
                 guardianName: x.guardianName,
                 guardianMobile: x.guardianMobile,
@@ -59,19 +58,12 @@ export default function PrimaryInfo({
     name: "guardianContact",
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
-      if (!isValid) return;
-      setBiodataForm({ ...biodataForm, ...values });
-    });
-    return unsubscribe;
-  }, [form, biodataForm, setBiodataForm]);
-
   const handleNextClick = async () => {
     const isValid = await form.trigger();
-    if (!isValid) return;
-    setCurrentStep(steps[2].key);
+    if (isValid) {
+      setBiodataForm({ ...biodataForm, ...form.getValues() });
+      setCurrentStep(steps[2].key);
+    }
   };
 
   return (
@@ -343,7 +335,6 @@ export default function PrimaryInfo({
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
-          disabled={!form.formState.isValid}
         >
           Next
         </Button>

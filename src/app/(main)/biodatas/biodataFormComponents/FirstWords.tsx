@@ -4,7 +4,6 @@ import { BiodataFormProps, FirstWordForm } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { firstWordForm } from "@/lib/validations";
-import { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -23,27 +22,20 @@ export default function FirstWords({
   const form = useForm<FirstWordForm>({
     resolver: zodResolver(firstWordForm),
     defaultValues: {
-      preApprovalAcceptTerms: biodataForm.preApprovalAcceptTerms || false,
+      preApprovalAcceptTerms: biodataForm?.preApprovalAcceptTerms || false,
       preApprovalOathTruthfulInfo:
-        biodataForm.preApprovalOathTruthfulInfo || false,
+        biodataForm?.preApprovalOathTruthfulInfo || false,
       preApprovalOathLegalResponsibility:
-        biodataForm.preApprovalOathLegalResponsibility || false,
+        biodataForm?.preApprovalOathLegalResponsibility || false,
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
-      if (!isValid) return;
-      setBiodataForm({ ...biodataForm, ...values });
-    });
-    return unsubscribe;
-  }, [form, biodataForm, setBiodataForm]);
-
   const handleNextClick = async () => {
     const isValid = await form.trigger();
-    if (!isValid) return;
-    setCurrentStep(steps[1].key);
+    if (isValid) {
+      setBiodataForm({ ...biodataForm, ...form.getValues() });
+      setCurrentStep(steps[1].key);
+    }
   };
 
   return (
@@ -186,7 +178,6 @@ export default function FirstWords({
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
-          disabled={!form.formState.isValid}
         >
           Next
         </Button>

@@ -3,14 +3,11 @@
 import { useSearchParams } from "next/navigation";
 import { steps } from "../steps";
 import Breadcrumbs from "../biodataFormComponents/Breadcrumbs";
-import { useState } from "react";
-import { BiodataForm } from "@/lib/types";
-import FirstWords from "../biodataFormComponents/FirstWords";
+import { useCreateBiodataFormStore } from "@/store/createBiodataForm.store";
 
 export default function CreateBiodataPage() {
   const searchParams = useSearchParams();
-  const [biodataForm, setBiodataForm] = useState<BiodataForm>({});
-
+  const { biodataForm, setBiodataForm } = useCreateBiodataFormStore();
   const currentStep = searchParams.get("step") || steps[0].key;
 
   const setStep = (key: string) => {
@@ -24,16 +21,7 @@ export default function CreateBiodataPage() {
 
   return (
     <div className="text-[#1f4f69] flex flex-col items-center justify-center mt-4 mb-12">
-      <Breadcrumbs
-        currentStep={currentStep}
-        setCurrentStep={setStep}
-        firstWordsCompleted={
-          biodataForm.preApprovalAcceptTerms &&
-          biodataForm.preApprovalOathLegalResponsibility &&
-          biodataForm.preApprovalOathTruthfulInfo
-        }
-        primaryInfoCompleted={!!biodataForm.biodataType}
-      />
+      <Breadcrumbs currentStep={currentStep} />
       <div className="mt-8 w-full">
         {FormComponent && (
           <FormComponent
