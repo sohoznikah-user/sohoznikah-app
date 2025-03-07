@@ -1,21 +1,24 @@
 import { z } from "zod";
 import {
-  firstWordForm,
-  biodataForm,
-  primaryInfoForm,
-  generalInfoForm,
-  addressInfoForm,
+  biodataFormData,
+  firstWordsFormData,
+  primaryInfoFormData,
+  generalInfoFormData,
+  addressInfoFormData,
 } from "./validations";
+import { BiodataFormStep } from "@/app/(main)/biodata-editor/steps";
 
-export type FirstWordForm = z.infer<typeof firstWordForm>;
-export type PrimaryInfoForm = z.infer<typeof primaryInfoForm>;
-export type GeneralInfoForm = z.infer<typeof generalInfoForm>;
-export type AddressInfoForm = z.infer<typeof addressInfoForm>;
+export type FirstWordsFormData = z.infer<typeof firstWordsFormData>;
+export type PrimaryInfoFormData = z.infer<typeof primaryInfoFormData>;
+export type GeneralInfoFormData = z.infer<typeof generalInfoFormData>;
+export type AddressInfoFormData = z.infer<typeof addressInfoFormData>;
 
-export type BiodataForm = z.infer<typeof biodataForm>;
+export type BiodataFormData = z.infer<typeof biodataFormData>;
 
-export interface BiodataFormProps {
-  biodataForm: BiodataForm;
-  setBiodataForm: (data: BiodataForm) => void;
-  setCurrentStep: (step: string) => void;
+export interface BiodataFormDataProps {
+  biodataFormData: BiodataFormData;
+  setBiodataFormData: (data: BiodataFormData) => void;
+  handleSave: () => void;
+  currentStep: BiodataFormStep;
+  setCurrentStep: (key: string) => void;
 }

@@ -26,11 +26,10 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
-import { BiodataFormProps, GeneralInfoForm } from "@/lib/types";
+import { BiodataFormDataProps, GeneralInfoFormData } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { steps } from "../steps";
-import { generalInfoForm } from "@/lib/validations";
+import { generalInfoFormData } from "@/lib/validations";
 import {
   maritalStatuses,
   skinTones,
@@ -38,35 +37,59 @@ import {
   bloodGroups,
   nationalities,
 } from "@/lib/consts";
+import { useEffect, useState } from "react";
 
 export default function GeneralInfo({
-  biodataForm,
-  setBiodataForm,
+  biodataFormData,
+  setBiodataFormData,
+  handleSave,
+  currentStep,
   setCurrentStep,
-}: BiodataFormProps) {
-  const form = useForm<GeneralInfoForm>({
-    resolver: zodResolver(generalInfoForm),
+}: BiodataFormDataProps) {
+  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+
+  const form = useForm<GeneralInfoFormData>({
+    resolver: zodResolver(generalInfoFormData),
     defaultValues: {
-      dateOfBirth: biodataForm?.dateOfBirth || "",
-      maritalStatus: biodataForm?.maritalStatus || "",
-      skinTone: biodataForm?.skinTone || "",
-      height: biodataForm?.height || "",
-      weight: biodataForm?.weight || "",
-      bloodGroup: biodataForm?.bloodGroup || "",
-      nationality: biodataForm?.nationality || "",
+      dateOfBirth: biodataFormData?.generalInfoFormData?.dateOfBirth || "",
+      maritalStatus: biodataFormData?.generalInfoFormData?.maritalStatus || "",
+      skinTone: biodataFormData?.generalInfoFormData?.skinTone || "",
+      height: biodataFormData?.generalInfoFormData?.height || "",
+      weight: biodataFormData?.generalInfoFormData?.weight || "",
+      bloodGroup: biodataFormData?.generalInfoFormData?.bloodGroup || "",
+      nationality: biodataFormData?.generalInfoFormData?.nationality || "",
     },
   });
 
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      if (submittedOnce) {
+        await form.trigger();
+      }
+      setBiodataFormData({
+        ...biodataFormData,
+        generalInfoFormData: { ...values },
+      });
+    });
+    return unsubscribe;
+  }, [
+    submittedOnce,
+    setSubmittedOnce,
+    form,
+    biodataFormData,
+    setBiodataFormData,
+  ]);
+
   const handleNextClick = async () => {
+    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      setBiodataForm({ ...biodataForm, ...form.getValues() });
-      setCurrentStep(steps[3].key);
+      handleSave();
     }
   };
 
   const maritalStatusOptions = maritalStatuses.filter((x) =>
-    x.for.includes(biodataForm.biodataType)
+    x.for.includes(biodataFormData.primaryInfoFormData.biodataType)
   );
 
   return (
@@ -314,7 +337,7 @@ export default function GeneralInfo({
       <div className="max-w-4xl w-full space-x-2 flex justify-center">
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
-          onClick={() => setCurrentStep(steps[1].key)}
+          onClick={() => setCurrentStep(currentStep.prev)}
         >
           Previous
         </Button>

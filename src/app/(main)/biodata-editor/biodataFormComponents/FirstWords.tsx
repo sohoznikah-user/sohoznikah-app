@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { BiodataFormProps, FirstWordForm } from "@/lib/types";
+import { BiodataFormDataProps, FirstWordsFormData } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { firstWordForm } from "@/lib/validations";
+import { firstWordsFormData } from "@/lib/validations";
 import {
   Form,
   FormControl,
@@ -12,29 +12,55 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { steps } from "../steps";
+import { useEffect, useState } from "react";
 
 export default function FirstWords({
-  biodataForm,
-  setBiodataForm,
+  biodataFormData,
+  setBiodataFormData,
+  handleSave,
+  currentStep,
   setCurrentStep,
-}: BiodataFormProps) {
-  const form = useForm<FirstWordForm>({
-    resolver: zodResolver(firstWordForm),
+}: BiodataFormDataProps) {
+  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+
+  const form = useForm<FirstWordsFormData>({
+    resolver: zodResolver(firstWordsFormData),
     defaultValues: {
-      preApprovalAcceptTerms: biodataForm?.preApprovalAcceptTerms || false,
+      preApprovalAcceptTerms:
+        biodataFormData?.firstWordsFormData?.preApprovalAcceptTerms || false,
       preApprovalOathTruthfulInfo:
-        biodataForm?.preApprovalOathTruthfulInfo || false,
+        biodataFormData?.firstWordsFormData?.preApprovalOathTruthfulInfo ||
+        false,
       preApprovalOathLegalResponsibility:
-        biodataForm?.preApprovalOathLegalResponsibility || false,
+        biodataFormData?.firstWordsFormData
+          ?.preApprovalOathLegalResponsibility || false,
     },
   });
 
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      if (submittedOnce) {
+        await form.trigger();
+      }
+      setBiodataFormData({
+        ...biodataFormData,
+        firstWordsFormData: { ...values },
+      });
+    });
+    return unsubscribe;
+  }, [
+    submittedOnce,
+    setSubmittedOnce,
+    form,
+    biodataFormData,
+    setBiodataFormData,
+  ]);
+
   const handleNextClick = async () => {
+    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      setBiodataForm({ ...biodataForm, ...form.getValues() });
-      setCurrentStep(steps[1].key);
+      handleSave();
     }
   };
 

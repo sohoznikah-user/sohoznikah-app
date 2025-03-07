@@ -3,7 +3,7 @@ import { boolean, z } from "zod";
 export const optionalString = z.string().trim().optional().or(z.literal(""));
 export const requiredString = z.string().trim();
 
-export const firstWordForm = z.object({
+export const firstWordsFormData = z.object({
   preApprovalAcceptTerms: z.boolean().refine((val) => val === true, {
     message: "আপনাকে শর্তসমূহ মেনে নিতে হবে।",
   }),
@@ -17,7 +17,7 @@ export const firstWordForm = z.object({
     }),
 });
 
-export const primaryInfoForm = z.object({
+export const primaryInfoFormData = z.object({
   biodataType: requiredString.min(1, {
     message: "বায়োডাটা ধরন নির্বাচন করা আবশ্যক।",
   }),
@@ -56,7 +56,7 @@ export const primaryInfoForm = z.object({
     .min(2, { message: "কমপক্ষে ২ জন অভিভাবকের তথ্য প্রয়োজন।" }),
 });
 
-export const generalInfoForm = z.object({
+export const generalInfoFormData = z.object({
   dateOfBirth: requiredString.min(1, {
     message: "জন্ম তারিখ প্রদান করা আবশ্যক।",
   }),
@@ -80,7 +80,7 @@ export const generalInfoForm = z.object({
   }),
 });
 
-export const addressInfoForm = z.object({
+export const addressInfoFormData = z.object({
   addressList: z
     .array(
       z
@@ -137,9 +137,9 @@ export const addressInfoForm = z.object({
     .min(2, { message: "কমপক্ষে দুইটি তথ্য প্রদান করতে হবে।" }),
 });
 
-export const biodataForm = z.object({
-  ...firstWordForm.shape,
-  ...primaryInfoForm.shape,
-  ...generalInfoForm.shape,
-  ...addressInfoForm.shape,
+export const biodataFormData = z.object({
+  firstWordsFormData: firstWordsFormData,
+  primaryInfoFormData: primaryInfoFormData,
+  generalInfoFormData: generalInfoFormData,
+  addressInfoFormData: addressInfoFormData,
 });

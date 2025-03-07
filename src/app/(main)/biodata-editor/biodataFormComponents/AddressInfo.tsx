@@ -10,21 +10,25 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { addressTypes, citizenshipOptions } from "@/lib/consts";
-import { AddressInfoForm, BiodataFormProps } from "@/lib/types";
+import { AddressInfoFormData, BiodataFormDataProps } from "@/lib/types";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { steps } from "../steps";
-import { addressInfoForm } from "@/lib/validations";
+import { addressInfoFormData } from "@/lib/validations";
+import { useEffect, useState } from "react";
 
 export default function AddressInfo({
-  biodataForm,
-  setBiodataForm,
+  biodataFormData,
+  setBiodataFormData,
+  handleSave,
+  currentStep,
   setCurrentStep,
-}: BiodataFormProps) {
-  const form = useForm<AddressInfoForm>({
-    resolver: zodResolver(addressInfoForm),
+}: BiodataFormDataProps) {
+  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+
+  const form = useForm<AddressInfoFormData>({
+    resolver: zodResolver(addressInfoFormData),
     defaultValues: {
-      addressList: biodataForm.addressList || [],
+      addressList: biodataFormData?.addressInfoFormData?.addressList || [],
     },
   });
 
@@ -33,11 +37,30 @@ export default function AddressInfo({
     name: "addressList",
   });
 
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      if (submittedOnce) {
+        await form.trigger();
+      }
+      setBiodataFormData({
+        ...biodataFormData,
+        addressInfoFormData: { ...values },
+      });
+    });
+    return unsubscribe;
+  }, [
+    submittedOnce,
+    setSubmittedOnce,
+    form,
+    biodataFormData,
+    setBiodataFormData,
+  ]);
+
   const handleNextClick = async () => {
+    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      setBiodataForm({ ...biodataForm, ...form.getValues() });
-      setCurrentStep(steps[3].key);
+      handleSave();
     }
   };
 

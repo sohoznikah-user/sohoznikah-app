@@ -16,31 +16,35 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { biodataTypes } from "@/lib/consts";
-import { BiodataFormProps, PrimaryInfoForm } from "@/lib/types";
-import { primaryInfoForm } from "@/lib/validations";
+import { BiodataFormDataProps, PrimaryInfoFormData } from "@/lib/types";
+import { primaryInfoFormData } from "@/lib/validations";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { steps } from "../steps";
 import { Minus, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function PrimaryInfo({
-  biodataForm,
-  setBiodataForm,
+  biodataFormData,
+  setBiodataFormData,
+  handleSave,
+  currentStep,
   setCurrentStep,
-}: BiodataFormProps) {
-  const form = useForm<PrimaryInfoForm>({
-    resolver: zodResolver(primaryInfoForm),
+}: BiodataFormDataProps) {
+  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+
+  const form = useForm<PrimaryInfoFormData>({
+    resolver: zodResolver(primaryInfoFormData),
     defaultValues: {
-      biodataType: biodataForm?.biodataType || "",
-      biodataFor: biodataForm?.biodataFor || "",
-      fullName: biodataForm?.fullName || "",
-      fatherName: biodataForm?.fatherName || "",
-      motherName: biodataForm?.motherName || "",
-      email: biodataForm?.email || "",
-      mobile: biodataForm?.mobile || "",
+      biodataType: biodataFormData?.primaryInfoFormData?.biodataType || "",
+      biodataFor: biodataFormData?.primaryInfoFormData?.biodataFor || "",
+      fullName: biodataFormData?.primaryInfoFormData?.fullName || "",
+      fatherName: biodataFormData?.primaryInfoFormData?.fatherName || "",
+      motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
+      email: biodataFormData?.primaryInfoFormData?.email || "",
+      mobile: biodataFormData?.primaryInfoFormData?.mobile || "",
       guardianContact:
-        biodataForm?.guardianContact?.length > 0
-          ? biodataForm?.guardianContact.map((x) => {
+        biodataFormData?.primaryInfoFormData?.guardianContact?.length > 0
+          ? biodataFormData?.primaryInfoFormData?.guardianContact.map((x) => {
               return {
                 guardianRelation: x.guardianRelation,
                 guardianName: x.guardianName,
@@ -54,16 +58,35 @@ export default function PrimaryInfo({
     },
   });
 
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      if (submittedOnce) {
+        await form.trigger();
+      }
+      setBiodataFormData({
+        ...biodataFormData,
+        primaryInfoFormData: { ...values },
+      });
+    });
+    return unsubscribe;
+  }, [
+    submittedOnce,
+    setSubmittedOnce,
+    form,
+    biodataFormData,
+    setBiodataFormData,
+  ]);
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "guardianContact",
   });
 
   const handleNextClick = async () => {
+    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      setBiodataForm({ ...biodataForm, ...form.getValues() });
-      setCurrentStep(steps[2].key);
+      handleSave();
     }
   };
 
@@ -348,7 +371,7 @@ export default function PrimaryInfo({
       <div className="max-w-4xl w-full space-x-2 flex justify-center">
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
-          onClick={() => setCurrentStep(steps[0].key)}
+          onClick={() => setCurrentStep(currentStep.prev)}
         >
           Previous
         </Button>
