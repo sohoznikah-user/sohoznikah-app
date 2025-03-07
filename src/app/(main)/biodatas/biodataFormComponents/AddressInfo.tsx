@@ -10,8 +10,37 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { addressTypes, citizenshipOptions } from "@/lib/consts";
+import { AddressInfoForm, BiodataFormProps } from "@/lib/types";
+import { useFieldArray, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { steps } from "../steps";
+import { addressInfoForm } from "@/lib/validations";
 
-export default function AddressInfo() {
+export default function AddressInfo({
+  biodataForm,
+  setBiodataForm,
+  setCurrentStep,
+}: BiodataFormProps) {
+  const form = useForm<AddressInfoForm>({
+    resolver: zodResolver(addressInfoForm),
+    defaultValues: {
+      addressList: biodataForm.addressList || [],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "addressList",
+  });
+
+  const handleNextClick = async () => {
+    const isValid = await form.trigger();
+    if (isValid) {
+      setBiodataForm({ ...biodataForm, ...form.getValues() });
+      setCurrentStep(steps[3].key);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">ঠিকানা</div>

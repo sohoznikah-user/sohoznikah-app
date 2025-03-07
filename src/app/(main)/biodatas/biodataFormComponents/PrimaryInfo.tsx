@@ -42,13 +42,14 @@ export default function PrimaryInfo({
         biodataForm?.guardianContact?.length > 0
           ? biodataForm?.guardianContact.map((x) => {
               return {
+                guardianRelation: x.guardianRelation,
                 guardianName: x.guardianName,
                 guardianMobile: x.guardianMobile,
               };
             })
           : [
-              { guardianName: "", guardianMobile: "" },
-              { guardianName: "", guardianMobile: "" },
+              { guardianRelation: "", guardianName: "", guardianMobile: "" },
+              { guardianRelation: "", guardianName: "", guardianMobile: "" },
             ],
     },
   });
@@ -255,16 +256,43 @@ export default function PrimaryInfo({
             )}
           />
           <div className="flex flex-col space-y-2">
-            <FormLabel className="text-md space-y-1 leading-4.5">
-              <div>পাত্র/পাত্রীর অভিভাবকের মোবাইল নম্বর:</div>
-              <div className="text-xs">
-                <div>কমপক্ষে ২ টি সচল নম্বর প্রদান করতে হবে।</div>
+            <FormLabel className="flex items-center justify-between space-x-8">
+              <div className="text-md space-y-1 leading-4.5">
+                <div>পাত্র/পাত্রীর অভিভাবকের মোবাইল নম্বর:</div>
+                <div className="text-xs">
+                  <div>কমপক্ষে ২ টি সচল নম্বর প্রদান করতে হবে।</div>
+                </div>
               </div>
+              <Button
+                type="button"
+                className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F] flex items-center space-x-2"
+                onClick={() => append({ guardianName: "", guardianMobile: "" })}
+              >
+                <Plus size={20} /> <span>নতুন নম্বর যোগ করুন</span>
+              </Button>
             </FormLabel>
 
             <div className="space-y-2">
               {fields.map((field, index) => (
                 <div className="flex space-x-2 items-center" key={field.id}>
+                  <FormField
+                    control={form.control}
+                    name={`guardianContact.${index}.guardianRelation`}
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <div className="flex items-center space-x-2">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                              placeholder="সম্পর্ক"
+                            />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name={`guardianContact.${index}.guardianName`}
@@ -314,14 +342,6 @@ export default function PrimaryInfo({
                 </div>
               ))}
             </div>
-
-            <Button
-              type="button"
-              className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F] flex items-center space-x-2"
-              onClick={() => append({ guardianName: "", guardianMobile: "" })}
-            >
-              <Plus size={20} /> <span>নতুন নম্বর যোগ করুন</span>
-            </Button>
           </div>
         </form>
       </Form>

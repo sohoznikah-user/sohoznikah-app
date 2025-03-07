@@ -21,7 +21,7 @@ export default function CreateBiodataPage() {
 
   return (
     <div className="text-[#1f4f69] flex flex-col items-center justify-center mt-4 mb-12">
-      <Breadcrumbs currentStep={currentStep} />
+      <Breadcrumbs currentStep={currentStep} setCurrentStep={setStep} />
       <div className="mt-8 w-full">
         {FormComponent && (
           <FormComponent

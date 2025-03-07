@@ -41,7 +41,7 @@ export default function FinalWords() {
       </div>
       <div className="max-w-4xl w-ful">
         <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
-          Submit abd Send For Approval
+          Submit and Send For Approval
         </Button>
       </div>
     </div>

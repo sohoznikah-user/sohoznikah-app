@@ -42,6 +42,9 @@ export const primaryInfoForm = z.object({
   guardianContact: z
     .array(
       z.object({
+        guardianRelation: requiredString.min(1, {
+          message: "অভিভাবকের সম্পর্ক প্রদান করা আবশ্যক।",
+        }),
         guardianName: requiredString.min(1, {
           message: "অভিভাবকের নাম নম্বর প্রদান করা আবশ্যক।",
         }),
@@ -77,8 +80,66 @@ export const generalInfoForm = z.object({
   }),
 });
 
+export const addressInfoForm = z.object({
+  addressList: z
+    .array(
+      z
+        .object({
+          addressType: requiredString.min(1, {
+            message: "ঠিকানার ধরন প্রদান করা আবশ্যক।",
+          }),
+          state: requiredString.min(1, {
+            // বিভাগ
+            message: "নির্বাচন করা আবশ্যক।",
+          }),
+          city: requiredString.min(1, {
+            // জেলা
+            message: "নির্বাচন করা আবশ্যক।",
+          }),
+          addressDetail: requiredString.min(1, {
+            message: "ঠিকানার বিস্তারিত প্রদান করা আবশ্যক।",
+          }),
+
+          // বাংলাদেশি ঠিকানা
+          subDistrict: optionalString,
+
+          // বিদেশি ঠিকানা
+          country: optionalString,
+          cityzenshipStatus: optionalString,
+        })
+        .superRefine((data, ctx) => {
+          if (data.addressType === "foregin" && !data.country) {
+            if (!data.country) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "দেশের নাম প্রদান করা আবশ্যক।",
+                path: ["country"],
+              });
+            }
+            if (!data.cityzenshipStatus) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "নাগরিকত্বের অবস্থা প্রদান করা আবশ্যক।",
+                path: ["cityzenshipStatus"],
+              });
+            }
+          }
+
+          if (data.addressType === "local" && !data.subDistrict) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "উপজেলা নির্বাচন করা আবশ্যক।",
+              path: ["subDistrict"],
+            });
+          }
+        })
+    )
+    .min(2, { message: "কমপক্ষে দুইটি তথ্য প্রদান করতে হবে।" }),
+});
+
 export const biodataForm = z.object({
   ...firstWordForm.shape,
   ...primaryInfoForm.shape,
   ...generalInfoForm.shape,
+  ...addressInfoForm.shape,
 });
