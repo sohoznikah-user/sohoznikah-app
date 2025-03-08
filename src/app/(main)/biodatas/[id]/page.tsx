@@ -8,9 +8,9 @@ import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccu
 import FooterSection from "./viewBioDataComponents/FooterSection";
 import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
 import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
-import ReligionInfo from "./viewBioDataComponents/ReligionInfo";
-import MaritalInfo from "./viewBioDataComponents/MaritalInfo";
-import PartnerInfo from "./viewBioDataComponents/PartnerInfo";
+import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
+import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
+import SpousePreferenceInfo from "./viewBioDataComponents/SpousePreferenceInfo";
 
 export default function BiodataPage() {
   const tabs = [
@@ -50,10 +50,10 @@ export default function BiodataPage() {
           <AddressInfo />
           <EducationAndOccupationInfo />
           <FamilyInfo />
-          <ReligionInfo />
+          <ReligiousInfo />
           <PersonalInfo />
-          <MaritalInfo />
-          <PartnerInfo />
+          <MarriageInfo />
+          <SpousePreferenceInfo />
         </div>
       </div>
       <FooterSection />

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 
-export default function ReligionInfo() {
+export default function ReligiousInfo() {
   const isMale = true;
   const [muslimType, setMuslimType] = useState<string>(null);
 

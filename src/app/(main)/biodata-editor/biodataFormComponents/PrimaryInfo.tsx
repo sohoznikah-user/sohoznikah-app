@@ -42,18 +42,18 @@ export default function PrimaryInfo({
       motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
       email: biodataFormData?.primaryInfoFormData?.email || "",
       mobile: biodataFormData?.primaryInfoFormData?.mobile || "",
-      guardianContact:
-        biodataFormData?.primaryInfoFormData?.guardianContact?.length > 0
-          ? biodataFormData?.primaryInfoFormData?.guardianContact.map((x) => {
+      guardianContacts:
+        biodataFormData?.primaryInfoFormData?.guardianContacts?.length > 0
+          ? biodataFormData?.primaryInfoFormData?.guardianContacts.map((x) => {
               return {
-                guardianRelation: x.guardianRelation,
-                guardianName: x.guardianName,
-                guardianMobile: x.guardianMobile,
+                relation: x.relation,
+                name: x.name,
+                mobile: x.mobile,
               };
             })
           : [
-              { guardianRelation: "", guardianName: "", guardianMobile: "" },
-              { guardianRelation: "", guardianName: "", guardianMobile: "" },
+              { relation: "", name: "", mobile: "" },
+              { relation: "", name: "", mobile: "" },
             ],
     },
   });
@@ -79,7 +79,7 @@ export default function PrimaryInfo({
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "guardianContact",
+    name: "guardianContacts",
   });
 
   const handleNextClick = async () => {
@@ -289,7 +289,7 @@ export default function PrimaryInfo({
               <Button
                 type="button"
                 className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F] flex items-center space-x-2"
-                onClick={() => append({ guardianName: "", guardianMobile: "" })}
+                onClick={() => append({ name: "", mobile: "" })}
               >
                 <Plus size={20} /> <span>নতুন নম্বর যোগ করুন</span>
               </Button>
@@ -300,7 +300,7 @@ export default function PrimaryInfo({
                 <div className="flex space-x-2 items-center" key={field.id}>
                   <FormField
                     control={form.control}
-                    name={`guardianContact.${index}.guardianRelation`}
+                    name={`guardianContacts.${index}.relation`}
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <div className="flex items-center space-x-2">
@@ -318,7 +318,7 @@ export default function PrimaryInfo({
                   />
                   <FormField
                     control={form.control}
-                    name={`guardianContact.${index}.guardianName`}
+                    name={`guardianContacts.${index}.name`}
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <div className="flex items-center space-x-2">
@@ -336,7 +336,7 @@ export default function PrimaryInfo({
                   />
                   <FormField
                     control={form.control}
-                    name={`guardianContact.${index}.guardianMobile`}
+                    name={`guardianContacts.${index}.mobile`}
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <div className="flex items-center space-x-2">

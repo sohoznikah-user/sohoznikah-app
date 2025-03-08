@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-export default function HeaderPartnerRequierment() {
+export default function HeaderSpousePreferenceRequierment() {
   return (
     <Card className="w-1/2 bg-white text-black border-none rounded-4xl">
       <CardHeader className="flex items-center">

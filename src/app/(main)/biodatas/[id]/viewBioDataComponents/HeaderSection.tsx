@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 import male from "@/assets/images/male-5.svg";
 import Link from "next/link";
-import HeaderPartnerRequierment from "./HeaderPartnerRequierment";
+import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierment";
 import HeaderShortBio from "./HeaderShortBio";
 
 export default function HeaderSection() {
@@ -99,7 +99,7 @@ export default function HeaderSection() {
         </div>
         <div className="w-3/4 flex space-x-8">
           <HeaderShortBio />
-          <HeaderPartnerRequierment />
+          <HeaderSpousePreferenceRequierment />
         </div>
       </div>
     </div>

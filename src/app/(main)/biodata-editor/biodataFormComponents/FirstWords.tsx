@@ -129,7 +129,7 @@ export default function FirstWords({
       <Form {...form}>
         <form className="max-w-4xl w-full bg-[#f6f6f6] p-6 space-y-4 text-black rounded-4xl">
           <div className="text-[#005A8B] text-xl">প্রতিশ্রুতি নামা:</div>
-          <div className="text-[#cd0000] space-y-3">
+          <div className="text-[#cd0000] space-y-2">
             <FormField
               control={form.control}
               name="preApprovalAcceptTerms"

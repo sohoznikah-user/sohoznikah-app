@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function PartnerInfo() {
+export default function SpousePreferenceInfo() {
   const isMale = false;
   const skinTones = [
     "গাঢ় ত্বক",

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function MaritalInfo() {
+export default function MarriageInfo() {
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
       <CardHeader>

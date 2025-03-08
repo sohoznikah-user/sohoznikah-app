@@ -46,7 +46,7 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
         break;
       case "family-info":
         break;
-      case "religion-info":
+      case "religious-info":
         break;
       case "personal-info":
         break;

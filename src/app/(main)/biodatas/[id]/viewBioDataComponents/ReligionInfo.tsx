@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function ReligionInfo() {
+export default function ReligiousInfo() {
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
       <CardHeader>

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function MaritalInfo() {
+export default function MarriageInfo() {
   const isMale = true;
   const afterMarriageJobMaleOptions = [
     "না, আমি একদমই চাই না",

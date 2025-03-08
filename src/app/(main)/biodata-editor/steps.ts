@@ -6,10 +6,10 @@ import AddressInfo from "./biodataFormComponents/AddressInfo";
 import EducationInfo from "./biodataFormComponents/EducationInfo";
 import OccupationInfo from "./biodataFormComponents/OccupationInfo";
 import FamilyInfo from "./biodataFormComponents/FamilyInfo";
-import ReligionInfo from "./biodataFormComponents/ReligionInfo";
+import ReligiousInfo from "./biodataFormComponents/ReligiousInfo";
 import PersonalInfo from "./biodataFormComponents/PersonalInfo";
-import MaritalInfo from "./biodataFormComponents/MaritalInfo";
-import PartnerInfo from "./biodataFormComponents/PartnerInfo";
+import MarriageInfo from "./biodataFormComponents/MarriageInfo";
+import SpousePreferenceInfo from "./biodataFormComponents/SpousePreferenceInfo";
 import ProfilePic from "./biodataFormComponents/ProfilePic";
 import FinalWords from "./biodataFormComponents/FinalWords";
 
@@ -76,12 +76,12 @@ export const steps: BiodataFormStep[] = [
     key: "family-info",
     disabled: true,
     prev: "occupation-info",
-    next: "religion-info",
+    next: "religious-info",
   },
   {
     title: "ধর্মীয় লাইফস্টাইল",
-    component: ReligionInfo,
-    key: "religion-info",
+    component: ReligiousInfo,
+    key: "religious-info",
     disabled: true,
     prev: "family-info",
     next: "personal-info",
@@ -91,12 +91,12 @@ export const steps: BiodataFormStep[] = [
     component: PersonalInfo,
     key: "personal-info",
     disabled: true,
-    prev: "religion-info",
+    prev: "religious-info",
     next: "marital-info",
   },
   {
     title: "বিয়ে সংক্রান্ত তথ্য",
-    component: MaritalInfo,
+    component: MarriageInfo,
     key: "marital-info",
     disabled: true,
     prev: "personal-info",
@@ -104,7 +104,7 @@ export const steps: BiodataFormStep[] = [
   },
   {
     title: "যেমন জীবনসঙ্গী আশা করেন",
-    component: PartnerInfo,
+    component: SpousePreferenceInfo,
     key: "partner-info",
     disabled: true,
     prev: "marital-info",
