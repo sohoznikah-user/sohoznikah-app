@@ -88,12 +88,12 @@ export default function OccupationInfo({
                           <Checkbox
                             id={x.id}
                             checked={field.value.includes(x.id)}
-                            {...form.register("occupations")}
-                            onChange={() => {
-                              const updatedTypes = field.value.includes(x.id)
-                                ? field.value.filter((id) => id !== x.id)
-                                : [...field.value, x.id];
-                              field.onChange(updatedTypes);
+                            onCheckedChange={(checked) => {
+                              const updatedOccupations = checked
+                                ? [...field.value, x.id]
+                                : field.value.filter((id) => id !== x.id);
+
+                              field.onChange(updatedOccupations);
                             }}
                           />
                           <Label htmlFor={x.id}>{x.title}</Label>

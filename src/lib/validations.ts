@@ -160,7 +160,7 @@ export const educationInfoFormData = z.object({
 });
 
 export const occupationInfoFormData = z.object({
-  occupations: z.array(requiredString).min(1, {
+  occupations: z.array(optionalString).min(1, {
     message: "পেশার ধরন প্রদান করা আবশ্যক।",
   }),
   detail: requiredString.min(1, {
