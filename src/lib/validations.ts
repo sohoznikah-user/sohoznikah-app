@@ -172,33 +172,48 @@ export const occupationInfoFormData = z.object({
 });
 
 export const familyInfoFormData = z.object({
+  parentsAlive: requiredString.min(1, {
+    message: "পিতা-মাতার জীবিত থাকার অবস্থা নির্বাচন করুন।",
+  }),
   fatherOccupation: requiredString.min(1, {
-    message: "পিতার পেশা প্রদান করা আবশ্যক।",
+    message: "পিতার পেশা উল্লেখ করুন।",
   }),
   motherOccupation: requiredString.min(1, {
-    message: "মাতার পেশা প্রদান করা আবশ্যক।",
+    message: "মাতার পেশা উল্লেখ করুন।",
   }),
   siblings: z.array(
     z.object({
       type: requiredString.min(1, {
-        message: "ভাই/বোনের ধরন প্রদান করা আবশ্যক।",
+        message: "ভাই বা বোনের ধরন নির্বাচন করুন।",
       }),
       occupation: requiredString.min(1, {
-        message: "ভাই/বোনের পেশা প্রদান করা আবশ্যক।",
+        message: "ভাই বা বোনের পেশা উল্লেখ করুন।",
       }),
       maritalStatus: requiredString.min(1, {
-        message: "বৈবাহিক অবস্থা নির্বাচন করা আবশ্যক।",
+        message: "ভাই বা বোনের বৈবাহিক অবস্থা নির্বাচন করুন।",
       }),
       children: requiredString.min(1, {
-        message: "সন্তান সংখ্যা প্রদান করা আবশ্যক।",
+        message: "সন্তানের সংখ্যা উল্লেখ করুন।",
       }),
     })
   ),
   fatherSideDetail: requiredString.min(1, {
-    message: "পিতার পারিবারিক বিস্তারিত তথ্য প্রদান করা আবশ্যক।",
+    message: "পিতার পরিবারের বিস্তারিত তথ্য প্রদান করুন।",
   }),
   motherSideDetail: requiredString.min(1, {
-    message: "মাতার পারিবারিক বিস্তারিত তথ্য প্রদান করা আবশ্যক।",
+    message: "মাতার পরিবারের বিস্তারিত তথ্য প্রদান করুন।",
+  }),
+  familyType: requiredString.min(1, {
+    message: "পরিবারের ধরন নির্বাচন করুন।",
+  }),
+  familyBackground: requiredString.min(1, {
+    message: "পরিবারের সামাজিক ও সাংস্কৃতিক পটভূমি উল্লেখ করুন।",
+  }),
+  livingCondition: requiredString.min(1, {
+    message: "পরিবারের বসবাসের পরিবেশ সম্পর্কে উল্লেখ করুন।",
+  }),
+  wealthDescription: requiredString.min(1, {
+    message: "পরিবারের আর্থিক অবস্থা সম্পর্কে সংক্ষিপ্ত বিবরণ দিন।",
   }),
 });
 

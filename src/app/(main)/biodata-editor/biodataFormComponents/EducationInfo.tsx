@@ -143,6 +143,11 @@ export default function EducationInfo({
               </FormItem>
             )}
           />
+          <div className="text-[#E25A6F]">
+            মাধ্যমিক পর্যায় থেকে শুরু করে এখন পর্যন্ত যেসকল ডিগ্রী অর্জন করেছেন
+            বা চলমান রয়েছে সেগুলো নিচে প্লাস বাটন চাপ দিয়ে ধাপে ধাপে যুক্ত করুন।
+            কোনো ডিগ্রী না থাকলে খালি রাখুন।
+          </div>
           {fields.map((field, index) => (
             <div
               className="flex flex-col space-y-4 items-center rounded-2xl p-4 border border-[#E25A6F]"

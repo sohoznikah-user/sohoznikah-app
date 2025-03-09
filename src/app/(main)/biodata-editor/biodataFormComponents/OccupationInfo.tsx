@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { occupationsList } from "@/lib/consts";
 import { BiodataFormDataProps, OccupationInfoFormData } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { occupationInfoFormData } from "@/lib/validations";
 import {

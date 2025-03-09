@@ -132,3 +132,21 @@ export const occupationsList = [
   { id: "30", title: "পেশা নেই/কর্মহীন" },
   { id: "31", title: "অন্যান্য" },
 ];
+
+export const familyBackgrounds = [
+  { id: "1", title: "উচ্চবিত্ত" },
+  { id: "2", title: "উচ্চ মধ্যবিত্ত" },
+  { id: "3", title: "মধ্যবিত্ত" },
+  { id: "4", title: "নিম্ন মধ্যবিত্ত" },
+  { id: "5", title: "নিম্নবিত্ত" },
+];
+
+export const familyTypes = [
+  { id: "1", title: "একক পরিবার" },
+  { id: "2", title: "যৌথ পরিবার" },
+];
+
+export const siblingTypes = [
+  { id: "1", title: "ভাই" },
+  { id: "2", title: "বোন" },
+];
