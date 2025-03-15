@@ -12,8 +12,8 @@ import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 
 export default function BiodatasPageFilters() {
-  const [ageRange, setAgeRange] = useState<[number, number]>([18, 80]);
-  const [heightRange, setHeightRange] = useState<[number, number]>([36, 84]);
+  const [ageRange, setAgeRange] = useState<number[]>([18, 80]);
+  const [heightRange, setHeightRange] = useState<number[]>([36, 84]);
 
   return (
     <div className="w-72 bg-white ml-4 px-4 space-y-2">

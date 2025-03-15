@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 
 export function HomeSearchBiodata() {
   const router = useRouter();
-  const [range, setRange] = useState<[number, number]>([18, 80]);
+  const [range, setRange] = useState<number[]>([18, 80]);
 
   const handleSearchClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
