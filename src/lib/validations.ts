@@ -151,9 +151,7 @@ export const educationInfoFormData = z.object({
       }),
     })
   ),
-  religiousEducation: requiredString.min(1, {
-    message: "ধর্মীয় শিক্ষা নির্বাচন করা আবশ্যক।",
-  }),
+  religiousEducation: z.array(optionalString).optional(),
   detail: requiredString.min(1, {
     message: "শিক্ষার বিস্তারিত তথ্য প্রদান করা আবশ্যক।",
   }),
@@ -224,7 +222,7 @@ export const religiousInfoFormData = z.object({
   ideology: requiredString.min(1, {
     message: "ধর্মীয় কোন মতাদর্শ মেনে চলেন তা প্রদান করা আবশ্যক।",
   }),
-  madhabOrManhaj: requiredString.min(1, {
+  madhab: requiredString.min(1, {
     message: "কোন মাজহাব / মানহাজ অনুসরণ করেন তা নির্বাচন করা আবশ্যক।",
   }),
   praysFiveTimes: requiredString.min(1, {
@@ -253,6 +251,33 @@ export const religiousInfoFormData = z.object({
   practicingSince: requiredString.min(1, {
     message:
       "কত সাল/সময় থেকে পরিপূর্ণভাবে দ্বীনের পথে চলা শুরু করেছেন তা প্রদান করা আবশ্যক।",
+  }),
+});
+
+export const personalInfoFormData = z.object({
+  beardStatus: requiredString.min(1, {
+    message: "দয়া করে দাড়ি রাখার ব্যাপারে আপনার অবস্থান উল্লেখ করুন।",
+  }),
+  preferredOutfit: requiredString.min(1, {
+    message: "আপনার বাহিরে পরার পছন্দের পোশাক নির্বাচন করুন।",
+  }),
+  entertainmentPreferences: requiredString.min(1, {
+    message: "দয়া করে আপনি কোন ধরণের বিনোদন উপভোগ করেন তা উল্লেখ করুন।",
+  }),
+  healthConditions: requiredString.min(1, {
+    message: "আপনার যদি কোনো মানসিক বা শারীরিক সমস্যা থাকে, তা উল্লেখ করুন।",
+  }),
+  personalTraits: z.array(optionalString).min(1, {
+    message: "আপনার ব্যক্তিগত কিছু গুণাবলী উল্লেখ করুন।",
+  }),
+  genderEqualityView: requiredString.min(1, {
+    message: "নারী-পুরুষ সমঅধিকারের বিষয়ে আপনার মতামত প্রদান করুন।",
+  }),
+  lgbtqOpinion: requiredString.min(1, {
+    message: "LGBTQ সম্পর্কিত আপনার ধারণা বা মতামত লিখুন।",
+  }),
+  specialConditions: z.array(optionalString).min(1, {
+    message: "আপনার ক্ষেত্রে প্রযোজ্য বিশেষ কোনো অবস্থা থাকলে তা উল্লেখ করুন।",
   }),
 });
 
@@ -287,36 +312,20 @@ export const spousePreferenceInfoFormData = z.object({
   age: requiredString.min(1, {
     message: "বয়স প্রদান করা আবশ্যক।",
   }),
-  skinTone: requiredString.min(1, {
-    message: "গায়ের রং নির্বাচন করা আবশ্যক।",
-  }),
+  skinTone: z.array(optionalString).optional(),
   height: requiredString.min(1, {
     message: "উচ্চতা প্রদান করা আবশ্যক।",
   }),
   educationalQualification: requiredString.min(1, {
     message: "শিক্ষাগত যোগ্যতা নির্বাচন করা আবশ্যক।",
   }),
-  religiousEducationalQualification: requiredString.min(1, {
-    message: "ধর্মীয় শিক্ষাগত যোগ্যতা নির্বাচন করা আবশ্যক।",
-  }),
-  maritalStatus: requiredString.min(1, {
-    message: "বৈবাহিক অবস্থা নির্বাচন করা আবশ্যক।",
-  }),
-  specialCategory: requiredString.min(1, {
-    message: "বিশেষ ক্যাটাগরি নির্বাচন করা আবশ্যক।",
-  }),
-  religiousType: requiredString.min(1, {
-    message: "ধর্মীয় মতাদর্শ নির্বাচন করা আবশ্যক।",
-  }),
-  occupation: requiredString.min(1, {
-    message: "পেশা নির্বাচন করা আবশ্যক।",
-  }),
-  familyBackground: requiredString.min(1, {
-    message: "পারিবারিক পটভূমি নির্বাচন করা আবশ্যক।",
-  }),
-  darkSkinTone: requiredString.min(1, {
-    message: "গা dark ় ত্বক রঙের preference প্রদান করা আবশ্যক।",
-  }),
+  religiousEducationalQualification: z.array(optionalString).optional(),
+  address: optionalString,
+  maritalStatus: z.array(optionalString).optional(),
+  specialCategory: z.array(optionalString).optional(),
+  religiousType: z.array(optionalString).optional(),
+  occupation: z.array(optionalString).optional(),
+  familyBackground: z.array(optionalString).optional(),
   secondMarrige: requiredString.min(1, {
     message: "দ্বিতীয় বিয়ে সম্পর্কে নির্বাচন করা আবশ্যক।",
   }),
@@ -359,6 +368,7 @@ export const biodataFormData = z.object({
   occupationInfoFormData: occupationInfoFormData,
   familyInfoFormData: familyInfoFormData,
   religiousInfoFormData: religiousInfoFormData,
+  personalInfoFormData: personalInfoFormData,
   marriageInfoFormData: marriageInfoFormData,
   spousePreferenceInfoFormData: spousePreferenceInfoFormData,
   profilePicFormData: profilePicFormData,

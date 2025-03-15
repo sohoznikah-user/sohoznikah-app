@@ -9,6 +9,7 @@ import {
   occupationInfoFormData,
   familyInfoFormData,
   religiousInfoFormData,
+  personalInfoFormData,
   marriageInfoFormData,
   spousePreferenceInfoFormData,
   profilePicFormData,
@@ -24,6 +25,7 @@ export type EducationInfoFormData = z.infer<typeof educationInfoFormData>;
 export type OccupationInfoFormData = z.infer<typeof occupationInfoFormData>;
 export type FamilyInfoFormData = z.infer<typeof familyInfoFormData>;
 export type ReligiousInfoFormData = z.infer<typeof religiousInfoFormData>;
+export type PersonalInfoFormData = z.infer<typeof personalInfoFormData>;
 export type MarriageInfoFormData = z.infer<typeof marriageInfoFormData>;
 export type SpousePreferenceInfoFormData = z.infer<
   typeof spousePreferenceInfoFormData

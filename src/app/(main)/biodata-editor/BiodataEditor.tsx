@@ -22,9 +22,7 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
     window.history.pushState(null, "", `?${newSearchParams.toString()}`);
   };
 
-  const FormComponent = steps.find(
-    (step) => step.key === currentStep.key
-  )?.component;
+  const FormComponent = currentStep?.component;
 
   const handleSave = async () => {
     switch (currentStep.key) {
@@ -52,7 +50,7 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
         break;
       case "marital-info":
         break;
-      case "partner-info":
+      case "spouse-preference-info":
         break;
       case "profile-pic":
         break;
@@ -63,7 +61,7 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
 
   return (
     <>
-      <Breadcrumbs currentStep={currentStep.key} setCurrentStep={setStep} />
+      <Breadcrumbs currentStep={currentStep?.key} setCurrentStep={setStep} />
       <div className="mt-8 w-full">
         {FormComponent && (
           <FormComponent

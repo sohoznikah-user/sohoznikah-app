@@ -100,12 +100,12 @@ export const steps: BiodataFormStep[] = [
     key: "marital-info",
     disabled: true,
     prev: "personal-info",
-    next: "partner-info",
+    next: "spouse-preference-info",
   },
   {
     title: "যেমন জীবনসঙ্গী আশা করেন",
     component: SpousePreferenceInfo,
-    key: "partner-info",
+    key: "spouse-preference-info",
     disabled: true,
     prev: "marital-info",
     next: "profile-pic",
@@ -115,7 +115,7 @@ export const steps: BiodataFormStep[] = [
     component: ProfilePic,
     key: "profile-pic",
     disabled: true,
-    prev: "partner-info",
+    prev: "spouse-preference-info",
     next: "final-words",
   },
   {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
@@ -16,58 +16,131 @@ import female3 from "@/assets/images/female-3.svg";
 import female4 from "@/assets/images/female-4.svg";
 import female5 from "@/assets/images/female-5.svg";
 import female6 from "@/assets/images/female-6.svg";
+import { BiodataFormDataProps, ProfilePicFormData } from "@/lib/types";
+import { profilePicFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
-export default function ProfilePic() {
-  const isMale = true;
-  let images = [];
-  if (isMale) {
-    images = [male1, male2, male3, male4, male5, male6];
-  } else {
-    images = [female1, female2, female3, female4, female5, female6];
-  }
-  const [selectedImage, setSelectedImage] = useState(null);
+export default function ProfilePic({
+  biodataFormData,
+  setBiodataFormData,
+  handleSave,
+  currentStep,
+  setCurrentStep,
+}: BiodataFormDataProps) {
+  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+
+  const form = useForm<ProfilePicFormData>({
+    resolver: zodResolver(profilePicFormData),
+    defaultValues: {
+      photoId: biodataFormData?.profilePicFormData?.photoId || "",
+    },
+  });
+
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      if (submittedOnce) {
+        await form.trigger();
+      }
+      setBiodataFormData({
+        ...biodataFormData,
+        profilePicFormData: { ...values },
+      });
+    });
+    return unsubscribe;
+  }, [
+    submittedOnce,
+    setSubmittedOnce,
+    form,
+    biodataFormData,
+    setBiodataFormData,
+  ]);
+
+  const handleNextClick = async () => {
+    setSubmittedOnce(true);
+    const isValid = await form.trigger();
+    if (isValid) {
+      handleSave();
+    }
+  };
+
+  const images =
+    biodataFormData?.primaryInfoFormData?.biodataType === "1"
+      ? [male1, male2, male3, male4, male5, male6]
+      : [female1, female2, female3, female4, female5, female6];
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">প্রোফাইল পিকচার</div>
-      <div className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
-        <div>
-          আপনার সাথে মানানসই বা সামঞ্জস্যপূর্ণ একটি প্রোফাইল পিকচার বাছাই করুন:
-        </div>
-        <div className="flex flex-wrap">
-          {images.map((image, index) => (
-            <div
-              key={index}
-              className="w-1/3 mb-4 flex items-center justify-center relative"
-            >
-              <div
-                className={`border p-12 rounded-3xl cursor-pointer transition-all relative ${
-                  selectedImage === image
-                    ? "border-[#E25A6F] ring-2 ring-[#E25A6F]"
-                    : "border-gray-300"
-                } `}
-                onClick={() => setSelectedImage(image)}
-              >
-                <Image
-                  src={image}
-                  alt={`Male${index + 1}`}
-                  width={120}
-                  height={40}
-                  priority
-                />
-                {selectedImage === image && (
-                  <CheckCircle className="absolute top-4 right-4 text-[#E25A6F]" />
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="max-w-4xl w-full space-x-2">
-        <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
+      <Form {...form}>
+        <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+          <FormField
+            control={form.control}
+            name="photoId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  আপনার সাথে মানানসই বা সামঞ্জস্যপূর্ণ একটি প্রোফাইল পিকচার
+                  বাছাই করুন:
+                </FormLabel>
+                <FormControl>
+                  <div className="flex flex-wrap">
+                    {images.map((image, index) => (
+                      <div
+                        key={index}
+                        className="w-1/3 mb-4 flex items-center justify-center relative"
+                      >
+                        <div
+                          className={`border p-12 rounded-3xl cursor-pointer transition-all relative ${
+                            form.getValues().photoId === image.src
+                              ? "border-[#E25A6F] ring-2 ring-[#E25A6F]"
+                              : "border-gray-300"
+                          } `}
+                          onClick={() => {
+                            field.onChange(image.src);
+                          }}
+                        >
+                          <Image
+                            src={image}
+                            alt={`Profile${index + 1}`}
+                            width={120}
+                            height={40}
+                            priority
+                          />
+                          {form.getValues().photoId === image.src && (
+                            <CheckCircle className="absolute top-4 right-4 text-[#E25A6F]" />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+
+      <div className="max-w-4xl w-full space-x-2 flex justify-center">
+        <Button
+          className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
+          onClick={() => setCurrentStep(currentStep.prev)}
+        >
           Previous
         </Button>
-        <Button className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]">
+        <Button
+          className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
+          onClick={handleNextClick}
+        >
           Next
         </Button>
       </div>

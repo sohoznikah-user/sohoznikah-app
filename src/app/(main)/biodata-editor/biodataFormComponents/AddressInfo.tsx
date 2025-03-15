@@ -293,7 +293,7 @@ export default function AddressInfo({
               {form.getValues(`addresses.${index}.location`) === "2" && (
                 <FormField
                   control={form.control}
-                  name={`addresses.${index}.country`}
+                  name={`addresses.${index}.cityzenshipStatus`}
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="text-md space-y-2 leading-4.5">
@@ -302,7 +302,11 @@ export default function AddressInfo({
                       <div className="flex flex-col space-y-2">
                         <div className="flex items-center space-x-2">
                           <FormControl>
-                            <RadioGroup className="w-full flex flex-wrap gap-0 min-h-12">
+                            <RadioGroup
+                              className="w-full flex flex-wrap gap-0 min-h-12"
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
                               {citizenshipOptions.map((x) => (
                                 <div
                                   key={x.id}

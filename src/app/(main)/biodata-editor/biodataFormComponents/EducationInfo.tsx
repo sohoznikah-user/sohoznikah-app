@@ -15,13 +15,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { educationTypes } from "@/lib/consts";
+import { educationTypes, religiousEducationQualities } from "@/lib/consts";
 import { BiodataFormDataProps, EducationInfoFormData } from "@/lib/types";
 import { educationInfoFormData } from "@/lib/validations";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export default function EducationInfo({
   biodataFormData,
@@ -49,6 +51,9 @@ export default function EducationInfo({
               };
             })
           : [{ name: "", passYear: "", group: "", institute: "" }],
+      religiousEducation:
+        biodataFormData?.educationInfoFormData?.religiousEducation || [],
+      detail: biodataFormData?.educationInfoFormData?.detail || "",
     },
   });
 
@@ -276,11 +281,27 @@ export default function EducationInfo({
                     দ্বীনি শিক্ষাগত যোগ্যতা:
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="সম্পূর্ণ নাম"
-                    />
+                    <div className="w-full flex flex-wrap">
+                      {religiousEducationQualities.map((x) => (
+                        <div
+                          key={x.id}
+                          className="w-1/3 flex items-center space-x-2 mb-4"
+                        >
+                          <Checkbox
+                            id={x.id}
+                            checked={field.value?.includes(x.id)}
+                            onCheckedChange={(checked) => {
+                              const updatedOccupations = checked
+                                ? [...field.value, x.id]
+                                : field.value.filter((id) => id !== x.id);
+
+                              field.onChange(updatedOccupations);
+                            }}
+                          />
+                          <Label htmlFor={x.id}>{x.title}</Label>
+                        </div>
+                      ))}
+                    </div>
                   </FormControl>
                 </div>
                 <FormMessage />
