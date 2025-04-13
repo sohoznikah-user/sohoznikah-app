@@ -37,7 +37,7 @@ export const primaryInfoFormData = z.object({
   email: requiredString.min(1, {
     message: "ইমেইল প্রদান করা আবশ্যক।",
   }),
-  mobile: requiredString.min(1, {
+  phoneNumber: requiredString.min(1, {
     message: "মোবাইল নম্বর প্রদান করা আবশ্যক।",
   }),
   guardianContacts: z
@@ -46,10 +46,10 @@ export const primaryInfoFormData = z.object({
         relation: requiredString.min(1, {
           message: "অভিভাবকের সম্পর্ক প্রদান করা আবশ্যক।",
         }),
-        name: requiredString.min(1, {
-          message: "অভিভাবকের নাম নম্বর প্রদান করা আবশ্যক।",
+        fullName: requiredString.min(1, {
+          message: "অভিভাবকের নাম প্রদান করা আবশ্যক।",
         }),
-        mobile: requiredString.min(1, {
+        phoneNumber: requiredString.min(1, {
           message: "অভিভাবকের মোবাইল নম্বর প্রদান করা আবশ্যক।",
         }),
       })

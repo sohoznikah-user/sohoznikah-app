@@ -41,19 +41,19 @@ export default function PrimaryInfo({
       fatherName: biodataFormData?.primaryInfoFormData?.fatherName || "",
       motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
       email: biodataFormData?.primaryInfoFormData?.email || "",
-      mobile: biodataFormData?.primaryInfoFormData?.mobile || "",
+      phoneNumber: biodataFormData?.primaryInfoFormData?.phoneNumber || "",
       guardianContacts:
         biodataFormData?.primaryInfoFormData?.guardianContacts?.length > 0
           ? biodataFormData?.primaryInfoFormData?.guardianContacts.map((x) => {
               return {
                 relation: x.relation,
-                name: x.name,
-                mobile: x.mobile,
+                fullName: x.fullName,
+                phoneNumber: x.phoneNumber,
               };
             })
           : [
-              { relation: "", name: "", mobile: "" },
-              { relation: "", name: "", mobile: "" },
+              { relation: "", fullName: "", phoneNumber: "" },
+              { relation: "", fullName: "", phoneNumber: "" },
             ],
     },
   });
@@ -255,7 +255,7 @@ export default function PrimaryInfo({
           />
           <FormField
             control={form.control}
-            name="mobile"
+            name="phoneNumber"
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-col space-y-2">
@@ -289,7 +289,7 @@ export default function PrimaryInfo({
               <Button
                 type="button"
                 className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F] flex items-center space-x-2"
-                onClick={() => append({ name: "", mobile: "" })}
+                onClick={() => append({ fullName: "", phoneNumber: "" })}
               >
                 <Plus size={20} /> <span>নতুন নম্বর যোগ করুন</span>
               </Button>
@@ -318,7 +318,7 @@ export default function PrimaryInfo({
                   />
                   <FormField
                     control={form.control}
-                    name={`guardianContacts.${index}.name`}
+                    name={`guardianContacts.${index}.fullName`}
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <div className="flex items-center space-x-2">
@@ -336,7 +336,7 @@ export default function PrimaryInfo({
                   />
                   <FormField
                     control={form.control}
-                    name={`guardianContacts.${index}.mobile`}
+                    name={`guardianContacts.${index}.phoneNumber`}
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <div className="flex items-center space-x-2">
