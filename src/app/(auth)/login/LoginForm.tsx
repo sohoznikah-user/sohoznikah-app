@@ -10,7 +10,7 @@ import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 interface LoginFormValues {
   email: string;
@@ -24,21 +24,54 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormValues>();
+    formState: { errors, isValid },
+    watch,
+    trigger,
+  } = useForm<LoginFormValues>({
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const email = watch("email");
+  const password = watch("password");
 
   const onFinish = async (values: LoginFormValues) => {
+    // Validate all fields before proceeding
+    const isEmailValid = await trigger("email");
+    const isPasswordValid = await trigger("password");
+
+    if (!isEmailValid || !isPasswordValid) {
+      toast.error("Please fix the validation errors before proceeding");
+      return;
+    }
+
+    // Additional validation checks
+    if (!values.email || !values.password) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(values.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    // Password length validation
+    if (values.password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+
     try {
       const result = await loginUser(values).unwrap();
-
+      console.log(result);
       if (result.success) {
-        Swal.fire({
-          title: "Success",
-          text: result.message || "You have successfully logged in!",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        toast.success(result.message || "You have successfully logged in!");
 
         const accessToken = result.data.accessToken;
         const refreshToken = result.data.refreshToken;
@@ -53,16 +86,12 @@ const LoginForm = () => {
         );
 
         router.push("/dashboard");
+      } else {
+        toast.error(result.message || "Invalid email or password!");
       }
     } catch (error: any) {
       console.error("Login Error:", error);
-      Swal.fire({
-        title: "Error",
-        text: error?.data?.message || "Invalid email or password!",
-        icon: "error",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      toast.error(error?.message || "Invalid email or password!");
     }
   };
 
@@ -77,7 +106,13 @@ const LoginForm = () => {
           id="email"
           type="text"
           placeholder="Email/Mobile Number"
-          {...register("email", { required: "Email is required" })}
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          })}
         />
         {errors.email && (
           <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -93,7 +128,13 @@ const LoginForm = () => {
           id="password"
           type="password"
           placeholder="Password"
-          {...register("password", { required: "Password is required" })}
+          {...register("password", {
+            required: "Password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters",
+            },
+          })}
         />
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -108,7 +149,7 @@ const LoginForm = () => {
 
       <Button
         type="submit"
-        disabled={isLoading}
+        disabled={isLoading || !isValid || !email || !password}
         className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F] disabled:opacity-50"
       >
         {isLoading ? "Logging in..." : "Login"}

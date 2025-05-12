@@ -1,18 +1,20 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import authReducer from "./features/auth/authSlice"; // Assuming you have an auth slice
+import { baseApi } from "./api/baseApi";
+import authReducer from "./features/auth/authSlice";
 import biodataReducer from "./features/biodata/biodataSlice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["biodata", "auth"], // Persist biodata and auth slices
+  whitelist: ["biodata", "auth"],
 };
 
 const rootReducer = combineReducers({
+  [baseApi.reducerPath]: baseApi.reducer,
   biodata: biodataReducer,
-  auth: authReducer, // Include other reducers as needed
+  auth: authReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -24,7 +26,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
-    }),
+    }).concat(baseApi.middleware) as any,
 });
 
 export const persistor = persistStore(store);

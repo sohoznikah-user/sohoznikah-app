@@ -5,6 +5,6 @@ import biodataReducer from "../features/biodata/biodataSlice";
 
 export const reducer = {
   [baseApi.reducerPath]: baseApi.reducer,
-  auth: authReducer, // This gets persisted in `store.ts`
+  auth: authReducer,
   biodata: biodataReducer,
 };

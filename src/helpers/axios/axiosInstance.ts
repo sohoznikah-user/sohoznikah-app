@@ -2,7 +2,7 @@ import { authAccessKey } from "@/constant/authkey";
 import { IGenericErrorResponse } from "@/types";
 import { getCookie } from "@/utils/cookieHelper";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 const instance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}`,
@@ -43,12 +43,8 @@ instance.interceptors.response.use(
   function (error) {
     // Handle Unauthorized (401) or Forbidden (403)
     if (error?.response?.status === 401 || error?.response?.status === 403) {
-      Swal.fire({
-        title: "Access Denied!",
-        text: error?.response?.data?.message || "UnAuthorized Access.",
-        icon: "error",
-        timer: 1500,
-      });
+      toast.error(error?.response?.data?.message || "UnAuthorized Access.");
+
       window.location.href = "/login"; // Redirect to login
       return Promise.reject("Unauthorized. Redirecting to login.");
     }

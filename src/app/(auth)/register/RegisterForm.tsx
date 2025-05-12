@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 interface RegisterFormValues {
   name: string;
@@ -40,13 +40,7 @@ const RegisterForm = () => {
 
   const onFinish = async (values: RegisterFormValues) => {
     if (!accountType) {
-      Swal.fire({
-        title: "Error",
-        text: "Please select an account type",
-        icon: "error",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      toast.error("Please select an account type");
       return;
     }
 
@@ -62,25 +56,13 @@ const RegisterForm = () => {
     try {
       const result = await registerUser(registerData).unwrap();
       if (result.success) {
-        Swal.fire({
-          title: "Success",
-          text: result.message || "Successfully registered!",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        toast.success(result.message || "Successfully registered!");
 
         router.push("/login");
       }
     } catch (error: any) {
       console.error("Register Error:", error);
-      Swal.fire({
-        title: "Error",
-        text: error?.message || "Failed to register!",
-        icon: "error",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      toast.error(error?.message || "Failed to register!");
     }
   };
 

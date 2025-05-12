@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useForgotPasswordMutation } from "@/redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 interface ForgotPasswordFormValues {
   email: string;
@@ -19,41 +19,53 @@ const FortgetPassForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<ForgotPasswordFormValues>();
+    formState: { errors, isValid },
+    watch,
+    trigger,
+  } = useForm<ForgotPasswordFormValues>({
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+    },
+  });
 
-  const onFinish = async (values: any) => {
+  const email = watch("email");
+
+  const onFinish = async (values: ForgotPasswordFormValues) => {
+    // Validate email before proceeding
+    const isEmailValid = await trigger("email");
+
+    if (!isEmailValid) {
+      toast.error("Please fix the validation errors before proceeding");
+      return;
+    }
+
+    // Additional validation checks
+    if (!values.email) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(values.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
     try {
       const result = await forgotPassword(values).unwrap();
-      //   console.log(result);
       if (result.success) {
-        Swal.fire({
-          title: "Success",
-          text: result.message || "Reset password link sent to your email!",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
+        toast.success(
+          result.message || "Reset password link sent to your email!"
+        );
         router.push("/reset-password");
       } else {
-        Swal.fire({
-          title: "Error",
-          text: result.message || "Something went wrong!",
-          icon: "error",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        toast.error(result.message || "Something went wrong!");
       }
     } catch (error: any) {
       console.error("Forgot Password Error:", error);
-      Swal.fire({
-        title: "Error",
-        text: error?.message || "Something went wrong!",
-        icon: "error",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      toast.error(error?.message || "Something went wrong!");
     }
   };
 
@@ -66,15 +78,25 @@ const FortgetPassForm = () => {
         <Input
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           id="email"
-          type="text"
+          type="email"
           placeholder="Email"
-          {...register("email", { required: "Email is required" })}
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          })}
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
       </div>
 
       <Button
-        className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F]"
-        disabled={isLoading}
+        className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F] disabled:opacity-50"
+        type="submit"
+        disabled={isLoading || !isValid || !email}
       >
         {isLoading ? "Sending..." : "Send Reset Password Link"}
       </Button>

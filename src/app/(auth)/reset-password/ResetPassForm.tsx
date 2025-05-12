@@ -5,10 +5,11 @@ import { Label } from "@/components/ui/label";
 import { useResetPasswordMutation } from "@/redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 interface ResetPasswordFormValues {
   newPassword: string;
+  confirmPassword: string;
 }
 
 const ResetPassForm = () => {
@@ -18,41 +19,61 @@ const ResetPassForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<ResetPasswordFormValues>();
+    formState: { errors, isValid },
+    watch,
+    trigger,
+  } = useForm<ResetPasswordFormValues>({
+    mode: "onChange",
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  const newPassword = watch("newPassword");
+  const confirmPassword = watch("confirmPassword");
 
   const onFinish = async (values: ResetPasswordFormValues) => {
-    try {
-      const result = await resetPassword(values).unwrap();
-      //   console.log(result);
-      if (result.success) {
-        Swal.fire({
-          title: "Success",
-          text: result.message || "Reset password link sent to your email!",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+    // Validate all fields before proceeding
+    const isNewPasswordValid = await trigger("newPassword");
+    const isConfirmPasswordValid = await trigger("confirmPassword");
 
-        router.push("/reset-password");
+    if (!isNewPasswordValid || !isConfirmPasswordValid) {
+      toast.error("Please fix the validation errors before proceeding");
+      return;
+    }
+
+    // Additional validation checks
+    if (!values.newPassword || !values.confirmPassword) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // Password length validation
+    if (values.newPassword.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+
+    // Password match validation
+    if (values.newPassword !== values.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      const result = await resetPassword({
+        newPassword: values.newPassword,
+      }).unwrap();
+      if (result.success) {
+        toast.success(result.message || "Password reset successful!");
+        router.push("/login");
       } else {
-        Swal.fire({
-          title: "Error",
-          text: result.message || "Something went wrong!",
-          icon: "error",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        toast.error(result.message || "Something went wrong!");
       }
     } catch (error: any) {
       console.error("Reset Password Error:", error);
-      Swal.fire({
-        title: "Error",
-        text: error?.message || "Something went wrong!",
-        icon: "error",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      toast.error(error?.message || "Something went wrong!");
     }
   };
 
@@ -65,13 +86,47 @@ const ResetPassForm = () => {
         <Input
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           id="newPassword"
-          type="text"
+          type="password"
           placeholder="New Password"
+          {...register("newPassword", {
+            required: "New password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters",
+            },
+          })}
         />
+        {errors.newPassword && (
+          <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
+        )}
       </div>
+
+      <div className="space-y-2">
+        <Label className="block font-medium" htmlFor="confirmPassword">
+          Confirm Password
+        </Label>
+        <Input
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirm Password"
+          {...register("confirmPassword", {
+            required: "Please confirm your password",
+            validate: (value) =>
+              value === newPassword || "Passwords do not match",
+          })}
+        />
+        {errors.confirmPassword && (
+          <p className="text-red-500 text-sm">
+            {errors.confirmPassword.message}
+          </p>
+        )}
+      </div>
+
       <Button
-        className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F]"
-        disabled={isLoading}
+        className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F] disabled:opacity-50"
+        type="submit"
+        disabled={isLoading || !isValid || !newPassword || !confirmPassword}
       >
         {isLoading ? "Submitting..." : "Submit"}
       </Button>
