@@ -1,5 +1,14 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/SpousePreferenceInfo.tsx
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -12,16 +21,16 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  skinTones,
+  familyBackgrounds,
   heights,
   maritalStatuses,
-  familyBackgrounds,
   muslimTypes,
   occupationsList,
   religiousEducationQualities,
-  spouseSpecialCatagories,
-  spouseLocationOptions,
   secondMarriageOptions,
+  skinTones,
+  spouseLocationOptions,
+  spouseSpecialCatagories,
 } from "@/lib/consts";
 import {
   BiodataFormDataProps,
@@ -31,14 +40,6 @@ import { spousePreferenceInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 
 export default function SpousePreferenceInfo({
   biodataFormData,

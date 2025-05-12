@@ -1,6 +1,8 @@
+// File: src/app/HomeSearchBiodata.tsx
+
 "use client";
 
-import { MouseEvent, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -10,8 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { MouseEvent, useState } from "react";
 
 export function HomeSearchBiodata() {
   const router = useRouter();

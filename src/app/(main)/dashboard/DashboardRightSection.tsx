@@ -1,3 +1,4 @@
+// File: src/app/(main)/dashboard/DashboardRightSection.tsx
 export default function DashboardRightSection() {
   return (
     <div className="py-12 mr-8 flex flex-col items-center space-y-6">

@@ -1,13 +1,15 @@
+// File: src/app/(main)/biodatas/listPageComponentes/BiodatasPageFilters.tsx
+
 "use client";
 
-import { Label } from "@/components/ui/label";
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 

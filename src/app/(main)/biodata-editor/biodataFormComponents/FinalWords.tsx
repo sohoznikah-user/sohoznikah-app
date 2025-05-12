@@ -1,11 +1,6 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/FinalWords.tsx
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { BiodataFormDataProps, FinalWordsFormData } from "@/lib/types";
-import { finalWordsFormData } from "@/lib/validations";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -14,6 +9,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { BiodataFormDataProps, FinalWordsFormData } from "@/lib/types";
+import { finalWordsFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function FinalWords({
   biodataFormData,

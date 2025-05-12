@@ -1,8 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Metadata } from "next";
 import Link from "next/link";
+import ResetPassForm from "./ResetPassForm";
 
 export const metadata: Metadata = {
   title: "Reset Password",
@@ -14,22 +12,7 @@ export default function ResetPasswordPage() {
       <h2 className="text-2xl font-semibold mb-6 text-center">
         Reset Password
       </h2>
-      <form className="space-y-4 text-left">
-        <div className="space-y-2">
-          <Label className="block font-medium" htmlFor="newPassword">
-            New Password
-          </Label>
-          <Input
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            id="newPassword"
-            type="text"
-            placeholder="New Password"
-          />
-        </div>
-        <Button className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F]">
-          Submit
-        </Button>
-      </form>
+      <ResetPassForm />
       <p className="text-sm text-gray-600 mt-3 text-center">
         Already have an account?
         <Link href="/login" className="text-blue-500 hover:underline ml-1">

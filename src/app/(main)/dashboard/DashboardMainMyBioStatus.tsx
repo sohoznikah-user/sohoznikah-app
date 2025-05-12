@@ -1,3 +1,4 @@
+// File: src/app/(main)/dashboard/DashboardMainMyBioStatus.tsx
 export default function DashboardMainMyBioStatus() {
   return (
     <div className="w-96 bg-[#f2f4fc] p-8 flex flex-col space-y-4 rounded-xl">

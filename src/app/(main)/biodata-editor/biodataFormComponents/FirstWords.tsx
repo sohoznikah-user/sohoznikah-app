@@ -1,9 +1,6 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/FirstWords.tsx
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { BiodataFormDataProps, FirstWordsFormData } from "@/lib/types";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { firstWordsFormData } from "@/lib/validations";
 import {
   Form,
   FormControl,
@@ -12,15 +9,28 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect, useState } from "react";
+import { FirstWordsFormData } from "@/lib/types";
+import { firstWordsFormData } from "@/lib/validations";
+import { setBiodataFormData } from "@/redux/features/biodata/biodataSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+interface BiodataFormDataProps {
+  biodataFormData: any;
+  handleSave: () => void;
+  currentStep: any;
+  setCurrentStep: (step: string) => void;
+}
 
 export default function FirstWords({
   biodataFormData,
-  setBiodataFormData,
   handleSave,
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
+  const dispatch = useAppDispatch();
   const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
 
   const form = useForm<FirstWordsFormData>({
@@ -37,30 +47,21 @@ export default function FirstWords({
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
-      }
-      setBiodataFormData({
-        ...biodataFormData,
-        firstWordsFormData: { ...values },
-      });
-    });
-    return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
-
   const handleNextClick = async () => {
     setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      handleSave();
+      const formValues = form.getValues();
+      // Only update if we have valid values
+      if (Object.values(formValues).some((value) => value !== undefined)) {
+        dispatch(
+          setBiodataFormData({
+            key: "firstWordsFormData",
+            data: formValues,
+          })
+        );
+        handleSave();
+      }
     }
   };
 

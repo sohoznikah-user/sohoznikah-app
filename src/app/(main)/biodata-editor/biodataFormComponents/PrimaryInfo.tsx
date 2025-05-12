@@ -1,12 +1,5 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/PrimaryInfo.tsx
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -15,13 +8,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { biodataTypes } from "@/lib/consts";
 import { BiodataFormDataProps, PrimaryInfoFormData } from "@/lib/types";
 import { primaryInfoFormData } from "@/lib/validations";
-import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 export default function PrimaryInfo({
   biodataFormData,

@@ -1,10 +1,12 @@
+// File: src/app/(main)/biodatas/listPageComponentes/BiodatasPageCard.tsx
+
 "use client";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import male from "@/assets/images/male-5.svg";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import male from "@/assets/images/male-5.svg";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Heart } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export interface BiodatasPageCardProps {

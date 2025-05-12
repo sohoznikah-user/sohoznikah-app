@@ -1,10 +1,7 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/ReligiousInfo.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { madhhabs, religiousIdeologies } from "@/lib/consts";
 import {
   Form,
   FormControl,
@@ -13,11 +10,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { madhhabs, religiousIdeologies } from "@/lib/consts";
 import { BiodataFormDataProps, ReligiousInfoFormData } from "@/lib/types";
 import { religiousInfoFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function ReligiousInfo({
   biodataFormData,

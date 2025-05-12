@@ -1,3 +1,4 @@
+// File: src/app/(main)/dashboard/DashboardMainContent.tsx
 import DashboardMainBioStatus from "./DashboardMainBioStatus";
 import DashboardMainContactUs from "./DashboardMainContactUs";
 import DashboardMainMyActivityStatus from "./DashboardMainMyActivityStatus";

@@ -1,6 +1,15 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/FamilyInfo.tsx
+
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -12,18 +21,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { familyBackgrounds, familyTypes, siblingTypes } from "@/lib/consts";
 import { BiodataFormDataProps, FamilyInfoFormData } from "@/lib/types";
 import { familyInfoFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Minus, Plus } from "lucide-react";
 
 export default function FamilyInfo({
   biodataFormData,

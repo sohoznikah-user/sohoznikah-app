@@ -1,20 +1,23 @@
+// File: src/components/navbar/index.tsx
+
 "use client";
-import Link from "next/link";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "../ui/navigation-menu";
-import Image from "next/image";
 import logo from "@/assets/images/logo.svg";
+import { logout } from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import Image from "next/image";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "../ui/navigation-menu";
 
 export interface MenuItem {
   name: string;
@@ -22,7 +25,9 @@ export interface MenuItem {
 }
 
 export function Navbar() {
-  const authenticated = false;
+  const user = useAppSelector((state) => state.auth.user);
+  const token = useAppSelector((state) => state.auth.acesstoken);
+  const dispatch = useAppDispatch();
 
   const menuItems: MenuItem[] = [
     {
@@ -43,11 +48,11 @@ export function Navbar() {
     },
   ];
 
-  const user = {
-    name: "test",
-    profilePicture:
-      "http://localhost:3000/_next/static/media/male.b7323272.svg",
-  };
+  // const user = {
+  //   name: "test",
+  //   profilePicture:
+  //     "http://localhost:3000/_next/static/media/male.b7323272.svg",
+  // };
 
   return (
     <div className="sticky top-0 flex items-center z-20 justify-center p-4 text-[#1f4f69] bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
@@ -77,22 +82,29 @@ export function Navbar() {
         >
           বায়োডাটা তৈরী করুন
         </Link>
-        {!authenticated && (
+        {!user && !token ? (
           <Link
             href="/login"
             className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all"
           >
             Login
           </Link>
+        ) : (
+          <p
+            onClick={() => dispatch(logout())}
+            className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all cursor-pointer"
+          >
+            Logout
+          </p>
         )}
-        {authenticated && (
+        {user && token && (
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none">
-              <Avatar>
+              {/* <Avatar>
                 <AvatarImage src={user.profilePicture} alt={user.name} />
                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <span className="text-lg text-[#1f4f69]">{user.name}</span>
+              <span className="text-lg text-[#1f4f69]">{user.name}</span> */}
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"

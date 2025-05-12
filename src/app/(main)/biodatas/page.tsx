@@ -1,7 +1,7 @@
+import BiodatasPageAppliedFilters from "./listPageComponentes/BiodatasPageAppliedFilters";
+import BiodatasPageCard from "./listPageComponentes/BiodatasPageCard";
 import BiodatasPageFilters from "./listPageComponentes/BiodatasPageFilters";
 import BiodatasPageSearchByBiodataNo from "./listPageComponentes/SearchByBiodataNo";
-import BiodatasPageCard from "./listPageComponentes/BiodatasPageCard";
-import BiodatasPageAppliedFilters from "./listPageComponentes/BiodatasPageAppliedFilters";
 
 export default function BiodatasPage() {
   return (

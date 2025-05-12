@@ -1,3 +1,5 @@
+// File: src/app/(main)/biodatas/[id]/viewBioDataComponents/FamilyInfo.tsx
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function FamilyInfo() {

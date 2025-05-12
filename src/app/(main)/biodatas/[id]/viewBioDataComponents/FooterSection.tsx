@@ -1,3 +1,5 @@
+// File: src/app/(main)/biodatas/[id]/viewBioDataComponents/FooterSection.tsx
+
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 export default function FooterSection() {

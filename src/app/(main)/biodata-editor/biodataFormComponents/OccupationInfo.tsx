@@ -1,14 +1,6 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/OccupationInfo.tsx
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { occupationsList } from "@/lib/consts";
-import { BiodataFormDataProps, OccupationInfoFormData } from "@/lib/types";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { occupationInfoFormData } from "@/lib/validations";
 import {
   Form,
   FormControl,
@@ -17,6 +9,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { occupationsList } from "@/lib/consts";
+import { BiodataFormDataProps, OccupationInfoFormData } from "@/lib/types";
+import { occupationInfoFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function OccupationInfo({
   biodataFormData,

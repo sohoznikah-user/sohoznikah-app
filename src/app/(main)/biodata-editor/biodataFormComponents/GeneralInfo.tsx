@@ -1,21 +1,8 @@
-"use client";
+// File: src/app/(main)/biodata-editor/biodataFormComponents/GeneralInfo.tsx
 
-import { format } from "date-fns";
+"use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -24,20 +11,34 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
-import { BiodataFormDataProps, GeneralInfoFormData } from "@/lib/types";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { generalInfoFormData } from "@/lib/validations";
+import { Input } from "@/components/ui/input";
 import {
-  maritalStatuses,
-  skinTones,
-  heights,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   bloodGroups,
+  heights,
+  maritalStatuses,
   nationalities,
+  skinTones,
 } from "@/lib/consts";
+import { BiodataFormDataProps, GeneralInfoFormData } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { generalInfoFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function GeneralInfo({
   biodataFormData,

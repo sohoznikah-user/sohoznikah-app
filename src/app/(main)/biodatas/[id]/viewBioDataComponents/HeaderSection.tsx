@@ -1,17 +1,19 @@
+// File: src/app/(main)/biodatas/[id]/viewBioDataComponents/HeaderSection.tsx
+
+import male from "@/assets/images/male-5.svg";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Heart,
-  IdCard,
-  Send,
-  Mail,
   CircleChevronDown,
   Copy,
+  Heart,
+  IdCard,
+  Mail,
+  Send,
 } from "lucide-react";
 import Image from "next/image";
-import male from "@/assets/images/male-5.svg";
 import Link from "next/link";
-import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierment";
 import HeaderShortBio from "./HeaderShortBio";
+import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierment";
 
 export default function HeaderSection() {
   return (

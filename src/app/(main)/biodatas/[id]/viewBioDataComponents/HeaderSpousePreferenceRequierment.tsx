@@ -1,3 +1,5 @@
+// File: src/app/(main)/biodatas/[id]/viewBioDataComponents/HeaderSpousePreferenceRequierment.tsx
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function HeaderSpousePreferenceRequierment() {

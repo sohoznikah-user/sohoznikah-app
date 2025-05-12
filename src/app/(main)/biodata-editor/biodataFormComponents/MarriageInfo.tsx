@@ -1,8 +1,5 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/MarriageInfo.tsx
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -11,13 +8,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { afterMarriageJobs, afterMarriageStuties } from "@/lib/consts";
 import { BiodataFormDataProps, MarriageInfoFormData } from "@/lib/types";
 import { marriageInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { afterMarriageJobs, afterMarriageStuties } from "@/lib/consts";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function MarriageInfo({
   biodataFormData,

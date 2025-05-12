@@ -1,3 +1,4 @@
+// File: src/app/(main)/dashboard/DashboardMainBioStatus.tsx
 import { Slider } from "@/components/ui/slider";
 
 export default function DashboardMainBioStatus() {

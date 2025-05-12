@@ -1,15 +1,15 @@
-import React from "react";
+// File: src/app/(main)/biodatas/[id]/page.tsx
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import HeaderSection from "./viewBioDataComponents/HeaderSection";
-import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
-import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
 import AddressInfo from "./viewBioDataComponents/AddressInfo";
 import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
+import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
 import FooterSection from "./viewBioDataComponents/FooterSection";
-import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
 import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
-import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
+import HeaderSection from "./viewBioDataComponents/HeaderSection";
 import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
+import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
+import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
+import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
 import SpousePreferenceInfo from "./viewBioDataComponents/SpousePreferenceInfo";
 
 export default function BiodataPage() {

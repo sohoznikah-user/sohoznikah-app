@@ -1,4 +1,6 @@
-import { Search } from "lucide-react";
+// File: src/app/(main)/biodatas/listPageComponentes/SearchByBiodataNo.tsx
+
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -6,8 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 export default function BiodatasPageSearchByBiodataNo() {
   return (

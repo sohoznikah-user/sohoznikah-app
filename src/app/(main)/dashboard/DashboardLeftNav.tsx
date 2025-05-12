@@ -1,6 +1,7 @@
-import Image from "next/image";
+// File: src/app/(main)/dashboard/DashboardLeftNav.tsx
 import profilePic from "@/assets/images/profile-pic.png";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 export default function DashboardLeftNav() {
   return (

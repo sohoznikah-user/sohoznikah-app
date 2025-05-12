@@ -1,13 +1,7 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/PersonalInfo.tsx
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { BiodataFormDataProps, PersonalInfoFormData } from "@/lib/types";
-import { personalInfoFormData } from "@/lib/validations";
 import {
   Form,
   FormControl,
@@ -16,7 +10,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { characteristics, specialCatagories } from "@/lib/consts";
+import { BiodataFormDataProps, PersonalInfoFormData } from "@/lib/types";
+import { personalInfoFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function PersonalInfo({
   biodataFormData,

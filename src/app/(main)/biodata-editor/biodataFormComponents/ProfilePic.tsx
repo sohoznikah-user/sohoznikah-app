@@ -1,25 +1,20 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/ProfilePic.tsx
+
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
-import Image from "next/image";
-import male1 from "@/assets/images/male-1.svg";
-import male2 from "@/assets/images/male-2.svg";
-import male3 from "@/assets/images/male-3.svg";
-import male4 from "@/assets/images/male-4.svg";
-import male5 from "@/assets/images/male-5.svg";
-import male6 from "@/assets/images/male-6.svg";
 import female1 from "@/assets/images/female-1.svg";
 import female2 from "@/assets/images/female-2.svg";
 import female3 from "@/assets/images/female-3.svg";
 import female4 from "@/assets/images/female-4.svg";
 import female5 from "@/assets/images/female-5.svg";
 import female6 from "@/assets/images/female-6.svg";
-import { BiodataFormDataProps, ProfilePicFormData } from "@/lib/types";
-import { profilePicFormData } from "@/lib/validations";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import male1 from "@/assets/images/male-1.svg";
+import male2 from "@/assets/images/male-2.svg";
+import male3 from "@/assets/images/male-3.svg";
+import male4 from "@/assets/images/male-4.svg";
+import male5 from "@/assets/images/male-5.svg";
+import male6 from "@/assets/images/male-6.svg";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -28,6 +23,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { BiodataFormDataProps, ProfilePicFormData } from "@/lib/types";
+import { profilePicFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CheckCircle } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function ProfilePic({
   biodataFormData,

@@ -1,5 +1,6 @@
-import { Navbar } from "@/components/navbar";
+// File: src/app/page.tsx
 import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
 import { HomeSearchBiodata } from "./HomeSearchBiodata";
 
 export default function HomePage() {
