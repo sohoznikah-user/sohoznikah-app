@@ -1,4 +1,4 @@
-// File: src/app/HomeSearchBiodata.tsx
+// src/app/HomeSearchBiodata.tsx
 
 "use client";
 
@@ -12,95 +12,108 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import {
+  biodataTypes,
+  locations,
+  maritalStatuses,
+  religiousLifestyle,
+} from "@/lib/consts";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
 
 export function HomeSearchBiodata() {
   const router = useRouter();
-  const [range, setRange] = useState<number[]>([18, 80]);
+  const [range, setRange] = useState([18, 80]);
+  const [biodataType, setBiodataType] = useState("all");
+  const [maritalStatus, setMaritalStatus] = useState("all");
+  const [location, setLocation] = useState("all");
+  const [muslimType, setMuslimType] = useState("all");
 
-  const handleSearchClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleSearchClick = (event: MouseEvent) => {
     event.preventDefault();
-    router.push("/biodatas");
+    const query = new URLSearchParams({
+      biodataType: biodataType === "all" ? "" : biodataType,
+      maritalStatus: maritalStatus === "all" ? "" : maritalStatus,
+      location: location === "all" ? "" : location,
+      religiousLifestyle: muslimType === "all" ? "" : muslimType,
+      ageMin: range[0].toString(),
+      ageMax: range[1].toString(),
+    }).toString();
+    router.push(`/biodatas?${query}`);
   };
 
   return (
-    <form className="bg-white p-8 shadow-lg flex flex-wrap">
+    <div className="bg-white p-8 shadow-lg flex flex-wrap">
       <div className="w-1/3 space-y-2 p-2">
-        <Label
-          className="block font-medium text-[#1f4f69] text-center"
-          htmlFor="biodataType"
-        >
-          আমি খুঁজছি
-        </Label>
-        <Select>
-          <SelectTrigger className="w-full border rounded-md focus:ring-2 focus:ring-blue-400">
-            <SelectValue placeholder="আমি খুঁজছি" />
+        <Label>আমি খুঁজছি</Label>
+        <Select value={biodataType} onValueChange={setBiodataType}>
+          <SelectTrigger>
+            <SelectValue placeholder="সকল বায়োডাটা" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">সকল বায়োডাটা</SelectItem>
-            <SelectItem value="male">পুরুষ</SelectItem>
-            <SelectItem value="female">নারী</SelectItem>
+            {biodataTypes.map((type) => (
+              <SelectItem key={type.id} value={type.id}>
+                {type.title}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
 
       <div className="w-1/3 space-y-2 p-2">
-        <Label
-          className="block font-medium text-[#1f4f69] text-center"
-          htmlFor="maritalStatus"
-        >
-          বৈবাহিক অবস্থা
-        </Label>
-        <Select>
-          <SelectTrigger className="w-full border rounded-md focus:ring-2 focus:ring-blue-400">
-            <SelectValue placeholder="বৈবাহিক অবস্থা" />
+        <Label>বৈবাহিক অবস্থা</Label>
+        <Select value={maritalStatus} onValueChange={setMaritalStatus}>
+          <SelectTrigger>
+            <SelectValue placeholder="সকল অবস্থা" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">সকল অবস্থা</SelectItem>
-            <SelectItem value="male">পুরুষ</SelectItem>
-            <SelectItem value="female">নারী</SelectItem>
+            {maritalStatuses
+              .filter((m) => m.for === biodataType || m.for === "both")
+              .map((status) => (
+                <SelectItem key={status.id} value={status.id}>
+                  {status.title}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
       </div>
 
       <div className="w-1/3 space-y-2 p-2">
-        <Label
-          className="block font-medium text-[#1f4f69] text-center"
-          htmlFor="address"
-        >
-          স্থায়ী ঠিকানা
-        </Label>
-        <Select>
-          <SelectTrigger className="w-full border rounded-md focus:ring-2 focus:ring-blue-400">
-            <SelectValue placeholder="স্থায়ী ঠিকানা" />
+        <Label>স্থায়ী ঠিকানা</Label>
+        <Select value={location} onValueChange={setLocation}>
+          <SelectTrigger>
+            <SelectValue placeholder="সকল ঠিকানা" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">সকল ঠিকানা</SelectItem>
-            <SelectItem value="male">পুরুষ</SelectItem>
-            <SelectItem value="female">নারী</SelectItem>
+            {locations.map((loc) => (
+              <SelectItem key={loc.id} value={loc.id}>
+                {loc.title}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
 
       <div className="w-1/3 space-y-2 p-2">
-        <Label
-          className="block font-medium text-[#1f4f69] text-center"
-          htmlFor="religious"
-        >
-          ধর্মীয় লাইফস্টাইল
-        </Label>
-        <Select>
-          <SelectTrigger className="w-full border rounded-md focus:ring-2 focus:ring-blue-400">
-            <SelectValue placeholder="ধর্মীয় লাইফস্টাইল" />
+        <Label>ধর্মীয় লাইফস্টাইল</Label>
+        <Select value={muslimType} onValueChange={setMuslimType}>
+          <SelectTrigger>
+            <SelectValue placeholder="সকল" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">সকল</SelectItem>
-            <SelectItem value="male">পুরুষ</SelectItem>
-            <SelectItem value="female">নারী</SelectItem>
+            {religiousLifestyle.map((type) => (
+              <SelectItem key={type.id} value={type.id}>
+                {type.title}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
+
       <div className="w-1/3 space-y-3 p-2">
         <Label
           className="block font-medium text-[#1f4f69] text-center"
@@ -121,7 +134,6 @@ export function HomeSearchBiodata() {
           <div className="text-[#1f4f69]">{range[1]}</div>
         </div>
       </div>
-
       <div className="w-1/3 space-y-1 p-2">
         <p className="text-center text-sm text-gray-700">বিসমিল্লাহ</p>
         <Button
@@ -131,6 +143,6 @@ export function HomeSearchBiodata() {
           খুঁজুন
         </Button>
       </div>
-    </form>
+    </div>
   );
 }

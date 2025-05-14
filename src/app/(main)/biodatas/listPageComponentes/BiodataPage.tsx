@@ -3,7 +3,7 @@
 "use client";
 import { useGetAllBiodatasQuery } from "@/redux/features/admin/biodataApi";
 import { useDebounced } from "@/redux/hooks";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import BiodatasPageCard from "./BiodatasPageCard";
 import BiodatasPageFilters from "./BiodatasPageFilters";
 import BiodatasPageSearchByBiodataNo from "./SearchByBiodataNo";
@@ -23,8 +23,28 @@ const BiodataPage = () => {
     sortBy: "createdAt",
   });
   const debouncedTerm = useDebounced({ searchQuery: searchTerm, delay: 600 });
+  // Transform filters for API query
+  const transformFiltersForAPI = useCallback((filters: Record<string, any>) => {
+    const rangeKeys = ["age", "partner_age", "height", "partner_height"];
+    return Object.entries(filters).reduce(
+      (acc: Record<string, any>, [key, value]) => {
+        if (
+          rangeKeys.includes(key) &&
+          Array.isArray(value) &&
+          value.length === 2
+        ) {
+          acc[`${key}Min`] = value[0];
+          acc[`${key}Max`] = value[1];
+        } else {
+          acc[key] = value;
+        }
+        return acc;
+      },
+      {}
+    );
+  }, []);
 
-  // Query
+  // Query for API
   const query = useMemo(
     () => ({
       page: pagination.page,
@@ -32,20 +52,24 @@ const BiodataPage = () => {
       sortBy: pagination.sortBy,
       sortOrder: pagination.sortOrder,
       ...(debouncedTerm && { searchTerm: debouncedTerm }),
-      ...filters,
+      ...transformFiltersForAPI(filters),
     }),
-    [pagination, debouncedTerm, filters]
+    [pagination, debouncedTerm, filters, transformFiltersForAPI]
   );
 
   const { data: biodatas, isLoading } = useGetAllBiodatasQuery(query, {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log(biodatas);
+  console.log("biodatas", biodatas);
   // Handle filter change
   const handleFilter = (newFilters: Record<string, any>) => {
     setFilters(newFilters);
     setFilterActive(Object.keys(newFilters).length > 0);
+  };
+
+  const handleSearchChange = (newSearchTerm: string) => {
+    setSearchTerm(newSearchTerm);
   };
 
   // Handle reset
@@ -73,7 +97,10 @@ const BiodataPage = () => {
       />
       <div className="flex-grow max-w-7xl">
         <div className="flex justify-end items-center mb-6">
-          <BiodatasPageSearchByBiodataNo />
+          <BiodatasPageSearchByBiodataNo
+            onSearchChange={handleSearchChange}
+            onReset={handleReset}
+          />
         </div>
         {isLoading ? (
           <div className="text-center py-4">Loading...</div>

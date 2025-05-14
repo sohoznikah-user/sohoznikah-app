@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { afterMarriageJobs, afterMarriageStuties } from "@/lib/consts";
+import { afterMarriageJobs, afterMarriageStudies } from "@/lib/consts";
 import { BiodataFormDataProps, MarriageInfoFormData } from "@/lib/types";
 import { marriageInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -73,7 +73,7 @@ export default function MarriageInfo({
     }
   };
 
-  const afterMarriageStutyOptions = afterMarriageStuties.filter((x) =>
+  const afterMarriageStudyOptions = afterMarriageStudies.filter((x) =>
     x.for.includes(biodataFormData?.primaryInfoFormData?.biodataType)
   );
 
@@ -127,7 +127,7 @@ export default function MarriageInfo({
                       onValueChange={field.onChange}
                       value={field.value}
                     >
-                      {afterMarriageStutyOptions.map((x) => (
+                      {afterMarriageStudyOptions.map((x) => (
                         <div
                           key={x.id}
                           className="w-1/4 flex items-center space-x-2 mb-2"

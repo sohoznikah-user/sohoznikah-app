@@ -9,12 +9,53 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import { useState } from "react";
 
-export default function BiodatasPageSearchByBiodataNo() {
+export default function BiodatasPageSearchByBiodataNo({
+  onSearchChange,
+  onReset,
+}: {
+  onSearchChange: (searchTerm: string) => void;
+  onReset: () => void;
+}) {
+  const [gender, setGender] = useState<string>("");
+  const [biodataNo, setBiodataNo] = useState<string>("");
+
+  const handleSearch = () => {
+    if (!gender || !biodataNo) return;
+
+    const prefix = gender === "male" ? "M" : "F";
+    const searchTerm = `${prefix}-${biodataNo}`;
+    onSearchChange(searchTerm);
+  };
+
+  const handleGenderChange = (value: string) => {
+    setGender(value);
+    if (biodataNo) {
+      const prefix = value === "male" ? "M" : "F";
+      onSearchChange(`${prefix}-${biodataNo}`);
+    }
+  };
+
+  const handleBiodataNoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setBiodataNo(value);
+    if (gender && value) {
+      const prefix = gender === "male" ? "M" : "F";
+      onSearchChange(`${prefix}-${value}`);
+    }
+  };
+
   return (
-    <form className="flex items-center space-x-4">
+    <form
+      className="flex items-center space-x-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSearch();
+      }}
+    >
       <div className="w-32">
-        <Select>
+        <Select onValueChange={handleGenderChange} value={gender}>
           <SelectTrigger className="text-[#1f4f69]">
             <SelectValue placeholder="SNM" />
           </SelectTrigger>
@@ -48,9 +89,14 @@ export default function BiodatasPageSearchByBiodataNo() {
             id="biodataNo"
             type="text"
             placeholder="বায়োডাটা নং"
+            value={biodataNo}
+            onChange={handleBiodataNoChange}
           />
         </div>
-        <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
+        <button
+          type="submit"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2"
+        >
           <Search className="w-4 h-4 text-gray-400" />
         </button>
       </div>

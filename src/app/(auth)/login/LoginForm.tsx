@@ -1,3 +1,4 @@
+// File: src/app/(auth)/login/LoginForm.tsx
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +9,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { TUser } from "@/utils/tokenHelper";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -21,6 +22,9 @@ const LoginForm = () => {
   const [loginUser, { isLoading }] = useUserLoginMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/dashboard"; // Get redirect URL
+
   const {
     register,
     handleSubmit,
@@ -39,7 +43,6 @@ const LoginForm = () => {
   const password = watch("password");
 
   const onFinish = async (values: LoginFormValues) => {
-    // Validate all fields before proceeding
     const isEmailValid = await trigger("email");
     const isPasswordValid = await trigger("password");
 
@@ -48,20 +51,17 @@ const LoginForm = () => {
       return;
     }
 
-    // Additional validation checks
     if (!values.email || !values.password) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    // Email format validation
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!emailRegex.test(values.email)) {
       toast.error("Please enter a valid email address");
       return;
     }
 
-    // Password length validation
     if (values.password.length < 6) {
       toast.error("Password must be at least 6 characters long");
       return;
@@ -69,13 +69,12 @@ const LoginForm = () => {
 
     try {
       const result = await loginUser(values).unwrap();
-      console.log(result);
       if (result.success) {
         toast.success(result.message || "You have successfully logged in!");
 
         const accessToken = result.data.accessToken;
         const refreshToken = result.data.refreshToken;
-        const decodedToken = jwtDecode(accessToken) as TUser;
+        const decodedToken = jwtDecode<TUser>(accessToken);
 
         dispatch(
           setUser({
@@ -85,7 +84,7 @@ const LoginForm = () => {
           })
         );
 
-        router.push("/dashboard");
+        router.push(decodeURIComponent(redirectUrl)); // Redirect to the specified URL
       } else {
         toast.error(result.message || "Invalid email or password!");
       }
@@ -96,22 +95,14 @@ const LoginForm = () => {
   };
 
   return (
-    <form className="space-y-4 text-left" onSubmit={handleSubmit(onFinish)}>
-      <div className="space-y-2">
-        <Label className="block font-medium" htmlFor="email">
-          Email/Mobile Number
-        </Label>
+    <form onSubmit={handleSubmit(onFinish)} className="space-y-4">
+      <div>
+        <Label htmlFor="email">Email/Mobile Number</Label>
         <Input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           id="email"
           type="text"
-          placeholder="Email/Mobile Number"
           {...register("email", {
             required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address",
-            },
           })}
         />
         {errors.email && (
@@ -119,38 +110,27 @@ const LoginForm = () => {
         )}
       </div>
 
-      <div className="space-y-2">
-        <Label className="block font-medium" htmlFor="password">
-          Password
-        </Label>
+      <div>
+        <Label htmlFor="password">Password</Label>
         <Input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           id="password"
           type="password"
-          placeholder="Password"
           {...register("password", {
             required: "Password is required",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters",
-            },
           })}
         />
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password.message}</p>
         )}
-        <Link
-          href="/forgot-password"
-          className="text-blue-500 text-sm mt-1 inline-block hover:underline"
-        >
+        <Link href="/forgot-password" className="text-sm text-blue-500">
           Forgot Password?
         </Link>
       </div>
 
       <Button
-        type="submit"
-        disabled={isLoading || !isValid || !email || !password}
         className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F] disabled:opacity-50"
+        type="submit"
+        disabled={isLoading}
       >
         {isLoading ? "Logging in..." : "Login"}
       </Button>

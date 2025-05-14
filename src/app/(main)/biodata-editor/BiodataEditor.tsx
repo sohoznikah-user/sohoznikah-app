@@ -1,16 +1,35 @@
 // File: src/app/(main)/biodata-editor/BiodataEditor.tsx
+
 "use client";
 
-import { createBiodata } from "@/app/services/biodata.service";
+import { useCreateBiodataMutation } from "@/redux/features/admin/biodataApi";
 import {
   clearBiodataFormData,
   updateBiodataFormData,
 } from "@/redux/features/biodata/biodataSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 import Breadcrumbs from "./biodataFormComponents/Breadcrumbs";
 import { steps } from "./steps";
+
+// Map step keys to Redux state keys
+const stepKeyToStateKey: Record<string, string> = {
+  "first-words": "firstWordsFormData",
+  "primary-info": "primaryInfoFormData",
+  "general-info": "generalInfoFormData",
+  "address-info": "addressInfoFormData",
+  "education-info": "educationInfoFormData",
+  "occupation-info": "occupationInfoFormData",
+  "family-info": "familyInfoFormData",
+  "religious-info": "religiousInfoFormData",
+  "personal-info": "personalInfoFormData",
+  "marriage-info": "marriageInfoFormData",
+  "spouse-preference-info": "spousePreferenceInfoFormData",
+  "profile-pic": "profilePicFormData",
+  "final-words": "finalWordsFormData",
+};
 
 interface BiodataEditorProps {
   biodataToEdit: any | null;
@@ -18,9 +37,12 @@ interface BiodataEditorProps {
 
 export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const biodataFormData = useAppSelector(
     (state) => state.biodata.biodataFormData
   );
+  const { user, acesstoken } = useAppSelector((state) => state.auth);
+  const [createBiodata, { isLoading }] = useCreateBiodataMutation();
 
   const searchParams = useSearchParams();
   const currentStepKey = searchParams.get("step") || steps[0].key;
@@ -28,6 +50,13 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
     () => steps.find((x) => x.key === currentStepKey),
     [currentStepKey]
   );
+
+  useEffect(() => {
+    if (!user || !acesstoken) {
+      const redirectUrl = `/biodata-editor?step=${currentStepKey}`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    }
+  }, [user, acesstoken, router, currentStepKey]);
 
   const setStep = useCallback(
     (key: string) => {
@@ -43,9 +72,10 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   const handleFormDataUpdate = useCallback(
     (data: any) => {
       const cleanData = JSON.parse(JSON.stringify(data));
+      const stateKey = stepKeyToStateKey[currentStepKey] || currentStepKey;
       dispatch(
         updateBiodataFormData({
-          key: currentStepKey,
+          key: stateKey,
           data: cleanData,
         })
       );
@@ -54,41 +84,55 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   );
 
   const handleSave = useCallback(async () => {
-    if (!currentStep) return;
+    if (!currentStep || !user) return;
 
     if (currentStep.key === "final-words") {
       try {
-        const completeBiodata = JSON.parse(JSON.stringify(biodataFormData));
-        await createBiodata(completeBiodata);
-        dispatch(clearBiodataFormData());
-        setStep(steps[0].key);
-      } catch (error) {
+        const completeBiodata = {
+          userId: user.userId,
+          ...JSON.parse(JSON.stringify(biodataFormData)),
+        };
+        const result = await createBiodata(completeBiodata).unwrap();
+        if (result.success) {
+          toast.success("Biodata created successfully!");
+          dispatch(clearBiodataFormData());
+          setStep(steps[0].key);
+          router.push("/dashboard");
+        } else {
+          toast.error(result.message || "Failed to create biodata.");
+        }
+      } catch (error: any) {
         console.error("Failed to save biodata:", error);
+        toast.error(error?.message || "Failed to create biodata.");
       }
     } else {
       setStep(currentStep.next);
     }
-  }, [currentStep, biodataFormData, setStep, dispatch]);
+  }, [
+    currentStep,
+    biodataFormData,
+    setStep,
+    dispatch,
+    createBiodata,
+    user,
+    router,
+  ]);
 
-  if (!FormComponent) return null;
+  if (!FormComponent || !user) return null;
 
   return (
-    <>
-      <Breadcrumbs currentStep={currentStep?.key} setCurrentStep={setStep} />
-      <div className="mt-8 w-full">
-        <FormComponent
-          biodataFormData={biodataFormData[currentStepKey] || {}}
-          setBiodataFormData={handleFormDataUpdate}
-          handleSave={handleSave}
-          currentStep={currentStep}
-          setCurrentStep={setStep}
-        />
-      </div>
+    <div className="container mx-auto p-4">
+      <Breadcrumbs currentStep={currentStepKey} setCurrentStep={setStep} />
+      <FormComponent
+        biodataFormData={biodataFormData}
+        setBiodataFormData={handleFormDataUpdate}
+        handleSave={handleSave}
+        currentStep={currentStep}
+        setCurrentStep={setStep}
+      />
       {process.env.NODE_ENV === "development" && (
-        <pre className="text-sm bg-white p-2 rounded-md shadow">
-          {JSON.stringify(biodataFormData, null, 2)}
-        </pre>
+        <pre>{JSON.stringify(biodataFormData, null, 2)}</pre>
       )}
-    </>
+    </div>
   );
 }

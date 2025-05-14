@@ -1,3 +1,5 @@
+// src/app/(main)/biodatas/page.tsx
+
 import BiodataPage from "./listPageComponentes/BiodataPage";
 
 export default function BiodatasPage() {

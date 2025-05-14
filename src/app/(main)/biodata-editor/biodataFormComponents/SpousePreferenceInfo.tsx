@@ -24,9 +24,9 @@ import {
   familyBackgrounds,
   heights,
   maritalStatuses,
-  muslimTypes,
   occupationsList,
-  religiousEducationQualities,
+  religiousEducation,
+  religiousLifestyle,
   secondMarriageOptions,
   skinTones,
   spouseLocationOptions,
@@ -73,8 +73,8 @@ export default function SpousePreferenceInfo({
         biodataFormData?.spousePreferenceInfoFormData?.occupation || [],
       familyBackground:
         biodataFormData?.spousePreferenceInfoFormData?.familyBackground || [],
-      secondMarrige:
-        biodataFormData?.spousePreferenceInfoFormData?.secondMarrige || "",
+      secondMarriage:
+        biodataFormData?.spousePreferenceInfoFormData?.secondMarriage || "",
       location: biodataFormData?.spousePreferenceInfoFormData?.location || "",
       qualities: biodataFormData?.spousePreferenceInfoFormData?.qualities || "",
     },
@@ -239,7 +239,7 @@ export default function SpousePreferenceInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {religiousEducationQualities.map((x) => (
+                      {religiousEducation.map((x) => (
                         <div
                           key={x.id}
                           className="w-1/3 flex items-center space-x-2 mb-4"
@@ -372,7 +372,7 @@ export default function SpousePreferenceInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {muslimTypes.map((x) => (
+                      {religiousLifestyle.map((x) => (
                         <div
                           key={x.id}
                           className="w-1/3 flex items-center space-x-2 mb-4"
@@ -472,10 +472,10 @@ export default function SpousePreferenceInfo({
               </FormItem>
             )}
           />
-          {biodataFormData?.primaryInfoFormData?.biodataType === "2" && (
+          {biodataFormData?.primaryInfoFormData?.biodataType === "GROOM" && (
             <FormField
               control={form.control}
-              name="secondMarrige"
+              name="secondMarriage"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex flex-col space-y-2">

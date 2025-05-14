@@ -1,5 +1,4 @@
-import { boolean, z } from "zod";
-import { maritalStatuses } from "./consts";
+import { z } from "zod";
 
 export const optionalString = z.string().trim().optional().or(z.literal(""));
 export const requiredString = z.string().trim();
@@ -32,14 +31,14 @@ export const primaryInfoFormData = z.object({
     message: "পিতার নাম অবশ্যই প্রদান করতে হবে।",
   }),
   motherName: requiredString.min(1, {
-    message: "মাতার ধরন নির্বাচন করা আবশ্যক।",
+    message: "মাতার নাম অবশ্যই প্রদান করতে হবে।",
   }),
-  email: requiredString.min(1, {
-    message: "ইমেইল প্রদান করা আবশ্যক।",
-  }),
-  phoneNumber: requiredString.min(1, {
-    message: "মোবাইল নম্বর প্রদান করা আবশ্যক।",
-  }),
+  email: requiredString
+    .email({ message: "একটি বৈধ ইমেইল প্রদান করুন।" })
+    .min(1, { message: "ইমেইল প্রদান করা আবশ্যক।" }),
+  phoneNumber: requiredString
+    .regex(/^\+?\d{10,15}$/, { message: "একটি বৈধ মোবাইল নম্বর প্রদান করুন।" })
+    .min(1, { message: "মোবাইল নম্বর প্রদান করা আবশ্যক।" }),
   guardianContacts: z
     .array(
       z.object({
@@ -49,9 +48,11 @@ export const primaryInfoFormData = z.object({
         fullName: requiredString.min(1, {
           message: "অভিভাবকের নাম প্রদান করা আবশ্যক।",
         }),
-        phoneNumber: requiredString.min(1, {
-          message: "অভিভাবকের মোবাইল নম্বর প্রদান করা আবশ্যক।",
-        }),
+        phoneNumber: requiredString
+          .regex(/^\+?\d{10,15}$/, {
+            message: "একটি বৈধ মোবাইল নম্বর প্রদান করুন।",
+          })
+          .min(1, { message: "অভিভাবকের মোবাইল নম্বর প্রদান করা আবশ্যক।" }),
       })
     )
     .min(2, { message: "কমপক্ষে ২ জন অভিভাবকের তথ্য প্রয়োজন।" }),
@@ -152,9 +153,7 @@ export const educationInfoFormData = z.object({
     })
   ),
   religiousEducation: z.array(optionalString).optional(),
-  detail: requiredString.min(1, {
-    message: "শিক্ষার বিস্তারিত তথ্য প্রদান করা আবশ্যক।",
-  }),
+  detail: optionalString, // Made optional to align with JSON
 });
 
 export const occupationInfoFormData = z.object({
@@ -308,6 +307,34 @@ export const marriageInfoFormData = z.object({
   additionalMarriageInfo: optionalString,
 });
 
+// export const spousePreferenceInfoFormData = z.object({
+//   age: requiredString.min(1, {
+//     message: "বয়স প্রদান করা আবশ্যক।",
+//   }),
+//   skinTone: z.array(optionalString).optional(),
+//   height: requiredString.min(1, {
+//     message: "উচ্চতা প্রদান করা আবশ্যক।",
+//   }),
+//   educationalQualification: requiredString.min(1, {
+//     message: "শিক্ষাগত যোগ্যতা নির্বাচন করা আবশ্যক।",
+//   }),
+//   religiousEducationalQualification: z.array(optionalString).optional(),
+//   address: optionalString,
+//   maritalStatus: z.array(optionalString).optional(),
+//   specialCategory: z.array(optionalString).optional(),
+//   religiousType: z.array(optionalString).optional(),
+//   occupation: z.array(optionalString).optional(),
+//   familyBackground: z.array(optionalString).optional(),
+//   secondMarrige: requiredString.min(1, {
+//     message: "দ্বিতীয় বিয়ে সম্পর্কে নির্বাচন করা আবশ্যক।",
+//   }),
+//   location: requiredString.min(1, {
+//     message: "অবস্থান নির্বাচন করা আবশ্যক।",
+//   }),
+//   qualities: requiredString.min(1, {
+//     message: "জীবনসঙ্গীর বৈশিষ্ট্য বা গুণাবলী প্রদান করা আবশ্যক।",
+//   }),
+// });
 export const spousePreferenceInfoFormData = z.object({
   age: requiredString.min(1, {
     message: "বয়স প্রদান করা আবশ্যক।",
@@ -326,7 +353,7 @@ export const spousePreferenceInfoFormData = z.object({
   religiousType: z.array(optionalString).optional(),
   occupation: z.array(optionalString).optional(),
   familyBackground: z.array(optionalString).optional(),
-  secondMarrige: requiredString.min(1, {
+  secondMarriage: requiredString.min(1, {
     message: "দ্বিতীয় বিয়ে সম্পর্কে নির্বাচন করা আবশ্যক।",
   }),
   location: requiredString.min(1, {
@@ -336,7 +363,6 @@ export const spousePreferenceInfoFormData = z.object({
     message: "জীবনসঙ্গীর বৈশিষ্ট্য বা গুণাবলী প্রদান করা আবশ্যক।",
   }),
 });
-
 export const profilePicFormData = z.object({
   photoId: requiredString.min(1, {
     message: "প্রোফাইল ছবি প্রদান করা আবশ্যক।",

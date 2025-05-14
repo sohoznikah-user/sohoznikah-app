@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { FirstWordsFormData } from "@/lib/types";
 import { firstWordsFormData } from "@/lib/validations";
-import { setBiodataFormData } from "@/redux/features/biodata/biodataSlice";
+import { updateBiodataFormData } from "@/redux/features/biodata/biodataSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -55,7 +55,7 @@ export default function FirstWords({
       // Only update if we have valid values
       if (Object.values(formValues).some((value) => value !== undefined)) {
         dispatch(
-          setBiodataFormData({
+          updateBiodataFormData({
             key: "firstWordsFormData",
             data: formValues,
           })

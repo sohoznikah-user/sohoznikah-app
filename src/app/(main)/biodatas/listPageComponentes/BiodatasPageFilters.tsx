@@ -6,7 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { beingSearchedFilters, searchingFilters } from "./biodataFilterOptions";
 import { FilterAccordion } from "./FilterAccordian";
 
@@ -14,19 +15,64 @@ interface BiodatasPageFiltersProps {
   onFilterChange: (filters: Record<string, any>) => void;
   onReset: () => void;
 }
+type FilterType = Record<string, string | string[] | [number, number]>;
 
 export default function BiodatasPageFilters({
   onFilterChange,
   onReset,
 }: BiodatasPageFiltersProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const initializedRef = useRef(false);
   const [activeTab, setActiveTab] = useState<"searching" | "beingSearched">(
     "searching"
   );
   const [ageRange, setAgeRange] = useState<[number, number]>([18, 80]);
   const [heightRange, setHeightRange] = useState<[number, number]>([36, 84]);
-  const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string | string[] | [number, number]>
-  >({});
+
+  // Initialize filters from URL only on mount or when searchParams change due to navigation
+
+  // State for filters
+  const [selectedFilters, setSelectedFilters] = useState<FilterType>({});
+
+  // Initialize filters from URL only once on mount
+  useEffect(() => {
+    if (!initializedRef.current) {
+      const initialFilters: FilterType = {};
+
+      searchParams.forEach((value, key) => {
+        if (key === "biodataType") initialFilters[key] = value;
+        if (key === "specialCategory") initialFilters[key] = value.split(",");
+        if (key === "ageMin" || key === "ageMax") {
+          initialFilters[key] = value;
+        }
+      });
+
+      setSelectedFilters(initialFilters);
+      onFilterChange(initialFilters);
+      initializedRef.current = true;
+    }
+  }, [searchParams, onFilterChange]);
+
+  // Sync URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    Object.entries(selectedFilters).forEach(([key, value]) => {
+      if (typeof value === "string") {
+        params.set(key, value);
+      } else if (Array.isArray(value)) {
+        if (value.length === 2 && typeof value[0] === "number") {
+          // Handle ranges like age or height
+          params.set(`${key}Min`, value[0].toString());
+          params.set(`${key}Max`, value[1].toString());
+        } else {
+          // Handle arrays like checkboxes
+          params.set(key, value.join(","));
+        }
+      }
+    });
+    router.replace(`/biodatas?${params.toString()}`, { scroll: false });
+  }, [selectedFilters, router]);
 
   // Radio change handler
   const handleRadioChange = (key: string, value: string) => {
@@ -45,7 +91,7 @@ export default function BiodatasPageFilters({
   ) => {
     setSelectedFilters((prev) => {
       const currentValues = Array.isArray(prev[key])
-        ? ([...prev[key]] as string[])
+        ? [...(prev[key] as string[])]
         : [];
       if (checked) {
         currentValues.push(value);
@@ -61,7 +107,9 @@ export default function BiodatasPageFilters({
 
   // Slider change handler
   const handleSliderChange = (key: string, value: [number, number]) => {
-    if (key === "age" || key === "partner_age") setAgeRange(value);
+    if (key === "age" || key === "partner_age") {
+      setAgeRange(value);
+    }
     if (key === "height" || key === "partner_height") setHeightRange(value);
     const newFilters = { ...selectedFilters, [key]: value };
     setSelectedFilters(newFilters);
@@ -134,7 +182,9 @@ export default function BiodatasPageFilters({
                 contentType="slider"
                 filterKey="age"
                 range={ageRange}
-                onRangeChange={(val) => handleSliderChange("age", val)}
+                onRangeChange={(val: [number, number]) =>
+                  handleSliderChange("age", val)
+                }
                 min={18}
                 max={80}
               />
@@ -144,7 +194,9 @@ export default function BiodatasPageFilters({
                 contentType="slider"
                 filterKey="height"
                 range={heightRange}
-                onRangeChange={(val) => handleSliderChange("height", val)}
+                onRangeChange={(val: [number, number]) =>
+                  handleSliderChange("height", val)
+                }
                 min={36}
                 max={84}
               />
@@ -152,8 +204,8 @@ export default function BiodatasPageFilters({
                 value="গাত্রবর্ণ"
                 title="গাত্রবর্ণ"
                 contentType="radio"
-                filterKey="complexion"
-                options={searchingFilters.complexion}
+                filterKey="skinTones"
+                options={searchingFilters.skinTones}
                 selectedFilters={selectedFilters as Record<string, string>}
                 handleRadioChange={handleRadioChange}
               />
@@ -187,7 +239,7 @@ export default function BiodatasPageFilters({
               <FilterAccordion
                 value="পেশা"
                 title="পেশা"
-                contentType="radio"
+                contentType="checkbox"
                 filterKey="occupation"
                 options={searchingFilters.occupation}
                 selectedFilters={selectedFilters as Record<string, string>}
@@ -196,7 +248,7 @@ export default function BiodatasPageFilters({
               <FilterAccordion
                 value="শিক্ষা"
                 title="শিক্ষা"
-                contentType="radio"
+                contentType="checkbox"
                 filterKey="education"
                 options={searchingFilters.education}
                 selectedFilters={selectedFilters as Record<string, string>}
@@ -205,7 +257,7 @@ export default function BiodatasPageFilters({
               <FilterAccordion
                 value="দ্বীনি যোগ্যতা"
                 title="দ্বীনি যোগ্যতা"
-                contentType="radio"
+                contentType="checkbox"
                 filterKey="religiousEducation"
                 options={searchingFilters.religiousEducation}
                 selectedFilters={selectedFilters as Record<string, string>}
@@ -216,7 +268,7 @@ export default function BiodatasPageFilters({
                 title="পরিবারের আর্থসামাজিক অবস্থা"
                 contentType="radio"
                 filterKey="familyStatus"
-                options={searchingFilters.familyStatus}
+                options={searchingFilters.familyBackgrounds}
                 selectedFilters={selectedFilters as Record<string, string>}
                 handleRadioChange={handleRadioChange}
               />
@@ -264,12 +316,16 @@ export default function BiodatasPageFilters({
                 title="বিশেষ ক্যাটাগরি"
                 contentType="checkbox"
                 filterKey="specialCategory"
-                options={beingSearchedFilters.specialCategory}
+                options={beingSearchedFilters.specialCategory.filter(
+                  (item) =>
+                    item.for === selectedFilters.selfBiodataType ||
+                    item.for === "both"
+                )}
                 selectedFilters={selectedFilters as Record<string, string[]>}
                 handleCheckboxChange={handleCheckboxChange}
               />
               <AccordionItem
-                className="border border-gray-300 rounded-xl px-4 max-h-40 overflow-y-auto"
+                className="border border-gray-300 rounded-xl px-4 max-h-80 overflow-y-auto"
                 value="যেমন জীবনসঙ্গী আশা করেন"
               >
                 <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
@@ -307,8 +363,8 @@ export default function BiodatasPageFilters({
                       title="জীবনসঙ্গীর বয়স"
                       contentType="slider"
                       filterKey="partner_age"
-                      range={ageRange}
-                      onRangeChange={(val) =>
+                      range={ageRange as [number, number]}
+                      onRangeChange={(val: [number, number]) =>
                         handleSliderChange("partner_age", val)
                       }
                       min={18}
@@ -319,8 +375,8 @@ export default function BiodatasPageFilters({
                       title="জীবনসঙ্গীর উচ্চতা"
                       contentType="slider"
                       filterKey="partner_height"
-                      range={heightRange}
-                      onRangeChange={(val) =>
+                      range={heightRange as [number, number]}
+                      onRangeChange={(val: [number, number]) =>
                         handleSliderChange("partner_height", val)
                       }
                       min={36}

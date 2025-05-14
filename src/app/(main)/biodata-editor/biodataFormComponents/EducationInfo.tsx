@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { educationTypes, religiousEducationQualities } from "@/lib/consts";
+import { educationTypes, religiousEducation } from "@/lib/consts";
 import { BiodataFormDataProps, EducationInfoFormData } from "@/lib/types";
 import { educationInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -284,7 +284,7 @@ export default function EducationInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {religiousEducationQualities.map((x) => (
+                      {religiousEducation.map((x) => (
                         <div
                           key={x.id}
                           className="w-1/3 flex items-center space-x-2 mb-4"

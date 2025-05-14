@@ -8,40 +8,20 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 
-interface BaseFilterAccordionProps {
+interface FilterAccordionProps {
   value: string;
   title: string;
+  contentType: string;
+  filterKey?: string;
+  options?: { id: string; title: string }[];
+  selectedFilters?: Record<string, string | string[]>;
+  handleRadioChange?: (key: string, value: string) => void;
+  handleCheckboxChange?: (key: string, value: string, checked: boolean) => void;
+  range?: number[];
+  onRangeChange?: (value: number[]) => void;
+  min?: number;
+  max?: number;
 }
-
-interface RadioFilterAccordionProps extends BaseFilterAccordionProps {
-  contentType: "radio";
-  filterKey: string;
-  options: { value: string; label: string }[];
-  selectedFilters: Record<string, string>;
-  handleRadioChange: (key: string, value: string) => void;
-}
-
-interface CheckboxFilterAccordionProps extends BaseFilterAccordionProps {
-  contentType: "checkbox";
-  filterKey: string;
-  options: { value: string; label: string }[];
-  selectedFilters: Record<string, string[]>;
-  handleCheckboxChange: (key: string, value: string, checked: boolean) => void;
-}
-
-interface SliderFilterAccordionProps extends BaseFilterAccordionProps {
-  contentType: "slider";
-  filterKey: string;
-  range: [number, number];
-  onRangeChange: (value: [number, number]) => void;
-  min: number;
-  max: number;
-}
-
-type FilterAccordionProps =
-  | RadioFilterAccordionProps
-  | CheckboxFilterAccordionProps
-  | SliderFilterAccordionProps;
 
 export const FilterAccordion = (props: FilterAccordionProps) => {
   const { value, title, contentType } = props;
@@ -80,55 +60,51 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
     return null;
   }
 
-  // Default renderRadioGroup
   const renderRadioGroup = (
     key: string,
-    options: { value: string; label: string }[],
-    selectedFilters: Record<string, string>,
+    options: { id: string; title: string }[],
+    selectedFilters: Record<string, string | string[]>,
     handleRadioChange: (key: string, value: string) => void
   ) => (
     <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
       <RadioGroup
-        value={selectedFilters[key] || ""}
+        value={(selectedFilters[key] as string) || ""}
         onValueChange={(value) => handleRadioChange(key, value)}
       >
         {options.map((option) => (
-          <div key={option.value} className="flex items-center space-x-2">
-            <RadioGroupItem
-              value={option.value}
-              id={`${key}-${option.value}`}
-            />
-            <Label htmlFor={`${key}-${option.value}`}>{option.label}</Label>
+          <div key={option.id} className="flex items-center space-x-2">
+            <RadioGroupItem value={option.id} id={`${key}-${option.id}`} />
+            <Label htmlFor={`${key}-${option.id}`}>{option.title}</Label>
           </div>
         ))}
       </RadioGroup>
     </AccordionContent>
   );
 
-  // Default renderCheckboxGroup
   const renderCheckboxGroup = (
     key: string,
-    options: { value: string; label: string }[],
-    selectedFilters: Record<string, string[]>,
+    options: { id: string; title: string }[],
+    selectedFilters: Record<string, string | string[]>,
     handleCheckboxChange: (key: string, value: string, checked: boolean) => void
   ) => (
     <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
       {options.map((option) => (
-        <div key={option.value} className="flex items-center space-x-2">
+        <div key={option.id} className="flex items-center space-x-2">
           <Checkbox
-            id={`${key}-${option.value}`}
-            checked={selectedFilters[key]?.includes(option.value) || false}
+            id={`${key}-${option.id}`}
+            checked={
+              (selectedFilters[key] as string[])?.includes(option.id) || false
+            }
             onCheckedChange={(checked) =>
-              handleCheckboxChange(key, option.value, checked as boolean)
+              handleCheckboxChange(key, option.id, checked as boolean)
             }
           />
-          <Label htmlFor={`${key}-${option.value}`}>{option.label}</Label>
+          <Label htmlFor={`${key}-${option.id}`}>{option.title}</Label>
         </div>
       ))}
     </AccordionContent>
   );
 
-  // Default renderSlider
   const renderSlider = (
     key: string,
     label: string,

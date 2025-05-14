@@ -34,7 +34,7 @@ import {
 import { BiodataFormDataProps, GeneralInfoFormData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { generalInfoFormData } from "@/lib/validations";
-import { setBiodataFormData } from "@/redux/features/biodata/biodataSlice";
+import { updateBiodataFormData } from "@/redux/features/biodata/biodataSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -88,7 +88,7 @@ export default function GeneralInfo({
       const formValues = form.getValues();
       if (Object.values(formValues).some((value) => value !== undefined)) {
         dispatch(
-          setBiodataFormData({
+          updateBiodataFormData({
             key: "generalInfoFormData",
             data: formValues,
           })
