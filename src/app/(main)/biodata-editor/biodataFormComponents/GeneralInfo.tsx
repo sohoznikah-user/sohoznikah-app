@@ -34,19 +34,21 @@ import {
 import { BiodataFormDataProps, GeneralInfoFormData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { generalInfoFormData } from "@/lib/validations";
+import { setBiodataFormData } from "@/redux/features/biodata/biodataSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function GeneralInfo({
   biodataFormData,
-  setBiodataFormData,
   handleSave,
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
+  const dispatch = useAppDispatch();
   const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
 
   const form = useForm<GeneralInfoFormData>({
@@ -62,30 +64,37 @@ export default function GeneralInfo({
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
-      }
-      setBiodataFormData({
-        ...biodataFormData,
-        generalInfoFormData: { ...values },
-      });
-    });
-    return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+  // useEffect(() => {
+  //   const { unsubscribe } = form.watch(async (values) => {
+  //     if (submittedOnce) {
+  //       await form.trigger();
+  //     }
+  //     if (Object.values(values).some((value) => value !== undefined)) {
+  //       dispatch(
+  //         setBiodataFormData({
+  //           key: "generalInfoFormData",
+  //           data: values,
+  //         })
+  //       );
+  //     }
+  //   });
+  //   return unsubscribe;
+  // }, [submittedOnce, form, dispatch]);
 
   const handleNextClick = async () => {
     setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      handleSave();
+      const formValues = form.getValues();
+      if (Object.values(formValues).some((value) => value !== undefined)) {
+        dispatch(
+          setBiodataFormData({
+            key: "generalInfoFormData",
+            data: formValues,
+          })
+        );
+        handleSave();
+      }
     }
   };
 

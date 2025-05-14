@@ -11,13 +11,28 @@ import { useRouter } from "next/navigation";
 
 export interface BiodatasPageCardProps {
   id: number;
+  name: string;
+  code: number;
+  age: number;
+  height: number;
+  permanentAddress: string;
+  occupation: string;
+  maritalStatus: string;
 }
 
-export default function BioCard({ id }: BiodatasPageCardProps) {
+export default function BioCard({
+  id,
+  name,
+  code,
+  age,
+  height,
+  permanentAddress,
+  occupation,
+  maritalStatus,
+}: BiodatasPageCardProps) {
   const router = useRouter();
-
   const handleOnClick = () => {
-    router.push("/biodatas/asd");
+    router.push(`/biodatas/${id}`);
   };
   return (
     <Card
@@ -40,30 +55,30 @@ export default function BioCard({ id }: BiodatasPageCardProps) {
 
         <div className="text-center mb-4 flex items-center justify-center">
           <div className="text-black bg-[#fcfafd] p-3 rounded-md">
-            বায়োডাটা নং: 43527
+            বায়োডাটা নং: {code}
           </div>
         </div>
 
         <div className="space-y-3 text-black">
           <div className="flex justify-between">
             <span>বৈবাহিক অবস্থা:</span>
-            <span>অবিবাহিত</span>
+            <span>{maritalStatus}</span>
           </div>
           <div className="flex justify-between">
             <span>জন্মসন:</span>
-            <span>১৯৯০</span>
+            <span>{age}</span>
           </div>
           <div className="flex justify-between">
             <span>উচ্চতা:</span>
-            <span>৫'৩০"</span>
+            <span>{height}</span>
           </div>
           <div className="flex justify-between">
             <span>স্থায়ী ঠিকানা:</span>
-            <span>BSC in EEE</span>
+            <span>{permanentAddress}</span>
           </div>
           <div className="flex justify-between">
             <span>পেশা:</span>
-            <span>ইঞ্জিনিয়ার</span>
+            <span>{occupation[0]}</span>
           </div>
         </div>
       </CardContent>

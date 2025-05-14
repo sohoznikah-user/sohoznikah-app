@@ -11,16 +11,18 @@ const DynamicPersistGate = dynamic(() => Promise.resolve(PersistGate), {
 });
 
 const RootProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isClient, setIsClient] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    setMounted(true);
   }, []);
 
-  if (!isClient) {
+  // During SSR and initial client render, only render the Provider
+  if (!mounted) {
     return <Provider store={store}>{children}</Provider>;
   }
 
+  // After hydration, render the full provider with PersistGate
   return (
     <Provider store={store}>
       <DynamicPersistGate loading={null} persistor={persistor}>

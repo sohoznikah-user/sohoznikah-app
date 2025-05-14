@@ -1,5 +1,3 @@
-// File: src/app/(main)/biodatas/listPageComponentes/BiodatasPageFilters.tsx
-
 "use client";
 
 import {
@@ -8,297 +6,344 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
+import { beingSearchedFilters, searchingFilters } from "./biodataFilterOptions";
+import { FilterAccordion } from "./FilterAccordian";
 
-export default function BiodatasPageFilters() {
-  const [ageRange, setAgeRange] = useState<number[]>([18, 80]);
-  const [heightRange, setHeightRange] = useState<number[]>([36, 84]);
+interface BiodatasPageFiltersProps {
+  onFilterChange: (filters: Record<string, any>) => void;
+  onReset: () => void;
+}
+
+export default function BiodatasPageFilters({
+  onFilterChange,
+  onReset,
+}: BiodatasPageFiltersProps) {
+  const [activeTab, setActiveTab] = useState<"searching" | "beingSearched">(
+    "searching"
+  );
+  const [ageRange, setAgeRange] = useState<[number, number]>([18, 80]);
+  const [heightRange, setHeightRange] = useState<[number, number]>([36, 84]);
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, string | string[] | [number, number]>
+  >({});
+
+  // Radio change handler
+  const handleRadioChange = (key: string, value: string) => {
+    setSelectedFilters((prev) => {
+      const newFilters = { ...prev, [key]: value };
+      onFilterChange(newFilters);
+      return newFilters;
+    });
+  };
+
+  // Checkbox change handler
+  const handleCheckboxChange = (
+    key: string,
+    value: string,
+    checked: boolean
+  ) => {
+    setSelectedFilters((prev) => {
+      const currentValues = Array.isArray(prev[key])
+        ? ([...prev[key]] as string[])
+        : [];
+      if (checked) {
+        currentValues.push(value);
+      } else {
+        const index = currentValues.indexOf(value);
+        if (index > -1) currentValues.splice(index, 1);
+      }
+      const newFilters = { ...prev, [key]: currentValues };
+      onFilterChange(newFilters);
+      return newFilters;
+    });
+  };
+
+  // Slider change handler
+  const handleSliderChange = (key: string, value: [number, number]) => {
+    if (key === "age" || key === "partner_age") setAgeRange(value);
+    if (key === "height" || key === "partner_height") setHeightRange(value);
+    const newFilters = { ...selectedFilters, [key]: value };
+    setSelectedFilters(newFilters);
+    onFilterChange(newFilters);
+  };
+
+  // Tab change handler
+  const handleTabChange = (tab: "searching" | "beingSearched") => {
+    setActiveTab(tab);
+    setSelectedFilters({});
+    setAgeRange([18, 80]);
+    setHeightRange([36, 84]);
+    onFilterChange({});
+  };
 
   return (
     <div className="w-72 bg-white ml-4 px-4 space-y-2">
       <div className="flex items-center justify-center text-center text-[#1f4f69] pb-2">
         <div className="pb-1 border-b border-[#1f4f69]">ফিল্টার করুন</div>
       </div>
+      {/* Filter buttons */}
       <div className="flex justify-center mb-4">
-        <button className="mr-[-1rem] rounded-xl py-3 text-white px-4 z-10 bg-gradient-to-r from-[#e25a6f] to-[#016ca7]">
+        <button
+          className={`mr-[-1rem] rounded-xl py-3 px-4 z-10 ${
+            activeTab === "searching"
+              ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
+              : "text-[#989898] border border-[#989898]"
+          }`}
+          onClick={() => handleTabChange("searching")}
+        >
           আমি খুঁজছি
         </button>
-        <button className="py-3 rounded-xl text-[#989898] pr-4 pl-6 border border-[#989898]">
+        <button
+          className={`py-3 rounded-xl px-4 ${
+            activeTab === "beingSearched"
+              ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
+              : "text-[#989898] border border-[#989898]"
+          }`}
+          onClick={() => handleTabChange("beingSearched")}
+        >
           আমাকে খুঁজছে
         </button>
-        {/* <button className="mr-[-1rem] rounded-xl py-3 text-[#989898] pl-4 pr-6 border border-[#989898]">
-          আমি খুঁজছি
-        </button>
-        <button className="py-3 rounded-xl text-white px-4 z-10 bg-gradient-to-r from-[#e25a6f] to-[#016ca7]">
-          আমাকে খুঁজছে
-        </button> */}
       </div>
+      {/* Filter accordion */}
       <form className="flex flex-col space-y-2">
         <Accordion type="multiple" className="flex flex-col space-y-2 mb-2">
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="বায়োডাটার ধরন"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              বায়োডাটার ধরন
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="বৈবাহিক অবস্থা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              বৈবাহিক অবস্থা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="বয়স"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              বয়স
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex">
-                <div className="text-[#1f4f69]">{ageRange[0]}</div>
-                <Slider
-                  value={ageRange}
-                  onValueChange={setAgeRange}
-                  min={18}
-                  max={80}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="text-[#1f4f69]">{ageRange[1]}</div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="উচ্চতা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              উচ্চতা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex">
-                <div className="text-[#1f4f69]">{heightRange[0]}</div>
-                <Slider
-                  value={heightRange}
-                  onValueChange={setHeightRange}
-                  min={18}
-                  max={80}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="text-[#1f4f69]">{heightRange[1]}</div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="গাত্রবর্ণ"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              গাত্রবর্ণ
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="স্থায়ী ঠিকানা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              স্থায়ী ঠিকানা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="বর্তমান ঠিকানা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              বর্তমান ঠিকানা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="শিক্ষা মাইগ্রেশন"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              শিক্ষা মাইগ্রেশন
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="পেশা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              পেশা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="শিক্ষা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              শিক্ষা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="পরিবারের আর্থসামাজিক অবস্থা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              পরিবারের আর্থসামাজিক অবস্থা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="মাজহাব/মাসলাহ"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              মাজহাব/মাসলাহ
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="রক্তের গ্রুপ"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              রক্তের গ্রুপ
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem
-            className="border border-gray-300 rounded-xl px-4"
-            value="বিশেষ অবস্থা"
-          >
-            <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-              বিশেষ অবস্থা
-            </AccordionTrigger>
-            <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="male" />
-                <Label htmlFor="male">পুরুষ</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="female" />
-                <Label htmlFor="female">নারী</Label>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+          {activeTab === "searching" ? (
+            <>
+              <FilterAccordion
+                value="বায়োডাটার ধরন"
+                title="বায়োডাটার ধরন"
+                contentType="radio"
+                filterKey="biodataType"
+                options={searchingFilters.biodataType}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="বৈবাহিক অবস্থা"
+                title="বৈবাহিক অবস্থা"
+                contentType="radio"
+                filterKey="maritalStatus"
+                options={searchingFilters.maritalStatus}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="বয়স"
+                title="বয়স"
+                contentType="slider"
+                filterKey="age"
+                range={ageRange}
+                onRangeChange={(val) => handleSliderChange("age", val)}
+                min={18}
+                max={80}
+              />
+              <FilterAccordion
+                value="উচ্চতা"
+                title="উচ্চতা"
+                contentType="slider"
+                filterKey="height"
+                range={heightRange}
+                onRangeChange={(val) => handleSliderChange("height", val)}
+                min={36}
+                max={84}
+              />
+              <FilterAccordion
+                value="গাত্রবর্ণ"
+                title="গাত্রবর্ণ"
+                contentType="radio"
+                filterKey="complexion"
+                options={searchingFilters.complexion}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="স্থায়ী ঠিকানা"
+                title="স্থায়ী ঠিকানা"
+                contentType="radio"
+                filterKey="permanentAddress"
+                options={searchingFilters.permanentAddress}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="বর্তমান ঠিকানা"
+                title="বর্তমান ঠিকানা"
+                contentType="radio"
+                filterKey="currentAddress"
+                options={searchingFilters.currentAddress}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="ধর্মীয় লাইফস্টাইল"
+                title="ধর্মীয় লাইফস্টাইল"
+                contentType="radio"
+                filterKey="religiousLifestyle"
+                options={searchingFilters.religiousLifestyle}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="পেশা"
+                title="পেশা"
+                contentType="radio"
+                filterKey="occupation"
+                options={searchingFilters.occupation}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="শিক্ষা"
+                title="শিক্ষা"
+                contentType="radio"
+                filterKey="education"
+                options={searchingFilters.education}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="দ্বীনি যোগ্যতা"
+                title="দ্বীনি যোগ্যতা"
+                contentType="radio"
+                filterKey="religiousEducation"
+                options={searchingFilters.religiousEducation}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="পরিবারের আর্থসামাজিক অবস্থা"
+                title="পরিবারের আর্থসামাজিক অবস্থা"
+                contentType="radio"
+                filterKey="familyStatus"
+                options={searchingFilters.familyStatus}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="মাজহাব/মানহাজ"
+                title="মাজহাব/মানহাজ"
+                contentType="radio"
+                filterKey="madhhab"
+                options={searchingFilters.madhhab}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="রক্তের গ্রুপ"
+                title="রক্তের গ্রুপ"
+                contentType="radio"
+                filterKey="bloodGroup"
+                options={searchingFilters.bloodGroup}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="বিশেষ ক্যাটাগরি"
+                title="বিশেষ ক্যাটাগরি"
+                contentType="checkbox"
+                filterKey="specialCategory"
+                options={searchingFilters.specialCategory}
+                selectedFilters={selectedFilters as Record<string, string[]>}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            </>
+          ) : (
+            <>
+              <FilterAccordion
+                value="বায়োডাটার ধরন"
+                title="বায়োডাটার ধরন"
+                contentType="radio"
+                filterKey="selfBiodataType"
+                options={beingSearchedFilters.selfBiodataType}
+                selectedFilters={selectedFilters as Record<string, string>}
+                handleRadioChange={handleRadioChange}
+              />
+              <FilterAccordion
+                value="বিশেষ ক্যাটাগরি"
+                title="বিশেষ ক্যাটাগরি"
+                contentType="checkbox"
+                filterKey="specialCategory"
+                options={beingSearchedFilters.specialCategory}
+                selectedFilters={selectedFilters as Record<string, string[]>}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+              <AccordionItem
+                className="border border-gray-300 rounded-xl px-4 max-h-40 overflow-y-auto"
+                value="যেমন জীবনসঙ্গী আশা করেন"
+              >
+                <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
+                  যেমন জীবনসঙ্গী আশা করেন
+                </AccordionTrigger>
+                <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
+                  <Accordion
+                    type="multiple"
+                    className="flex flex-col space-y-2"
+                  >
+                    <FilterAccordion
+                      value="partner_biodataType"
+                      title="জীবনসঙ্গীর বায়োডাটার ধরন"
+                      contentType="radio"
+                      filterKey="partner_biodataType"
+                      options={searchingFilters.biodataType}
+                      selectedFilters={
+                        selectedFilters as Record<string, string>
+                      }
+                      handleRadioChange={handleRadioChange}
+                    />
+                    <FilterAccordion
+                      value="partner_maritalStatus"
+                      title="জীবনসঙ্গীর বৈবাহিক অবস্থা"
+                      contentType="checkbox"
+                      filterKey="partner_maritalStatus"
+                      options={searchingFilters.maritalStatus}
+                      selectedFilters={
+                        selectedFilters as Record<string, string[]>
+                      }
+                      handleCheckboxChange={handleCheckboxChange}
+                    />
+                    <FilterAccordion
+                      value="partner_age"
+                      title="জীবনসঙ্গীর বয়স"
+                      contentType="slider"
+                      filterKey="partner_age"
+                      range={ageRange}
+                      onRangeChange={(val) =>
+                        handleSliderChange("partner_age", val)
+                      }
+                      min={18}
+                      max={80}
+                    />
+                    <FilterAccordion
+                      value="partner_height"
+                      title="জীবনসঙ্গীর উচ্চতা"
+                      contentType="slider"
+                      filterKey="partner_height"
+                      range={heightRange}
+                      onRangeChange={(val) =>
+                        handleSliderChange("partner_height", val)
+                      }
+                      min={36}
+                      max={84}
+                    />
+                  </Accordion>
+                </AccordionContent>
+              </AccordionItem>
+            </>
+          )}
         </Accordion>
+        <button
+          type="button"
+          className="py-2 px-4 bg-[#e25a6f] text-white rounded-xl"
+          onClick={() => {
+            setSelectedFilters({});
+            setAgeRange([18, 80]);
+            setHeightRange([36, 84]);
+            onReset();
+          }}
+        >
+          ফিল্টার রিসেট
+        </button>
       </form>
     </div>
   );

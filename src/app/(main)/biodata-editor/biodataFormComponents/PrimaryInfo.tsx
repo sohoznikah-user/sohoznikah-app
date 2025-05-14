@@ -19,6 +19,8 @@ import {
 import { biodataTypes } from "@/lib/consts";
 import { BiodataFormDataProps, PrimaryInfoFormData } from "@/lib/types";
 import { primaryInfoFormData } from "@/lib/validations";
+import { setBiodataFormData } from "@/redux/features/biodata/biodataSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -26,11 +28,11 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 export default function PrimaryInfo({
   biodataFormData,
-  setBiodataFormData,
   handleSave,
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
+  const dispatch = useAppDispatch();
   const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
 
   const form = useForm<PrimaryInfoFormData>({
@@ -64,19 +66,17 @@ export default function PrimaryInfo({
       if (submittedOnce) {
         await form.trigger();
       }
-      setBiodataFormData({
-        ...biodataFormData,
-        primaryInfoFormData: { ...values },
-      });
+      if (Object.values(values).some((value) => value !== undefined)) {
+        dispatch(
+          setBiodataFormData({
+            key: "primaryInfoFormData",
+            data: values,
+          })
+        );
+      }
     });
     return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+  }, [submittedOnce, form, dispatch]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -87,7 +87,16 @@ export default function PrimaryInfo({
     setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      handleSave();
+      const formValues = form.getValues();
+      if (Object.values(formValues).some((value) => value !== undefined)) {
+        dispatch(
+          setBiodataFormData({
+            key: "primaryInfoFormData",
+            data: formValues,
+          })
+        );
+        handleSave();
+      }
     }
   };
 

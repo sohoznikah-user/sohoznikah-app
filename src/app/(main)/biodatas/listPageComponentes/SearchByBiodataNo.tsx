@@ -19,12 +19,12 @@ export default function BiodatasPageSearchByBiodataNo() {
             <SelectValue placeholder="SNM" />
           </SelectTrigger>
           <SelectContent className="bg-white text-[#1f4f69]">
-            <SelectItem
+            {/* <SelectItem
               className="focus:bg-[#E25A6F] focus:text-white"
               value="all"
             >
               SNM
-            </SelectItem>
+            </SelectItem> */}
             <SelectItem
               className="focus:bg-[#E25A6F] focus:text-white"
               value="male"
