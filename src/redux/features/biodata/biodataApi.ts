@@ -29,6 +29,21 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.biodata],
     }),
+    getMyBiodata: build.query({
+      query: () => ({
+        url: `${BIODATA_URL}/my-biodata`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.biodata],
+    }),
+    updateMyBiodata: build.mutation({
+      query: (updatedData) => ({
+        url: `${BIODATA_URL}/my-biodata`,
+        method: "PATCH",
+        data: updatedData,
+      }),
+      invalidatesTags: [tagTypes.biodata],
+    }),
     updateBiodata: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${BIODATA_URL}/${id}`,
@@ -51,6 +66,8 @@ export const {
   useCreateBiodataMutation,
   useGetAllBiodatasQuery,
   useGetBiodataByIdQuery,
+  useGetMyBiodataQuery,
+  useUpdateMyBiodataMutation,
   useUpdateBiodataMutation,
   useDeleteBiodataMutation,
 } = biodataApi;

@@ -1,4 +1,5 @@
-// File: src/app/(main)/biodata-editor/biodataFormComponents/FirstWords.tsx
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -9,30 +10,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { FirstWordsFormData } from "@/lib/types";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  FirstWordsFormData,
+} from "@/lib/types";
 import { firstWordsFormData } from "@/lib/validations";
-import { updateBiodataFormData } from "@/redux/features/biodata/biodataSlice";
-import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-interface BiodataFormDataProps {
-  biodataFormData: any;
-  handleSave: () => void;
-  currentStep: any;
-  setCurrentStep: (step: string) => void;
-}
 
 export default function FirstWords({
   biodataFormData,
   handleSave,
-  currentStep,
-  setCurrentStep,
+  setBiodataFormData,
 }: BiodataFormDataProps) {
-  const dispatch = useAppDispatch();
-  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
-
   const form = useForm<FirstWordsFormData>({
     resolver: zodResolver(firstWordsFormData),
     defaultValues: {
@@ -47,21 +39,40 @@ export default function FirstWords({
     },
   });
 
+  // Reset form when biodataFormData changes
+  useEffect(() => {
+    form.reset({
+      preApprovalAcceptTerms:
+        biodataFormData?.firstWordsFormData?.preApprovalAcceptTerms || false,
+      preApprovalOathTruthfulInfo:
+        biodataFormData?.firstWordsFormData?.preApprovalOathTruthfulInfo ||
+        false,
+      preApprovalOathLegalResponsibility:
+        biodataFormData?.firstWordsFormData
+          ?.preApprovalOathLegalResponsibility || false,
+    });
+  }, [biodataFormData, form]);
+
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.firstWordsFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      const formValues = form.getValues();
-      // Only update if we have valid values
-      if (Object.values(formValues).some((value) => value !== undefined)) {
-        dispatch(
-          updateBiodataFormData({
-            key: "firstWordsFormData",
-            data: formValues,
-          })
-        );
-        handleSave();
-      }
+      handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof FirstWordsFormData
+      );
     }
   };
 
@@ -122,7 +133,8 @@ export default function FirstWords({
               নিজের শিক্ষা, পেশা এবং পারিবারিক তথ্যে বিস্তারিত উত্তর লিখতে হবে।
             </li>
             <li>
-              তথ্য ভেরিফিকেশনের সময় বায়োডাটায় দেওয়া তথ্যের সাথে মিল থাকতে হবে।
+              অভিভাবকদের ফোন করে তথ্য ভেরিফিকেশনের সময় বায়োডাটায় দেওয়া তথ্যের
+              সাথে মিল থাকতে হবে।
             </li>
           </ol>
         </div>
@@ -146,10 +158,6 @@ export default function FirstWords({
                     <FormLabel className="leading-4.5">
                       আমি শর্তসমূহ পড়েছি এবং তা মেনে চলার প্রতিশ্রুতি দিচ্ছি।
                     </FormLabel>
-
-                    {/* <FormDescription>
-                      Describe what this resume is for.
-                    </FormDescription> */}
                   </div>
                   <FormMessage />
                 </FormItem>

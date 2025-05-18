@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -19,23 +20,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { biodataTypes } from "@/lib/consts";
-import { BiodataFormDataProps, PrimaryInfoFormData } from "@/lib/types";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  PrimaryInfoFormData,
+} from "@/lib/types";
 import { primaryInfoFormData } from "@/lib/validations";
-import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export default function PrimaryInfo({
   biodataFormData,
-  setBiodataFormData, // Added missing prop
   handleSave,
   currentStep,
   setCurrentStep,
+  setBiodataFormData,
 }: BiodataFormDataProps) {
-  const dispatch = useAppDispatch();
-  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+  const defaultGuardianContacts = [
+    { relation: "", fullName: "", phoneNumber: "" },
+    { relation: "", fullName: "", phoneNumber: "" },
+  ];
 
   const form = useForm<PrimaryInfoFormData>({
     resolver: zodResolver(primaryInfoFormData),
@@ -65,23 +71,44 @@ export default function PrimaryInfo({
     },
   });
 
+  // Reset form when biodataFormData changes
+  useEffect(() => {
+    const guardianContacts =
+      Array.isArray(biodataFormData?.primaryInfoFormData?.guardianContacts) &&
+      biodataFormData.primaryInfoFormData.guardianContacts.length >= 2
+        ? biodataFormData.primaryInfoFormData.guardianContacts.map(
+            (contact) => ({
+              relation: contact.relation || "",
+              fullName: contact.fullName || "",
+              phoneNumber: contact.phoneNumber || "",
+            })
+          )
+        : [
+            { relation: "", fullName: "", phoneNumber: "" },
+            { relation: "", fullName: "", phoneNumber: "" },
+          ];
+
+    form.reset(
+      {
+        biodataType: biodataFormData?.primaryInfoFormData?.biodataType || "",
+        biodataFor: biodataFormData?.primaryInfoFormData?.biodataFor || "",
+        fullName: biodataFormData?.primaryInfoFormData?.fullName || "",
+        fatherName: biodataFormData?.primaryInfoFormData?.fatherName || "",
+        motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
+        email: biodataFormData?.primaryInfoFormData?.email || "",
+        phoneNumber: biodataFormData?.primaryInfoFormData?.phoneNumber || "",
+        guardianContacts,
+      },
+      {
+        keepDefaultValues: true,
+      }
+    );
+  }, [biodataFormData, form]);
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "guardianContacts",
   });
-
-  useEffect(() => {
-    const subscription = form.watch((values) => {
-      if (submittedOnce) {
-        form.trigger(); // Trigger validation on change after submission attempt
-      }
-      setBiodataFormData({
-        ...biodataFormData,
-        primaryInfoFormData: values as PrimaryInfoFormData,
-      });
-    });
-    return () => subscription.unsubscribe();
-  }, [form, submittedOnce, setBiodataFormData, biodataFormData]);
 
   const handleAppend = () => {
     append({ relation: "", fullName: "", phoneNumber: "" });
@@ -98,16 +125,26 @@ export default function PrimaryInfo({
     }
   };
 
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.primaryInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      const formValues = form.getValues();
-      setBiodataFormData({
-        ...biodataFormData,
-        primaryInfoFormData: formValues,
-      });
       handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof PrimaryInfoFormData
+      );
     }
   };
 
@@ -154,19 +191,42 @@ export default function PrimaryInfo({
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-col space-y-2">
-                  <FormLabel className="text-md space-y-1 leading-4.5">
-                    <div>বায়োডাটা কার জন্য তৈরী করছেন?</div>
-                    <div className="text-xs">
-                      (যেমনঃ নিজের জন্য/বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য
-                      ইত্যাদি)
-                    </div>
+                  <FormLabel className="text-lg font-medium text-[#005889]">
+                    বায়োডাটা কার জন্য তৈরী করছেন?
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="নিজের জন্য"
-                    />
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value="self"
+                          id="self"
+                          className="h-5 w-5 border-2 border-[#005889] text-[#005889] focus:ring-[#005889]"
+                        />
+                        <label
+                          htmlFor="self"
+                          className="text-xs text-[#005889]"
+                        >
+                          নিজের জন্য
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value="other"
+                          id="other"
+                          className="h-5 w-5 border-2 border-[#005889] text-[#005889] focus:ring-[#005889]"
+                        />
+                        <label
+                          htmlFor="other"
+                          className="text-xs text-[#005889]"
+                        >
+                          বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য
+                        </label>
+                      </div>
+                    </RadioGroup>
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -305,7 +365,10 @@ export default function PrimaryInfo({
               <div className="text-md space-y-1 leading-4.5">
                 <div>পাত্র/পাত্রীর অভিভাবকের মোবাইল নম্বর:</div>
                 <div className="text-xs">
-                  <div>কমপক্ষে ২ টি সচল নম্বর প্রদান করতে হবে।</div>
+                  <div>
+                    কমপক্ষে ২ টি সচল নম্বর প্রদান করতে হবে। কেউ আপনার বায়োডাটার
+                    যোগাযোগ তথ্য কিনলে তাদেরকে এই তথ্য প্রদান করা হবে।
+                  </div>
                 </div>
               </div>
               <Button
@@ -389,6 +452,7 @@ export default function PrimaryInfo({
           </div>
         </form>
       </Form>
+
       <div className="max-w-4xl w-full space-x-2 flex justify-center">
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
@@ -400,7 +464,7 @@ export default function PrimaryInfo({
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
-          disabled={submittedOnce && !form.formState.isValid}
+          disabled={!form.formState.isValid}
         >
           Next
         </Button>

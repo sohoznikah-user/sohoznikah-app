@@ -1,7 +1,7 @@
 // src/app/(main)/biodatas/listPageComponentes/BiodataPage.tsx
 
 "use client";
-import { useGetAllBiodatasQuery } from "@/redux/features/admin/biodataApi";
+import { useGetAllBiodatasQuery } from "@/redux/features/biodata/biodataApi";
 import { useDebounced } from "@/redux/hooks";
 import { useCallback, useMemo, useState } from "react";
 import BiodatasPageCard from "./BiodatasPageCard";

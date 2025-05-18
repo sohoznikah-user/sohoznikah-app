@@ -1,13 +1,19 @@
-// File: src/app/(main)/biodata-editor/BiodataEditor.tsx
-
 "use client";
 
-import { useCreateBiodataMutation } from "@/redux/features/admin/biodataApi";
+import Loading from "@/app/loading";
+import {
+  useGetMyBiodataQuery,
+  useUpdateMyBiodataMutation,
+} from "@/redux/features/biodata/biodataApi";
 import {
   clearBiodataFormData,
+  setAllBiodata,
+  setAllBiodataFormData,
   updateBiodataFormData,
 } from "@/redux/features/biodata/biodataSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
+import { mapBiodataFormDataToApi } from "@/utils/mapBiodataFormDataToApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
@@ -38,11 +44,18 @@ interface BiodataEditorProps {
 export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const biodataFormData = useAppSelector(
-    (state) => state.biodata.biodataFormData
-  );
+  const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
   const { user, acesstoken } = useAppSelector((state) => state.auth);
-  const [createBiodata, { isLoading }] = useCreateBiodataMutation();
+  const [updateMyBiodata, { isLoading: isUpdating }] =
+    useUpdateMyBiodataMutation();
+  const {
+    data: fetchedBiodata,
+    isLoading: isFetching,
+    error: fetchError,
+    refetch,
+  } = useGetMyBiodataQuery(undefined, {
+    skip: !user || !acesstoken,
+  });
 
   const searchParams = useSearchParams();
   const currentStepKey = searchParams.get("step") || steps[0].key;
@@ -51,12 +64,29 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
     [currentStepKey]
   );
 
+  // Redirect to login if not authenticated
   useEffect(() => {
     if (!user || !acesstoken) {
       const redirectUrl = `/biodata-editor?step=${currentStepKey}`;
       router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
     }
   }, [user, acesstoken, router, currentStepKey]);
+
+  // Populate Redux with fetched biodata
+  useEffect(() => {
+    if (fetchedBiodata?.data) {
+      const mapped = mapApiToBiodataFormData(fetchedBiodata.data);
+      dispatch(setAllBiodataFormData(mapped.biodataFormData));
+      dispatch(setAllBiodata(mapped.biodata));
+    }
+  }, [fetchedBiodata, dispatch]);
+
+  // Handle fetch errors
+  useEffect(() => {
+    if (fetchError) {
+      toast.error("Failed to fetch biodata. Please try again.");
+    }
+  }, [fetchError]);
 
   const setStep = useCallback(
     (key: string) => {
@@ -86,38 +116,47 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   const handleSave = useCallback(async () => {
     if (!currentStep || !user) return;
 
-    if (currentStep.key === "final-words") {
-      try {
-        const completeBiodata = {
-          userId: user.userId,
-          ...JSON.parse(JSON.stringify(biodataFormData)),
-        };
-        const result = await createBiodata(completeBiodata).unwrap();
-        if (result.success) {
-          toast.success("Biodata created successfully!");
-          dispatch(clearBiodataFormData());
-          setStep(steps[0].key);
-          router.push("/dashboard");
-        } else {
-          toast.error(result.message || "Failed to create biodata.");
-        }
-      } catch (error: any) {
-        console.error("Failed to save biodata:", error);
-        toast.error(error?.message || "Failed to create biodata.");
+    try {
+      const stepKey = stepKeyToStateKey[currentStepKey];
+      const formData = biodataFormData?.[stepKey];
+
+      if (!formData) {
+        toast.error("No data to save for this step.");
+        return;
       }
-    } else {
-      setStep(currentStep.next);
+
+      const completeBiodata = {
+        [stepKey]: formData,
+      };
+
+      const payload = mapBiodataFormDataToApi(currentStepKey, formData);
+      console.log("Saving data:", { completeBiodata, payload });
+
+      const result = await updateMyBiodata(completeBiodata).unwrap();
+      if (result.success) {
+        toast.success("Biodata saved successfully!");
+        await refetch(); // Sync state again
+        setStep(currentStep.next);
+      } else {
+        toast.error(result.message || "Failed to save biodata.");
+      }
+    } catch (error: any) {
+      console.error("Failed to save biodata:", error);
+      toast.error(error?.message || "Failed to create biodata.");
     }
   }, [
     currentStep,
     biodataFormData,
     setStep,
     dispatch,
-    createBiodata,
+    updateMyBiodata,
     user,
     router,
+    currentStepKey,
+    refetch,
   ]);
 
+  if (isFetching) return <Loading />;
   if (!FormComponent || !user) return null;
 
   return (
@@ -125,13 +164,22 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
       <Breadcrumbs currentStep={currentStepKey} setCurrentStep={setStep} />
       <FormComponent
         biodataFormData={biodataFormData}
-        setBiodataFormData={handleFormDataUpdate}
         handleSave={handleSave}
+        setBiodataFormData={handleFormDataUpdate}
         currentStep={currentStep}
         setCurrentStep={setStep}
       />
+      <button
+        onClick={() => dispatch(clearBiodataFormData())}
+        className="bg-red-500 text-white px-4 py-2 rounded-md mx-auto block cursor-pointer mt-5"
+      >
+        Clear Biodata
+      </button>
       {process.env.NODE_ENV === "development" && (
-        <pre>{JSON.stringify(biodataFormData, null, 2)}</pre>
+        <>
+          <pre>{JSON.stringify(biodataFormData, null, 2)}</pre>
+          <pre>{JSON.stringify(biodata, null, 2)}</pre>
+        </>
       )}
     </div>
   );

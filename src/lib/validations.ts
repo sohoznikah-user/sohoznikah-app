@@ -77,9 +77,13 @@ export const generalInfoFormData = z.object({
   bloodGroup: requiredString.min(1, {
     message: "রক্তের গ্রুপ নির্বাচন করা আবশ্যক।",
   }),
-  nationality: requiredString.min(1, {
-    message: "জাতীয়তা প্রদান করা আবশ্যক।",
-  }),
+  nationality: z
+    .array(
+      requiredString.min(1, {
+        message: "জাতীয়তা প্রদান করা আবশ্যক।",
+      })
+    )
+    .min(1, { message: "জাতীয়তা প্রদান করা আবশ্যক।" }),
 });
 
 export const addressInfoFormData = z.object({
@@ -138,6 +142,9 @@ export const educationInfoFormData = z.object({
   }),
   degrees: z.array(
     z.object({
+      degreeType: requiredString.min(1, {
+        message: "ডিগ্রির ধরন প্রদান করা আবশ্যক।",
+      }),
       name: requiredString.min(1, {
         message: "ডিগ্রির নাম প্রদান করা আবশ্যক।",
       }),

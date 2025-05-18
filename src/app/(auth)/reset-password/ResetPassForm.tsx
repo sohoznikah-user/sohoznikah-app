@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useResetPasswordMutation } from "@/redux/features/auth/authApi";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -15,6 +16,7 @@ interface ResetPasswordFormValues {
 const ResetPassForm = () => {
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const {
     register,
@@ -29,6 +31,16 @@ const ResetPassForm = () => {
       confirmPassword: "",
     },
   });
+
+  const id = searchParams.get("id");
+  const token = searchParams.get("token");
+
+  useEffect(() => {
+    if (!id || !token) {
+      toast.error("Invalid or missing reset token");
+      // router.push("/");
+    }
+  }, [id, token]);
 
   const newPassword = watch("newPassword");
   const confirmPassword = watch("confirmPassword");
@@ -60,11 +72,14 @@ const ResetPassForm = () => {
       toast.error("Passwords do not match");
       return;
     }
+    const resetData = {
+      id: id,
+      newPassword: values.newPassword,
+    };
+    console.log("resetData", resetData, token);
 
     try {
-      const result = await resetPassword({
-        newPassword: values.newPassword,
-      }).unwrap();
+      const result = await resetPassword({ resetData, token }).unwrap();
       if (result.success) {
         toast.success(result.message || "Password reset successful!");
         router.push("/login");

@@ -64,19 +64,11 @@ export default function EducationInfo({
       if (submittedOnce) {
         await form.trigger();
       }
-      setBiodataFormData({
-        ...biodataFormData,
-        educationInfoFormData: { ...values },
-      });
+
+      setBiodataFormData(values);
     });
     return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+  }, [submittedOnce, form, setBiodataFormData]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -90,6 +82,12 @@ export default function EducationInfo({
       handleSave();
     }
   };
+
+  const religiousEducationOptions = religiousEducation.filter(
+    (x) =>
+      x.for === biodataFormData?.primaryInfoFormData?.biodataType ||
+      x.for === "both"
+  );
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
@@ -284,7 +282,7 @@ export default function EducationInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {religiousEducation.map((x) => (
+                      {religiousEducationOptions?.map((x) => (
                         <div
                           key={x.id}
                           className="w-1/3 flex items-center space-x-2 mb-4"

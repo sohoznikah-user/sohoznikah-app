@@ -12,9 +12,18 @@ export default function LoginPage() {
       <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
       <LoginForm />
       <p className="text-sm text-gray-600 mt-3 text-center">
-        Don&apos;t have an account?
+        Don&apos;t have an account? Please
         <Link href="/register" className="text-blue-500 hover:underline ml-1">
           Register
+        </Link>
+      </p>
+      <p className="text-sm text-gray-600 mt-2 text-center">
+        Not verified yet? Please
+        <Link
+          href="/verify-email"
+          className="text-blue-500 hover:underline ml-1"
+        >
+          Verify
         </Link>
       </p>
     </>

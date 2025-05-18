@@ -31,25 +31,27 @@ import {
   nationalities,
   skinTones,
 } from "@/lib/consts";
-import { BiodataFormDataProps, GeneralInfoFormData } from "@/lib/types";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  GeneralInfoFormData,
+} from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { generalInfoFormData } from "@/lib/validations";
-import { updateBiodataFormData } from "@/redux/features/biodata/biodataSlice";
-import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export default function GeneralInfo({
   biodataFormData,
+  setBiodataFormData,
   handleSave,
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
-  const dispatch = useAppDispatch();
-  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+  console.log(biodataFormData);
 
   const form = useForm<GeneralInfoFormData>({
     resolver: zodResolver(generalInfoFormData),
@@ -60,47 +62,39 @@ export default function GeneralInfo({
       height: biodataFormData?.generalInfoFormData?.height || "",
       weight: biodataFormData?.generalInfoFormData?.weight || "",
       bloodGroup: biodataFormData?.generalInfoFormData?.bloodGroup || "",
-      nationality: biodataFormData?.generalInfoFormData?.nationality || "",
+      nationality:
+        biodataFormData?.generalInfoFormData?.nationality || ([] as string[]),
     },
   });
 
-  // useEffect(() => {
-  //   const { unsubscribe } = form.watch(async (values) => {
-  //     if (submittedOnce) {
-  //       await form.trigger();
-  //     }
-  //     if (Object.values(values).some((value) => value !== undefined)) {
-  //       dispatch(
-  //         setBiodataFormData({
-  //           key: "generalInfoFormData",
-  //           data: values,
-  //         })
-  //       );
-  //     }
-  //   });
-  //   return unsubscribe;
-  // }, [submittedOnce, form, dispatch]);
+  const maritalStatusOptions = maritalStatuses.filter(
+    (x) =>
+      x.for === biodataFormData?.primaryInfoFormData?.biodataType ||
+      x.for === "both"
+  );
 
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.generalInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
-      const formValues = form.getValues();
-      if (Object.values(formValues).some((value) => value !== undefined)) {
-        dispatch(
-          updateBiodataFormData({
-            key: "generalInfoFormData",
-            data: formValues,
-          })
-        );
-        handleSave();
-      }
+      handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof GeneralInfoFormData
+      );
     }
   };
-
-  const maritalStatusOptions = maritalStatuses.filter((x) =>
-    x.for.includes(biodataFormData?.primaryInfoFormData?.biodataType)
-  );
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
@@ -319,25 +313,70 @@ export default function GeneralInfo({
                     জাতীয়তা:
                   </FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
-                        <SelectValue placeholder="জাতীয়তা" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-                        {nationalities.map((x) => (
-                          <SelectItem
-                            key={x.id}
-                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                            value={x.id}
-                          >
-                            {x.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="space-y-2">
+                      {Array.isArray(field.value) && field.value.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {field.value.map((value) => {
+                            const nationality = nationalities.find(
+                              (n) => n.id === value
+                            );
+                            return (
+                              <div
+                                key={value}
+                                className="bg-[#E25A6F] text-white px-3 py-1 rounded-full flex items-center gap-2"
+                              >
+                                <span>{nationality?.title}</span>
+                                <span
+                                  onClick={() => {
+                                    const currentValue = Array.isArray(
+                                      field.value
+                                    )
+                                      ? field.value
+                                      : [];
+                                    const newValue = currentValue.filter(
+                                      (v) => v !== value
+                                    );
+                                    field.onChange(newValue);
+                                  }}
+                                  className="hover:text-gray-200 cursor-pointer text-xs ml-1"
+                                  role="button"
+                                  tabIndex={0}
+                                >
+                                  ×
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                      <Select
+                        onValueChange={(value) => {
+                          const currentValue = Array.isArray(field.value)
+                            ? field.value
+                            : [];
+                          if (!currentValue.includes(value)) {
+                            field.onChange([...currentValue, value]);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                          <SelectValue placeholder="জাতীয়তা" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                          {nationalities.map((x) => (
+                            <SelectItem
+                              key={x.id}
+                              className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                              value={x.id}
+                            >
+                              {x.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </FormControl>
                 </div>
-
                 <FormMessage />
               </FormItem>
             )}

@@ -2,13 +2,13 @@
 import { baseApi } from "@/redux/api/baseApi";
 import { tagTypes } from "@/redux/tag-Types";
 
-const AUTH_URL = "/auth";
+const URL = "/auth";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     userRegister: build.mutation({
       query: (registerData) => ({
-        url: `${AUTH_URL}/register`,
+        url: `${URL}/register`,
         method: "POST",
         data: registerData,
       }),
@@ -16,7 +16,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     userLogin: build.mutation({
       query: (loginData) => ({
-        url: `${AUTH_URL}/login`,
+        url: `${URL}/login`,
         method: "POST",
         data: loginData,
       }),
@@ -24,7 +24,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     verifyEmail: build.mutation({
       query: (verifyData) => ({
-        url: `${AUTH_URL}/verify-email`,
+        url: `${URL}/verify-email`,
         method: "POST",
         data: verifyData,
       }),
@@ -32,7 +32,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     changePassword: build.mutation({
       query: (data) => ({
-        url: `${AUTH_URL}/change-password`,
+        url: `${URL}/change-password`,
         method: "POST",
         contentType: "application/json",
         data,
@@ -41,7 +41,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     refreshToken: build.mutation({
       query: (data) => ({
-        url: `${AUTH_URL}/refresh-token`,
+        url: `${URL}/refresh-token`,
         method: "POST",
         contentType: "application/json",
         data,
@@ -50,17 +50,20 @@ export const authApi = baseApi.injectEndpoints({
     }),
     forgotPassword: build.mutation({
       query: (data) => ({
-        url: `${AUTH_URL}/forgot-password`,
+        url: `${URL}/forgot-password`,
         method: "POST",
         data: data,
       }),
       invalidatesTags: [tagTypes.user],
     }),
     resetPassword: build.mutation({
-      query: (data) => ({
-        url: `${AUTH_URL}/reset-password`,
+      query: ({ resetData, token }) => ({
+        url: `${URL}/reset-password`,
         method: "POST",
-        data: data,
+        data: resetData,
+        headers: {
+          Authorization: token,
+        },
       }),
       invalidatesTags: [tagTypes.user],
     }),

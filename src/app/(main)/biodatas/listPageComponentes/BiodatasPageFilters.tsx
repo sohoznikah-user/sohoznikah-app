@@ -76,11 +76,9 @@ export default function BiodatasPageFilters({
 
   // Radio change handler
   const handleRadioChange = (key: string, value: string) => {
-    setSelectedFilters((prev) => {
-      const newFilters = { ...prev, [key]: value };
-      onFilterChange(newFilters);
-      return newFilters;
-    });
+    const newFilters = { ...selectedFilters, [key]: value };
+    setSelectedFilters(newFilters);
+    onFilterChange(newFilters);
   };
 
   // Checkbox change handler
@@ -89,20 +87,18 @@ export default function BiodatasPageFilters({
     value: string,
     checked: boolean
   ) => {
-    setSelectedFilters((prev) => {
-      const currentValues = Array.isArray(prev[key])
-        ? [...(prev[key] as string[])]
-        : [];
-      if (checked) {
-        currentValues.push(value);
-      } else {
-        const index = currentValues.indexOf(value);
-        if (index > -1) currentValues.splice(index, 1);
-      }
-      const newFilters = { ...prev, [key]: currentValues };
-      onFilterChange(newFilters);
-      return newFilters;
-    });
+    const currentValues = Array.isArray(selectedFilters[key])
+      ? [...(selectedFilters[key] as string[])]
+      : [];
+    if (checked) {
+      currentValues.push(value);
+    } else {
+      const index = currentValues.indexOf(value);
+      if (index > -1) currentValues.splice(index, 1);
+    }
+    const newFilters = { ...selectedFilters, [key]: currentValues };
+    setSelectedFilters(newFilters);
+    onFilterChange(newFilters);
   };
 
   // Slider change handler
