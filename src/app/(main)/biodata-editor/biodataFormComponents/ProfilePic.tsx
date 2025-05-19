@@ -23,12 +23,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { BiodataFormDataProps, ProfilePicFormData } from "@/lib/types";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  ProfilePicFormData,
+} from "@/lib/types";
 import { profilePicFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export default function ProfilePic({
@@ -38,8 +42,6 @@ export default function ProfilePic({
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
-  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
-
   const form = useForm<ProfilePicFormData>({
     resolver: zodResolver(profilePicFormData),
     defaultValues: {
@@ -47,37 +49,33 @@ export default function ProfilePic({
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
-      }
-      setBiodataFormData({
-        ...biodataFormData,
-        profilePicFormData: { ...values },
-      });
-    });
-    return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+  const images =
+    biodataFormData?.primaryInfoFormData?.biodataType === "GROOM"
+      ? [male1, male2, male3, male4, male5, male6]
+      : [female1, female2, female3, female4, female5, female6];
 
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.profilePicFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
       handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof ProfilePicFormData
+      );
     }
   };
-
-  const images =
-    biodataFormData?.primaryInfoFormData?.biodataType === "1"
-      ? [male1, male2, male3, male4, male5, male6]
-      : [female1, female2, female3, female4, female5, female6];
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
@@ -143,7 +141,7 @@ export default function ProfilePic({
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
         >
-          Next
+          Save & Next
         </Button>
       </div>
     </div>

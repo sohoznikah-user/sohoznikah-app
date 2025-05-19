@@ -1,5 +1,5 @@
 export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
-  console.log("apiData", apiData);
+  console.log("apiData", apiData.religiousInfoFormData);
   const biodata = {
     biodata: {
       id: apiData?.id || "",
@@ -65,7 +65,7 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
     },
     educationInfoFormData: {
       type: apiData?.educationInfoFormData?.[0]?.type || "",
-      highestDegree: apiData?.educationInfos?.[0]?.highestDegree || "",
+      highestDegree: apiData?.educationInfoFormData?.[0]?.highestDegree || "",
       degrees: apiData?.educationDegrees?.map((deg: any) => ({
         degreeType: deg?.degreeType || "",
         name: deg?.name || "",
@@ -76,8 +76,8 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
         { degreeType: "", name: "", institute: "", passYear: "", group: "" },
       ],
       religiousEducation:
-        apiData?.educationInfos?.[0]?.religiousEducation || [],
-      detail: apiData?.educationInfos?.[0]?.detail || "",
+        apiData?.educationInfoFormData?.[0]?.religiousEducation || [],
+      detail: apiData?.educationInfoFormData?.[0]?.detail || "",
     },
     occupationInfoFormData: {
       occupations: apiData?.occupationInfoFormData?.[0]?.occupations || [],
@@ -92,6 +92,7 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
         apiData?.familyInfoFormData?.[0]?.motherOccupation || "",
       siblings:
         apiData?.familySiblings?.map((sibling: any) => ({
+          serial: sibling?.serial || "",
           type: sibling?.type || "",
           occupation: sibling?.occupation || "",
           maritalStatus: sibling?.maritalStatus || "",
@@ -141,12 +142,28 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
       lgbtqOpinion: apiData?.personalInfoFormData?.[0]?.lgbtqOpinion || "",
       specialConditions:
         apiData?.personalInfoFormData?.[0]?.specialConditions || [],
+      aboutYourself: apiData?.personalInfoFormData?.[0]?.aboutYourself || "",
     },
     marriageInfoFormData: {
+      reasonForRemarriage:
+        apiData?.marriageInfoFormData?.[0]?.reasonForRemarriage || "",
+      currentSpouseAndChildren:
+        apiData?.marriageInfoFormData?.[0]?.currentSpouseAndChildren || "",
+      previousMarriageAndDivorceDetails:
+        apiData?.marriageInfoFormData?.[0]?.previousMarriageAndDivorceDetails ||
+        "",
+      spouseDeathDetails:
+        apiData?.marriageInfoFormData?.[0]?.spouseDeathDetails || "",
+      childrenDetails:
+        apiData?.marriageInfoFormData?.[0]?.childrenDetails || "",
       guardianApproval:
         apiData?.marriageInfoFormData?.[0]?.guardianApproval || "",
       continueStudy: apiData?.marriageInfoFormData?.[0]?.continueStudy || "",
+      continueStudyDetails:
+        apiData?.marriageInfoFormData?.[0]?.continueStudyDetails || "",
       careerPlan: apiData?.marriageInfoFormData?.[0]?.careerPlan || "",
+      careerPlanDetails:
+        apiData?.marriageInfoFormData?.[0]?.careerPlanDetails || "",
       residence: apiData?.marriageInfoFormData?.[0]?.residence || "",
       arrangeHijab: apiData?.marriageInfoFormData?.[0]?.arrangeHijab || "",
       dowryExpectation:
@@ -190,6 +207,7 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
       postApprovalOathNoMisuse: apiData?.postApprovalOathNoMisuse || false,
       postApprovalOathLegalResponsibility:
         apiData?.postApprovalOathLegalResponsibility || false,
+      visibility: apiData?.visibility || "",
     },
   };
 

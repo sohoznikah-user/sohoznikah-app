@@ -2,8 +2,8 @@ export const mapBiodataFormDataToApi = (
   stepKey: string,
   formData: any
 ): Record<string, any> => {
-  console.log("stepKey in mapBiodataFormDataToApi", stepKey);
-  console.log("formData in mapBiodataFormDataToApi", formData);
+  // console.log("stepKey in mapBiodataFormDataToApi", stepKey);
+  // console.log("formData in mapBiodataFormDataToApi", formData);
 
   switch (stepKey) {
     case "primary-info":

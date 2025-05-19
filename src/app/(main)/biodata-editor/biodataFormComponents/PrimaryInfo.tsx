@@ -466,7 +466,7 @@ export default function PrimaryInfo({
           onClick={handleNextClick}
           disabled={!form.formState.isValid}
         >
-          Next
+          Save & Next
         </Button>
       </div>
     </div>

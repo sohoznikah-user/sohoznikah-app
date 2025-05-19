@@ -20,12 +20,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { citizenshipOptions, locations, types } from "@/lib/consts";
-import { AddressInfoFormData, BiodataFormDataProps } from "@/lib/types";
+import {
+  AddressInfoFormData,
+  BiodataFormData,
+  BiodataFormDataProps,
+} from "@/lib/types";
 import { addressInfoFormData } from "@/lib/validations";
-import { updateBiodataFormData } from "@/redux/features/biodata/biodataSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { districtsAndUpazilas } from "@/utils/districtsAndUpazilas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export default function AddressInfo({
@@ -33,6 +37,7 @@ export default function AddressInfo({
   handleSave,
   currentStep,
   setCurrentStep,
+  setBiodataFormData,
 }: BiodataFormDataProps) {
   const form = useForm<AddressInfoFormData>({
     resolver: zodResolver(addressInfoFormData),
@@ -49,11 +54,11 @@ export default function AddressInfo({
                 detail: "",
                 country: "",
                 cityzenshipStatus: "",
+                permanentHomeAddress: "",
               },
             ],
     },
   });
-  const dispatch = useAppDispatch();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -61,35 +66,38 @@ export default function AddressInfo({
   });
 
   // Reset form when biodataFormData changes
-  // useEffect(() => {
-  //   form.reset({
-  //     addresses:
-  //       biodataFormData?.addressInfoFormData?.addresses ||
-  //       biodataFormData?.addresses?.length > 0
-  //         ? biodataFormData.addressInfoFormData.addresses
-  //         : [
-  //             {
-  //               type: "",
-  //               location: "",
-  //               state: "",
-  //               city: "",
-  //               detail: "",
-  //               country: "",
-  //               cityzenshipStatus: "",
-  //             },
-  //           ],
-  //   });
-  // }, [biodataFormData.addressInfoFormData, form]);
+  useEffect(() => {
+    const addresses = biodataFormData?.addressInfoFormData?.addresses || [
+      {
+        type: "",
+        location: "",
+        state: "",
+        city: "",
+        detail: "",
+        country: "",
+        cityzenshipStatus: "",
+        permanentHomeAddress: "",
+      },
+    ];
 
+    form.reset({ addresses });
+  }, [biodataFormData?.addressInfoFormData?.addresses, form]);
+
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.addressInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
     const isValid = await form.trigger();
     if (isValid) {
-      dispatch(
-        updateBiodataFormData({
-          key: "addressInfoFormData",
-          data: form.getValues(),
-        })
-      );
       handleSave();
     } else {
       form.setFocus(
@@ -103,6 +111,10 @@ export default function AddressInfo({
       <div className="text-3xl text-center text-black">ঠিকানা</div>
       <Form {...form}>
         <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
+          <h4 className="text-md">
+            আপনার স্থায়ী ঠিকানা এবং বর্তমান ঠিকানা প্লাস বাটনে চাপ দিয়ে যুক্ত
+            করুন একাধিক ঠিকানা থাকলেও যুক্ত করতে পারেন
+          </h4>
           {fields.map((field, index) => (
             <div
               className="flex flex-col space-y-4 items-center rounded-2xl p-4 border border-[#E25A6F]"
@@ -191,93 +203,6 @@ export default function AddressInfo({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name={`addresses.${index}.state`}
-                render={({ field }) => {
-                  const label =
-                    form.getValues(`addresses.${index}.location`) === "foreign"
-                      ? "স্টেট"
-                      : "স্থায়ী জেলা";
-                  return (
-                    <FormItem className="w-full">
-                      <FormLabel className="text-md space-y-2 leading-4.5">
-                        {label}:
-                      </FormLabel>
-                      <div className="flex flex-col space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                              type="text"
-                              placeholder={label}
-                            />
-                          </FormControl>
-                        </div>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name={`addresses.${index}.city`}
-                render={({ field }) => {
-                  const label =
-                    form.getValues(`addresses.${index}.location`) === "foreign"
-                      ? "শহর"
-                      : "স্থায়ী উপজেলা";
-                  return (
-                    <FormItem className="w-full">
-                      <FormLabel className="text-md space-y-2 leading-4.5">
-                        <div>{label}:</div>
-                        <div className="text-xs">(যদি থাকে)</div>
-                      </FormLabel>
-                      <div className="flex flex-col space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                              type="text"
-                              placeholder={label}
-                            />
-                          </FormControl>
-                        </div>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name={`addresses.${index}.detail`}
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="text-md space-y-2 leading-4.5">
-                      ঠিকানার বিস্তারিত:
-                    </FormLabel>
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                            type="text"
-                            placeholder="ঠিকানার বিস্তারিত"
-                          />
-                        </FormControl>
-                      </div>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
               {form.getValues(`addresses.${index}.location`) === "foreign" && (
                 <>
                   <FormField
@@ -304,6 +229,172 @@ export default function AddressInfo({
                       </FormItem>
                     )}
                   />
+                </>
+              )}
+
+              <FormField
+                control={form.control}
+                name={`addresses.${index}.state`}
+                render={({ field }) => {
+                  const location = form.getValues(
+                    `addresses.${index}.location`
+                  );
+                  const label =
+                    location === "foreign" ? "স্টেট" : "স্থায়ী জেলা";
+
+                  return (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-md space-y-2 leading-4.5">
+                        <div>{label}:</div>
+                        <div className="text-xs">(যদি থাকে)</div>
+                      </FormLabel>
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <FormControl>
+                            {location === "foreign" ? (
+                              <Input
+                                {...field}
+                                className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                                type="text"
+                                placeholder={label}
+                              />
+                            ) : (
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
+                                  <SelectValue placeholder="জেলা নির্বাচন করুন" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Object.keys(districtsAndUpazilas).map(
+                                    (district) => (
+                                      <SelectItem
+                                        key={
+                                          districtsAndUpazilas[district].value
+                                        }
+                                        value={
+                                          districtsAndUpazilas[district].value
+                                        }
+                                      >
+                                        {district}
+                                      </SelectItem>
+                                    )
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+              <FormField
+                control={form.control}
+                name={`addresses.${index}.city`}
+                render={({ field }) => {
+                  const location = form.getValues(
+                    `addresses.${index}.location`
+                  );
+                  const selectedDistrict = form.getValues(
+                    `addresses.${index}.state`
+                  );
+                  const label =
+                    location === "foreign" ? "শহর" : "স্থায়ী উপজেলা";
+
+                  const upazilas =
+                    (selectedDistrict &&
+                      Object.values(districtsAndUpazilas).find(
+                        (district) => district.value === selectedDistrict
+                      )?.upazilas) ||
+                    [];
+
+                  return (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-md space-y-2 leading-4.5">
+                        <div>{label}:</div>
+                      </FormLabel>
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <FormControl>
+                            {location === "foreign" ? (
+                              <Input
+                                {...field}
+                                className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                                type="text"
+                                placeholder={label}
+                              />
+                            ) : (
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                                disabled={!selectedDistrict}
+                              >
+                                <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
+                                  <SelectValue placeholder="উপজেলা নির্বাচন করুন" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {upazilas.map((upazila) => (
+                                    <SelectItem
+                                      key={upazila.value}
+                                      value={upazila.value}
+                                    >
+                                      {upazila.title}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+              {form.getValues(`addresses.${index}.location`) ===
+                "bangladesh" && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name={`addresses.${index}.permanentHomeAddress`}
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel className="text-md space-y-2 leading-4.5">
+                          <div>স্থায়ী বাড়ির ঠিকানা:</div>
+                          <div className="text-xs">
+                            যেমন: (মিরপুর ১১/ আজমপুর,উত্তরা) অথবা (ইউনিয়ন/থানা)।
+                            বাসা নম্বর বা গ্রামের নাম লিখবেন না।
+                          </div>
+                        </FormLabel>
+                        <div className="flex flex-col space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                                type="text"
+                                placeholder="যেমন: (মিরপুর ১১/ আজমপুর,উত্তরা)
+                          অথবা (ইউনিয়ন/থানা)"
+                              />
+                            </FormControl>
+                          </div>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+
+              {form.getValues(`addresses.${index}.location`) === "foreign" && (
+                <>
                   <FormField
                     control={form.control}
                     name={`addresses.${index}.cityzenshipStatus`}
@@ -360,6 +451,36 @@ export default function AddressInfo({
           >
             <Plus size={20} /> <span>নতুন ঠিকানা যোগ করুন</span>
           </Button>
+
+          <FormField
+            control={form.control}
+            name={`addresses.${0}.detail`}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="text-md space-y-2 leading-4.5">
+                  <div>কোথায় বেড়ে উঠেছেন:</div>
+                  <div className="text-xs">
+                    (ছোটবেলা থেকে এখন পর্যন্ত কোথায় কোথায় থাকা হয়েছে তার
+                    সংক্ষিপ্ত বিবরণ দিন)
+                  </div>
+                </FormLabel>
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                        type="text"
+                        placeholder="(ছোটবেলা থেকে এখন পর্যন্ত কোথায় কোথায় থাকা হয়েছে তার
+                    সংক্ষিপ্ত বিবরণ দিন)"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
         </form>
       </Form>
 
@@ -374,7 +495,7 @@ export default function AddressInfo({
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
         >
-          Next
+          Save & Next
         </Button>
       </div>
     </div>

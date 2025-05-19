@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -30,6 +29,7 @@ import {
   maritalStatuses,
   nationalities,
   skinTones,
+  weights,
 } from "@/lib/consts";
 import {
   BiodataFormData,
@@ -51,8 +51,6 @@ export default function GeneralInfo({
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
-  console.log(biodataFormData);
-
   const form = useForm<GeneralInfoFormData>({
     resolver: zodResolver(generalInfoFormData),
     defaultValues: {
@@ -258,11 +256,22 @@ export default function GeneralInfo({
                     ওজন:
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="ওজন"
-                    />
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                        <SelectValue placeholder="ওজন" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                        {weights.map((x) => (
+                          <SelectItem
+                            key={x.id}
+                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                            value={x.id}
+                          >
+                            {x.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                 </div>
 

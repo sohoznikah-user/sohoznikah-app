@@ -1,4 +1,4 @@
-// File: src/app/(main)/biodata-editor/biodataFormComponents/EducationInfo.tsx
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -19,12 +19,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { educationTypes, religiousEducation } from "@/lib/consts";
-import { BiodataFormDataProps, EducationInfoFormData } from "@/lib/types";
+import { degreeTypes, educationTypes, religiousEducation } from "@/lib/consts";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  EducationInfoFormData,
+} from "@/lib/types";
 import { educationInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export default function EducationInfo({
@@ -34,8 +38,6 @@ export default function EducationInfo({
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
-  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
-
   const form = useForm<EducationInfoFormData>({
     resolver: zodResolver(educationInfoFormData),
     defaultValues: {
@@ -44,50 +46,61 @@ export default function EducationInfo({
         biodataFormData?.educationInfoFormData?.highestDegree || "",
       degrees:
         biodataFormData?.educationInfoFormData?.degrees?.length > 0
-          ? biodataFormData?.educationInfoFormData?.degrees.map((x) => {
-              return {
-                name: x.name,
-                passYear: x.passYear,
-                group: x.group,
-                institute: x.institute,
-              };
-            })
-          : [{ name: "", passYear: "", group: "", institute: "" }],
+          ? biodataFormData?.educationInfoFormData?.degrees.map((x) => ({
+              degreeType: x.degreeType,
+              name: x.name,
+              passYear: x.passYear,
+              group: x.group,
+              institute: x.institute,
+            }))
+          : [
+              {
+                degreeType: "",
+                name: "",
+                passYear: "",
+                group: "",
+                institute: "",
+              },
+            ],
       religiousEducation:
         biodataFormData?.educationInfoFormData?.religiousEducation || [],
       detail: biodataFormData?.educationInfoFormData?.detail || "",
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
-      }
-
-      setBiodataFormData(values);
-    });
-    return unsubscribe;
-  }, [submittedOnce, form, setBiodataFormData]);
-
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "degrees",
   });
-
-  const handleNextClick = async () => {
-    setSubmittedOnce(true);
-    const isValid = await form.trigger();
-    if (isValid) {
-      handleSave();
-    }
-  };
 
   const religiousEducationOptions = religiousEducation.filter(
     (x) =>
       x.for === biodataFormData?.primaryInfoFormData?.biodataType ||
       x.for === "both"
   );
+
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.educationInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
+  const handleNextClick = async () => {
+    const isValid = await form.trigger();
+    if (isValid) {
+      handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof EducationInfoFormData
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
@@ -122,7 +135,6 @@ export default function EducationInfo({
                     </Select>
                   </FormControl>
                 </div>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -140,7 +152,7 @@ export default function EducationInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="নিজের জন্য"
+                      placeholder="সর্বোচ্চ ডিগ্রীর নাম"
                     />
                   </FormControl>
                 </div>
@@ -160,20 +172,34 @@ export default function EducationInfo({
             >
               <FormField
                 control={form.control}
-                name={`degrees.${index}.name`}
+                name={`degrees.${index}.degreeType`}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel className="text-md space-y-2 leading-4.5">
-                      ডিগ্রীর নাম:
+                      ডিগ্রীর ধরণ:
                     </FormLabel>
                     <div className="flex flex-col space-y-2">
                       <div className="flex items-center space-x-2">
                         <FormControl>
-                          <Input
-                            {...field}
-                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                            placeholder="ডিগ্রীর নাম"
-                          />
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                              <SelectValue placeholder="ডিগ্রীর ধরণ" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                              {degreeTypes.map((x) => (
+                                <SelectItem
+                                  key={x.id}
+                                  className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                                  value={x.id}
+                                >
+                                  {x.title}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <Button
                           type="button"
@@ -188,7 +214,42 @@ export default function EducationInfo({
                   </FormItem>
                 )}
               />
-
+              <FormField
+                control={form.control}
+                name={`degrees.${index}.name`}
+                render={({ field }) => {
+                  const selectedDegreeType = form.getValues(
+                    `degrees.${index}.degreeType`
+                  );
+                  const isBelowSecondary =
+                    selectedDegreeType === "below_secondary";
+                  return (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-md space-y-2 leading-4.5">
+                        {isBelowSecondary
+                          ? "কোন ক্লাস পর্যন্ত পড়েছেন?"
+                          : "ডিগ্রীর নাম"}
+                      </FormLabel>
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                              placeholder={
+                                isBelowSecondary
+                                  ? "কোন ক্লাস পর্যন্ত পড়েছেন?"
+                                  : "ডিগ্রীর নাম"
+                              }
+                            />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
               <FormField
                 control={form.control}
                 name={`degrees.${index}.passYear`}
@@ -210,29 +271,30 @@ export default function EducationInfo({
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name={`degrees.${index}.group`}
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="text-md space-y-2 leading-4.5">
-                      বিভাগ/বিষয়:
-                    </FormLabel>
-                    <div className="flex flex-col space-y-2">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                          placeholder="বিভাগ/বিষয়"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-
+              {form.getValues(`degrees.${index}.degreeType`) !==
+                "below_secondary" && (
+                <FormField
+                  control={form.control}
+                  name={`degrees.${index}.group`}
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-md space-y-2 leading-4.5">
+                        বিভাগ/বিষয়:
+                      </FormLabel>
+                      <div className="flex flex-col space-y-2">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                            placeholder="বিভাগ/বিষয়"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name={`degrees.${index}.institute`}
@@ -256,12 +318,12 @@ export default function EducationInfo({
               />
             </div>
           ))}
-          {/* Add New Address */}
           <Button
             type="button"
             className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F] flex items-center space-x-2"
             onClick={() =>
               append({
+                degreeType: "",
                 name: "",
                 passYear: "",
                 group: "",
@@ -294,7 +356,6 @@ export default function EducationInfo({
                               const updatedOccupations = checked
                                 ? [...field.value, x.id]
                                 : field.value.filter((id) => id !== x.id);
-
                               field.onChange(updatedOccupations);
                             }}
                           />
@@ -322,7 +383,7 @@ export default function EducationInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="পিতার নাম"
+                      placeholder="শিক্ষা সম্পর্কিত অতিরিক্ত তথ্য"
                     />
                   </FormControl>
                 </div>
@@ -343,7 +404,7 @@ export default function EducationInfo({
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
         >
-          Next
+          Save & Next
         </Button>
       </div>
     </div>

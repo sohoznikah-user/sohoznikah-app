@@ -13,7 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { occupationsList } from "@/lib/consts";
-import { BiodataFormDataProps, OccupationInfoFormData } from "@/lib/types";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  OccupationInfoFormData,
+} from "@/lib/types";
 import { occupationInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -38,30 +42,26 @@ export default function OccupationInfo({
     },
   });
 
+  // Sync form data to Redux in real-time
   useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.occupationInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
       }
-      setBiodataFormData({
-        ...biodataFormData,
-        occupationInfoFormData: { ...values },
-      });
     });
-    return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
 
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
       handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof OccupationInfoFormData
+      );
     }
   };
 
