@@ -50,7 +50,8 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
         city: addr?.city || "",
         detail: addr?.detail || "",
         country: addr?.country || "",
-        citizenshipStatus: addr?.cityzenshipStatus || "", // Note: API uses 'cityzenshipStatus'
+        permanentHomeAddress: addr?.permanentHomeAddress || "",
+        cityzenshipStatus: addr?.cityzenshipStatus || "",
       })) || [
         {
           type: "",
@@ -59,7 +60,8 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
           city: "",
           detail: "",
           country: "",
-          citizenshipStatus: "",
+          permanentHomeAddress: "",
+          cityzenshipStatus: "",
         },
       ],
     },

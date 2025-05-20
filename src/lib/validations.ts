@@ -93,20 +93,12 @@ export const addressInfoFormData = z.object({
         type: requiredString.min(1, {
           message: "ঠিকানার ধরন প্রদান করা আবশ্যক।",
         }),
-        location: requiredString.min(1, {
-          message: "ঠিকানার অবস্থান প্রদান করা আবশ্যক।",
-        }),
+        location: optionalString,
         // জেলা / স্টেট
-        state: requiredString.min(1, {
-          message: "নির্বাচন করা আবশ্যক।",
-        }),
+        state: optionalString,
         // উপজেলা / শহর
-        city: requiredString.min(1, {
-          message: "নির্বাচন করা আবশ্যক।",
-        }),
-        detail: requiredString.min(1, {
-          message: "ঠিকানার বিস্তারিত প্রদান করা আবশ্যক।",
-        }),
+        city: optionalString,
+        detail: optionalString,
 
         // বিদেশি ঠিকানা
         country: optionalString,
