@@ -41,7 +41,7 @@ export const nationalities = [
   { id: "foreign_citizen", title: "ফরেইন সিটিজেন", for: "both" },
 ];
 
-export const types = [
+export const locationTypes = [
   { id: "permanent_address", title: "স্থায়ী ঠিকানা", for: "both" },
   { id: "current_address", title: "বর্তমান ঠিকানা", for: "both" },
 ];
@@ -227,7 +227,7 @@ export const specialCatagories = [
     for: "both",
   },
   {
-    id: "short_term_divorcee",
+    id: "short_divorced",
     title: "আমি শর্ট ডিভোর্সি",
     for: "both",
   },

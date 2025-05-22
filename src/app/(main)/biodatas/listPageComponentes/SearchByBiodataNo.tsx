@@ -1,4 +1,4 @@
-// File: src/app/(main)/biodatas/listPageComponentes/SearchByBiodataNo.tsx
+"use client";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -9,20 +9,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+interface BiodatasPageSearchByBiodataNoProps {
+  onSearchChange: (searchTerm: string) => void;
+  onReset: () => void;
+  initialSearchTerm: string;
+}
 
 export default function BiodatasPageSearchByBiodataNo({
   onSearchChange,
   onReset,
-}: {
-  onSearchChange: (searchTerm: string) => void;
-  onReset: () => void;
-}) {
+  initialSearchTerm,
+}: BiodatasPageSearchByBiodataNoProps) {
   const [gender, setGender] = useState<string>("");
   const [biodataNo, setBiodataNo] = useState<string>("");
 
+  // Initialize from initialSearchTerm
+  useEffect(() => {
+    if (initialSearchTerm) {
+      const [prefix, no] = initialSearchTerm.split("-");
+      if (prefix && no) {
+        setGender(prefix === "M" ? "male" : prefix === "F" ? "female" : "");
+        setBiodataNo(no);
+      }
+    } else {
+      setGender("");
+      setBiodataNo("");
+    }
+  }, [initialSearchTerm]);
+
   const handleSearch = () => {
-    if (!gender || !biodataNo) return;
+    if (!gender || !biodataNo) {
+      onSearchChange("");
+      return;
+    }
 
     const prefix = gender === "male" ? "M" : "F";
     const searchTerm = `${prefix}-${biodataNo}`;
@@ -31,9 +52,11 @@ export default function BiodatasPageSearchByBiodataNo({
 
   const handleGenderChange = (value: string) => {
     setGender(value);
-    if (biodataNo) {
+    if (biodataNo && value) {
       const prefix = value === "male" ? "M" : "F";
       onSearchChange(`${prefix}-${biodataNo}`);
+    } else {
+      onSearchChange("");
     }
   };
 
@@ -43,7 +66,15 @@ export default function BiodatasPageSearchByBiodataNo({
     if (gender && value) {
       const prefix = gender === "male" ? "M" : "F";
       onSearchChange(`${prefix}-${value}`);
+    } else {
+      onSearchChange("");
     }
+  };
+
+  const handleReset = () => {
+    setGender("");
+    setBiodataNo("");
+    onReset();
   };
 
   return (
@@ -60,12 +91,6 @@ export default function BiodatasPageSearchByBiodataNo({
             <SelectValue placeholder="SNM" />
           </SelectTrigger>
           <SelectContent className="bg-white text-[#1f4f69]">
-            {/* <SelectItem
-              className="focus:bg-[#E25A6F] focus:text-white"
-              value="all"
-            >
-              SNM
-            </SelectItem> */}
             <SelectItem
               className="focus:bg-[#E25A6F] focus:text-white"
               value="male"
@@ -100,6 +125,13 @@ export default function BiodatasPageSearchByBiodataNo({
           <Search className="w-4 h-4 text-gray-400" />
         </button>
       </div>
+      <button
+        type="button"
+        className="py-2 px-4 bg-[#e25a6f] text-white rounded-xl"
+        onClick={handleReset}
+      >
+        রিসেট
+      </button>
     </form>
   );
 }

@@ -152,7 +152,7 @@ export default function EducationInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="সর্বোচ্চ ডিগ্রীর নাম"
+                      placeholder="শুধুমাত্র ডিগ্রীর নাম লিখবেন (যেমন: অনার্স চলমান/ডিপ্লোমা/এস.এস.সি/৮ম শ্রেণি)"
                     />
                   </FormControl>
                 </div>

@@ -70,7 +70,7 @@ export default function BioCard({
           </div>
           <div className="flex justify-between">
             <span>উচ্চতা:</span>
-            <span>{height}</span>
+            <span>{height} ইঞ্চি</span>
           </div>
           <div className="flex justify-between">
             <span>স্থায়ী ঠিকানা:</span>

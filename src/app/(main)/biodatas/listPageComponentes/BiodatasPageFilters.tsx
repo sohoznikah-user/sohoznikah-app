@@ -6,119 +6,128 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { beingSearchedFilters, searchingFilters } from "./biodataFilterOptions";
+import {
+  biodataTypes,
+  bloodGroups,
+  education,
+  familyBackgrounds,
+  madhhabs,
+  maritalStatuses,
+  occupationsList,
+  religiousEducation,
+  religiousLifestyle,
+  skinTones,
+} from "@/lib/consts";
+import {
+  FilterState,
+  resetFilters,
+  setFilterData,
+} from "@/redux/features/filter/filterSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { districtsAndUpazilas } from "@/utils/districtsAndUpazilas";
+import { useState } from "react";
+import { searchingFilters } from "./biodataFilterOptions";
 import { FilterAccordion } from "./FilterAccordian";
+import { PermanentAddressFilter } from "./PermanentAddressFilter"; // Import the new component
 
 interface BiodatasPageFiltersProps {
-  onFilterChange: (filters: Record<string, any>) => void;
   onReset: () => void;
+  onFilterChange: () => void;
+  filters: FilterState;
 }
-type FilterType = Record<string, string | string[] | [number, number]>;
 
 export default function BiodatasPageFilters({
-  onFilterChange,
   onReset,
+  onFilterChange,
+  filters,
 }: BiodatasPageFiltersProps) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const initializedRef = useRef(false);
+  const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<"searching" | "beingSearched">(
     "searching"
   );
-  const [ageRange, setAgeRange] = useState<[number, number]>([18, 80]);
-  const [heightRange, setHeightRange] = useState<[number, number]>([36, 84]);
 
-  // Initialize filters from URL only on mount or when searchParams change due to navigation
-
-  // State for filters
-  const [selectedFilters, setSelectedFilters] = useState<FilterType>({});
-
-  // Initialize filters from URL only once on mount
-  useEffect(() => {
-    if (!initializedRef.current) {
-      const initialFilters: FilterType = {};
-
-      searchParams.forEach((value, key) => {
-        if (key === "biodataType") initialFilters[key] = value;
-        if (key === "specialCategory") initialFilters[key] = value.split(",");
-        if (key === "ageMin" || key === "ageMax") {
-          initialFilters[key] = value;
-        }
-      });
-
-      setSelectedFilters(initialFilters);
-      onFilterChange(initialFilters);
-      initializedRef.current = true;
-    }
-  }, [searchParams, onFilterChange]);
-
-  // Sync URL when filters change
-  useEffect(() => {
-    const params = new URLSearchParams();
-    Object.entries(selectedFilters).forEach(([key, value]) => {
-      if (typeof value === "string") {
-        params.set(key, value);
-      } else if (Array.isArray(value)) {
-        if (value.length === 2 && typeof value[0] === "number") {
-          // Handle ranges like age or height
-          params.set(`${key}Min`, value[0].toString());
-          params.set(`${key}Max`, value[1].toString());
-        } else {
-          // Handle arrays like checkboxes
-          params.set(key, value.join(","));
-        }
-      }
-    });
-    router.replace(`/biodatas?${params.toString()}`, { scroll: false });
-  }, [selectedFilters, router]);
-
-  // Radio change handler
-  const handleRadioChange = (key: string, value: string) => {
-    const newFilters = { ...selectedFilters, [key]: value };
-    setSelectedFilters(newFilters);
-    onFilterChange(newFilters);
+  const handleRadioChange = (key: keyof FilterState, value: string) => {
+    dispatch(setFilterData({ [key]: value }));
+    onFilterChange();
   };
 
-  // Checkbox change handler
   const handleCheckboxChange = (
-    key: string,
+    key: keyof FilterState,
     value: string,
     checked: boolean
   ) => {
-    const currentValues = Array.isArray(selectedFilters[key])
-      ? [...(selectedFilters[key] as string[])]
+    const currentValues = Array.isArray(filters[key])
+      ? [...(filters[key] as string[])]
       : [];
+    let updatedValues: string[];
     if (checked) {
-      currentValues.push(value);
+      updatedValues = [...currentValues, value];
     } else {
-      const index = currentValues.indexOf(value);
-      if (index > -1) currentValues.splice(index, 1);
+      updatedValues = currentValues.filter((item) => item !== value);
     }
-    const newFilters = { ...selectedFilters, [key]: currentValues };
-    setSelectedFilters(newFilters);
-    onFilterChange(newFilters);
+    dispatch(setFilterData({ [key]: updatedValues }));
+    onFilterChange();
   };
 
-  // Slider change handler
-  const handleSliderChange = (key: string, value: [number, number]) => {
-    if (key === "age" || key === "partner_age") {
-      setAgeRange(value);
-    }
-    if (key === "height" || key === "partner_height") setHeightRange(value);
-    const newFilters = { ...selectedFilters, [key]: value };
-    setSelectedFilters(newFilters);
-    onFilterChange(newFilters);
+  const handleSliderChange = (
+    key: "age" | "height" | "partnerAge" | "partnerHeight",
+    value: [number, number]
+  ) => {
+    dispatch(
+      setFilterData({
+        [`${key}Min`]: value[0],
+        [`${key}Max`]: value[1],
+      })
+    );
+    onFilterChange();
   };
 
-  // Tab change handler
   const handleTabChange = (tab: "searching" | "beingSearched") => {
     setActiveTab(tab);
-    setSelectedFilters({});
-    setAgeRange([18, 80]);
-    setHeightRange([36, 84]);
-    onFilterChange({});
+    dispatch(resetFilters());
+  };
+
+  // Prepare district and subdistrict options for PermanentAddressFilter
+  const districtOptions = Object.entries(districtsAndUpazilas).map(
+    ([districtName, district]) => ({
+      id: district.value,
+      title: districtName,
+    })
+  );
+
+  const allSubdistricts = Object.values(districtsAndUpazilas).flatMap(
+    (district) => district.upazilas
+  );
+  const subdistrictOptions = allSubdistricts.map((upazila) => ({
+    id: upazila.value,
+    title: upazila.title,
+  }));
+
+  const handlePermanentAddressChange = (updatedFilters: {
+    permanent_address_type?: "bangladesh" | "foreign";
+    district?: string[];
+    subdistrict?: string[];
+    all_countries?: boolean;
+  }) => {
+    dispatch(
+      setFilterData({
+        permanentLocation: updatedFilters.permanent_address_type,
+        permanentState: updatedFilters.district,
+        permanentCity: updatedFilters.subdistrict,
+        allCountries: updatedFilters.all_countries,
+      })
+    );
+    onFilterChange();
+  };
+
+  const permanentAddressValue = {
+    permanent_address_type: filters.permanentLocation as
+      | "bangladesh"
+      | "foreign"
+      | undefined,
+    district: filters.permanentState || [],
+    subdistrict: filters.permanentCity || [],
+    all_countries: filters.allCountries || false,
   };
 
   return (
@@ -126,7 +135,6 @@ export default function BiodatasPageFilters({
       <div className="flex items-center justify-center text-center text-[#1f4f69] pb-2">
         <div className="pb-1 border-b border-[#1f4f69]">ফিল্টার করুন</div>
       </div>
-      {/* Filter buttons */}
       <div className="flex justify-center mb-4">
         <button
           className={`mr-[-1rem] rounded-xl py-3 px-4 z-10 ${
@@ -149,7 +157,6 @@ export default function BiodatasPageFilters({
           আমাকে খুঁজছে
         </button>
       </div>
-      {/* Filter accordion */}
       <form className="flex flex-col space-y-2">
         <Accordion type="multiple" className="flex flex-col space-y-2 mb-2">
           {activeTab === "searching" ? (
@@ -159,25 +166,28 @@ export default function BiodatasPageFilters({
                 title="বায়োডাটার ধরন"
                 contentType="radio"
                 filterKey="biodataType"
-                options={searchingFilters.biodataType}
-                selectedFilters={selectedFilters as Record<string, string>}
+                options={biodataTypes}
+                selectedFilters={filters}
                 handleRadioChange={handleRadioChange}
               />
               <FilterAccordion
                 value="বৈবাহিক অবস্থা"
                 title="বৈবাহিক অবস্থা"
-                contentType="radio"
+                contentType="checkbox"
                 filterKey="maritalStatus"
-                options={searchingFilters.maritalStatus}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={maritalStatuses.filter(
+                  (item) =>
+                    item.for === filters.biodataType || item.for === "both"
+                )}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
-                value="বয়স"
-                title="বয়স"
+                value="বয়স"
+                title="বয়স"
                 contentType="slider"
                 filterKey="age"
-                range={ageRange}
+                range={[filters.ageMin, filters.ageMax]}
                 onRangeChange={(val: [number, number]) =>
                   handleSliderChange("age", val)
                 }
@@ -189,7 +199,7 @@ export default function BiodatasPageFilters({
                 title="উচ্চতা"
                 contentType="slider"
                 filterKey="height"
-                range={heightRange}
+                range={[filters.heightMin, filters.heightMax]}
                 onRangeChange={(val: [number, number]) =>
                   handleSliderChange("height", val)
                 }
@@ -199,92 +209,99 @@ export default function BiodatasPageFilters({
               <FilterAccordion
                 value="গাত্রবর্ণ"
                 title="গাত্রবর্ণ"
-                contentType="radio"
-                filterKey="skinTones"
-                options={searchingFilters.skinTones}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                contentType="checkbox"
+                filterKey="skinTone"
+                options={skinTones}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
-              <FilterAccordion
+              <AccordionItem
+                className="border border-gray-300 rounded-xl px-4"
                 value="স্থায়ী ঠিকানা"
-                title="স্থায়ী ঠিকানা"
-                contentType="radio"
-                filterKey="permanentAddress"
-                options={searchingFilters.permanentAddress}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
-              />
+              >
+                <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
+                  স্থায়ী ঠিকানা
+                </AccordionTrigger>
+                <AccordionContent className="bg-white text-[#1f4f69] space-y-4">
+                  <PermanentAddressFilter
+                    filterValue={permanentAddressValue}
+                    onChange={handlePermanentAddressChange}
+                    districtOptions={districtOptions}
+                    subdistrictOptions={subdistrictOptions}
+                  />
+                </AccordionContent>
+              </AccordionItem>
               <FilterAccordion
                 value="বর্তমান ঠিকানা"
                 title="বর্তমান ঠিকানা"
-                contentType="radio"
-                filterKey="currentAddress"
-                options={searchingFilters.currentAddress}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                contentType="checkbox"
+                filterKey="currentState"
+                options={districtOptions}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
-                value="ধর্মীয় লাইফস্টাইল"
-                title="ধর্মীয় লাইফস্টাইল"
-                contentType="radio"
+                value="ধর্মীয় লাইফস্টাইল"
+                title="ধর্মীয় লাইফস্টাইল"
+                contentType="checkbox"
                 filterKey="religiousLifestyle"
-                options={searchingFilters.religiousLifestyle}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={religiousLifestyle}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
                 value="পেশা"
                 title="পেশা"
                 contentType="checkbox"
                 filterKey="occupation"
-                options={searchingFilters.occupation}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={occupationsList}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
                 value="শিক্ষা"
                 title="শিক্ষা"
                 contentType="checkbox"
                 filterKey="education"
-                options={searchingFilters.education}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={education}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
                 value="দ্বীনি যোগ্যতা"
                 title="দ্বীনি যোগ্যতা"
                 contentType="checkbox"
                 filterKey="religiousEducation"
-                options={searchingFilters.religiousEducation}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={religiousEducation}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
                 value="পরিবারের আর্থসামাজিক অবস্থা"
                 title="পরিবারের আর্থসামাজিক অবস্থা"
-                contentType="radio"
+                contentType="checkbox"
                 filterKey="familyStatus"
-                options={searchingFilters.familyBackgrounds}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={familyBackgrounds}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
                 value="মাজহাব/মানহাজ"
                 title="মাজহাব/মানহাজ"
-                contentType="radio"
+                contentType="checkbox"
                 filterKey="madhhab"
-                options={searchingFilters.madhhab}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={madhhabs}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
                 value="রক্তের গ্রুপ"
                 title="রক্তের গ্রুপ"
-                contentType="radio"
+                contentType="checkbox"
                 filterKey="bloodGroup"
-                options={searchingFilters.bloodGroup}
-                selectedFilters={selectedFilters as Record<string, string>}
-                handleRadioChange={handleRadioChange}
+                options={bloodGroups}
+                selectedFilters={filters}
+                handleCheckboxChange={handleCheckboxChange}
               />
               <FilterAccordion
                 value="বিশেষ ক্যাটাগরি"
@@ -292,7 +309,7 @@ export default function BiodatasPageFilters({
                 contentType="checkbox"
                 filterKey="specialCategory"
                 options={searchingFilters.specialCategory}
-                selectedFilters={selectedFilters as Record<string, string[]>}
+                selectedFilters={filters}
                 handleCheckboxChange={handleCheckboxChange}
               />
             </>
@@ -302,9 +319,9 @@ export default function BiodatasPageFilters({
                 value="বায়োডাটার ধরন"
                 title="বায়োডাটার ধরন"
                 contentType="radio"
-                filterKey="selfBiodataType"
-                options={beingSearchedFilters.selfBiodataType}
-                selectedFilters={selectedFilters as Record<string, string>}
+                filterKey="partnerBiodataType"
+                options={biodataTypes}
+                selectedFilters={filters}
                 handleRadioChange={handleRadioChange}
               />
               <FilterAccordion
@@ -312,85 +329,18 @@ export default function BiodatasPageFilters({
                 title="বিশেষ ক্যাটাগরি"
                 contentType="checkbox"
                 filterKey="specialCategory"
-                options={beingSearchedFilters.specialCategory.filter(
-                  (item) =>
-                    item.for === selectedFilters.selfBiodataType ||
-                    item.for === "both"
-                )}
-                selectedFilters={selectedFilters as Record<string, string[]>}
+                options={searchingFilters.specialCategory}
+                selectedFilters={filters}
                 handleCheckboxChange={handleCheckboxChange}
               />
-              <AccordionItem
-                className="border border-gray-300 rounded-xl px-4 max-h-80 overflow-y-auto"
-                value="যেমন জীবনসঙ্গী আশা করেন"
-              >
-                <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
-                  যেমন জীবনসঙ্গী আশা করেন
-                </AccordionTrigger>
-                <AccordionContent className="bg-white text-[#1f4f69] space-y-1">
-                  <Accordion
-                    type="multiple"
-                    className="flex flex-col space-y-2"
-                  >
-                    <FilterAccordion
-                      value="partner_biodataType"
-                      title="জীবনসঙ্গীর বায়োডাটার ধরন"
-                      contentType="radio"
-                      filterKey="partner_biodataType"
-                      options={searchingFilters.biodataType}
-                      selectedFilters={
-                        selectedFilters as Record<string, string>
-                      }
-                      handleRadioChange={handleRadioChange}
-                    />
-                    <FilterAccordion
-                      value="partner_maritalStatus"
-                      title="জীবনসঙ্গীর বৈবাহিক অবস্থা"
-                      contentType="checkbox"
-                      filterKey="partner_maritalStatus"
-                      options={searchingFilters.maritalStatus}
-                      selectedFilters={
-                        selectedFilters as Record<string, string[]>
-                      }
-                      handleCheckboxChange={handleCheckboxChange}
-                    />
-                    <FilterAccordion
-                      value="partner_age"
-                      title="জীবনসঙ্গীর বয়স"
-                      contentType="slider"
-                      filterKey="partner_age"
-                      range={ageRange as [number, number]}
-                      onRangeChange={(val: [number, number]) =>
-                        handleSliderChange("partner_age", val)
-                      }
-                      min={18}
-                      max={80}
-                    />
-                    <FilterAccordion
-                      value="partner_height"
-                      title="জীবনসঙ্গীর উচ্চতা"
-                      contentType="slider"
-                      filterKey="partner_height"
-                      range={heightRange as [number, number]}
-                      onRangeChange={(val: [number, number]) =>
-                        handleSliderChange("partner_height", val)
-                      }
-                      min={36}
-                      max={84}
-                    />
-                  </Accordion>
-                </AccordionContent>
-              </AccordionItem>
             </>
           )}
         </Accordion>
         <button
           type="button"
-          className="py-2 px-4 bg-[#e25a6f] text-white rounded-xl"
+          className="py-2 px-4 bg-[#e25a6f] text-white rounded-xl cursor-pointer"
           onClick={() => {
-            setSelectedFilters({});
-            setAgeRange([18, 80]);
-            setHeightRange([36, 84]);
+            dispatch(resetFilters());
             onReset();
           }}
         >

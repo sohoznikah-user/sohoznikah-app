@@ -7,7 +7,7 @@ import rootReducer from "./reducer/rootReducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["biodata", "auth"],
+  whitelist: ["biodata", "auth", "filter"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

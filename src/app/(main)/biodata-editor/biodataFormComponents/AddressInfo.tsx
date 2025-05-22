@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { citizenshipOptions, locations, types } from "@/lib/consts";
+import { citizenshipOptions, locations, locationTypes } from "@/lib/consts";
 import {
   AddressInfoFormData,
   BiodataFormData,
@@ -179,7 +179,7 @@ export default function AddressInfo({
                                 <SelectValue placeholder="ঠিকানার ধরন" />
                               </SelectTrigger>
                               <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-                                {types.map((x) => (
+                                {locationTypes.map((x) => (
                                   <SelectItem
                                     key={x.id}
                                     className="focus:bg-transparent focus:text-[#E25A6F] p-2"

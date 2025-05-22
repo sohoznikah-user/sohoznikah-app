@@ -14,32 +14,36 @@ import {
 import { Slider } from "@/components/ui/slider";
 import {
   biodataTypes,
-  locations,
   maritalStatuses,
   religiousLifestyle,
 } from "@/lib/consts";
+import { setFilterData } from "@/redux/features/filter/filterSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { districtsAndUpazilas } from "@/utils/districtsAndUpazilas";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 
 export function HomeSearchBiodata() {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [range, setRange] = useState([18, 80]);
   const [biodataType, setBiodataType] = useState("all");
   const [maritalStatus, setMaritalStatus] = useState("all");
-  const [location, setLocation] = useState("all");
+  const [state, setState] = useState("all");
   const [muslimType, setMuslimType] = useState("all");
 
-  const handleSearchClick = (event: MouseEvent) => {
-    event.preventDefault();
-    const query = new URLSearchParams({
-      biodataType: biodataType === "all" ? "" : biodataType,
-      maritalStatus: maritalStatus === "all" ? "" : maritalStatus,
-      location: location === "all" ? "" : location,
-      religiousLifestyle: muslimType === "all" ? "" : muslimType,
-      ageMin: range[0].toString(),
-      ageMax: range[1].toString(),
-    }).toString();
-    router.push(`/biodatas?${query}`);
+  const handleSearchClick = () => {
+    const filters = {
+      biodataType: biodataType !== "all" ? biodataType : "",
+      maritalStatus: maritalStatus !== "all" ? maritalStatus : "",
+      permanentState: state !== "all" ? state : "",
+      religiousLifestyle: muslimType !== "all" ? muslimType : "",
+      ageMin: range[0],
+      ageMax: range[1],
+    };
+    console.log("Dispatching Filters:", filters); // Debug
+    dispatch(setFilterData(filters));
+    router.push("/biodatas");
   };
 
   return (
@@ -81,16 +85,19 @@ export function HomeSearchBiodata() {
       </div>
 
       <div className="w-1/3 space-y-2 p-2">
-        <Label>স্থায়ী ঠিকানা</Label>
-        <Select value={location} onValueChange={setLocation}>
+        <Label>স্থায়ী জেলা</Label>
+        <Select value={state} onValueChange={setState}>
           <SelectTrigger>
             <SelectValue placeholder="সকল ঠিকানা" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">সকল ঠিকানা</SelectItem>
-            {locations.map((loc) => (
-              <SelectItem key={loc.id} value={loc.id}>
-                {loc.title}
+            {Object.keys(districtsAndUpazilas).map((district) => (
+              <SelectItem
+                key={districtsAndUpazilas[district].value}
+                value={districtsAndUpazilas[district].value}
+              >
+                {district}
               </SelectItem>
             ))}
           </SelectContent>

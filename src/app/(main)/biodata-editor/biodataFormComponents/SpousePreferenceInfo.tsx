@@ -271,7 +271,7 @@ export default function SpousePreferenceInfo({
               <FormItem>
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
-                    কাঙ্খিত ঠিকানা:
+                    ঠিকানা:
                   </FormLabel>
                   <FormControl>
                     <Input
