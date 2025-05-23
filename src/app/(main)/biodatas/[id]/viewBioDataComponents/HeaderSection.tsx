@@ -8,6 +8,7 @@ import {
   useDeleteFavouriteMutation,
   useGetFavouriteByIdQuery,
 } from "@/redux/features/admin/favouriteApi";
+import { useCreateProposalMutation } from "@/redux/features/admin/proposalApi";
 import {
   useCreateShortlistMutation,
   useDeleteShortlistMutation,
@@ -49,6 +50,9 @@ export default function HeaderSection({
     useCreateShortlistMutation();
   const [deleteShortlist, { isLoading: isDeletingShortlist }] =
     useDeleteShortlistMutation();
+
+  const [createProposal, { isLoading: isCreatingProposal }] =
+    useCreateProposalMutation();
 
   useEffect(() => {
     if (favourite?.data) {
@@ -105,6 +109,24 @@ export default function HeaderSection({
       toast.success("URL copied to clipboard!");
     } catch (error) {
       toast.error("Failed to copy URL");
+    }
+  };
+
+  const handleCreateProposal = async () => {
+    const proposalData = {
+      biodataId: biodata?.biodata?.id,
+    };
+    try {
+      const res = await createProposal(proposalData).unwrap();
+
+      console.log("res-proposal", res);
+      if (res?.success) {
+        toast.success(res?.message || "Proposal sent successfully!");
+      } else {
+        toast.error(res?.message || "Failed to send proposal");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Failed to send proposal");
     }
   };
 
@@ -190,7 +212,10 @@ export default function HeaderSection({
                       ১টি টোকেন খরচ হবে
                     </div>
                   </div>
-                  <div className="bg-[#e25a6f] px-4 py-2 rounded-xl">
+                  <div
+                    className="bg-[#e25a6f] px-4 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f]"
+                    onClick={handleCreateProposal}
+                  >
                     <Send
                       className="h-6 w-6"
                       fill="white"
@@ -226,8 +251,8 @@ export default function HeaderSection({
           </Card>
         </div>
         <div className="w-3/4 flex space-x-8">
-          <HeaderShortBio />
-          <HeaderSpousePreferenceRequierment />
+          <HeaderShortBio biodata={biodata} />
+          <HeaderSpousePreferenceRequierment biodata={biodata} />
         </div>
       </div>
     </div>

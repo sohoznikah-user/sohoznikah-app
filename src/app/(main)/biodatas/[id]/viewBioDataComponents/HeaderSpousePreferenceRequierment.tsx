@@ -1,8 +1,13 @@
 // File: src/app/(main)/biodatas/[id]/viewBioDataComponents/HeaderSpousePreferenceRequierment.tsx
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { BiodataFormData } from "@/lib/types";
 
-export default function HeaderSpousePreferenceRequierment() {
+export default function HeaderSpousePreferenceRequierment({
+  biodata,
+}: {
+  biodata: BiodataFormData;
+}) {
   return (
     <Card className="w-1/2 bg-white text-black border-none rounded-4xl">
       <CardHeader className="flex items-center">

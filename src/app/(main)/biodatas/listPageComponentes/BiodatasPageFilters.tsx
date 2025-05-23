@@ -18,13 +18,13 @@ import {
   religiousLifestyle,
   skinTones,
 } from "@/lib/consts";
+import { districtsAndUpazilas } from "@/lib/districtsAndUpazilas";
 import {
   FilterState,
   resetFilters,
   setFilterData,
 } from "@/redux/features/filter/filterSlice";
 import { useAppDispatch } from "@/redux/hooks";
-import { districtsAndUpazilas } from "@/utils/districtsAndUpazilas";
 import { useState } from "react";
 import { searchingFilters } from "./biodataFilterOptions";
 import { FilterAccordion } from "./FilterAccordian";

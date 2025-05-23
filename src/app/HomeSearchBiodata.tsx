@@ -17,9 +17,9 @@ import {
   maritalStatuses,
   religiousLifestyle,
 } from "@/lib/consts";
+import { districtsAndUpazilas } from "@/lib/districtsAndUpazilas";
 import { setFilterData } from "@/redux/features/filter/filterSlice";
 import { useAppDispatch } from "@/redux/hooks";
-import { districtsAndUpazilas } from "@/utils/districtsAndUpazilas";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

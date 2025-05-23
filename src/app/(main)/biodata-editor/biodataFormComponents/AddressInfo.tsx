@@ -20,13 +20,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { citizenshipOptions, locations, locationTypes } from "@/lib/consts";
+import { districtsAndUpazilas } from "@/lib/districtsAndUpazilas";
 import {
   AddressInfoFormData,
   BiodataFormData,
   BiodataFormDataProps,
 } from "@/lib/types";
 import { addressInfoFormData } from "@/lib/validations";
-import { districtsAndUpazilas } from "@/utils/districtsAndUpazilas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import { useEffect } from "react";

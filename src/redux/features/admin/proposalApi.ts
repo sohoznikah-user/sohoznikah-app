@@ -2,13 +2,13 @@
 import { baseApi } from "@/redux/api/baseApi";
 import { tagTypes } from "@/redux/tag-Types";
 
-const PROPOSAL_URL = "/proposal";
+const URL = "/proposals";
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     createProposal: build.mutation({
       query: (proposalData) => ({
-        url: `${PROPOSAL_URL}`,
+        url: `${URL}`,
         method: "POST",
         data: proposalData,
       }),
@@ -16,7 +16,7 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
     getAllProposals: build.query({
       query: (arg: Record<string, any>) => ({
-        url: `${PROPOSAL_URL}`,
+        url: `${URL}`,
         method: "GET",
         params: arg,
       }),
@@ -24,14 +24,14 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
     getProposalById: build.query({
       query: (id) => ({
-        url: `${PROPOSAL_URL}/${id}`,
+        url: `${URL}/${id}`,
         method: "GET",
       }),
       providesTags: [tagTypes.proposal],
     }),
     updateProposal: build.mutation({
       query: ({ id, updatedData }) => ({
-        url: `${PROPOSAL_URL}/${id}`,
+        url: `${URL}/${id}`,
         method: "PUT",
         data: updatedData,
       }),
@@ -39,7 +39,7 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
     deleteProposal: build.mutation({
       query: (id) => ({
-        url: `${PROPOSAL_URL}/${id}`,
+        url: `${URL}/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.proposal],

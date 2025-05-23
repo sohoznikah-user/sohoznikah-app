@@ -110,12 +110,9 @@ export default function ReligiousInfo({
                     >
                       <div className="border border-gray-300 p-4 rounded-3xl space-y-6 flex-1">
                         <div className="min-h-32 border border-gray-300 bg-[#f6f6f6] p-4 rounded-xl space-x-2 flex items-center justify-center">
-                          <RadioGroupItem
-                            value="non-practicing"
-                            id="non-practicing"
-                          />
+                          <RadioGroupItem value="general" id="general" />
                           <Label
-                            htmlFor="non-practicing"
+                            htmlFor="general"
                             className="leading-5 space-y-2"
                           >
                             <div className="text-black leading-5">
@@ -145,12 +142,9 @@ export default function ReligiousInfo({
                       </div>
                       <div className="border border-gray-300 p-4 rounded-3xl space-y-6 flex-1">
                         <div className="min-h-32 border border-gray-300 bg-[#f6f6f6] p-4 rounded-xl space-x-2 flex items-center justify-center">
-                          <RadioGroupItem
-                            value="trying-to-practice"
-                            id="trying-to-practice"
-                          />
+                          <RadioGroupItem value="practicing" id="practicing" />
                           <Label
-                            htmlFor="trying-to-practice"
+                            htmlFor="practicing"
                             className="leading-5 space-y-2"
                           >
                             <div className="text-black">
@@ -181,12 +175,9 @@ export default function ReligiousInfo({
                       </div>
                       <div className="border border-gray-300 p-4 rounded-3xl space-y-6 flex-1">
                         <div className="min-h-32 border border-gray-300 bg-[#f6f6f6] p-4 rounded-xl space-x-2 flex items-center justify-center">
-                          <RadioGroupItem
-                            value="fully-practicing"
-                            id="fully-practicing"
-                          />
+                          <RadioGroupItem value="devout" id="devout" />
                           <Label
-                            htmlFor="fully-practicing"
+                            htmlFor="devout"
                             className="leading-5 space-y-2"
                           >
                             <div className="text-black leading-5">

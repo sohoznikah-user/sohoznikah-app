@@ -51,7 +51,8 @@ instance.interceptors.response.use(
 
     // General Error Handling
     const responseObject: IGenericErrorResponse = {
-      statusCode: error?.response?.data?.statusCode || 500,
+      statusCode:
+        error?.response?.status || error?.response?.data?.status || 500,
       message: error?.response?.data?.message || "Something went wrong!",
       errorMessages: error?.response?.data?.errorMessages || [],
     };
