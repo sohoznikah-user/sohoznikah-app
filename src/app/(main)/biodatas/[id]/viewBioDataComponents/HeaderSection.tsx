@@ -23,7 +23,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { CircleChevronDown, Copy, Heart, IdCard, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import HeaderShortBio from "./HeaderShortBio";
 import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierment";
@@ -39,23 +39,20 @@ export default function HeaderSection({
   const [isShortlisted, setIsShortlisted] = useState(false);
   const token = useAppSelector(selectCurrentToken);
   const user = useAppSelector(selectCurrentUser);
+  console.log("token", token);
+  console.log("user", user);
+  console.log("biodataId", biodataId);
+  console.log("biodata", biodata);
 
-  const { data: favourite } = useGetFavouriteByIdQuery(
-    {
-      biodataId: biodataId,
-    },
-    {
-      skip: !token || !user,
-    }
-  );
-  const { data: shortlist } = useGetShortlistByIdQuery(
-    {
-      biodataId: biodataId,
-    },
-    {
-      skip: !token || !user,
-    }
-  );
+  const { data: favourite } = useGetFavouriteByIdQuery(biodataId, {
+    skip: !token || !user,
+  });
+  const { data: shortlist } = useGetShortlistByIdQuery(biodataId, {
+    skip: !token || !user,
+  });
+
+  console.log("favourite", isFavourite, favourite);
+  console.log("shortlist", isShortlisted, shortlist);
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
   const [deleteFavourite, { isLoading: isDeleting }] =
@@ -69,36 +66,40 @@ export default function HeaderSection({
   const [createProposal, { isLoading: isCreatingProposal }] =
     useCreateProposalMutation();
 
-  // useEffect(() => {
-  //   if (favourite?.data) {
-  //     setIsFavourite(true);
-  //   }
-  // }, [favourite]);
+  useEffect(() => {
+    if (favourite?.data) {
+      setIsFavourite(true);
+    }
+  }, [favourite]);
 
-  // useEffect(() => {
-  //   if (shortlist?.data) {
-  //     setIsShortlisted(true);
-  //   }
-  // }, [shortlist]);
+  useEffect(() => {
+    if (shortlist?.data) {
+      setIsShortlisted(true);
+    }
+  }, [shortlist]);
 
   const handleFavourite = async (type: "add" | "remove") => {
     if (!token || !user) {
       return;
     }
-    if (type === "add") {
-      const res = await createFavourite({
-        biodataId: biodata?.biodata?.id,
-      }).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Added to favourite");
-        setIsFavourite(true);
+    try {
+      if (type === "add") {
+        const res = await createFavourite({
+          biodataId: biodata?.biodata?.id,
+        }).unwrap();
+        if (res?.success) {
+          toast.success(res?.message || "Added to favourite");
+          setIsFavourite(true);
+        }
+      } else {
+        const res = await deleteFavourite(biodata?.biodata?.id).unwrap();
+        if (res?.success) {
+          toast.success(res?.message || "Removed from favourite");
+          setIsFavourite(false);
+        }
       }
-    } else {
-      const res = await deleteFavourite(biodata?.biodata?.id).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Removed from favourite");
-        setIsFavourite(false);
-      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
     }
   };
 
@@ -106,20 +107,24 @@ export default function HeaderSection({
     if (!token || !user) {
       return;
     }
-    if (type === "add") {
-      const res = await createShortlist({
-        biodataId: biodata?.biodata?.id,
-      }).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Added to shortlist");
-        setIsShortlisted(true);
+    try {
+      if (type === "add") {
+        const res = await createShortlist({
+          biodataId: biodata?.biodata?.id,
+        }).unwrap();
+        if (res?.success) {
+          toast.success(res?.message || "Added to shortlist");
+          setIsShortlisted(true);
+        }
+      } else {
+        const res = await deleteShortlist(biodata?.biodata?.id).unwrap();
+        if (res?.success) {
+          toast.success(res?.message || "Removed from shortlist");
+          setIsShortlisted(false);
+        }
       }
-    } else {
-      const res = await deleteShortlist(biodata?.biodata?.id).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Removed from shortlist");
-        setIsShortlisted(false);
-      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
     }
   };
 
@@ -196,7 +201,19 @@ export default function HeaderSection({
                   </div>
 
                   <div className="flex space-x-4 border border-gray-400 rounded-xl p-4 ">
-                    <Alert>
+                    {!token || !user ? (
+                      <Alert>
+                        <Heart
+                          className={`h-6 w-6 cursor-pointer ${
+                            isFavourite ? "text-[#e25a6f]" : "text-black"
+                          }`}
+                          onClick={() =>
+                            handleFavourite(isFavourite ? "remove" : "add")
+                          }
+                          fill={isFavourite ? "red" : "white"}
+                        />
+                      </Alert>
+                    ) : (
                       <Heart
                         className={`h-6 w-6 cursor-pointer ${
                           isFavourite ? "text-[#e25a6f]" : "text-black"
@@ -206,8 +223,19 @@ export default function HeaderSection({
                         }
                         fill={isFavourite ? "red" : "white"}
                       />
-                    </Alert>
-                    <Alert>
+                    )}
+                    {!token || !user ? (
+                      <Alert>
+                        <IdCard
+                          className={`h-6 w-6 cursor-pointer ${
+                            isShortlisted ? "text-[#e25a6f]" : "text-black"
+                          }`}
+                          onClick={() =>
+                            handleShortlist(isShortlisted ? "remove" : "add")
+                          }
+                        />
+                      </Alert>
+                    ) : (
                       <IdCard
                         className={`h-6 w-6 cursor-pointer ${
                           isShortlisted ? "text-[#e25a6f]" : "text-black"
@@ -215,9 +243,8 @@ export default function HeaderSection({
                         onClick={() =>
                           handleShortlist(isShortlisted ? "remove" : "add")
                         }
-                        // fill={isShortlisted ? "#e25a6f" : "white"}
                       />
-                    </Alert>
+                    )}
 
                     <Copy
                       className="h-6 w-6 rotate-90 cursor-pointer hover:text-[#e25a6f]"

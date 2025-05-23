@@ -8,6 +8,7 @@ interface BiodataState {
     profilePic: string;
     status: string;
     visibility: string;
+    token: string | number;
   };
   biodataFormData: {
     [key: string]: any; // each step’s data
@@ -22,6 +23,7 @@ const initialState: BiodataState = {
     profilePic: "",
     status: "",
     visibility: "",
+    token: "",
   },
   biodataFormData: {}, // not null
 };
@@ -41,15 +43,8 @@ const biodataSlice = createSlice({
       state.biodata = action.payload;
     },
     clearBiodataFormData: (state) => {
-      state.biodata = {
-        id: "",
-        code: "",
-        biodataType: "",
-        profilePic: "",
-        status: "",
-        visibility: "",
-      };
-      state.biodataFormData = {};
+      state.biodata = initialState.biodata;
+      state.biodataFormData = initialState.biodataFormData;
     },
   },
 });

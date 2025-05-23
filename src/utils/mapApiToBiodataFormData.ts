@@ -1,3 +1,13 @@
+export interface IBiodata {
+  id: string;
+  code: string;
+  biodataType: string;
+  profilePic: string;
+  status: string;
+  visibility: string;
+  token?: string | number;
+}
+
 export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
   console.log("apiData", apiData.religiousInfoFormData);
   const biodata = {
@@ -7,6 +17,7 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
     profilePic: apiData?.profilePic || "",
     status: apiData?.status || "",
     visibility: apiData?.visibility || "",
+    token: apiData?.token || "",
   };
 
   const biodataFormData = {

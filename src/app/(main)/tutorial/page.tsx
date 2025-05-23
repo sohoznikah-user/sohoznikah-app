@@ -1,10 +1,10 @@
 // File: src/app/(main)/tutorial/page.tsx
-const Page = () => {
+const TutorialPage = () => {
   return (
     <div>
-      <h1>This is Page component</h1>
+      <h1 className="text-black">This is TutorialPage component</h1>
     </div>
   );
 };
 
-export default Page;
+export default TutorialPage;

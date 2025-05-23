@@ -76,20 +76,24 @@ export default function BioCard({
     if (!token || !user) {
       return;
     }
-    if (type === "add") {
-      const res = await createFavourite({
-        biodataId: id,
-      }).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Added to favourite");
-        setIsFavourite(true);
+    try {
+      if (type === "add") {
+        const res = await createFavourite({
+          biodataId: id,
+        }).unwrap();
+        if (res?.success) {
+          toast.success(res?.message || "Added to favourite");
+          setIsFavourite(true);
+        }
+      } else {
+        const res = await deleteFavourite(id).unwrap();
+        if (res?.success) {
+          toast.success(res?.message || "Removed from favourite");
+          setIsFavourite(false);
+        }
       }
-    } else {
-      const res = await deleteFavourite(id).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Removed from favourite");
-        setIsFavourite(false);
-      }
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
     }
   };
 
@@ -101,13 +105,23 @@ export default function BioCard({
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-4">
           <div className="w-1/3">
-            <Alert>
+            {!token || !user ? (
+              <Alert>
+                <Heart
+                  className="w-8 h-8 text-[#E25A6F]"
+                  fill={isFavourite ? "#E25A6F" : "none"}
+                  onClick={() =>
+                    handleFavourite(isFavourite ? "remove" : "add")
+                  }
+                />
+              </Alert>
+            ) : (
               <Heart
                 className="w-8 h-8 text-[#E25A6F]"
                 fill={isFavourite ? "#E25A6F" : "none"}
                 onClick={() => handleFavourite(isFavourite ? "remove" : "add")}
               />
-            </Alert>
+            )}
           </div>
           <div className="w-1/3 flex items-center justify-center">
             <Image src={male} alt="Male" width={80} height={40} priority />

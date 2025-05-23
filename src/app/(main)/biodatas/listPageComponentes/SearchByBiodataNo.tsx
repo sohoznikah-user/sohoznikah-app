@@ -88,20 +88,20 @@ export default function BiodatasPageSearchByBiodataNo({
       <div className="w-32">
         <Select onValueChange={handleGenderChange} value={gender}>
           <SelectTrigger className="text-[#1f4f69]">
-            <SelectValue placeholder="SNM" />
+            <SelectValue placeholder="পাত্র/পাত্রী" />
           </SelectTrigger>
           <SelectContent className="bg-white text-[#1f4f69]">
             <SelectItem
               className="focus:bg-[#E25A6F] focus:text-white"
               value="male"
             >
-              পুরুষ
+              পাত্র (M)
             </SelectItem>
             <SelectItem
               className="focus:bg-[#E25A6F] focus:text-white"
               value="female"
             >
-              নারী
+              পাত্রী (F)
             </SelectItem>
           </SelectContent>
         </Select>

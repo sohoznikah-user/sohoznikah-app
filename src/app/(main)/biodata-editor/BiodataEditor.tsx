@@ -6,7 +6,6 @@ import {
   useUpdateMyBiodataMutation,
 } from "@/redux/features/biodata/biodataApi";
 import {
-  clearBiodataFormData,
   setAllBiodata,
   setAllBiodataFormData,
   updateBiodataFormData,
@@ -169,18 +168,18 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
         currentStep={currentStep}
         setCurrentStep={setStep}
       />
-      <button
+      {/* <button
         onClick={() => dispatch(clearBiodataFormData())}
         className="bg-red-500 text-white px-4 py-2 rounded-md mx-auto block cursor-pointer mt-5"
       >
         Clear Biodata
-      </button>
-      {process.env.NODE_ENV === "development" && (
+      </button> */}
+      {/* {process.env.NODE_ENV === "development" && (
         <>
           <pre>{JSON.stringify(biodataFormData, null, 2)}</pre>
           <pre>{JSON.stringify(biodata, null, 2)}</pre>
         </>
-      )}
+      )} */}
     </div>
   );
 }

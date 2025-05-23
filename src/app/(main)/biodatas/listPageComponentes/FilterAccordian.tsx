@@ -99,7 +99,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
       checked: boolean
     ) => void
   ) => (
-    <AccordionContent className="bg-white text-[#1f4f69] space-y-0.5 pt-2 pb-4 px-4 shadow-sm rounded-b-xl">
+    <AccordionContent className="bg-white text-[#1f4f69] space-y-2 pt-2 pb-4 px-4 shadow-sm rounded-b-xl">
       {options.map((option) => (
         <div key={option.id} className="flex items-center space-x-2">
           <Checkbox
@@ -143,7 +143,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
 
   return (
     <AccordionItem
-      className="border border-gray-300 rounded-xl px-4 max-h-40 overflow-y-auto"
+      className="border border-gray-300 rounded-xl px-4 max-h-60 overflow-y-auto"
       value={value}
     >
       <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
