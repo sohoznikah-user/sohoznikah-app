@@ -1,7 +1,18 @@
 // File: src/app/(main)/biodatas/[id]/viewBioDataComponents/HeaderSection.tsx
-
+"use client";
+import Loading from "@/app/loading";
 import male from "@/assets/images/male-5.svg";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  useCreateFavouriteMutation,
+  useDeleteFavouriteMutation,
+  useGetFavouriteByIdQuery,
+} from "@/redux/features/admin/favouriteApi";
+import {
+  useCreateShortlistMutation,
+  useDeleteShortlistMutation,
+  useGetShortlistByIdQuery,
+} from "@/redux/features/admin/shortlistApi";
 import {
   CircleChevronDown,
   Copy,
@@ -12,10 +23,97 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import HeaderShortBio from "./HeaderShortBio";
 import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierment";
 
-export default function HeaderSection() {
+export default function HeaderSection({
+  biodata,
+  biodataId,
+}: {
+  biodata: any;
+  biodataId: string;
+}) {
+  const [isFavourite, setIsFavourite] = useState(false);
+  const [isShortlisted, setIsShortlisted] = useState(false);
+
+  const { data: favourite } = useGetFavouriteByIdQuery(biodataId);
+  const { data: shortlist } = useGetShortlistByIdQuery(biodataId);
+
+  const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
+  const [deleteFavourite, { isLoading: isDeleting }] =
+    useDeleteFavouriteMutation();
+
+  const [createShortlist, { isLoading: isCreatingShortlist }] =
+    useCreateShortlistMutation();
+  const [deleteShortlist, { isLoading: isDeletingShortlist }] =
+    useDeleteShortlistMutation();
+
+  useEffect(() => {
+    if (favourite?.data) {
+      setIsFavourite(true);
+    }
+  }, [favourite]);
+
+  useEffect(() => {
+    if (shortlist?.data) {
+      setIsShortlisted(true);
+    }
+  }, [shortlist]);
+
+  const handleFavourite = async (type: "add" | "remove") => {
+    if (type === "add") {
+      const res = await createFavourite({
+        biodataId: biodata?.biodata?.id,
+      }).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || "Added to favourite");
+        setIsFavourite(true);
+      }
+    } else {
+      const res = await deleteFavourite(favourite?.data?.id).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || "Removed from favourite");
+        setIsFavourite(false);
+      }
+    }
+  };
+
+  const handleShortlist = async (type: "add" | "remove") => {
+    if (type === "add") {
+      const res = await createShortlist({
+        biodataId: biodata?.biodata?.id,
+      }).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || "Added to shortlist");
+        setIsShortlisted(true);
+      }
+    } else {
+      const res = await deleteShortlist(shortlist?.data?.id).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || "Removed from shortlist");
+        setIsShortlisted(false);
+      }
+    }
+  };
+
+  const handleCopyUrl = async () => {
+    try {
+      const url = window.location.href;
+      await navigator.clipboard.writeText(url);
+      toast.success("URL copied to clipboard!");
+    } catch (error) {
+      toast.error("Failed to copy URL");
+    }
+  };
+
+  if (!biodata) return <Loading />;
+
+  const status =
+    biodata?.biodata?.status === "APPROVED" ? "Verified" : "Unverified";
+  const code = biodata?.biodata?.code || "SNM---";
+
   return (
     <div className="py-12 flex justify-center bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
       <div className="min-w-7xl flex space-x-8">
@@ -25,26 +123,54 @@ export default function HeaderSection() {
               <div className="flex flex-col items-center space-y-4">
                 <div className="w-full flex items-start justify-between">
                   <div className="w-1 text-[#00b754] text-md font-semibold">
-                    Verified
+                    {status}
                   </div>
                   <Image
-                    src={male}
-                    alt="Male"
+                    src={
+                      // biodata?.biodata?.profilePic
+                      //   ? biodata.biodata.profilePic
+                      //   : male
+                      male
+                    }
+                    alt="Profile"
                     width={100}
                     height={40}
                     priority
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = male;
+                    }}
                   />
                   <div className="w-1"></div>
                 </div>
 
                 <div className="text-lg">
-                  বায়োডাটা কোড: <span className="font-semibold">SNM-392</span>
+                  বায়োডাটা কোড: <span className="font-semibold">{code}</span>
                 </div>
 
                 <div className="flex space-x-4 border border-gray-400 rounded-xl p-4">
-                  <Heart className="h-6 w-6" />
-                  <IdCard className="h-6 w-6" />
-                  <Copy className="h-6 w-6 rotate-90" />
+                  <Heart
+                    className={`h-6 w-6 cursor-pointer ${
+                      isFavourite ? "text-[#e25a6f]" : "text-black"
+                    }`}
+                    onClick={() =>
+                      handleFavourite(isFavourite ? "remove" : "add")
+                    }
+                    fill={isFavourite ? "red" : "white"}
+                  />
+                  <IdCard
+                    className={`h-6 w-6 cursor-pointer ${
+                      isShortlisted ? "text-[#e25a6f]" : "text-black"
+                    }`}
+                    onClick={() =>
+                      handleShortlist(isShortlisted ? "remove" : "add")
+                    }
+                    // fill={isShortlisted ? "#e25a6f" : "white"}
+                  />
+                  <Copy
+                    className="h-6 w-6 rotate-90 cursor-pointer hover:text-[#e25a6f]"
+                    onClick={handleCopyUrl}
+                  />
                   <Mail className="h-6 w-6" />
                   <CircleChevronDown className="h-6 w-6 text-[#b52d1f]" />
                 </div>

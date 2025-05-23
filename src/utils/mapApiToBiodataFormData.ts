@@ -1,14 +1,12 @@
 export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
   console.log("apiData", apiData.religiousInfoFormData);
   const biodata = {
-    biodata: {
-      id: apiData?.id || "",
-      code: apiData?.code || "",
-      biodataType: apiData?.biodataType || "",
-      profilePic: apiData?.profilePic || "",
-      status: apiData?.status || "",
-      visibility: apiData?.visibility || "",
-    },
+    id: apiData?.id || "",
+    code: apiData?.code || "",
+    biodataType: apiData?.biodataType || "",
+    profilePic: apiData?.profilePic || "",
+    status: apiData?.status || "",
+    visibility: apiData?.visibility || "",
   };
 
   const biodataFormData = {

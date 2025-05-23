@@ -1,5 +1,10 @@
 // File: src/app/(main)/biodatas/[id]/page.tsx
+"use client";
+import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
+import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
+import { use, useEffect, useState } from "react";
 import AddressInfo from "./viewBioDataComponents/AddressInfo";
 import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
 import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
@@ -12,7 +17,17 @@ import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
 import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
 import SpousePreferenceInfo from "./viewBioDataComponents/SpousePreferenceInfo";
 
-export default function BiodataPage() {
+type PageParams = {
+  id: string;
+};
+
+export default function BiodataPage({
+  params,
+}: {
+  params: Promise<PageParams>;
+}) {
+  const [biodata, setBiodata] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<any>(null);
   const tabs = [
     "প্রাথমিক তথ্য",
     "সাধারণ তথ্য",
@@ -25,9 +40,22 @@ export default function BiodataPage() {
     "যেমন জীবনসঙ্গী আশা করেন",
   ];
 
+  const { id } = use(params);
+  const { data: fetchedBiodata, isLoading } = useGetBiodataByIdQuery(id);
+  // set biodata
+  useEffect(() => {
+    if (fetchedBiodata?.data) {
+      const mapped = mapApiToBiodataFormData(fetchedBiodata.data);
+      setBiodata(mapped);
+    }
+  }, [fetchedBiodata]);
+  // console.log("biodata", biodata);
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <>
-      <HeaderSection />
+      <HeaderSection biodata={biodata} biodataId={id} />
       <div className="py-12 flex flex-col items-center justify-center space-y-6">
         <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
         <Tabs defaultValue="ঠিকানা" className="max-w-7xl">
