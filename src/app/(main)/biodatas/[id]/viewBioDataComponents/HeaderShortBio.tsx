@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   bloodGroups,
+  degreeTypes,
   familyBackgrounds,
   heights,
   maritalStatuses,
@@ -10,7 +11,6 @@ import {
   occupationsList,
   religiousLifestyle,
   skinTones,
-  specialCatagories,
   weights,
 } from "@/lib/consts";
 import { BiodataFormData } from "@/lib/types";
@@ -18,7 +18,6 @@ import { getDistrictTitle, getTitleById } from "@/utils/getBanglaTitle";
 
 export default function HeaderShortBio({ biodata }: { biodata: any }) {
   const {
-    personalInfoFormData,
     generalInfoFormData,
     educationInfoFormData,
     occupationInfoFormData,
@@ -26,9 +25,12 @@ export default function HeaderShortBio({ biodata }: { biodata: any }) {
     familyInfoFormData,
     religiousInfoFormData,
   } = biodata?.biodataFormData as BiodataFormData;
+
   const bangladeshAddress = addressInfoFormData?.addresses?.find(
     (addr) => addr.location === "bangladesh"
   );
+  // console.log("biodataFormData", biodata?.biodataFormData);
+
   return (
     <Card className="w-1/2 bg-white text-black border-none rounded-4xl">
       <CardHeader className="flex items-center">
@@ -61,14 +63,16 @@ export default function HeaderShortBio({ biodata }: { biodata: any }) {
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
             <div>শিক্ষা</div>
-            <div>{educationInfoFormData?.highestDegree}</div>
+            <div>
+              {getTitleById(degreeTypes, educationInfoFormData?.highestDegree)}
+            </div>
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
             <div>পেশা</div>
             <div>
               {getTitleById(
                 occupationsList,
-                occupationInfoFormData?.occupations[0]
+                occupationInfoFormData?.occupations
               )}
             </div>
           </div>
@@ -91,29 +95,20 @@ export default function HeaderShortBio({ biodata }: { biodata: any }) {
             <div>
               {getTitleById(
                 familyBackgrounds,
-                familyInfoFormData?.wealthDescription
+                familyInfoFormData?.familyBackground
               )}
             </div>
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
             <div>জাতীয়তা</div>
             <div>
-              {getTitleById(nationalities, generalInfoFormData?.nationality[0])}
+              {getTitleById(nationalities, generalInfoFormData?.nationality)}
             </div>
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
             <div>ধর্মীয় লাইফস্টাইল</div>
             <div>
               {getTitleById(religiousLifestyle, religiousInfoFormData?.type)}
-            </div>
-          </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
-            <div>বিশেষ চাওয়া</div>
-            <div>
-              {getTitleById(
-                specialCatagories,
-                personalInfoFormData?.specialConditions[0]
-              )}
             </div>
           </div>
         </div>

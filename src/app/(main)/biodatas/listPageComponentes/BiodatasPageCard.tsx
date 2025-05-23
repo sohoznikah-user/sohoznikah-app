@@ -2,12 +2,26 @@
 
 "use client";
 import male from "@/assets/images/male-5.svg";
+import Alert from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { heights, maritalStatuses, occupationsList } from "@/lib/consts";
+import {
+  useCreateFavouriteMutation,
+  useDeleteFavouriteMutation,
+} from "@/redux/features/admin/favouriteApi";
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { getDistrictTitle, getTitleById } from "@/utils/getBanglaTitle";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export interface BiodatasPageCardProps {
   id: number;
@@ -22,18 +36,63 @@ export interface BiodatasPageCardProps {
 
 export default function BioCard({
   id,
-  name,
   code,
   age,
   height,
-  permanentAddress,
   occupation,
   maritalStatus,
+  permanentAddress,
 }: BiodatasPageCardProps) {
+  const [isFavourite, setIsFavourite] = useState(false);
   const router = useRouter();
+  const token = useAppSelector(selectCurrentToken);
+  const user = useAppSelector(selectCurrentUser);
+
+  // const { data: favourite } = useGetFavouriteByIdQuery(
+  //   {
+  //     biodataId: id,
+  //   },
+  //   {
+  //     skip: !token || !user,
+  //   }
+  // );
+  // const { data: shortlist } = useGetShortlistByIdQuery(
+  //   {
+  //     biodataId: id,
+  //   },
+  //   {
+  //     skip: !token || !user,
+  //   }
+  // );
+
+  const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
+  const [deleteFavourite, { isLoading: isDeleting }] =
+    useDeleteFavouriteMutation();
+
   const handleOnClick = () => {
     router.push(`/biodatas/${id}`);
   };
+  const handleFavourite = async (type: "add" | "remove") => {
+    if (!token || !user) {
+      return;
+    }
+    if (type === "add") {
+      const res = await createFavourite({
+        biodataId: id,
+      }).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || "Added to favourite");
+        setIsFavourite(true);
+      }
+    } else {
+      const res = await deleteFavourite(id).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || "Removed from favourite");
+        setIsFavourite(false);
+      }
+    }
+  };
+
   return (
     <Card
       key={id}
@@ -42,27 +101,33 @@ export default function BioCard({
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-4">
           <div className="w-1/3">
-            <Heart className="w-8 h-8 text-[#E25A6F]" fill="#E25A6F" />
+            <Alert>
+              <Heart
+                className="w-8 h-8 text-[#E25A6F]"
+                fill={isFavourite ? "#E25A6F" : "none"}
+                onClick={() => handleFavourite(isFavourite ? "remove" : "add")}
+              />
+            </Alert>
           </div>
           <div className="w-1/3 flex items-center justify-center">
             <Image src={male} alt="Male" width={80} height={40} priority />
           </div>
           <div className="w-1/3 flex flex-col items-end space-y-2">
-            <Badge className="text-[#00b754]">Verified</Badge>
+            {/* <Badge className="text-[#00b754]">Verified</Badge> */}
             <Badge className="text-[#016ca7]">Seen</Badge>
           </div>
         </div>
 
         <div className="text-center mb-4 flex items-center justify-center">
           <div className="text-black bg-[#fcfafd] p-3 rounded-md">
-            বায়োডাটা নং: {code}
+            বায়োডাটা নং: {code || "--"}
           </div>
         </div>
 
         <div className="space-y-3 text-black">
           <div className="flex justify-between">
             <span>বৈবাহিক অবস্থা:</span>
-            <span>{maritalStatus}</span>
+            <span>{getTitleById(maritalStatuses, maritalStatus)}</span>
           </div>
           <div className="flex justify-between">
             <span>জন্মসন:</span>
@@ -70,15 +135,15 @@ export default function BioCard({
           </div>
           <div className="flex justify-between">
             <span>উচ্চতা:</span>
-            <span>{height} ইঞ্চি</span>
+            <span>{getTitleById(heights, String(height))}</span>
           </div>
           <div className="flex justify-between">
             <span>স্থায়ী ঠিকানা:</span>
-            <span>{permanentAddress}</span>
+            <span>{getDistrictTitle(permanentAddress)}</span>
           </div>
           <div className="flex justify-between">
             <span>পেশা:</span>
-            <span>{occupation[0]}</span>
+            <span>{getTitleById(occupationsList, occupation)}</span>
           </div>
         </div>
       </CardContent>

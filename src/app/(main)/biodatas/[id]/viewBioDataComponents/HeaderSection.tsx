@@ -2,6 +2,7 @@
 "use client";
 import Loading from "@/app/loading";
 import male from "@/assets/images/male-5.svg";
+import Alert from "@/components/ui/Alert";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   useCreateFavouriteMutation,
@@ -15,16 +16,14 @@ import {
   useGetShortlistByIdQuery,
 } from "@/redux/features/admin/shortlistApi";
 import {
-  CircleChevronDown,
-  Copy,
-  Heart,
-  IdCard,
-  Mail,
-  Send,
-} from "lucide-react";
+  selectCurrentToken,
+  selectCurrentUser,
+} from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { CircleChevronDown, Copy, Heart, IdCard, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import HeaderShortBio from "./HeaderShortBio";
 import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierment";
@@ -38,9 +37,25 @@ export default function HeaderSection({
 }) {
   const [isFavourite, setIsFavourite] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
+  const token = useAppSelector(selectCurrentToken);
+  const user = useAppSelector(selectCurrentUser);
 
-  const { data: favourite } = useGetFavouriteByIdQuery(biodataId);
-  const { data: shortlist } = useGetShortlistByIdQuery(biodataId);
+  const { data: favourite } = useGetFavouriteByIdQuery(
+    {
+      biodataId: biodataId,
+    },
+    {
+      skip: !token || !user,
+    }
+  );
+  const { data: shortlist } = useGetShortlistByIdQuery(
+    {
+      biodataId: biodataId,
+    },
+    {
+      skip: !token || !user,
+    }
+  );
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
   const [deleteFavourite, { isLoading: isDeleting }] =
@@ -54,19 +69,22 @@ export default function HeaderSection({
   const [createProposal, { isLoading: isCreatingProposal }] =
     useCreateProposalMutation();
 
-  useEffect(() => {
-    if (favourite?.data) {
-      setIsFavourite(true);
-    }
-  }, [favourite]);
+  // useEffect(() => {
+  //   if (favourite?.data) {
+  //     setIsFavourite(true);
+  //   }
+  // }, [favourite]);
 
-  useEffect(() => {
-    if (shortlist?.data) {
-      setIsShortlisted(true);
-    }
-  }, [shortlist]);
+  // useEffect(() => {
+  //   if (shortlist?.data) {
+  //     setIsShortlisted(true);
+  //   }
+  // }, [shortlist]);
 
   const handleFavourite = async (type: "add" | "remove") => {
+    if (!token || !user) {
+      return;
+    }
     if (type === "add") {
       const res = await createFavourite({
         biodataId: biodata?.biodata?.id,
@@ -76,7 +94,7 @@ export default function HeaderSection({
         setIsFavourite(true);
       }
     } else {
-      const res = await deleteFavourite(favourite?.data?.id).unwrap();
+      const res = await deleteFavourite(biodata?.biodata?.id).unwrap();
       if (res?.success) {
         toast.success(res?.message || "Removed from favourite");
         setIsFavourite(false);
@@ -85,6 +103,9 @@ export default function HeaderSection({
   };
 
   const handleShortlist = async (type: "add" | "remove") => {
+    if (!token || !user) {
+      return;
+    }
     if (type === "add") {
       const res = await createShortlist({
         biodataId: biodata?.biodata?.id,
@@ -94,7 +115,7 @@ export default function HeaderSection({
         setIsShortlisted(true);
       }
     } else {
-      const res = await deleteShortlist(shortlist?.data?.id).unwrap();
+      const res = await deleteShortlist(biodata?.biodata?.id).unwrap();
       if (res?.success) {
         toast.success(res?.message || "Removed from shortlist");
         setIsShortlisted(false);
@@ -113,6 +134,9 @@ export default function HeaderSection({
   };
 
   const handleCreateProposal = async () => {
+    if (!token || !user) {
+      return;
+    }
     const proposalData = {
       biodataId: biodata?.biodata?.id,
     };
@@ -137,122 +161,131 @@ export default function HeaderSection({
   const code = biodata?.biodata?.code || "SNM---";
 
   return (
-    <div className="py-12 flex justify-center bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
-      <div className="min-w-7xl flex space-x-8">
-        <div className="w-1/4 flex flex-col space-y-8">
-          <Card className="bg-white text-black border-none rounded-4xl">
-            <CardContent className="pt-6">
-              <div className="flex flex-col items-center space-y-4">
-                <div className="w-full flex items-start justify-between">
-                  <div className="w-1 text-[#00b754] text-md font-semibold">
-                    {status}
+    <div className="bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
+      <div className=" container mx-auto px-4 py-12 flex justify-center ">
+        <div className="min-w-7xl flex space-x-8">
+          <div className="w-1/4 flex flex-col space-y-8">
+            <Card className="bg-white text-black border-none rounded-4xl">
+              <CardContent className="pt-6">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="w-full flex items-start justify-between">
+                    <div className="w-1 text-[#00b754] text-md font-semibold">
+                      {status}
+                    </div>
+                    <Image
+                      src={
+                        // biodata?.biodata?.profilePic
+                        //   ? biodata.biodata.profilePic
+                        //   : male
+                        male
+                      }
+                      alt="Profile"
+                      width={100}
+                      height={40}
+                      priority
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = male;
+                      }}
+                    />
+                    <div className="w-1"></div>
                   </div>
-                  <Image
-                    src={
-                      // biodata?.biodata?.profilePic
-                      //   ? biodata.biodata.profilePic
-                      //   : male
-                      male
-                    }
-                    alt="Profile"
-                    width={100}
-                    height={40}
-                    priority
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = male;
-                    }}
-                  />
-                  <div className="w-1"></div>
-                </div>
 
-                <div className="text-lg">
-                  বায়োডাটা কোড: <span className="font-semibold">{code}</span>
-                </div>
+                  <div className="text-lg">
+                    বায়োডাটা কোড: <span className="font-semibold">{code}</span>
+                  </div>
 
-                <div className="flex space-x-4 border border-gray-400 rounded-xl p-4">
-                  <Heart
-                    className={`h-6 w-6 cursor-pointer ${
-                      isFavourite ? "text-[#e25a6f]" : "text-black"
-                    }`}
-                    onClick={() =>
-                      handleFavourite(isFavourite ? "remove" : "add")
-                    }
-                    fill={isFavourite ? "red" : "white"}
-                  />
-                  <IdCard
-                    className={`h-6 w-6 cursor-pointer ${
-                      isShortlisted ? "text-[#e25a6f]" : "text-black"
-                    }`}
-                    onClick={() =>
-                      handleShortlist(isShortlisted ? "remove" : "add")
-                    }
-                    // fill={isShortlisted ? "#e25a6f" : "white"}
-                  />
-                  <Copy
-                    className="h-6 w-6 rotate-90 cursor-pointer hover:text-[#e25a6f]"
-                    onClick={handleCopyUrl}
-                  />
-                  <Mail className="h-6 w-6" />
-                  <CircleChevronDown className="h-6 w-6 text-[#b52d1f]" />
+                  <div className="flex space-x-4 border border-gray-400 rounded-xl p-4 ">
+                    <Alert>
+                      <Heart
+                        className={`h-6 w-6 cursor-pointer ${
+                          isFavourite ? "text-[#e25a6f]" : "text-black"
+                        }`}
+                        onClick={() =>
+                          handleFavourite(isFavourite ? "remove" : "add")
+                        }
+                        fill={isFavourite ? "red" : "white"}
+                      />
+                    </Alert>
+                    <Alert>
+                      <IdCard
+                        className={`h-6 w-6 cursor-pointer ${
+                          isShortlisted ? "text-[#e25a6f]" : "text-black"
+                        }`}
+                        onClick={() =>
+                          handleShortlist(isShortlisted ? "remove" : "add")
+                        }
+                        // fill={isShortlisted ? "#e25a6f" : "white"}
+                      />
+                    </Alert>
+
+                    <Copy
+                      className="h-6 w-6 rotate-90 cursor-pointer hover:text-[#e25a6f]"
+                      onClick={handleCopyUrl}
+                    />
+                    {/* <Mail className="h-6 w-6" /> */}
+                    <CircleChevronDown className="h-6 w-6 text-[#b52d1f]" />
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-white text-black border-none rounded-4xl">
-            <CardContent className="pt-6">
-              <div className="flex flex-col space-y-4">
-                <div className="text-xl font-medium text-center mb-4 text-[#b52d1f]">
-                  আপনি আগ্রহী?
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <div>প্রাথমিক প্রস্তাব পাঠান</div>
-                    <div className="text-xs text-[#e25a6f]">
-                      ১টি টোকেন খরচ হবে
+              </CardContent>
+            </Card>
+            <Card className="bg-white text-black border-none rounded-4xl">
+              <CardContent className="pt-6">
+                <div className="flex flex-col space-y-4">
+                  <div className="text-xl font-medium text-center mb-4 text-[#b52d1f]">
+                    আপনি আগ্রহী?
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col">
+                      <div>প্রাথমিক প্রস্তাব পাঠান</div>
+                      <div className="text-xs text-[#e25a6f]">
+                        ১টি টোকেন খরচ হবে
+                      </div>
+                    </div>
+                    <Alert>
+                      <div
+                        className="bg-[#e25a6f] px-4 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f]"
+                        onClick={handleCreateProposal}
+                      >
+                        <Send
+                          className="h-6 w-6"
+                          fill="white"
+                          stroke="#e25a6f"
+                          strokeOpacity={0.5}
+                        />
+                      </div>
+                    </Alert>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col space-x-2">
+                      <div>অভিভাবকের যোগাযোগ তথ্য দেখুন</div>
+                      <div className="text-xs text-[#e25a6f]">
+                        ১টি টোকেন খরচ হবে
+                      </div>
+                    </div>
+                    <div className="bg-[#e25a6f] px-4 py-2 rounded-xl">
+                      <Send
+                        className="h-6 w-6"
+                        fill="white"
+                        stroke="#e25a6f"
+                        strokeOpacity={0.5}
+                      />
                     </div>
                   </div>
-                  <div
-                    className="bg-[#e25a6f] px-4 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f]"
-                    onClick={handleCreateProposal}
+                  <Link
+                    href="/tutorial"
+                    className="text-xs text-center hover:underline text-blue-300"
                   >
-                    <Send
-                      className="h-6 w-6"
-                      fill="white"
-                      stroke="#e25a6f"
-                      strokeOpacity={0.5}
-                    />
-                  </div>
+                    (বিস্তারিত জানুন)
+                  </Link>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col space-x-2">
-                    <div>অভিভাবকের যোগাযোগ তথ্য দেখুন</div>
-                    <div className="text-xs text-[#e25a6f]">
-                      ১টি টোকেন খরচ হবে
-                    </div>
-                  </div>
-                  <div className="bg-[#e25a6f] px-4 py-2 rounded-xl">
-                    <Send
-                      className="h-6 w-6"
-                      fill="white"
-                      stroke="#e25a6f"
-                      strokeOpacity={0.5}
-                    />
-                  </div>
-                </div>
-                <Link
-                  href="/tutorial"
-                  className="text-xs text-center hover:underline text-blue-300"
-                >
-                  (বিস্তারিত জানুন)
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="w-3/4 flex space-x-8">
-          <HeaderShortBio biodata={biodata} />
-          <HeaderSpousePreferenceRequierment biodata={biodata} />
+              </CardContent>
+            </Card>
+          </div>
+          <div className="w-3/4 flex space-x-8">
+            <HeaderShortBio biodata={biodata} />
+            <HeaderSpousePreferenceRequierment biodata={biodata} />
+          </div>
         </div>
       </div>
     </div>

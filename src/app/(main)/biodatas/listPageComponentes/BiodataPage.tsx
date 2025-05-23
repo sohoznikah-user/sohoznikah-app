@@ -230,7 +230,7 @@ const BiodataPage = () => {
   };
 
   return (
-    <div className="flex justify-between container mx-auto gap-5">
+    <div className="flex justify-between  gap-5">
       <BiodatasPageFilters
         onFilterChange={handleFilter}
         onReset={handleReset}

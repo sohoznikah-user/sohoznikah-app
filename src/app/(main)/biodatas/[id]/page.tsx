@@ -54,7 +54,7 @@ export default function BiodataPage({
     return <Loading />;
   }
   return (
-    <>
+    <div className="">
       <HeaderSection biodata={biodata} biodataId={id} />
       <div className="py-12 flex flex-col items-center justify-center space-y-6">
         <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
@@ -85,6 +85,6 @@ export default function BiodataPage({
         </div>
       </div>
       <FooterSection />
-    </>
+    </div>
   );
 }
