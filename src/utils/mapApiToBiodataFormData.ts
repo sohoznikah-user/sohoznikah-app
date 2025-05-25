@@ -138,6 +138,7 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
         "",
       practicingSince:
         apiData?.religiousInfoFormData?.[0]?.practicingSince || "",
+      veilWithNiqab: apiData?.religiousInfoFormData?.[0]?.veilWithNiqab || "",
     },
     personalInfoFormData: {
       beardStatus: apiData?.personalInfoFormData?.[0]?.beardStatus || "",

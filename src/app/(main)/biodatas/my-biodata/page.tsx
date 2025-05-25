@@ -1,33 +1,35 @@
-// File: src/app/(main)/biodatas/[id]/page.tsx
 "use client";
 import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useGetMyBiodataQuery } from "@/redux/features/biodata/biodataApi";
+import {
+  setAllBiodata,
+  setAllBiodataFormData,
+} from "@/redux/features/biodata/biodataSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
-import { use, useEffect, useRef, useState } from "react";
-import AddressInfo from "./viewBioDataComponents/AddressInfo";
-import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
-import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
-import FooterSection from "./viewBioDataComponents/FooterSection";
-import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
-import HeaderSection from "./viewBioDataComponents/HeaderSection";
-import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
-import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
-import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
-import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import AddressInfo from "../[id]/viewBioDataComponents/AddressInfo";
+import EducationAndOccupationInfo from "../[id]/viewBioDataComponents/EducationAndOccupationInfo";
+import FamilyInfo from "../[id]/viewBioDataComponents/FamilyInfo";
+import FooterSection from "../[id]/viewBioDataComponents/FooterSection";
+import GeneralInfo from "../[id]/viewBioDataComponents/GeneralInfo";
+import HeaderSection from "../[id]/viewBioDataComponents/HeaderSection";
+import MarriageInfo from "../[id]/viewBioDataComponents/MarriageInfo";
+import PersonalInfo from "../[id]/viewBioDataComponents/PersonalInfo";
+import PrimaryInfo from "../[id]/viewBioDataComponents/PrimaryInfo";
+import ReligiousInfo from "../[id]/viewBioDataComponents/ReligiousInfo";
+import SpousePreferenceInfo from "../[id]/viewBioDataComponents/SpousePreferenceInfo";
 
-type PageParams = {
-  id: string;
-};
-
-export default function BiodataPage({
-  params,
-}: {
-  params: Promise<PageParams>;
-}) {
-  const [biodata, setBiodata] = useState<any>(null);
+export default function BiodataPage() {
   const [activeTab, setActiveTab] = useState<string | null>(null);
-
+  const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
+  const user = useAppSelector(selectCurrentUser);
+  const acesstoken = useAppSelector(selectCurrentUser);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const tabs = [
     "প্রাথমিক তথ্য",
     "সাধারণ তথ্য",
@@ -61,16 +63,30 @@ export default function BiodataPage({
     "বিয়ে সংক্রান্ত তথ্য": marriageRef,
     "যেমন জীবনসঙ্গী আশা করেন": spouseRef,
   };
+  const {
+    data: fetchedBiodata,
+    isLoading: isFetching,
+    error: fetchError,
+    refetch,
+  } = useGetMyBiodataQuery(undefined, {
+    skip: !user || !acesstoken,
+  });
 
-  const { id } = use(params);
-  const { data: fetchedBiodata, isLoading } = useGetBiodataByIdQuery(id);
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user || !acesstoken) {
+      const redirectUrl = `/my-biodata`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    }
+  }, [user, acesstoken, router]);
 
   useEffect(() => {
     if (fetchedBiodata?.data) {
       const mapped = mapApiToBiodataFormData(fetchedBiodata.data);
-      setBiodata(mapped);
+      dispatch(setAllBiodataFormData(mapped.biodataFormData));
+      dispatch(setAllBiodata(mapped.biodata));
     }
-  }, [fetchedBiodata]);
+  }, [fetchedBiodata, dispatch]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -80,7 +96,7 @@ export default function BiodataPage({
     }
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 
@@ -88,8 +104,8 @@ export default function BiodataPage({
     <div className="">
       <HeaderSection
         biodata={biodata}
-        biodataId={id}
-        biodataFormData={biodata?.biodataFormData}
+        biodataId={biodata?.id}
+        biodataFormData={biodataFormData}
       />
       <div className="py-12 flex flex-col items-center justify-center space-y-6">
         <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
@@ -114,81 +130,61 @@ export default function BiodataPage({
         <div className="w-full max-w-6xl space-y-6">
           <div ref={primaryInfoRef}>
             <PrimaryInfo
-              biodata={biodata?.biodata}
-              primaryInfoFormData={
-                biodata?.biodataFormData?.primaryInfoFormData
-              }
+              biodata={biodata}
+              primaryInfoFormData={biodataFormData?.primaryInfoFormData}
             />
           </div>
           <div ref={generalInfoRef}>
             <GeneralInfo
               biodata={biodata}
-              generalInfoFormData={
-                biodata?.biodataFormData?.generalInfoFormData
-              }
+              generalInfoFormData={biodataFormData?.generalInfoFormData}
             />
           </div>
           <div ref={addressRef}>
             <AddressInfo
               biodata={biodata}
-              addressInfoFormData={
-                biodata?.biodataFormData?.addressInfoFormData
-              }
+              addressInfoFormData={biodataFormData?.addressInfoFormData}
             />
           </div>
           <div ref={educationRef}>
             <EducationAndOccupationInfo
               biodata={biodata}
-              educationInfoFormData={
-                biodata?.biodataFormData?.educationAndOccupationFormData
-              }
-              occupationInfoFormData={
-                biodata?.biodataFormData?.educationAndOccupationFormData
-              }
+              educationInfoFormData={biodataFormData?.educationInfoFormData}
+              occupationInfoFormData={biodataFormData?.occupationInfoFormData}
             />
           </div>
           <div ref={familyRef}>
             <FamilyInfo
               biodata={biodata}
-              familyInfoFormData={biodata?.biodataFormData?.familyInfoFormData}
+              familyInfoFormData={biodataFormData?.familyInfoFormData}
             />
           </div>
           <div ref={religiousRef}>
             <ReligiousInfo
               biodata={biodata}
-              religiousInfoFormData={
-                biodata?.biodataFormData?.religiousInfoFormData
-              }
+              religiousInfoFormData={biodataFormData?.religiousInfoFormData}
             />
           </div>
           <div ref={personalRef}>
             <PersonalInfo
               biodata={biodata}
-              personalInfoFormData={
-                biodata?.biodataFormData?.personalInfoFormData
-              }
+              personalInfoFormData={biodataFormData?.personalInfoFormData}
             />
           </div>
           <div ref={marriageRef}>
-            <MarriageInfo
-              biodata={biodata}
-              biodataFormData={biodata?.biodataFormData}
-            />
+            <MarriageInfo biodata={biodata} biodataFormData={biodataFormData} />
           </div>
           <div ref={spouseRef}>
-            {/* <SpousePreferenceInfo
+            <SpousePreferenceInfo
               biodata={biodata}
-              biodataFormData={
-                biodata?.biodataFormData?.spousePreferenceFormData
+              spousePreferenceInfoFormData={
+                biodataFormData?.spousePreferenceInfoFormData
               }
-            /> */}
+            />
           </div>
         </div>
       </div>
-      <FooterSection
-        biodata={biodata}
-        biodataFormData={biodata?.biodataFormData}
-      />
+      <FooterSection biodata={biodata} biodataFormData={biodataFormData} />
     </div>
   );
 }

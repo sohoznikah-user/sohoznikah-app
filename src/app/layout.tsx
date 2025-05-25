@@ -9,6 +9,24 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Local custom font
+// const customFont = localFont({
+//   src: [
+//     {
+//       path: "./fonts/SolaimanLipi_22-02-2012.ttf",
+//       weight: "400",
+//       style: "normal",
+//     },
+//     {
+//       path: "./fonts/SolaimanLipi_22-02-2012.ttf",
+//       weight: "700",
+//       style: "normal",
+//     },
+//   ],
+//   variable: "--font-custom",
+//   display: "swap",
+// });
+
 export const metadata: Metadata = {
   title: {
     template: "%s - Sohoz Nikah",
@@ -25,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} `} suppressHydrationWarning>
         <RootProvider>
           <ThemeProvider
             attribute="class"

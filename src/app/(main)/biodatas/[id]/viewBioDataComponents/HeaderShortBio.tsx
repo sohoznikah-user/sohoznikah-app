@@ -15,8 +15,15 @@ import {
 } from "@/lib/consts";
 import { BiodataFormData } from "@/lib/types";
 import { getDistrictTitle, getTitleById } from "@/utils/getBanglaTitle";
+import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 
-export default function HeaderShortBio({ biodata }: { biodata: any }) {
+export default function HeaderShortBio({
+  biodata,
+  biodataFormData,
+}: {
+  biodata: IBiodata;
+  biodataFormData: BiodataFormData;
+}) {
   const {
     generalInfoFormData,
     educationInfoFormData,
@@ -24,7 +31,7 @@ export default function HeaderShortBio({ biodata }: { biodata: any }) {
     addressInfoFormData,
     familyInfoFormData,
     religiousInfoFormData,
-  } = biodata?.biodataFormData as BiodataFormData;
+  } = biodataFormData as BiodataFormData;
 
   const bangladeshAddress = addressInfoFormData?.addresses?.find(
     (addr) => addr.location === "bangladesh"
@@ -68,13 +75,13 @@ export default function HeaderShortBio({ biodata }: { biodata: any }) {
             </div>
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
-            <div>পেশা</div>
-            <div>
+            <div className="mr-5">পেশা</div>
+            <p className="text-end">
               {getTitleById(
                 occupationsList,
                 occupationInfoFormData?.occupations
               )}
-            </div>
+            </p>
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
             <div>জেলা</div>

@@ -4,6 +4,7 @@ import Loading from "@/app/loading";
 import male from "@/assets/images/male-5.svg";
 import Alert from "@/components/ui/Alert";
 import { Card, CardContent } from "@/components/ui/card";
+import { BiodataFormData } from "@/lib/types";
 import {
   useCreateFavouriteMutation,
   useDeleteFavouriteMutation,
@@ -23,6 +24,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { CircleChevronDown, Copy, Heart, IdCard, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import HeaderShortBio from "./HeaderShortBio";
@@ -31,18 +33,18 @@ import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierme
 export default function HeaderSection({
   biodata,
   biodataId,
+  biodataFormData,
 }: {
   biodata: any;
-  biodataId: string;
+  biodataId?: string;
+  biodataFormData: BiodataFormData;
 }) {
+  const searchParams = useSearchParams();
+  console.log("params", searchParams);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
   const token = useAppSelector(selectCurrentToken);
   const user = useAppSelector(selectCurrentUser);
-  console.log("token", token);
-  console.log("user", user);
-  console.log("biodataId", biodataId);
-  console.log("biodata", biodata);
 
   const { data: favourite } = useGetFavouriteByIdQuery(biodataId, {
     skip: !token || !user,
@@ -50,9 +52,6 @@ export default function HeaderSection({
   const { data: shortlist } = useGetShortlistByIdQuery(biodataId, {
     skip: !token || !user,
   });
-
-  console.log("favourite", isFavourite, favourite);
-  console.log("shortlist", isShortlisted, shortlist);
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
   const [deleteFavourite, { isLoading: isDeleting }] =
@@ -310,8 +309,14 @@ export default function HeaderSection({
             </Card>
           </div>
           <div className="w-3/4 flex space-x-8">
-            <HeaderShortBio biodata={biodata} />
-            <HeaderSpousePreferenceRequierment biodata={biodata} />
+            <HeaderShortBio
+              biodata={biodata}
+              biodataFormData={biodataFormData}
+            />
+            <HeaderSpousePreferenceRequierment
+              biodata={biodata}
+              biodataFormData={biodataFormData}
+            />
           </div>
         </div>
       </div>

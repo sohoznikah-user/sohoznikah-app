@@ -225,6 +225,7 @@ export const religiousInfoFormData = z.object({
   followsMahramRules: optionalString,
   beliefAboutPirMurshidAndMazar: optionalString,
   practicingSince: optionalString,
+  veilWithNiqab: optionalString,
 });
 
 export const personalInfoFormData = z.object({

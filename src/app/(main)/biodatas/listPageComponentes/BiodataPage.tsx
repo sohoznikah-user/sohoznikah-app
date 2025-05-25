@@ -204,16 +204,15 @@ const BiodataPage = () => {
     }
   }, [dispatch, searchParams]);
 
-  console.log("API Query:", query); // Debug
+  // console.log("API Query:", query); // Debug
 
   const handleSearchChange = (newSearchTerm: string) => {
-    console.log("New Search Term:", newSearchTerm); // Debug
+    // console.log("New Search Term:", newSearchTerm); // Debug
     setSearchTerm(newSearchTerm);
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   const handleReset = () => {
-    console.log("Resetting Filters and Search Term"); // Debug
     dispatch(resetFilters());
     setSearchTerm("");
     setPagination({

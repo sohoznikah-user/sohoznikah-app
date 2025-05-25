@@ -1,8 +1,18 @@
 // File: src/app/(main)/biodatas/[id]/viewBioDataComponents/PersonalInfo.tsx
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { characteristics, specialCatagories } from "@/lib/consts";
+import { PersonalInfoFormData } from "@/lib/types";
+import { getTitleById } from "@/utils/getBanglaTitle";
+import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 
-export default function PersonalInfo() {
+export default function PersonalInfo({
+  biodata,
+  personalInfoFormData,
+}: {
+  biodata?: IBiodata;
+  personalInfoFormData: PersonalInfoFormData;
+}) {
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
       <CardHeader>
@@ -12,54 +22,81 @@ export default function PersonalInfo() {
       </CardHeader>
       <CardContent className="px-6 py-4 space-y-2">
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">আপনার কি দাড়ি পছন্দ?/দাড়ি রেখেছেন কি?</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2">আপনার কি দাড়ি পছন্দ?</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            {personalInfoFormData?.beardStatus}
+          </div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">
             বাড়ির বাহিরে সাধারণত কী ধরণের পোশাক পরতে পছন্দ করেন?
           </div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            {personalInfoFormData?.preferredOutfit}
+          </div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">
             নাটক/সিনেমা/সিরিয়াল/গান/খেলা এসবের কোনটি দেখেন বা শুনেন?
           </div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            {personalInfoFormData?.entertainmentPreferences}
+          </div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">মানসিক বা শারীরিক কোনো রোগ আছে কি?</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            {personalInfoFormData?.healthConditions}
+          </div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">নিজের কিছু গুণাবলী চিহ্নিত করুন</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">
-            শান্ত-শিষ্ট, ধৈর্যশীল, ইমোশনাল
+            {getTitleById(
+              characteristics,
+              personalInfoFormData?.personalTraits
+            )}
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">
-            নারী-পুরুষ সমঅধীকার বিষয়টাকে আপনি কিভাবে দেখেন?
+
+        {personalInfoFormData?.genderEqualityView && (
+          <div className="flex items-center space-x-2">
+            <div className="w-1/2">
+              নারী-পুরুষ সমঅধীকার বিষয়টাকে আপনি কিভাবে দেখেন?
+            </div>
+            <div className="w-1/2 pl-2 border-l border-gray-200">
+              {personalInfoFormData?.genderEqualityView}
+            </div>
           </div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-1/2">
-            সমকামিতা বা LGBTQ সম্পর্কে আপনার ধারণা কি?
+        )}
+
+        {personalInfoFormData?.lgbtqOpinion && (
+          <div className="flex items-center space-x-2">
+            <div className="w-1/2">
+              সমকামিতা বা LGBTQ সম্পর্কে আপনার ধারণা কি?
+            </div>
+            <div className="w-1/2 pl-2 border-l border-gray-200">
+              {personalInfoFormData?.lgbtqOpinion}
+            </div>
           </div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
-        </div>
+        )}
+
         <div className="flex items-center space-x-2">
           <div className="w-1/2">
             আপনার ক্ষেত্রে প্রযোজ্য এমন বিশেষ কোনো অবস্থা বা কার্যক্রম:
           </div>
           <div className="w-1/2 pl-2 border-l border-gray-200">
-            আমি একজন সমাজ সেবক, আমি বন্ধ্যা-ইনফার্টিলিটি
+            {getTitleById(
+              specialCatagories,
+              personalInfoFormData?.specialConditions
+            )}
           </div>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-1/2">নিজের মতো করে নিজের সম্পর্কে কিছু লিখুন:</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            {personalInfoFormData?.aboutYourself}
+          </div>
         </div>
         {/* <div className="flex items-center space-x-2">
           <div className="w-1/2">

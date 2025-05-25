@@ -42,6 +42,7 @@ export default function FamilyInfo({
   setCurrentStep,
 }: BiodataFormDataProps) {
   const [hasNoSiblings, setHasNoSiblings] = useState<boolean>(false);
+  const [selfSiblings, setSelfSiblings] = useState<boolean>(false);
 
   const form = useForm<FamilyInfoFormData>({
     resolver: zodResolver(familyInfoFormData),
@@ -94,7 +95,6 @@ export default function FamilyInfo({
 
   // Handle next button click
   const handleNextClick = async () => {
-    console.log("clicked");
     const isValid = await form.trigger();
     if (isValid) {
       console.log("valid");
@@ -105,6 +105,15 @@ export default function FamilyInfo({
       );
     }
   };
+
+  useEffect(() => {
+    const selfSiblings = biodataFormData?.familyInfoFormData?.siblings?.filter(
+      (sibling) => sibling.type === "self"
+    );
+    if (selfSiblings.length > 0) {
+      setSelfSiblings(true);
+    }
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
@@ -305,48 +314,56 @@ export default function FamilyInfo({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name={`siblings.${index}.occupation`}
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel className="text-md space-y-2 leading-4.5">
-                        শিক্ষা ও পেশা:
-                      </FormLabel>
-                      <div className="flex flex-col space-y-2">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                            placeholder="শিক্ষা ও পেশা"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`siblings.${index}.maritalStatus`}
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel className="text-md space-y-2 leading-4.5">
-                        বৈবাহিক অবস্থা:
-                      </FormLabel>
-                      <div className="flex flex-col space-y-2">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                            placeholder="বৈবাহিক অবস্থা"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
+
+                {form.watch(`siblings.${index}.type`) !== "self" && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name={`siblings.${index}.occupation`}
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel
+                            className={`text-md space-y-2 leading-4.5`}
+                          >
+                            শিক্ষা ও পেশা:
+                          </FormLabel>
+                          <div className="flex flex-col space-y-2">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                className={`p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white`}
+                                placeholder="শিক্ষা ও পেশা"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`siblings.${index}.maritalStatus`}
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="text-md space-y-2 leading-4.5">
+                            বৈবাহিক অবস্থা:
+                          </FormLabel>
+                          <div className="flex flex-col space-y-2">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                                placeholder="বৈবাহিক অবস্থা"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
               </div>
             ))}
           {!hasNoSiblings && (

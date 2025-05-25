@@ -2,6 +2,10 @@ export const biodataTypes = [
   { id: "GROOM", title: "পাত্রের বায়োডাটা" },
   { id: "BRIDE", title: "পাত্রীর বায়োডাটা" },
 ];
+export const biodataFor = [
+  { id: "self", title: "নিজের জন্য" },
+  { id: "other", title: " বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য" },
+];
 
 export const maritalStatuses = [
   { id: "unmarried", title: "অবিবাহিত", for: "both" },
@@ -130,6 +134,7 @@ export const familyTypes = [
 export const siblingTypes = [
   { id: "brother", title: "ভাই", for: "both" },
   { id: "sister", title: "বোন", for: "both" },
+  { id: "self", title: "নিজে", for: "both" },
 ];
 
 export const religiousIdeologies = [

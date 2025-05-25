@@ -139,8 +139,8 @@ export default function BiodatasPageFilters({
         <button
           className={`mr-[-1rem] rounded-xl py-3 px-4 z-10 ${
             activeTab === "searching"
-              ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
-              : "text-[#989898] border border-[#989898]"
+              ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7] z-10"
+              : "text-[#989898] border border-[#989898] z-0"
           }`}
           onClick={() => handleTabChange("searching")}
         >
@@ -149,8 +149,8 @@ export default function BiodatasPageFilters({
         <button
           className={`py-3 rounded-xl px-4 ${
             activeTab === "beingSearched"
-              ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
-              : "text-[#989898] border border-[#989898]"
+              ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7] z-10"
+              : "text-[#989898] border border-[#989898] z-0"
           }`}
           onClick={() => handleTabChange("beingSearched")}
         >

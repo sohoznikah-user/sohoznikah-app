@@ -15,13 +15,14 @@ import { getTitleById } from "@/utils/getBanglaTitle";
 
 export default function HeaderSpousePreferenceRequierment({
   biodata,
+  biodataFormData,
 }: {
   biodata: any;
+  biodataFormData: BiodataFormData;
 }) {
-  const { spousePreferenceInfoFormData } =
-    biodata?.biodataFormData as BiodataFormData;
+  const { spousePreferenceInfoFormData } = biodataFormData;
 
-  console.log("biodataFormData", biodata?.biodataFormData);
+  // console.log("biodataFormData", biodata?.biodataFormData);
 
   return (
     <Card className="w-1/2 bg-white text-black border-none rounded-4xl">
