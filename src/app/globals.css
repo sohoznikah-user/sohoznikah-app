@@ -1,6 +1,20 @@
+/* File: src/app/globals.css */
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
+
+@font-face {
+  font-family: SolaimanLipi;
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/SolaimanLipi_22-02-2012.ttf") format("woff2");
+}
+
+/* Targeting the scrollbar */
+::-webkit-scrollbar {
+  width: 5px; /* Adjust the width */
+}
 
 @custom-variant dark (&:is(.dark *));
 

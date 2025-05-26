@@ -1,4 +1,5 @@
-import { Badge } from "@/components/ui/badge";
+// File: src/app/(main)/biodatas/listPageComponentes/BiodatasPageAppliedFilters.tsx
+
 import { X } from "lucide-react";
 
 export default function BiodatasPageAppliedFilters() {

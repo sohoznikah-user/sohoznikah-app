@@ -1,6 +1,17 @@
+// File: src/app/(main)/biodatas/[id]/viewBioDataComponents/FooterSection.tsx
+
 import { Card, CardContent } from "@/components/ui/card";
+import { BiodataFormData } from "@/lib/types";
+import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 import Link from "next/link";
-export default function FooterSection() {
+
+export default function FooterSection({
+  biodata,
+  biodataFormData,
+}: {
+  biodata?: IBiodata;
+  biodataFormData: BiodataFormData;
+}) {
   return (
     <div className="py-12 flex flex-col items-center justify-center">
       <div className="text-4xl text-center text-[#004972] mb-4">

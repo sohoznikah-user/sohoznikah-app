@@ -1,5 +1,4 @@
-import { boolean, z } from "zod";
-import { maritalStatuses } from "./consts";
+import { z } from "zod";
 
 export const optionalString = z.string().trim().optional().or(z.literal(""));
 export const requiredString = z.string().trim();
@@ -32,14 +31,14 @@ export const primaryInfoFormData = z.object({
     message: "পিতার নাম অবশ্যই প্রদান করতে হবে।",
   }),
   motherName: requiredString.min(1, {
-    message: "মাতার ধরন নির্বাচন করা আবশ্যক।",
+    message: "মাতার নাম অবশ্যই প্রদান করতে হবে।",
   }),
-  email: requiredString.min(1, {
-    message: "ইমেইল প্রদান করা আবশ্যক।",
-  }),
-  phoneNumber: requiredString.min(1, {
-    message: "মোবাইল নম্বর প্রদান করা আবশ্যক।",
-  }),
+  email: requiredString
+    .email({ message: "একটি বৈধ ইমেইল প্রদান করুন।" })
+    .min(1, { message: "ইমেইল প্রদান করা আবশ্যক।" }),
+  phoneNumber: requiredString
+    .regex(/^\+?\d{10,15}$/, { message: "একটি বৈধ মোবাইল নম্বর প্রদান করুন।" })
+    .min(1, { message: "মোবাইল নম্বর প্রদান করা আবশ্যক।" }),
   guardianContacts: z
     .array(
       z.object({
@@ -49,9 +48,11 @@ export const primaryInfoFormData = z.object({
         fullName: requiredString.min(1, {
           message: "অভিভাবকের নাম প্রদান করা আবশ্যক।",
         }),
-        phoneNumber: requiredString.min(1, {
-          message: "অভিভাবকের মোবাইল নম্বর প্রদান করা আবশ্যক।",
-        }),
+        phoneNumber: requiredString
+          .regex(/^\+?\d{10,15}$/, {
+            message: "একটি বৈধ মোবাইল নম্বর প্রদান করুন।",
+          })
+          .min(1, { message: "অভিভাবকের মোবাইল নম্বর প্রদান করা আবশ্যক।" }),
       })
     )
     .min(2, { message: "কমপক্ষে ২ জন অভিভাবকের তথ্য প্রয়োজন।" }),
@@ -76,9 +77,13 @@ export const generalInfoFormData = z.object({
   bloodGroup: requiredString.min(1, {
     message: "রক্তের গ্রুপ নির্বাচন করা আবশ্যক।",
   }),
-  nationality: requiredString.min(1, {
-    message: "জাতীয়তা প্রদান করা আবশ্যক।",
-  }),
+  nationality: z
+    .array(
+      requiredString.min(1, {
+        message: "জাতীয়তা প্রদান করা আবশ্যক।",
+      })
+    )
+    .min(1, { message: "জাতীয়তা প্রদান করা আবশ্যক।" }),
 });
 
 export const addressInfoFormData = z.object({
@@ -88,24 +93,17 @@ export const addressInfoFormData = z.object({
         type: requiredString.min(1, {
           message: "ঠিকানার ধরন প্রদান করা আবশ্যক।",
         }),
-        location: requiredString.min(1, {
-          message: "ঠিকানার অবস্থান প্রদান করা আবশ্যক।",
-        }),
+        location: optionalString,
         // জেলা / স্টেট
-        state: requiredString.min(1, {
-          message: "নির্বাচন করা আবশ্যক।",
-        }),
+        state: optionalString,
         // উপজেলা / শহর
-        city: requiredString.min(1, {
-          message: "নির্বাচন করা আবশ্যক।",
-        }),
-        detail: requiredString.min(1, {
-          message: "ঠিকানার বিস্তারিত প্রদান করা আবশ্যক।",
-        }),
+        city: optionalString,
+        detail: optionalString,
 
         // বিদেশি ঠিকানা
         country: optionalString,
         cityzenshipStatus: optionalString,
+        permanentHomeAddress: optionalString,
       })
       .superRefine((data, ctx) => {
         if (data.type === "foregin" && !data.country) {
@@ -137,24 +135,23 @@ export const educationInfoFormData = z.object({
   }),
   degrees: z.array(
     z.object({
+      degreeType: requiredString.min(1, {
+        message: "ডিগ্রির ধরন প্রদান করা আবশ্যক।",
+      }),
       name: requiredString.min(1, {
         message: "ডিগ্রির নাম প্রদান করা আবশ্যক।",
       }),
       passYear: requiredString.min(1, {
         message: "পাসের বছর প্রদান করা আবশ্যক।",
       }),
-      group: requiredString.min(1, {
-        message: "শ্রেণী/বিভাগ নির্বাচন করা আবশ্যক।",
-      }),
+      group: optionalString,
       institute: requiredString.min(1, {
         message: "শিক্ষাপ্রতিষ্ঠানের নাম প্রদান করা আবশ্যক।",
       }),
     })
   ),
   religiousEducation: z.array(optionalString).optional(),
-  detail: requiredString.min(1, {
-    message: "শিক্ষার বিস্তারিত তথ্য প্রদান করা আবশ্যক।",
-  }),
+  detail: optionalString, // Made optional to align with JSON
 });
 
 export const occupationInfoFormData = z.object({
@@ -164,9 +161,7 @@ export const occupationInfoFormData = z.object({
   detail: requiredString.min(1, {
     message: "পেশার বিস্তারিত তথ্য প্রদান করা আবশ্যক।",
   }),
-  monthlyIncome: requiredString.min(1, {
-    message: "মাসিক আয় প্রদান করা আবশ্যক।",
-  }),
+  monthlyIncome: optionalString,
 });
 
 export const familyInfoFormData = z.object({
@@ -181,18 +176,11 @@ export const familyInfoFormData = z.object({
   }),
   siblings: z.array(
     z.object({
-      type: requiredString.min(1, {
-        message: "ভাই বা বোনের ধরন নির্বাচন করুন।",
-      }),
-      occupation: requiredString.min(1, {
-        message: "ভাই বা বোনের পেশা উল্লেখ করুন।",
-      }),
-      maritalStatus: requiredString.min(1, {
-        message: "ভাই বা বোনের বৈবাহিক অবস্থা নির্বাচন করুন।",
-      }),
-      children: requiredString.min(1, {
-        message: "সন্তানের সংখ্যা উল্লেখ করুন।",
-      }),
+      serial: optionalString,
+      type: optionalString,
+      occupation: optionalString,
+      maritalStatus: optionalString,
+      children: optionalString,
     })
   ),
   fatherSideDetail: requiredString.min(1, {
@@ -228,30 +216,16 @@ export const religiousInfoFormData = z.object({
   praysFiveTimes: requiredString.min(1, {
     message: "প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়া হয় কিনা তা নির্বাচন করা আবশ্যক।",
   }),
-  hasQazaPrayers: requiredString.min(1, {
-    message: "আপনার কি নামাজ কাযা হয় তা নির্বাচন করা আবশ্যক।",
-  }),
+  hasQazaPrayers: optionalString,
   canReciteQuranProperly: requiredString.min(1, {
     message: "শুদ্ধভাবে কুরআন তেলাওয়াত করতে পারেন কিনা তা নির্বাচন করা আবশ্যক।",
   }),
-  avoidsHaramIncome: requiredString.min(1, {
-    message:
-      "হারাম উপার্জন বা সুদ-ঘুষ থেকে বিরত আছেন কিনা তা নির্বাচন করা আবশ্যক।",
-  }),
-  modestDressing: requiredString.min(1, {
-    message: "আপনার পোশাকধারণ কেমন তা নির্বাচন করা আবশ্যক।",
-  }),
-  followsMahramRules: requiredString.min(1, {
-    message: "মাহরাম/গাইরে-মাহরাম মেনে চলেন কিনা তা নির্বাচন করা আবশ্যক।",
-  }),
-  beliefAboutPirMurshidAndMazar: requiredString.min(1, {
-    message:
-      "পীর-মুরিদ ও মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস প্রদান করা আবশ্যক।",
-  }),
-  practicingSince: requiredString.min(1, {
-    message:
-      "কত সাল/সময় থেকে পরিপূর্ণভাবে দ্বীনের পথে চলা শুরু করেছেন তা প্রদান করা আবশ্যক।",
-  }),
+  avoidsHaramIncome: optionalString,
+  modestDressing: optionalString,
+  followsMahramRules: optionalString,
+  beliefAboutPirMurshidAndMazar: optionalString,
+  practicingSince: optionalString,
+  veilWithNiqab: optionalString,
 });
 
 export const personalInfoFormData = z.object({
@@ -270,44 +244,77 @@ export const personalInfoFormData = z.object({
   personalTraits: z.array(optionalString).min(1, {
     message: "আপনার ব্যক্তিগত কিছু গুণাবলী উল্লেখ করুন।",
   }),
-  genderEqualityView: requiredString.min(1, {
-    message: "নারী-পুরুষ সমঅধিকারের বিষয়ে আপনার মতামত প্রদান করুন।",
-  }),
-  lgbtqOpinion: requiredString.min(1, {
-    message: "LGBTQ সম্পর্কিত আপনার ধারণা বা মতামত লিখুন।",
-  }),
+  genderEqualityView: optionalString,
+  lgbtqOpinion: optionalString,
   specialConditions: z.array(optionalString).min(1, {
     message: "আপনার ক্ষেত্রে প্রযোজ্য বিশেষ কোনো অবস্থা থাকলে তা উল্লেখ করুন।",
+  }),
+  aboutYourself: requiredString.min(1, {
+    message: "আপনার সম্পর্কে বিবরণিত তথ্য প্রদান করুন।",
   }),
 });
 
 export const marriageInfoFormData = z.object({
+  // Conditional fields based on marital status
+  reasonForRemarriage: optionalString,
+  currentSpouseAndChildren: optionalString,
+  previousMarriageAndDivorceDetails: optionalString,
+  spouseDeathDetails: optionalString,
+  childrenDetails: optionalString,
+  // Existing fields
   guardianApproval: requiredString.min(1, {
     message: "অভিভাবক আপনার বিয়েতে রাজি আছেন কিনা নির্বাচন করুন।",
   }),
   continueStudy: requiredString.min(1, {
-    message: "বিয়ের পর আপনি পড়াশোনা চালিয়ে যেতে চান কিনা নির্বাচন করুন।",
+    message: "বিয়ের পর স্ত্রীকে পড়াশোনা করতে দিতে চান কিনা নির্বাচন করুন।",
   }),
+  continueStudyDetails: optionalString,
   careerPlan: requiredString.min(1, {
-    message: "বিয়ের পর আপনি চাকরি বা ব্যবসা করতে চান কিনা নির্বাচন করুন।",
-  }),
-  residence: requiredString.min(1, {
-    message: "বিয়ের পর আপনি কোথায় থাকবেন তা উল্লেখ করুন।",
-  }),
-  arrangeHijab: requiredString.min(1, {
     message:
-      "স্ত্রী পর্দা করতে চাইলে আপনি ব্যবস্থা রাখতে পারবেন কিনা নির্বাচন করুন।",
+      "বিয়ের পর স্ত্রী চাইলে চাকরি বা ব্যবসা করতে দিবেন কিনা নির্বাচন করুন।",
   }),
+  careerPlanDetails: optionalString,
+  residence: requiredString.min(1, {
+    message:
+      "যৌথ বা একক পরিবারে থাকার ব্যাপারে আপনি কোনটি পছন্দ করেন তা উল্লেখ করুন।",
+  }),
+  arrangeHijab: optionalString,
   dowryExpectation: requiredString.min(1, {
     message:
-      "আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক বা উপহার আশা করে কিনা নির্বাচন করুন।",
+      "বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক / উপহার / অর্থ আশা করবেন কিনা নির্বাচন করুন।",
   }),
-  allowShowingPhotoOnline: requiredString.min(1, {
-    message: "অনলাইনে আপনার ছবি দেখতে চাইলে দেখাতে রাজি কিনা নির্বাচন করুন।",
-  }),
+  allowShowingPhotoOnline: optionalString,
   additionalMarriageInfo: optionalString,
 });
 
+// export const spousePreferenceInfoFormData = z.object({
+//   age: requiredString.min(1, {
+//     message: "বয়স প্রদান করা আবশ্যক।",
+//   }),
+//   skinTone: z.array(optionalString).optional(),
+//   height: requiredString.min(1, {
+//     message: "উচ্চতা প্রদান করা আবশ্যক।",
+//   }),
+//   educationalQualification: requiredString.min(1, {
+//     message: "শিক্ষাগত যোগ্যতা নির্বাচন করা আবশ্যক।",
+//   }),
+//   religiousEducationalQualification: z.array(optionalString).optional(),
+//   address: optionalString,
+//   maritalStatus: z.array(optionalString).optional(),
+//   specialCategory: z.array(optionalString).optional(),
+//   religiousType: z.array(optionalString).optional(),
+//   occupation: z.array(optionalString).optional(),
+//   familyBackground: z.array(optionalString).optional(),
+//   secondMarrige: requiredString.min(1, {
+//     message: "দ্বিতীয় বিয়ে সম্পর্কে নির্বাচন করা আবশ্যক।",
+//   }),
+//   location: requiredString.min(1, {
+//     message: "অবস্থান নির্বাচন করা আবশ্যক।",
+//   }),
+//   qualities: requiredString.min(1, {
+//     message: "জীবনসঙ্গীর বৈশিষ্ট্য বা গুণাবলী প্রদান করা আবশ্যক।",
+//   }),
+// });
 export const spousePreferenceInfoFormData = z.object({
   age: requiredString.min(1, {
     message: "বয়স প্রদান করা আবশ্যক।",
@@ -319,16 +326,16 @@ export const spousePreferenceInfoFormData = z.object({
   educationalQualification: requiredString.min(1, {
     message: "শিক্ষাগত যোগ্যতা নির্বাচন করা আবশ্যক।",
   }),
+  address: requiredString.min(1, {
+    message: "ঠিকানা প্রদান করা আবশ্যক।",
+  }),
   religiousEducationalQualification: z.array(optionalString).optional(),
-  address: optionalString,
   maritalStatus: z.array(optionalString).optional(),
   specialCategory: z.array(optionalString).optional(),
   religiousType: z.array(optionalString).optional(),
   occupation: z.array(optionalString).optional(),
   familyBackground: z.array(optionalString).optional(),
-  secondMarrige: requiredString.min(1, {
-    message: "দ্বিতীয় বিয়ে সম্পর্কে নির্বাচন করা আবশ্যক।",
-  }),
+  secondMarriage: optionalString,
   location: requiredString.min(1, {
     message: "অবস্থান নির্বাচন করা আবশ্যক।",
   }),
@@ -336,7 +343,6 @@ export const spousePreferenceInfoFormData = z.object({
     message: "জীবনসঙ্গীর বৈশিষ্ট্য বা গুণাবলী প্রদান করা আবশ্যক।",
   }),
 });
-
 export const profilePicFormData = z.object({
   photoId: requiredString.min(1, {
     message: "প্রোফাইল ছবি প্রদান করা আবশ্যক।",
@@ -357,6 +363,10 @@ export const finalWordsFormData = z.object({
       message:
         "আপনাকে কোনো মিথ্যা তথ্য প্রদান করলে বা কোনো তথ্য অসৎ কাজে ব্যবহার করলে সকল আইনী এবং পরকালীন দায়ভার স্বীকার করতে হবে।",
     }),
+  visibility: requiredString.min(1, {
+    message:
+      "বায়োডাটা গোপন থাকবে না, শুধু আপনি যাকে প্রস্তাব পাঠাবেন বা লিংক পাঠাবেন তিনি ছাড়া",
+  }),
 });
 
 export const biodataFormData = z.object({

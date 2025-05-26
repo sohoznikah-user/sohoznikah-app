@@ -1,5 +1,14 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/SpousePreferenceInfo.tsx
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -12,33 +21,26 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  skinTones,
+  familyBackgrounds,
   heights,
   maritalStatuses,
-  familyBackgrounds,
-  muslimTypes,
   occupationsList,
-  religiousEducationQualities,
-  spouseSpecialCatagories,
-  spouseLocationOptions,
+  religiousEducation,
+  religiousLifestyle,
   secondMarriageOptions,
+  skinTones,
+  spouseLocationOptions,
+  spouseSpecialCatagories,
 } from "@/lib/consts";
 import {
+  BiodataFormData,
   BiodataFormDataProps,
   SpousePreferenceInfoFormData,
 } from "@/lib/types";
 import { spousePreferenceInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 
 export default function SpousePreferenceInfo({
   biodataFormData,
@@ -47,8 +49,6 @@ export default function SpousePreferenceInfo({
   currentStep,
   setCurrentStep,
 }: BiodataFormDataProps) {
-  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
-
   const form = useForm<SpousePreferenceInfoFormData>({
     resolver: zodResolver(spousePreferenceInfoFormData),
     defaultValues: {
@@ -72,44 +72,43 @@ export default function SpousePreferenceInfo({
         biodataFormData?.spousePreferenceInfoFormData?.occupation || [],
       familyBackground:
         biodataFormData?.spousePreferenceInfoFormData?.familyBackground || [],
-      secondMarrige:
-        biodataFormData?.spousePreferenceInfoFormData?.secondMarrige || "",
+      secondMarriage:
+        biodataFormData?.spousePreferenceInfoFormData?.secondMarriage || "",
       location: biodataFormData?.spousePreferenceInfoFormData?.location || "",
       qualities: biodataFormData?.spousePreferenceInfoFormData?.qualities || "",
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
-      }
-      setBiodataFormData({
-        ...biodataFormData,
-        spousePreferenceInfoFormData: { ...values },
-      });
-    });
-    return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+  const spouseSpecialCatagoryOptions = spouseSpecialCatagories.filter(
+    (x) =>
+      x.for === biodataFormData?.primaryInfoFormData?.biodataType ||
+      x.for === "both"
+  );
 
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.spousePreferenceInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
       handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(
+          form.formState.errors
+        )[0] as keyof SpousePreferenceInfoFormData
+      );
     }
   };
-
-  const spouseSpecialCatagoryOptions = spouseSpecialCatagories.filter((x) =>
-    x.for.includes(biodataFormData?.primaryInfoFormData?.biodataType)
-  );
-
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
       <div className="text-3xl text-center text-black">
@@ -182,12 +181,12 @@ export default function SpousePreferenceInfo({
               <FormItem>
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
-                    কাঙ্খিত উচ্চতা:
+                    উচ্চতা:
                   </FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
-                        <SelectValue placeholder="কাঙ্খিত উচ্চতা" />
+                        <SelectValue placeholder="উচ্চতা" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
                         {heights.map((x) => (
@@ -238,7 +237,7 @@ export default function SpousePreferenceInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {religiousEducationQualities.map((x) => (
+                      {religiousEducation.map((x) => (
                         <div
                           key={x.id}
                           className="w-1/3 flex items-center space-x-2 mb-4"
@@ -272,7 +271,7 @@ export default function SpousePreferenceInfo({
               <FormItem>
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
-                    কাঙ্খিত ঠিকানা:
+                    ঠিকানা:
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -371,7 +370,7 @@ export default function SpousePreferenceInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {muslimTypes.map((x) => (
+                      {religiousLifestyle.map((x) => (
                         <div
                           key={x.id}
                           className="w-1/3 flex items-center space-x-2 mb-4"
@@ -471,10 +470,10 @@ export default function SpousePreferenceInfo({
               </FormItem>
             )}
           />
-          {biodataFormData?.primaryInfoFormData?.biodataType === "2" && (
+          {biodataFormData?.primaryInfoFormData?.biodataType === "GROOM" && (
             <FormField
               control={form.control}
-              name="secondMarrige"
+              name="secondMarriage"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex flex-col space-y-2">
@@ -578,7 +577,7 @@ export default function SpousePreferenceInfo({
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
         >
-          Next
+          Save & Next
         </Button>
       </div>
     </div>

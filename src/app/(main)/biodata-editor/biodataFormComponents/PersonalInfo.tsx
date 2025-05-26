@@ -1,13 +1,7 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/PersonalInfo.tsx
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { BiodataFormDataProps, PersonalInfoFormData } from "@/lib/types";
-import { personalInfoFormData } from "@/lib/validations";
 import {
   Form,
   FormControl,
@@ -16,7 +10,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { characteristics, specialCatagories } from "@/lib/consts";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  PersonalInfoFormData,
+} from "@/lib/types";
+import { personalInfoFormData } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function PersonalInfo({
   biodataFormData,
@@ -44,39 +50,38 @@ export default function PersonalInfo({
       lgbtqOpinion: biodataFormData?.personalInfoFormData?.lgbtqOpinion || "",
       specialConditions:
         biodataFormData?.personalInfoFormData?.specialConditions || [],
+      aboutYourself: biodataFormData?.personalInfoFormData?.aboutYourself || "",
     },
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
-      }
-      setBiodataFormData({
-        ...biodataFormData,
-        personalInfoFormData: { ...values },
-      });
-    });
-    return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+  const specialCatagoryOptions = specialCatagories.filter(
+    (x) =>
+      x.for === biodataFormData?.primaryInfoFormData?.biodataType ||
+      x.for === "both"
+  );
 
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.personalInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
       handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof PersonalInfoFormData
+      );
     }
   };
-
-  const specialCatagoryOptions = specialCatagories.filter((x) =>
-    x.for.includes(biodataFormData?.primaryInfoFormData?.biodataType)
-  );
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
@@ -279,6 +284,31 @@ export default function PersonalInfo({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="aboutYourself"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col space-y-2">
+                  <FormLabel className="text-md space-y-1 leading-4.5">
+                    <div>নিজের মতো করে নিজের সম্পর্কে কিছু লিখুন:</div>
+                    <div className="text-xs">
+                      (আপনার স্বভাব চরিত্র, ভবিষ্যত পরিকল্পনা, শখ-আগ্রহ ইত্যাদি
+                      সম্পর্কে লিখতে পারেন।)
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="নিজের সম্পর্কে লিখুন"
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </form>
       </Form>
       <div className="max-w-4xl w-full space-x-2 flex justify-center">
@@ -292,7 +322,7 @@ export default function PersonalInfo({
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
         >
-          Next
+          Save & Next
         </Button>
       </div>
     </div>

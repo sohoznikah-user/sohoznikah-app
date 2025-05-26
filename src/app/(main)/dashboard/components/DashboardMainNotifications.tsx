@@ -1,3 +1,5 @@
+// File: src/app/(main)/dashboard/DashboardMainNotifications.tsx
+
 export default function DashboardMainNotifications() {
   const notiication = [
     {

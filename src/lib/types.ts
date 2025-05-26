@@ -1,21 +1,21 @@
+import { BiodataFormStep } from "@/app/(main)/biodata-editor/steps";
 import { z } from "zod";
 import {
-  biodataFormData,
-  firstWordsFormData,
-  primaryInfoFormData,
-  generalInfoFormData,
   addressInfoFormData,
+  biodataFormData,
   educationInfoFormData,
-  occupationInfoFormData,
   familyInfoFormData,
-  religiousInfoFormData,
-  personalInfoFormData,
-  marriageInfoFormData,
-  spousePreferenceInfoFormData,
-  profilePicFormData,
   finalWordsFormData,
+  firstWordsFormData,
+  generalInfoFormData,
+  marriageInfoFormData,
+  occupationInfoFormData,
+  personalInfoFormData,
+  primaryInfoFormData,
+  profilePicFormData,
+  religiousInfoFormData,
+  spousePreferenceInfoFormData,
 } from "./validations";
-import { BiodataFormStep } from "@/app/(main)/biodata-editor/steps";
 
 export type FirstWordsFormData = z.infer<typeof firstWordsFormData>;
 export type PrimaryInfoFormData = z.infer<typeof primaryInfoFormData>;

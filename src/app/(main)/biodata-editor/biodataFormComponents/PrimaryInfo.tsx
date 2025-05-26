@@ -1,12 +1,7 @@
+// File: src/app/(main)/biodata-editor/biodataFormComponents/PrimaryInfo.tsx
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -15,22 +10,38 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { biodataTypes } from "@/lib/consts";
-import { BiodataFormDataProps, PrimaryInfoFormData } from "@/lib/types";
+import {
+  BiodataFormData,
+  BiodataFormDataProps,
+  PrimaryInfoFormData,
+} from "@/lib/types";
 import { primaryInfoFormData } from "@/lib/validations";
-import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 export default function PrimaryInfo({
   biodataFormData,
-  setBiodataFormData,
   handleSave,
   currentStep,
   setCurrentStep,
+  setBiodataFormData,
 }: BiodataFormDataProps) {
-  const [submittedOnce, setSubmittedOnce] = useState<boolean>(false);
+  const defaultGuardianContacts = [
+    { relation: "", fullName: "", phoneNumber: "" },
+    { relation: "", fullName: "", phoneNumber: "" },
+  ];
 
   const form = useForm<PrimaryInfoFormData>({
     resolver: zodResolver(primaryInfoFormData),
@@ -43,14 +54,16 @@ export default function PrimaryInfo({
       email: biodataFormData?.primaryInfoFormData?.email || "",
       phoneNumber: biodataFormData?.primaryInfoFormData?.phoneNumber || "",
       guardianContacts:
-        biodataFormData?.primaryInfoFormData?.guardianContacts?.length > 0
-          ? biodataFormData?.primaryInfoFormData?.guardianContacts.map((x) => {
-              return {
-                relation: x.relation,
-                fullName: x.fullName,
-                phoneNumber: x.phoneNumber,
-              };
-            })
+        Array.isArray(biodataFormData?.primaryInfoFormData?.guardianContacts) &&
+        biodataFormData.primaryInfoFormData.guardianContacts.length >= 2
+          ? // Create a deep copy to avoid immutability issues
+            biodataFormData.primaryInfoFormData.guardianContacts.map(
+              (contact) => ({
+                relation: contact.relation || "",
+                fullName: contact.fullName || "",
+                phoneNumber: contact.phoneNumber || "",
+              })
+            )
           : [
               { relation: "", fullName: "", phoneNumber: "" },
               { relation: "", fullName: "", phoneNumber: "" },
@@ -58,35 +71,80 @@ export default function PrimaryInfo({
     },
   });
 
+  // Reset form when biodataFormData changes
   useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      if (submittedOnce) {
-        await form.trigger();
+    const guardianContacts =
+      Array.isArray(biodataFormData?.primaryInfoFormData?.guardianContacts) &&
+      biodataFormData.primaryInfoFormData.guardianContacts.length >= 2
+        ? biodataFormData.primaryInfoFormData.guardianContacts.map(
+            (contact) => ({
+              relation: contact.relation || "",
+              fullName: contact.fullName || "",
+              phoneNumber: contact.phoneNumber || "",
+            })
+          )
+        : [
+            { relation: "", fullName: "", phoneNumber: "" },
+            { relation: "", fullName: "", phoneNumber: "" },
+          ];
+
+    form.reset(
+      {
+        biodataType: biodataFormData?.primaryInfoFormData?.biodataType || "",
+        biodataFor: biodataFormData?.primaryInfoFormData?.biodataFor || "",
+        fullName: biodataFormData?.primaryInfoFormData?.fullName || "",
+        fatherName: biodataFormData?.primaryInfoFormData?.fatherName || "",
+        motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
+        email: biodataFormData?.primaryInfoFormData?.email || "",
+        phoneNumber: biodataFormData?.primaryInfoFormData?.phoneNumber || "",
+        guardianContacts,
+      },
+      {
+        keepDefaultValues: true,
       }
-      setBiodataFormData({
-        ...biodataFormData,
-        primaryInfoFormData: { ...values },
-      });
-    });
-    return unsubscribe;
-  }, [
-    submittedOnce,
-    setSubmittedOnce,
-    form,
-    biodataFormData,
-    setBiodataFormData,
-  ]);
+    );
+  }, [biodataFormData, form]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "guardianContacts",
   });
 
+  const handleAppend = () => {
+    append({ relation: "", fullName: "", phoneNumber: "" });
+  };
+
+  const handleRemove = (index: number) => {
+    if (fields.length > 2) {
+      remove(index);
+    } else {
+      form.setError(`guardianContacts`, {
+        type: "manual",
+        message: "কমপক্ষে ২ জন অভিভাবকের তথ্য প্রয়োজন।",
+      });
+    }
+  };
+
+  // Sync form data to Redux in real-time
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const currentValues = biodataFormData?.primaryInfoFormData;
+      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
+        setBiodataFormData(values as BiodataFormData);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setBiodataFormData, biodataFormData]);
+
+  // Handle next button click
   const handleNextClick = async () => {
-    setSubmittedOnce(true);
     const isValid = await form.trigger();
     if (isValid) {
       handleSave();
+    } else {
+      form.setFocus(
+        Object.keys(form.formState.errors)[0] as keyof PrimaryInfoFormData
+      );
     }
   };
 
@@ -106,7 +164,7 @@ export default function PrimaryInfo({
                   </FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
                         <SelectValue placeholder="বায়োডাটার ধরন" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
@@ -123,7 +181,6 @@ export default function PrimaryInfo({
                     </Select>
                   </FormControl>
                 </div>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -134,19 +191,42 @@ export default function PrimaryInfo({
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-col space-y-2">
-                  <FormLabel className="text-md space-y-1 leading-4.5">
-                    <div>বায়োডাটা কার জন্য তৈরী করছেন?</div>
-                    <div className="text-xs">
-                      (যেমনঃ নিজের জন্য/বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য
-                      ইত্যাদি)
-                    </div>
+                  <FormLabel className="text-lg font-medium text-[#005889]">
+                    বায়োডাটা কার জন্য তৈরী করছেন?
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="নিজের জন্য"
-                    />
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value="self"
+                          id="self"
+                          className="h-5 w-5 border-2 border-[#005889] text-[#005889] focus:ring-[#005889]"
+                        />
+                        <label
+                          htmlFor="self"
+                          className="text-xs text-[#005889]"
+                        >
+                          নিজের জন্য
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value="other"
+                          id="other"
+                          className="h-5 w-5 border-2 border-[#005889] text-[#005889] focus:ring-[#005889]"
+                        />
+                        <label
+                          htmlFor="other"
+                          className="text-xs text-[#005889]"
+                        >
+                          বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য
+                        </label>
+                      </div>
+                    </RadioGroup>
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -244,6 +324,7 @@ export default function PrimaryInfo({
                   <FormControl>
                     <Input
                       {...field}
+                      type="email"
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                       placeholder="ইমেইল আইডি"
                     />
@@ -269,6 +350,7 @@ export default function PrimaryInfo({
                   <FormControl>
                     <Input
                       {...field}
+                      type="tel"
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                       placeholder="মোবাইল নম্বর"
                     />
@@ -283,13 +365,16 @@ export default function PrimaryInfo({
               <div className="text-md space-y-1 leading-4.5">
                 <div>পাত্র/পাত্রীর অভিভাবকের মোবাইল নম্বর:</div>
                 <div className="text-xs">
-                  <div>কমপক্ষে ২ টি সচল নম্বর প্রদান করতে হবে।</div>
+                  <div>
+                    কমপক্ষে ২ টি সচল নম্বর প্রদান করতে হবে। কেউ আপনার বায়োডাটার
+                    যোগাযোগ তথ্য কিনলে তাদেরকে এই তথ্য প্রদান করা হবে।
+                  </div>
                 </div>
               </div>
               <Button
                 type="button"
                 className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F] flex items-center space-x-2"
-                onClick={() => append({ fullName: "", phoneNumber: "" })}
+                onClick={handleAppend}
               >
                 <Plus size={20} /> <span>নতুন নম্বর যোগ করুন</span>
               </Button>
@@ -303,15 +388,13 @@ export default function PrimaryInfo({
                     name={`guardianContacts.${index}.relation`}
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <div className="flex items-center space-x-2">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                              placeholder="সম্পর্ক"
-                            />
-                          </FormControl>
-                        </div>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                            placeholder="সম্পর্ক (যেমন: বাবা, মা)"
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -321,15 +404,13 @@ export default function PrimaryInfo({
                     name={`guardianContacts.${index}.fullName`}
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <div className="flex items-center space-x-2">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                              placeholder="অভিভাবকের নাম"
-                            />
-                          </FormControl>
-                        </div>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                            placeholder="অভিভাবকের নাম"
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -339,25 +420,23 @@ export default function PrimaryInfo({
                     name={`guardianContacts.${index}.phoneNumber`}
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <div className="flex items-center space-x-2">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                              placeholder="অভিভাবকের মোবাইল নম্বর"
-                            />
-                          </FormControl>
-                        </div>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="tel"
+                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                            placeholder="অভিভাবকের মোবাইল নম্বর"
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  {/* Remove button (except for the first two fields) */}
                   {fields.length > 2 && (
                     <Button
                       type="button"
                       className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F] p-2"
-                      onClick={() => remove(index)}
+                      onClick={() => handleRemove(index)}
                     >
                       <Minus size={20} />
                     </Button>
@@ -365,21 +444,29 @@ export default function PrimaryInfo({
                 </div>
               ))}
             </div>
+            {form.formState.errors.guardianContacts && (
+              <p className="text-red-500 text-sm">
+                {form.formState.errors.guardianContacts.message}
+              </p>
+            )}
           </div>
         </form>
       </Form>
+
       <div className="max-w-4xl w-full space-x-2 flex justify-center">
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={() => setCurrentStep(currentStep.prev)}
+          disabled={!currentStep.prev}
         >
           Previous
         </Button>
         <Button
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
+          disabled={!form.formState.isValid}
         >
-          Next
+          Save & Next
         </Button>
       </div>
     </div>

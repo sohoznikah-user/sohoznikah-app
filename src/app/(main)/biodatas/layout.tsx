@@ -1,5 +1,4 @@
-import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
+// File: src/app/(main)/biodatas/layout.tsx
 import { ReactNode } from "react";
 
 export default function MainLayout({

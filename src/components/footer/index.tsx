@@ -1,7 +1,9 @@
-import { Facebook, Instagram, Youtube } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
+// File: src/components/footer/index.tsx
+
 import logo from "@/assets/images/logo-white.svg";
+import { Facebook, Instagram, Youtube } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export function Footer() {
   return (
