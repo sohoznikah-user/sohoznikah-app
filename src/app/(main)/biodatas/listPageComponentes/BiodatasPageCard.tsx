@@ -17,6 +17,7 @@ import {
 } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { getDistrictTitle, getTitleById } from "@/utils/getBanglaTitle";
+import { format } from "date-fns";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -27,7 +28,7 @@ export interface BiodatasPageCardProps {
   id: number;
   name: string;
   code: number;
-  age: number;
+  birthYear: string | Date;
   height: number;
   permanentAddress: string;
   occupation: string;
@@ -37,7 +38,7 @@ export interface BiodatasPageCardProps {
 export default function BioCard({
   id,
   code,
-  age,
+  birthYear,
   height,
   occupation,
   maritalStatus,
@@ -145,7 +146,7 @@ export default function BioCard({
           </div>
           <div className="flex justify-between">
             <span>জন্মসন:</span>
-            <span>{age}</span>
+            <span>{format(new Date(birthYear), "yyyy")}</span>
           </div>
           <div className="flex justify-between">
             <span>উচ্চতা:</span>
@@ -157,7 +158,10 @@ export default function BioCard({
           </div>
           <div className="flex justify-between">
             <span>পেশা:</span>
-            <span>{getTitleById(occupationsList, occupation)}</span>
+            <span>
+              {getTitleById(occupationsList, occupation.slice(0, 2))}
+              {occupation.length > 2 ? "..." : ""}{" "}
+            </span>
           </div>
         </div>
       </CardContent>

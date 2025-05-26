@@ -82,13 +82,19 @@ export default function AddressInfo({
       biodataFormData?.addressInfoFormData?.addresses
     );
 
-    // Find the grown_up address, if it exists
-    const grownUpAddress = addresses.find((addr) => addr.type === "grown_up");
-    if (grownUpAddress) {
-      form.setValue("addresses.0.detail", grownUpAddress.detail);
-    }
+    const currentValues = form.getValues("addresses");
 
-    form.reset({ addresses });
+    // Only reset if values actually changed (to prevent wiping input)
+    const isDifferent =
+      JSON.stringify(addresses) !== JSON.stringify(currentValues);
+    if (isDifferent) {
+      form.reset({ addresses });
+
+      const grownUpAddress = addresses.find((addr) => addr.type === "grown_up");
+      if (grownUpAddress) {
+        form.setValue("addresses.0.detail", grownUpAddress.detail);
+      }
+    }
   }, [biodataFormData?.addressInfoFormData?.addresses, form]);
 
   // Watch addresses.0.detail and append/update grown_up address

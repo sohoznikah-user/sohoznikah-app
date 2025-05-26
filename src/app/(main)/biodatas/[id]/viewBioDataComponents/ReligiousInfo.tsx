@@ -7,16 +7,18 @@ import {
   religiousLifestyle,
   yesNoOptions,
 } from "@/lib/consts";
-import { ReligiousInfoFormData } from "@/lib/types";
+import { PrimaryInfoFormData, ReligiousInfoFormData } from "@/lib/types";
 import { getTitleById } from "@/utils/getBanglaTitle";
 import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 
 export default function ReligiousInfo({
   biodata,
   religiousInfoFormData,
+  primaryInfoFormData,
 }: {
   biodata?: IBiodata;
   religiousInfoFormData: ReligiousInfoFormData;
+  primaryInfoFormData: PrimaryInfoFormData;
 }) {
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
@@ -122,6 +124,22 @@ export default function ReligiousInfo({
           </div>
         )}
 
+        {religiousInfoFormData?.modestDressing && (
+          <div className="flex items-center space-x-2">
+            <div className="w-1/2">
+              {primaryInfoFormData?.biodataType === "GROOM"
+                ? "টাখনুর উপরে কাপড় পরেন কিনা?"
+                : "আপনি কি নিকাব সহ পর্দা করেন?"}
+            </div>
+            <div className="w-1/2 pl-2 border-l border-gray-200">
+              {getTitleById(
+                yesNoOptions,
+                religiousInfoFormData?.modestDressing
+              )}
+            </div>
+          </div>
+        )}
+
         {religiousInfoFormData?.beliefAboutPirMurshidAndMazar && (
           <div className="flex items-center space-x-2">
             <div className="w-1/2">
@@ -140,29 +158,6 @@ export default function ReligiousInfo({
             </div>
             <div className="w-1/2 pl-2 border-l border-gray-200">
               {religiousInfoFormData?.practicingSince}
-            </div>
-          </div>
-        )}
-
-        {/* Practicing Male */}
-        {religiousInfoFormData?.modestDressing && (
-          <div className="flex items-center space-x-2">
-            <div className="w-1/2">টাখনুর উপরে কাপড় পরেন কিনা?</div>
-            <div className="w-1/2 pl-2 border-l border-gray-200">
-              {getTitleById(
-                yesNoOptions,
-                religiousInfoFormData?.modestDressing
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Practicing Female */}
-        {religiousInfoFormData?.veilWithNiqab && (
-          <div className="flex items-center space-x-2">
-            <div className="w-1/2">আপনি কি নিকাব সহ পর্দা করেন?</div>
-            <div className="w-1/2 pl-2 border-l border-gray-200">
-              {getTitleById(yesNoOptions, religiousInfoFormData?.veilWithNiqab)}
             </div>
           </div>
         )}

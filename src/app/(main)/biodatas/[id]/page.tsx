@@ -159,6 +159,9 @@ export default function BiodataPage({
               religiousInfoFormData={
                 biodata?.biodataFormData?.religiousInfoFormData
               }
+              primaryInfoFormData={
+                biodata?.biodataFormData?.primaryInfoFormData
+              }
             />
           </div>
           <div ref={personalRef}>

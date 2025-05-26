@@ -228,6 +228,7 @@ const BiodataPage = () => {
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
+  console.log(biodatas);
   return (
     <div className="flex justify-between  gap-5">
       <BiodatasPageFilters

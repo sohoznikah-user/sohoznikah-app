@@ -326,16 +326,16 @@ export const spousePreferenceInfoFormData = z.object({
   educationalQualification: requiredString.min(1, {
     message: "শিক্ষাগত যোগ্যতা নির্বাচন করা আবশ্যক।",
   }),
+  address: requiredString.min(1, {
+    message: "ঠিকানা প্রদান করা আবশ্যক।",
+  }),
   religiousEducationalQualification: z.array(optionalString).optional(),
-  address: optionalString,
   maritalStatus: z.array(optionalString).optional(),
   specialCategory: z.array(optionalString).optional(),
   religiousType: z.array(optionalString).optional(),
   occupation: z.array(optionalString).optional(),
   familyBackground: z.array(optionalString).optional(),
-  secondMarriage: requiredString.min(1, {
-    message: "দ্বিতীয় বিয়ে সম্পর্কে নির্বাচন করা আবশ্যক।",
-  }),
+  secondMarriage: optionalString,
   location: requiredString.min(1, {
     message: "অবস্থান নির্বাচন করা আবশ্যক।",
   }),

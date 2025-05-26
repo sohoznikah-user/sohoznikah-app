@@ -323,9 +323,7 @@ export default function ReligiousInfo({
               </FormItem>
             )}
           />
-          {["trying-to-practice", "fully-practicing"].includes(
-            form.getValues().type
-          ) && (
+          {["practicing", "devout"].includes(form.getValues().type) && (
             <FormField
               control={form.control}
               name="hasQazaPrayers"
@@ -396,9 +394,7 @@ export default function ReligiousInfo({
               </FormItem>
             )}
           />
-          {["trying-to-practice", "fully-practicing"].includes(
-            form.getValues().type
-          ) && (
+          {["practicing", "devout"].includes(form.getValues().type) && (
             <FormField
               control={form.control}
               name="avoidsHaramIncome"
@@ -436,7 +432,7 @@ export default function ReligiousInfo({
               )}
             />
           )}
-          {form.getValues().type === "fully-practicing" && (
+          {form.getValues().type === "devout" && (
             <FormField
               control={form.control}
               name="modestDressing"
@@ -444,7 +440,8 @@ export default function ReligiousInfo({
                 <FormItem>
                   <div className="flex flex-col space-y-2">
                     <FormLabel className="text-md space-y-1 leading-4.5">
-                      {biodataFormData?.primaryInfoFormData?.biodataType === "1"
+                      {biodataFormData?.primaryInfoFormData?.biodataType ===
+                      "GROOM"
                         ? "টাখনুর উপরে কাপড় পরেন কিনা?"
                         : "আপনি কি নিকাব সহ পর্দা করেন?"}
                     </FormLabel>
@@ -476,7 +473,7 @@ export default function ReligiousInfo({
               )}
             />
           )}
-          {form.getValues().type === "fully-practicing" && (
+          {form.getValues().type === "devout" && (
             <>
               <FormField
                 control={form.control}

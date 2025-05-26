@@ -69,8 +69,19 @@ export default function AddressInfo({
         </div>
 
         <div className="flex items-center space-x-2">
-          <div className="w-1/2">কোথায় বেড়ে উঠেছেন?</div>
-          <div className="w-1/2 pl-2 border-l border-gray-200">নিজের জন্য</div>
+          <div className="w-1/2">কোথায় বেড়ে উঠেছেন?</div>
+          <div className="w-1/2 pl-2 border-l border-gray-200">
+            {addressInfoFormData?.addresses?.map(
+              (addr, index) =>
+                addr?.type === "grown_up" && (
+                  <div key={index}>
+                    <p className="flex justify-start items-center gap-3">
+                      {addr?.detail}
+                    </p>
+                  </div>
+                )
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>
