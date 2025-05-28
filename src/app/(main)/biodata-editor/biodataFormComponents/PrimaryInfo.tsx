@@ -1,4 +1,3 @@
-// File: src/app/(main)/biodata-editor/biodataFormComponents/PrimaryInfo.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -27,8 +26,9 @@ import {
 } from "@/lib/types";
 import { primaryInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { debounce } from "lodash";
 import { Minus, Plus } from "lucide-react";
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export default function PrimaryInfo({
@@ -43,11 +43,13 @@ export default function PrimaryInfo({
     { relation: "", fullName: "", phoneNumber: "" },
   ];
 
+  // Set robust default values
   const form = useForm<PrimaryInfoFormData>({
     resolver: zodResolver(primaryInfoFormData),
     defaultValues: {
-      biodataType: biodataFormData?.primaryInfoFormData?.biodataType || "",
-      biodataFor: biodataFormData?.primaryInfoFormData?.biodataFor || "",
+      biodataType:
+        biodataFormData?.primaryInfoFormData?.biodataType || biodataTypes[0].id, // Default to first biodataType
+      biodataFor: biodataFormData?.primaryInfoFormData?.biodataFor || "self",
       fullName: biodataFormData?.primaryInfoFormData?.fullName || "",
       fatherName: biodataFormData?.primaryInfoFormData?.fatherName || "",
       motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
@@ -56,97 +58,120 @@ export default function PrimaryInfo({
       guardianContacts:
         Array.isArray(biodataFormData?.primaryInfoFormData?.guardianContacts) &&
         biodataFormData.primaryInfoFormData.guardianContacts.length >= 2
-          ? // Create a deep copy to avoid immutability issues
-            biodataFormData.primaryInfoFormData.guardianContacts.map(
+          ? biodataFormData.primaryInfoFormData.guardianContacts.map(
               (contact) => ({
                 relation: contact.relation || "",
                 fullName: contact.fullName || "",
                 phoneNumber: contact.phoneNumber || "",
               })
             )
-          : [
-              { relation: "", fullName: "", phoneNumber: "" },
-              { relation: "", fullName: "", phoneNumber: "" },
-            ],
+          : defaultGuardianContacts,
     },
   });
 
-  // Reset form when biodataFormData changes
-  useEffect(() => {
-    const guardianContacts =
-      Array.isArray(biodataFormData?.primaryInfoFormData?.guardianContacts) &&
-      biodataFormData.primaryInfoFormData.guardianContacts.length >= 2
-        ? biodataFormData.primaryInfoFormData.guardianContacts.map(
-            (contact) => ({
-              relation: contact.relation || "",
-              fullName: contact.fullName || "",
-              phoneNumber: contact.phoneNumber || "",
-            })
-          )
-        : [
-            { relation: "", fullName: "", phoneNumber: "" },
-            { relation: "", fullName: "", phoneNumber: "" },
-          ];
+  // Memoize guardianContacts
+  const guardianContacts = useMemo(() => {
+    return Array.isArray(
+      biodataFormData?.primaryInfoFormData?.guardianContacts
+    ) && biodataFormData.primaryInfoFormData.guardianContacts.length >= 2
+      ? biodataFormData.primaryInfoFormData.guardianContacts.map((contact) => ({
+          relation: contact.relation || "",
+          fullName: contact.fullName || "",
+          phoneNumber: contact.phoneNumber || "",
+        }))
+      : defaultGuardianContacts;
+  }, [biodataFormData?.primaryInfoFormData?.guardianContacts]);
 
-    form.reset(
-      {
-        biodataType: biodataFormData?.primaryInfoFormData?.biodataType || "",
-        biodataFor: biodataFormData?.primaryInfoFormData?.biodataFor || "",
-        fullName: biodataFormData?.primaryInfoFormData?.fullName || "",
-        fatherName: biodataFormData?.primaryInfoFormData?.fatherName || "",
-        motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
-        email: biodataFormData?.primaryInfoFormData?.email || "",
-        phoneNumber: biodataFormData?.primaryInfoFormData?.phoneNumber || "",
-        guardianContacts,
-      },
-      {
-        keepDefaultValues: true,
-      }
-    );
-  }, [biodataFormData, form]);
+  // Prevent form reset from overwriting user input
+  useEffect(() => {
+    const currentFormValues = form.getValues();
+    // Only reset if biodataFormData has meaningful changes
+    if (
+      JSON.stringify(currentFormValues) !==
+      JSON.stringify(biodataFormData?.primaryInfoFormData)
+    ) {
+      form.reset(
+        {
+          biodataType:
+            biodataFormData?.primaryInfoFormData?.biodataType ||
+            biodataTypes[0].id,
+          biodataFor:
+            biodataFormData?.primaryInfoFormData?.biodataFor || "self",
+          fullName: biodataFormData?.primaryInfoFormData?.fullName || "",
+          fatherName: biodataFormData?.primaryInfoFormData?.fatherName || "",
+          motherName: biodataFormData?.primaryInfoFormData?.motherName || "",
+          email: biodataFormData?.primaryInfoFormData?.email || "",
+          phoneNumber: biodataFormData?.primaryInfoFormData?.phoneNumber || "",
+          guardianContacts,
+        },
+        {
+          keepValues: true, // Preserve user input
+          keepDirtyValues: true, // Preserve changes made by user
+        }
+      );
+    }
+  }, [biodataFormData, form, guardianContacts]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "guardianContacts",
   });
 
-  const handleAppend = () => {
+  const handleAppend = useCallback(() => {
     append({ relation: "", fullName: "", phoneNumber: "" });
-  };
+  }, [append]);
 
-  const handleRemove = (index: number) => {
-    if (fields.length > 2) {
-      remove(index);
-    } else {
-      form.setError(`guardianContacts`, {
-        type: "manual",
-        message: "কমপক্ষে ২ জন অভিভাবকের তথ্য প্রয়োজন।",
-      });
-    }
-  };
+  const handleRemove = useCallback(
+    (index: number) => {
+      if (fields.length > 2) {
+        remove(index);
+      } else {
+        form.setError(`guardianContacts`, {
+          type: "manual",
+          message: "কমপক্ষে ২ জন অভিভাবকের তথ্য প্রয়োজন।",
+        });
+      }
+    },
+    [fields.length, form, remove]
+  );
 
-  // Sync form data to Redux in real-time
+  // Debounced Redux sync
+  const debouncedSetBiodataFormData = useCallback(
+    debounce((values: PrimaryInfoFormData) => {
+      setBiodataFormData(values as BiodataFormData);
+    }, 300),
+    [setBiodataFormData]
+  );
+
+  // Sync form data to Redux only when necessary
   useEffect(() => {
-    const subscription = form.watch((values) => {
-      const currentValues = biodataFormData?.primaryInfoFormData;
-      if (JSON.stringify(values) !== JSON.stringify(currentValues)) {
-        setBiodataFormData(values as BiodataFormData);
+    const subscription = form.watch((values, { name }) => {
+      // Only sync if the changed field is not being reset by useEffect
+      if (name) {
+        debouncedSetBiodataFormData(values as PrimaryInfoFormData);
       }
     });
-    return () => subscription.unsubscribe();
-  }, [form, setBiodataFormData, biodataFormData]);
+    return () => {
+      subscription.unsubscribe();
+      debouncedSetBiodataFormData.cancel();
+    };
+  }, [form, debouncedSetBiodataFormData]);
 
   // Handle next button click
-  const handleNextClick = async () => {
+  const handleNextClick = useCallback(async () => {
     const isValid = await form.trigger();
     if (isValid) {
+      const values = form.getValues();
+      console.log("Form values before save:", values); // Debug form values
       handleSave();
     } else {
-      form.setFocus(
-        Object.keys(form.formState.errors)[0] as keyof PrimaryInfoFormData
-      );
+      const firstErrorField = Object.keys(
+        form.formState.errors
+      )[0] as keyof PrimaryInfoFormData;
+      console.log("Form errors:", form.formState.errors); // Debug errors
+      form.setFocus(firstErrorField);
     }
-  };
+  }, [form, handleSave]);
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">

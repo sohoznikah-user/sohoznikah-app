@@ -169,21 +169,21 @@ export const education = [
 ];
 
 export const religiousEducation = [
-  { id: "hafiz_male", title: "হাফেজ", for: "BRIDE" },
-  { id: "hafiza_female", title: "হাফেজা", for: "GROOM" },
-  { id: "maulana_male", title: "মাওলানা", for: "BRIDE" },
-  { id: "alema_female", title: "আলেমা", for: "GROOM" },
-  { id: "mufti_male", title: "মুফতি", for: "BRIDE" },
-  { id: "muftia_female", title: "মুফতিয়া", for: "GROOM" },
-  { id: "muhaddis_male", title: "মুহাদ্দিস", for: "BRIDE" },
-  { id: "muhaddisa_female", title: "মুহাদ্দিসা", for: "GROOM" },
+  { id: "hafiz_male", title: "হাফেজ", for: "GROOM" },
+  { id: "hafiza_female", title: "হাফেজা", for: "BRIDE" },
+  { id: "maulana_male", title: "মাওলানা", for: "GROOM" },
+  { id: "alema_female", title: "আলেমা", for: "BRIDE" },
+  { id: "mufti_male", title: "মুফতি", for: "GROOM" },
+  { id: "muftia_female", title: "মুফতিয়া", for: "BRIDE" },
+  { id: "muhaddis_male", title: "মুহাদ্দিস", for: "GROOM" },
+  { id: "muhaddisa_female", title: "মুহাদ্দিসা", for: "BRIDE" },
   { id: "mufassir", title: "মুফাসসির", for: "both" },
   { id: "faqih", title: "ফকিহ", for: "both" },
-  { id: "daee_male", title: "দা'য়ী", for: "BRIDE" },
-  { id: "daiya_female", title: "দাঈয়া", for: "GROOM" },
+  { id: "daee_male", title: "দা'য়ী", for: "GROOM" },
+  { id: "daiya_female", title: "দাঈয়া", for: "BRIDE" },
   { id: "adib", title: "আদিব", for: "both" },
-  { id: "qari_male", title: "ক্বারী", for: "BRIDE" },
-  { id: "qaria_female", title: "ক্বারিয়া", for: "GROOM" },
+  { id: "qari_male", title: "ক্বারী", for: "GROOM" },
+  { id: "qaria_female", title: "ক্বারিয়া", for: "BRIDE" },
   { id: "talib_quran", title: "তালিবে কুরআন", for: "both" },
   { id: "tajwid_student", title: "তাজবীদ শিক্ষার্থী", for: "both" },
   { id: "muallim_talim", title: "মুয়াল্লিমুন ফি তালিম", for: "both" },
@@ -560,4 +560,17 @@ export const visibilityOptions = [
     description:
       "বায়োডাটা গোপন থাকবে। ওয়েবসাইটে দেখা যাবে না, শুধু আপনি যাকে প্রস্তাব পাঠাবেন বা লিংক পাঠাবেন তিনি ছাড়া",
   },
+];
+
+export const tokenOptions = [
+  { id: "1", title: "১", for: "both" },
+  { id: "2", title: "২", for: "both" },
+  { id: "3", title: "৩", for: "both" },
+  { id: "4", title: "৪", for: "both" },
+  { id: "5", title: "৫", for: "both" },
+  { id: "6", title: "৬", for: "both" },
+  { id: "7", title: "৭", for: "both" },
+  { id: "8", title: "৮", for: "both" },
+  { id: "9", title: "৯", for: "both" },
+  { id: "10", title: "১০", for: "both" },
 ];

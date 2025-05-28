@@ -6,6 +6,8 @@ import { logout } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +29,12 @@ export interface MenuItem {
 export function Navbar() {
   const user = useAppSelector((state) => state.auth.user);
   const token = useAppSelector((state) => state.auth.acesstoken);
+  const biodata = useAppSelector((state) => state.biodata.biodata);
+  const biodataFormData = useAppSelector(
+    (state) => state.biodata.biodataFormData
+  );
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const menuItems: MenuItem[] = [
     {
@@ -48,11 +55,11 @@ export function Navbar() {
     },
   ];
 
-  // const user = {
-  //   name: "test",
-  //   profilePicture:
-  //     "http://localhost:3000/_next/static/media/male.b7323272.svg",
-  // };
+  const test = {
+    name: "test",
+    profilePicture:
+      "http://localhost:3000/_next/static/media/male.b7323272.svg",
+  };
 
   return (
     <div className="sticky top-0 flex items-center z-20 justify-center p-4 text-[#1f4f69] bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
@@ -82,29 +89,27 @@ export function Navbar() {
         >
           বায়োডাটা তৈরী করুন
         </Link>
-        {!user && !token ? (
+        {!user && !token && (
           <Link
             href="/login"
             className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all"
           >
             Login
           </Link>
-        ) : (
-          <p
-            onClick={() => dispatch(logout())}
-            className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all cursor-pointer"
-          >
-            Logout
-          </p>
         )}
         {user && token && (
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none">
-              {/* <Avatar>
-                <AvatarImage src={user.profilePicture} alt={user.name} />
-                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+              <Avatar>
+                <AvatarImage
+                  src={biodata?.profilePic}
+                  alt={biodataFormData?.primaryInfoFormData?.fullName}
+                />
+                <AvatarFallback>{test?.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <span className="text-lg text-[#1f4f69]">{user.name}</span> */}
+              <span className="text-lg text-[#1f4f69]">
+                {biodataFormData?.primaryInfoFormData?.fullName || test.name}
+              </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
@@ -112,13 +117,13 @@ export function Navbar() {
             >
               <DropdownMenuItem
                 className="focus:bg-[#E25A6F]"
-                onClick={() => console.log("Profile Clicked")}
+                onClick={() => router.push("/dashboard")}
               >
                 Profile
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="focus:bg-[#E25A6F]"
-                onClick={() => console.log("Logout Clicked")}
+                onClick={() => dispatch(logout())}
               >
                 Logout
               </DropdownMenuItem>

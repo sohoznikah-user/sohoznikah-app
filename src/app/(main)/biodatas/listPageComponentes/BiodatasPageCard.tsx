@@ -9,7 +9,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { heights, maritalStatuses, occupationsList } from "@/lib/consts";
 import {
   useCreateFavouriteMutation,
-  useDeleteFavouriteMutation,
+  useGetFavouriteByIdQuery,
 } from "@/redux/features/admin/favouriteApi";
 import {
   selectCurrentToken,
@@ -49,14 +49,14 @@ export default function BioCard({
   const token = useAppSelector(selectCurrentToken);
   const user = useAppSelector(selectCurrentUser);
 
-  // const { data: favourite } = useGetFavouriteByIdQuery(
-  //   {
-  //     biodataId: id,
-  //   },
-  //   {
-  //     skip: !token || !user,
-  //   }
-  // );
+  const { data: favourite } = useGetFavouriteByIdQuery(
+    {
+      biodataId: id,
+    },
+    {
+      skip: !token || !user,
+    }
+  );
   // const { data: shortlist } = useGetShortlistByIdQuery(
   //   {
   //     biodataId: id,
@@ -67,8 +67,6 @@ export default function BioCard({
   // );
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
-  const [deleteFavourite, { isLoading: isDeleting }] =
-    useDeleteFavouriteMutation();
 
   const handleOnClick = () => {
     router.push(`/biodatas/${id}`);
@@ -78,18 +76,15 @@ export default function BioCard({
       return;
     }
     try {
-      if (type === "add") {
-        const res = await createFavourite({
-          biodataId: id,
-        }).unwrap();
-        if (res?.success) {
+      const res = await createFavourite({
+        biodataId: id,
+      }).unwrap();
+      if (res?.success) {
+        if (res?.statusCode === 201) {
           toast.success(res?.message || "Added to favourite");
           setIsFavourite(true);
-        }
-      } else {
-        const res = await deleteFavourite(id).unwrap();
-        if (res?.success) {
-          toast.success(res?.message || "Removed from favourite");
+        } else if (res?.statusCode === 200) {
+          toast.error(res?.message || "Deleted from favourite");
           setIsFavourite(false);
         }
       }
@@ -146,7 +141,13 @@ export default function BioCard({
           </div>
           <div className="flex justify-between">
             <span>জন্মসন:</span>
-            <span>{format(new Date(birthYear), "yyyy")}</span>
+            <span>
+              {birthYear
+                ? typeof birthYear === "string" && birthYear.length === 4
+                  ? birthYear
+                  : format(new Date(birthYear), "yyyy")
+                : "--"}
+            </span>
           </div>
           <div className="flex justify-between">
             <span>উচ্চতা:</span>
@@ -159,8 +160,14 @@ export default function BioCard({
           <div className="flex justify-between">
             <span>পেশা:</span>
             <span>
-              {getTitleById(occupationsList, occupation.slice(0, 2))}
-              {occupation.length > 2 ? "..." : ""}{" "}
+              {occupation ? (
+                <>
+                  {getTitleById(occupationsList, occupation.slice(0, 2))}
+                  {occupation.length > 2 ? "..." : ""}
+                </>
+              ) : (
+                "--"
+              )}{" "}
             </span>
           </div>
         </div>

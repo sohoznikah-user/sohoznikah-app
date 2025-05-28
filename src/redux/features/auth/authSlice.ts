@@ -4,6 +4,7 @@ import { RootState } from "@/redux/store";
 import { getCookie, removeCookie, setCookie } from "@/utils/cookieHelper";
 import { decodeToken, TUser } from "@/utils/tokenHelper";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { clearBiodataFormData } from "../biodata/biodataSlice";
 
 type TAuthState = {
   user: TUser | null;
@@ -40,6 +41,7 @@ const authSlice = createSlice({
       state.user = null;
       state.acesstoken = null;
       state.refreshtoken = null;
+      clearBiodataFormData();
       removeCookie(authAccessKey); // Remove token from cookies
       removeCookie(authRefreshKey); // Remove token from cookies
     },

@@ -47,7 +47,7 @@ export default function DashboardLeftNav() {
         href={`/dashboard/shortlist`}
         className="p-2 w-full text-center hover:bg-[#eff9ff] hover:text-black"
       >
-        শর্টলিস্টের তালিকা
+        চুড়ান্ত তালিকা
       </Link>
       <Link
         href={`/dashboard/proposal`}
