@@ -18,7 +18,7 @@ export default function DashboardLeftNav() {
         priority
         className="bg-[#77a1b8] p-4 rounded-full"
       />
-      <div className="p-2">
+      <div className="p-2 text-center">
         {biodataFormData?.primaryInfoFormData?.fullName}
       </div>
       <div className="mb-4 p-3 bg-[#c6d8e1] text-black rounded-xl">

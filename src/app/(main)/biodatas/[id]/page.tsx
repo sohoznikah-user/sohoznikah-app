@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
 import { use, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import AddressInfo from "./viewBioDataComponents/AddressInfo";
 import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
 import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
@@ -63,9 +64,19 @@ export default function BiodataPage({
   };
 
   const { id } = use(params);
-  const { data: fetchedBiodata, isLoading } = useGetBiodataByIdQuery(id);
+  const {
+    data: fetchedBiodata,
+    isLoading,
+    isError,
+  } = useGetBiodataByIdQuery(id);
 
   useEffect(() => {
+    if (isLoading) {
+      toast.loading("বায়োডাটা লোড হচ্ছে...");
+    }
+    if (isError) {
+      toast.error("বায়োডাটা লোড করতে সমস্যা হয়েছে");
+    }
     if (fetchedBiodata?.data) {
       const mapped = mapApiToBiodataFormData(fetchedBiodata.data);
       setBiodata(mapped);
@@ -82,6 +93,10 @@ export default function BiodataPage({
 
   if (isLoading) {
     return <Loading />;
+  }
+
+  if (isError) {
+    return <div>Error loading data</div>;
   }
 
   return (

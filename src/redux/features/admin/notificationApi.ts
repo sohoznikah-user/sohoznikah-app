@@ -32,7 +32,7 @@ export const notificationApi = baseApi.injectEndpoints({
     updateNotification: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${NOTIFICATION_URL}/${id}`,
-        method: "PUT",
+        method: "PATCH",
         data: updatedData,
       }),
       invalidatesTags: [tagTypes.notification],

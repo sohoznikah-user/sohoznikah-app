@@ -1,4 +1,4 @@
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 
 interface EditDeleteButtonsProps {
   onEdit?: () => void;
@@ -24,7 +24,7 @@ const EditDeleteButtons: React.FC<EditDeleteButtonsProps> = ({
           className="text-red-400 hover:text-red-700 cursor-pointer"
           onClick={onDelete}
         >
-          <Trash className="size-5" />
+          <Trash2 className="size-5" />
         </button>
       )}
     </div>

@@ -162,7 +162,11 @@ export function ReusableTable<T>({
               table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
-                  className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                  className={
+                    index % 2 === 0
+                      ? "bg-white hover:bg-gradient-to-r hover:from-blue-200 hover:to-pink-300"
+                      : "bg-gradient-to-r from-blue-100 to-pink-100 hover:bg-gradient-to-r hover:from-blue-200 hover:to-pink-300"
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

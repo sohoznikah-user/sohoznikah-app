@@ -181,8 +181,8 @@ const ProposalPage = () => {
             onClick={() => setActiveTab("myRecords")}
             className={`px-6 py-2 rounded-lg font-medium transition ${
               activeTab === "myRecords"
-                ? "bg-gray-300 text-gray-800 z-10"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200 z-0"
+                ? "bg-[#c65c5c] text-white z-10"
+                : "bg-[#d9d9d9] text-[#777] z-0"
             }`}
           >
             প্রস্তাব এসেছে
@@ -191,8 +191,8 @@ const ProposalPage = () => {
             onClick={() => setActiveTab("othersRecords")}
             className={`px-6 py-2 rounded-lg -ml-2 font-medium transition ${
               activeTab === "othersRecords"
-                ? "bg-gray-300 text-gray-800 z-10"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200 z-0"
+                ? "bg-[#c65c5c] text-white z-10"
+                : "bg-[#d9d9d9] text-[#777] z-0"
             }`}
           >
             প্রস্তাব পাঠিয়েছি

@@ -107,9 +107,6 @@ export function Navbar() {
                 />
                 <AvatarFallback>{test?.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <span className="text-lg text-[#1f4f69]">
-                {biodataFormData?.primaryInfoFormData?.fullName || test.name}
-              </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"

@@ -1,10 +1,12 @@
 "use client";
+import { DeleteConfirmationModal } from "@/components/shared/DeleteConfirmationModal";
 import EditDeleteButtons from "@/components/shared/EditDeleteButtons";
+import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
 import {
   useDeleteNotificationMutation,
   useGetAllNotificationsQuery,
-  useGetNotificationByIdQuery,
+  useUpdateNotificationMutation,
 } from "@/redux/features/admin/notificationApi";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector, useDebounced } from "@/redux/hooks";
@@ -14,6 +16,10 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 export default function NotificationsPage() {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [selectedData, setSelectedData] = useState<any | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({});
   const [pagination, setPagination] = useState({
@@ -21,10 +27,10 @@ export default function NotificationsPage() {
     limit: 10,
     total: 0,
   });
+
   const user = useAppSelector(selectCurrentUser);
   const debouncedSearch = useDebounced({ searchQuery: searchTerm, delay: 600 });
 
-  // Query
   const query = useMemo(
     () => ({
       page: pagination.page,
@@ -35,46 +41,58 @@ export default function NotificationsPage() {
     [pagination, debouncedSearch, filters]
   );
 
-  const { data, isLoading } = useGetAllNotificationsQuery(query, {
+  const { data, isLoading, isError } = useGetAllNotificationsQuery(query, {
     refetchOnMountOrArgChange: true,
   });
-  const { data: get } = useGetNotificationByIdQuery(undefined);
+
   const [deleteNotification, { isLoading: isDeleting }] =
     useDeleteNotificationMutation();
 
-  // Handle delete notification
-  const handleDeleteNotification = async (id: string) => {
+  const [viewData, { isLoading: isViewing }] = useUpdateNotificationMutation();
+
+  const handleDeleteNotification = async () => {
+    if (!selectedId) return;
     try {
-      const res = await deleteNotification(id).unwrap();
+      const res = await deleteNotification(selectedId).unwrap();
       if (res.success) {
         toast.success(res.message || "Notification deleted successfully");
       }
     } catch (error) {
-      console.error("Error deleting notification:", error);
-      toast.error(error.data.message || "Failed to delete notification");
+      toast.error(error?.data?.message || "Failed to delete notification");
+    } finally {
+      handleReset();
     }
   };
 
-  // Handle filter change
-  // const handleFilter = (key: string, value: string | undefined) => {
-  //   setFilters((prev) => ({
-  //     ...prev,
-  //     [key]: value,
-  //   }));
-  // };
+  const handleViewNotification = async (id: any) => {
+    if (!id) return;
+    try {
+      const res = await viewData({ id, updatedData: {} }).unwrap();
+      if (res.success) {
+        toast.success("নোটিফিকেশন পড়া হয়েছে");
+      }
+    } catch (error) {
+      toast.error("নোটিফিকেশন পড়া হয়নি");
+    }
+  };
 
-  // ✅ Update total only when data changes
   useEffect(() => {
     if (data?.meta?.total) {
       setPagination((prev) => ({ ...prev, total: data.meta.total }));
     }
   }, [data?.meta?.total]);
 
+  const handleReset = () => {
+    setSelectedData(null);
+    setSelectedId(null);
+    setViewModalOpen(false);
+    setDeleteModalOpen(false);
+    setSearchTerm("");
+    setFilters({});
+  };
+
   const columns: ColumnDef<any>[] = [
-    {
-      accessorKey: "type",
-      header: "টাইপ",
-    },
+    { accessorKey: "type", header: "টাইপ" },
     {
       accessorKey: "message",
       header: "বার্তা",
@@ -84,44 +102,51 @@ export default function NotificationsPage() {
     },
     {
       accessorKey: "isRead",
-      header: "পড়া হয়েছে",
+      header: "পড়া হয়েছে",
       cell: ({ row }) => (row.original.isRead ? "হ্যা" : "না"),
     },
     {
       accessorKey: "createdAt",
       header: "তারিখ",
-      cell: ({ row }) => format(new Date(row.original.createdAt), "PPpp"),
+      cell: ({ row }) => {
+        const date = new Date(row.original.createdAt);
+        const formattedDate = date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return formattedDate;
+      },
     },
     {
       id: "view",
       header: "বায়োডাটা দেখুন",
       cell: ({ row }) => (
-        <div>
-          <button
-            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log(`/dashboard/notification/${row.original.id}`);
-            }}
-          >
-            View
-          </button>
-        </div>
+        <button
+          className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleViewNotification(row?.original?.id);
+            setSelectedData(row.original);
+            setViewModalOpen(true);
+          }}
+        >
+          View
+        </button>
       ),
     },
-    ...(user.role === "SUPER_ADMIN"
-      ? [
-          {
-            accessorKey: "",
-            header: "Action",
-            cell: ({ row }) => (
-              <EditDeleteButtons
-                onDelete={() => handleDeleteNotification(row.original.id)}
-              />
-            ),
-          },
-        ]
-      : []),
+    {
+      id: "actions",
+      header: "Action",
+      cell: ({ row }) => (
+        <EditDeleteButtons
+          onDelete={() => {
+            setSelectedId(row.original.id);
+            setDeleteModalOpen(true);
+          }}
+        />
+      ),
+    },
   ];
 
   return (
@@ -137,30 +162,39 @@ export default function NotificationsPage() {
           pagination={pagination}
           setPagination={setPagination}
           enablePagination
-          // searchable
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
 
-        {/* <ReusableTable
-      data={data?.data}
-      columns={columns}
-      pagination={pagination}
-      setPagination={setPagination}
-      enablePagination
-      searchable
-      searchTerm={searchTerm}
-      onSearchChange={setSearchTerm}
-      filterKey={filters}
-      onFilterChange={(value: string) => handleFilter("category", value)}
-      filterable
-      filterOptions={[
-        { label: "All", value: "all" },
-        { label: "Music", value: "music" },
-        { label: "Tech", value: "tech" },
-        { label: "Art", value: "art" },
-      ]}
-    /> */}
+        <DeleteConfirmationModal
+          open={deleteModalOpen}
+          onClose={() => handleReset()}
+          onDelete={handleDeleteNotification}
+          loading={isDeleting}
+          itemName={`Notification`}
+        />
+
+        <ReusableModal
+          open={viewModalOpen}
+          onClose={() => handleReset()}
+          showFooter={false}
+          title="নোটিফিকেশন বিস্তারিত"
+        >
+          {selectedData && (
+            <div className="space-y-2 flex flex-col gap-2">
+              <p>
+                <strong>Date:</strong>{" "}
+                {format(new Date(selectedData?.createdAt), "PPpp")}
+              </p>
+              <p>
+                <strong>Type:</strong> {selectedData?.type}
+              </p>
+              <p>
+                <strong>Message:</strong> {selectedData?.message}
+              </p>
+            </div>
+          )}
+        </ReusableModal>
       </div>
     </div>
   );
