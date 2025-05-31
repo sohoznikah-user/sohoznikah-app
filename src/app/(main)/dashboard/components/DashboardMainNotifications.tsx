@@ -16,8 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 export default function NotificationsPage() {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [selectedData, setSelectedData] = useState<any | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,8 +84,7 @@ export default function NotificationsPage() {
   const handleReset = () => {
     setSelectedData(null);
     setSelectedId(null);
-    setViewModalOpen(false);
-    setDeleteModalOpen(false);
+    setIsModalOpen(null);
     setSearchTerm("");
     setFilters({});
   };
@@ -128,7 +126,7 @@ export default function NotificationsPage() {
             e.stopPropagation();
             handleViewNotification(row?.original?.id);
             setSelectedData(row.original);
-            setViewModalOpen(true);
+            setIsModalOpen("view");
           }}
         >
           View
@@ -142,7 +140,7 @@ export default function NotificationsPage() {
         <EditDeleteButtons
           onDelete={() => {
             setSelectedId(row.original.id);
-            setDeleteModalOpen(true);
+            setIsModalOpen("delete");
           }}
         />
       ),
@@ -167,18 +165,18 @@ export default function NotificationsPage() {
         />
 
         <DeleteConfirmationModal
-          open={deleteModalOpen}
+          open={isModalOpen === "delete"}
           onClose={() => handleReset()}
           onDelete={handleDeleteNotification}
           loading={isDeleting}
-          itemName={`Notification`}
+          itemName={`নোটিফিকেশন`}
         />
 
         <ReusableModal
-          open={viewModalOpen}
+          open={isModalOpen === "view"}
           onClose={() => handleReset()}
-          showFooter={false}
           title="নোটিফিকেশন বিস্তারিত"
+          hideFooter
         >
           {selectedData && (
             <div className="space-y-2 flex flex-col gap-2">

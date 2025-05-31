@@ -4,11 +4,9 @@ import { Slider } from "@/components/ui/slider";
 import { useUpdateMyBiodataMutation } from "@/redux/features/biodata/biodataApi";
 import { useAppSelector } from "@/redux/hooks";
 import Link from "next/link";
-import { useState } from "react";
 import { toast } from "sonner";
 
 export default function DashboardMainBioStatus() {
-  const [activeBioStatus, setActiveBioStatus] = useState<string>("PRIVATE");
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
   console.log({ biodata, biodataFormData });
 
@@ -21,10 +19,8 @@ export default function DashboardMainBioStatus() {
         visibility: status,
       };
       const res = await updateBioStatus(updatedData).unwrap();
-      console.log(res);
       if (res?.success) {
         toast.success("বায়োডাটা স্ট্যাটাস আপডেট হয়েছে");
-        setActiveBioStatus(status);
       } else {
         toast.error("বায়োডাটা স্ট্যাটাস আপডেট হয়নি");
       }
@@ -47,7 +43,7 @@ export default function DashboardMainBioStatus() {
             <div
               onClick={() => handleBioStatus("PRIVATE")}
               className={`py-3 rounded-2xl  px-8  cursor-pointer ${
-                activeBioStatus === "PRIVATE"
+                biodata?.visibility === "PRIVATE"
                   ? "bg-[#c65c5c] text-white z-10"
                   : "bg-[#d9d9d9] text-[#777] z-0"
               }`}
@@ -57,7 +53,7 @@ export default function DashboardMainBioStatus() {
             <div
               onClick={() => handleBioStatus("PUBLIC")}
               className={`py-3 rounded-2xl px-8 -ml-5 cursor-pointer ${
-                activeBioStatus === "PUBLIC"
+                biodata?.visibility === "PUBLIC"
                   ? "bg-[#c65c5c] text-white z-10"
                   : "bg-[#d9d9d9] text-[#777] z-0"
               }`}

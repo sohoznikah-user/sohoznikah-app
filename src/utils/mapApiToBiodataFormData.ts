@@ -9,7 +9,7 @@ export interface IBiodata {
 }
 
 export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
-  console.log("apiData", apiData.religiousInfoFormData);
+  console.log("apiData", apiData);
   const biodata = {
     id: apiData?.id || "",
     code: apiData?.code || "",

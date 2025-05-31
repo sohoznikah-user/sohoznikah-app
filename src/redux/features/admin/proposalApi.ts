@@ -29,6 +29,13 @@ export const proposalApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.proposal],
     }),
+    cancelProposal: build.mutation({
+      query: (id) => ({
+        url: `${URL}/${id}/cancel`,
+        method: "POST",
+      }),
+      invalidatesTags: [tagTypes.proposal],
+    }),
     updateProposal: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${URL}/${id}`,
@@ -51,6 +58,7 @@ export const {
   useCreateProposalMutation,
   useGetAllProposalsQuery,
   useGetProposalByIdQuery,
+  useCancelProposalMutation,
   useUpdateProposalMutation,
   useDeleteProposalMutation,
 } = proposalApi;

@@ -29,6 +29,12 @@ export default function DashboardLeftNav() {
         href={`/dashboard`}
         className="p-2 w-full text-center hover:bg-[#eff9ff] hover:text-black"
       >
+        ড্যাশবোর্ড
+      </Link>
+      <Link
+        href={`/dashboard/biodata`}
+        className="p-2 w-full text-center hover:bg-[#eff9ff] hover:text-black"
+      >
         বায়োডাটা
       </Link>
       <Link
@@ -67,12 +73,12 @@ export default function DashboardLeftNav() {
       >
         টোকেন
       </Link>
-      <Link
+      {/* <Link
         href={`/dashboard/married`}
         className="p-2 w-full text-center hover:bg-[#eff9ff] hover:text-black"
       >
         বিবাহ সম্পন্ন
-      </Link>
+      </Link> */}
       <Separator className="bg-white my-4" />
       <div className="p-2 w-full text-center hover:bg-[#eff9ff] hover:text-black">
         জিজ্ঞাসা

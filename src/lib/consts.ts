@@ -574,3 +574,17 @@ export const tokenOptions = [
   { id: "9", title: "৯", for: "both" },
   { id: "10", title: "১০", for: "both" },
 ];
+
+export const proposalStatusOptions = [
+  { id: "PENDING", title: "পেন্ডিং", for: "both" },
+  { id: "ACCEPTED", title: "আগ্রহী", for: "both" },
+  { id: "REJECTED", title: "অনাগ্রহী", for: "both" },
+  { id: "NEED_TIME", title: "সময় নিতে ইচ্ছুক", for: "both" },
+  { id: "TOKEN_WITHDRAWN", title: "টোকেন তুলে দিন", for: "both" },
+];
+
+export const tokenTypeOptions = [
+  { id: "REQUESTED", title: "REQUESTED" },
+  { id: "APPROVED", title: "APPROVED" },
+  { id: "REJECTED", title: "REJECTED" },
+];

@@ -1,100 +1,100 @@
 "use client";
 
+import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
+import { proposalStatusOptions } from "@/lib/consts";
+import {
+  useCancelProposalMutation,
+  useGetAllProposalsQuery,
+} from "@/redux/features/admin/proposalApi";
+import {
+  getDistrictTitle,
+  getTitleById,
+  getUpazilaTitle,
+} from "@/utils/getBanglaTitle";
+import { getTimeDifference } from "@/utils/getTimeDifference";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-// Sample data for "My Records"
-const myRecordsData = [
-  {
-    date: "01/04/2025",
-    mobile: "MS462",
-    name: "অনুপম, শোভনা",
-    address: "ঢাকা, ঢাকা, ঢাকা",
-    private: true,
-    icons: { check: "black", camera: "red" },
-  },
-  {
-    date: "25/03/2025",
-    mobile: "MS463",
-    name: "রাহুল, সরকার",
-    address: "চট্টগ্রাম, চট্টগ্রাম",
-    private: false,
-    icons: { check: "gray", camera: "red" },
-  },
-  {
-    date: "14/02/2025",
-    mobile: "MS464",
-    name: "মিতা, দাস",
-    address: "সিলেট, সিলেট",
-    private: true,
-    icons: { check: "gray", camera: "red" },
-  },
-  {
-    date: "26/01/2025",
-    mobile: "MS465",
-    name: "সুমন, রায়",
-    address: "রাজশাহী, রাজশাহী",
-    private: false,
-    icons: { check: "black", camera: "red" },
-  },
-];
-
-// Sample data for "Other's Records"
-const othersRecordsData = [
-  {
-    date: "01/04/2025",
-    mobile: "MS466",
-    name: "প্রিয়া, সাহা",
-    address: "খুলনা, খুলনা",
-    private: true,
-  },
-  {
-    date: "25/03/2025",
-    mobile: "MS467",
-    name: "কাজল, মিত্র",
-    address: "বরিশাল, বরিশাল",
-    private: false,
-  },
-  {
-    date: "14/02/2025",
-    mobile: "MS468",
-    name: "তানিয়া, আক্তার",
-    address: "ময়মনসিংহ, ময়মনসিংহ",
-    private: true,
-  },
-  {
-    date: "26/01/2025",
-    mobile: "MS469",
-    name: "অর্জুন, সেন",
-    address: "ঢাকা, ঢাকা",
-    private: false,
-  },
-];
+import { toast } from "sonner";
 
 // PaymentTracker component
 const ProposalPage = () => {
   const [activeTab, setActiveTab] = useState("myRecords");
-  const [searchTerm, setSearchTerm] = useState("");
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
-    total: myRecordsData.length,
+    total: 0,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
+  const router = useRouter();
+
+  const type = activeTab === "myRecords" ? "received" : "sent";
+
+  const { data: proposalData } = useGetAllProposalsQuery({
+    type,
+    page: pagination.page,
+    limit: pagination.limit,
+    searchTerm: searchTerm,
+  });
+
+  const [cancelProposal, { isLoading: isCancelling }] =
+    useCancelProposalMutation();
+
+  const handleCancelProposal = async () => {
+    if (!selectedId) {
+      toast.error("প্রস্তাবটি নির্বাচন করুন");
+      return;
+    }
+
+    try {
+      const response = await cancelProposal(selectedId).unwrap();
+      if (response.success) {
+        toast.success("প্রস্তাবটি বাতিল করা হয়েছে");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.message || "প্রস্তাবটি বাতিল করা হয়নি");
+    } finally {
+      handleReset();
+    }
+  };
+
+  const handleReset = () => {
+    setIsModalOpen(null);
+    setSelectedId(null);
+    setSearchTerm("");
+    setPagination({
+      page: 1,
+      limit: 10,
+      total: 0,
+    });
+  };
 
   // Define columns for the table
   const columns: ColumnDef<any>[] = [
     {
       accessorKey: "date",
       header: "তারিখ",
+      cell: ({ row }) => {
+        const date = new Date(row.original.createdAt);
+        const formattedDate = date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return formattedDate;
+      },
     },
     {
-      accessorKey: "mobile",
+      accessorKey: "bioNo",
       header: "বায়োডাটা নং",
       cell: ({ row }) => (
         <div>
-          {row.original.mobile}{" "}
-          {row.original.private && (
+          {row?.original?.bioNo}{" "}
+          {row?.original.bioVisibility === "PRIVATE" && (
             <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-sm">
               প্রাইভেট
             </span>
@@ -103,60 +103,142 @@ const ProposalPage = () => {
       ),
     },
     {
-      accessorKey: "name",
+      accessorKey: "bioPermanentAddress",
       header: "স্থায়ী ঠিকানা",
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          {row?.original?.bioPermanentCity
+            ? getUpazilaTitle(row?.original?.bioPermanentCity)
+            : "-"}
+          {", "}
+          {row?.original?.bioPermanentState
+            ? getDistrictTitle(row?.original?.bioPermanentState)
+            : "-"}
+        </div>
+      ),
     },
     {
-      accessorKey: "address",
+      accessorKey: "bioPresentAddress",
       header: "বর্তমান ঠিকানা",
-    },
-    {
-      id: "vie",
-      header: "সময় বাকি আছে",
       cell: ({ row }) => (
-        <div>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-            View
-          </button>
+        <div className="flex items-center justify-center">
+          {row?.original?.bioPresentCity
+            ? getUpazilaTitle(row?.original?.bioPresentCity)
+            : "-"}{" "}
+          {row?.original?.bioPresentState
+            ? getDistrictTitle(row?.original?.bioPresentState)
+            : "-"}
         </div>
       ),
     },
     {
-      id: "view",
-      header: "বায়োডাটা দেখুন",
-      cell: ({ row }) => (
-        <div>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-            View
-          </button>
-        </div>
-      ),
+      accessorKey: "timeLeft",
+      header: "সময় বাকি আছে",
+      cell: ({ row }) => {
+        const timeLeft = getTimeDifference(
+          row?.original?.expiredAt,
+          new Date().toISOString()
+        );
+        return (
+          <div>
+            {row?.original?.isCancelled ? (
+              <button className="bg-red-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-red-600 transition">
+                প্রস্তাবটি বাতিল করা হয়েছে
+              </button>
+            ) : timeLeft === "00:00" ? (
+              <button
+                className="bg-red-500 cursor-pointer text-white px-4 py-1 rounded hover:bg-red-600 transition"
+                onClick={() => {
+                  setSelectedId(row?.original?.id);
+                  setIsModalOpen("cancel");
+                }}
+              >
+                প্রস্তাবটি বাতিল করুন
+              </button>
+            ) : (
+              <>
+                <span>{timeLeft}</span>
+                <span>ঘন্টা</span>
+              </>
+            )}
+          </div>
+        );
+      },
     },
+
     ...(activeTab === "myRecords"
       ? [
           {
-            id: "viewContact",
-            header: "আপনার রেসপন্স",
+            id: "view",
+            header: "বায়োডাটা দেখুন",
             cell: ({ row }) => (
               <div>
-                <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-                  যোগাযোগ নাম্বার
+                <button
+                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  onClick={() => {
+                    row?.original.bioVisibility === "PRIVATE"
+                      ? setIsModalOpen("private")
+                      : router.push(`/biodatas/${row?.original?.biodataId}`);
+                  }}
+                >
+                  View & Respond
                 </button>
               </div>
             ),
           },
+          {
+            id: "status",
+            header: "আপনার রেসপন্স",
+            cell: ({ row }) => {
+              const status = getTitleById(
+                proposalStatusOptions,
+                row?.original?.status
+              );
+              return (
+                <div>
+                  <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
+                    {status}
+                  </button>
+                </div>
+              );
+            },
+          },
         ]
       : [
           {
-            id: "viewCont",
-            header: "অপর পক্ষের রেসপন্স",
+            id: "view",
+            header: "বায়োডাটা দেখুন",
             cell: ({ row }) => (
               <div>
-                <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-                  যোগাযোগ নাম্বার
+                <button
+                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  onClick={() => {
+                    row?.original.bioVisibility === "PRIVATE"
+                      ? setIsModalOpen("private")
+                      : router.push(`/biodatas/${row?.original?.biodataId}`);
+                  }}
+                >
+                  View
                 </button>
               </div>
             ),
+          },
+          {
+            id: "viewCont",
+            header: "অপর পক্ষের রেসপন্স",
+            cell: ({ row }) => {
+              const status = getTitleById(
+                proposalStatusOptions,
+                row?.original?.status
+              );
+              return (
+                <div>
+                  <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
+                    {status}
+                  </button>
+                </div>
+              );
+            },
           },
         ]),
   ];
@@ -198,8 +280,14 @@ const ProposalPage = () => {
             প্রস্তাব পাঠিয়েছি
           </button>
         </div>
+
+        <p className="text-center text-sm text-[#C65C5C] pt-6 mb-1 max-w-2xl mx-auto">
+          {activeTab === "myRecords"
+            ? "আপনাকে প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে কোনো রেসপন্স না করলে অপরপক্ষ চাইলে প্রস্তাবটি বাতিল করতে পারবে"
+            : "আপনি প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে অপরপক্ষ রেসপন্স না করলে প্রস্তাবটি বাতিল করার অপশন পাবেন। বাতিল করলে টোকেন রিফান্ড পাবেন, চাইলে অপেক্ষাও করতে পারেন"}
+        </p>
         <ReusableTable
-          data={activeTab === "myRecords" ? myRecordsData : othersRecordsData}
+          data={proposalData?.data || []}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
@@ -209,6 +297,15 @@ const ProposalPage = () => {
           onSearchChange={setSearchTerm}
         />
       </div>
+
+      <ReusableModal
+        open={isModalOpen === "cancel"}
+        onClose={() => handleReset()}
+        onConfirm={() => handleCancelProposal()}
+        loading={isCancelling}
+        title="প্রস্তাবটি বাতিল করতে চান?"
+        description="এই প্রস্তাবটি বাতিল করতে চান কি? বাতিল করার পর টোকেন রিফান্ড পাবেন"
+      />
     </div>
   );
 };
