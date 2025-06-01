@@ -87,18 +87,18 @@ export default function HeaderSection({
           biodataId: biodata?.biodata?.id,
         }).unwrap();
         if (res?.success) {
-          toast.success(res?.message || "Added to favourite");
+          toast.success("প্রিয় তালিকায় যোগ করা হয়েছে");
           setIsFavourite(true);
         }
       } else {
         const res = await deleteFavourite(biodata?.biodata?.id).unwrap();
         if (res?.success) {
-          toast.success(res?.message || "Removed from favourite");
+          toast.success("প্রিয় তালিকায় থেকে সরানো হয়েছে");
           setIsFavourite(false);
         }
       }
     } catch (error) {
-      toast.error(error?.message || "Something went wrong");
+      toast.error(error?.message || "কিছু ভুল হয়েছে");
     }
   };
 
@@ -112,18 +112,18 @@ export default function HeaderSection({
           biodataId: biodata?.biodata?.id,
         }).unwrap();
         if (res?.success) {
-          toast.success(res?.message || "Added to shortlist");
+          toast.success(res?.message || "চুড়ান্ত তালিকায় যোগ করা হয়েছে");
           setIsShortlisted(true);
         }
       } else {
         const res = await deleteShortlist(biodata?.biodata?.id).unwrap();
         if (res?.success) {
-          toast.success(res?.message || "Removed from shortlist");
+          toast.success(res?.message || "চুড়ান্ত তালিকায় থেকে সরানো হয়েছে");
           setIsShortlisted(false);
         }
       }
     } catch (error) {
-      toast.error(error?.message || "Something went wrong");
+      toast.error(error?.message || "কিছু ভুল হয়েছে");
     }
   };
 
@@ -131,9 +131,9 @@ export default function HeaderSection({
     try {
       const url = window.location.href;
       await navigator.clipboard.writeText(url);
-      toast.success("URL copied to clipboard!");
+      toast.success("লিংক কপি করা হয়েছে");
     } catch (error) {
-      toast.error("Failed to copy URL");
+      toast.error("লিংক কপি করা হয়নি");
     }
   };
 
@@ -149,12 +149,12 @@ export default function HeaderSection({
 
       console.log("res-proposal", res);
       if (res?.success) {
-        toast.success(res?.message || "Proposal sent successfully!");
+        toast.success("প্রস্তাব পাঠানো হয়েছে");
       } else {
-        toast.error(res?.message || "Failed to send proposal");
+        toast.error("প্রস্তাব পাঠানো হয়নি");
       }
     } catch (error: any) {
-      toast.error(error?.message || "Failed to send proposal");
+      toast.error(error?.message || "প্রস্তাব পাঠানো হয়নি");
     }
   };
 

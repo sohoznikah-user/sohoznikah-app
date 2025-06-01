@@ -42,7 +42,7 @@ export const ReusableModal = ({
 }: ReusableModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className=" text-black bg-gradient-to-r from-blue-100 to-pink-100 ">
+      <DialogContent className=" text-black bg-gradient-to-r from-blue-100 to-pink-100  overflow-y-auto">
         {(title || description) && (
           <DialogHeader>
             {title && <DialogTitle>{title}</DialogTitle>}
@@ -54,7 +54,7 @@ export const ReusableModal = ({
           </DialogHeader>
         )}
 
-        {children && <div className="py-2">{children}</div>}
+        {children && <div className="p-2">{children}</div>}
 
         {!hideFooter && (
           <DialogFooter>

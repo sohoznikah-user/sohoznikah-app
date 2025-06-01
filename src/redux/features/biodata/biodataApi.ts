@@ -14,6 +14,14 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.biodata],
     }),
+    requestDeleteBiodata: build.mutation({
+      query: (deleteData) => ({
+        url: `${BIODATA_URL}/delete-request`,
+        method: "POST",
+        data: deleteData,
+      }),
+      invalidatesTags: [tagTypes.biodata],
+    }),
     getAllBiodatas: build.query({
       query: (arg: Record<string, any>) => ({
         url: `${BIODATA_URL}`,
@@ -70,4 +78,5 @@ export const {
   useUpdateMyBiodataMutation,
   useUpdateBiodataMutation,
   useDeleteBiodataMutation,
+  useRequestDeleteBiodataMutation,
 } = biodataApi;

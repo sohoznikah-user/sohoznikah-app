@@ -17,7 +17,7 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
     profilePic: apiData?.profilePic || "",
     status: apiData?.status || "",
     visibility: apiData?.visibility || "",
-    token: apiData?.token || "",
+    token: apiData?.token || "0",
   };
 
   const biodataFormData = {

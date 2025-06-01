@@ -1,100 +1,72 @@
 "use client";
 
 import { ReusableTable } from "@/components/shared/ReusableTable";
+import { proposalStatusOptions } from "@/lib/consts";
+import { useGetAllContactsQuery } from "@/redux/features/admin/contactApi";
+import {
+  getDistrictTitle,
+  getTitleById,
+  getUpazilaTitle,
+} from "@/utils/getBanglaTitle";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-// Sample data for "My Records"
-const myRecordsData = [
-  {
-    date: "01/04/2025",
-    mobile: "MS462",
-    name: "অনুপম, শোভনা",
-    address: "ঢাকা, ঢাকা, ঢাকা",
-    private: true,
-    icons: { check: "black", camera: "red" },
-  },
-  {
-    date: "25/03/2025",
-    mobile: "MS463",
-    name: "রাহুল, সরকার",
-    address: "চট্টগ্রাম, চট্টগ্রাম",
-    private: false,
-    icons: { check: "gray", camera: "red" },
-  },
-  {
-    date: "14/02/2025",
-    mobile: "MS464",
-    name: "মিতা, দাস",
-    address: "সিলেট, সিলেট",
-    private: true,
-    icons: { check: "gray", camera: "red" },
-  },
-  {
-    date: "26/01/2025",
-    mobile: "MS465",
-    name: "সুমন, রায়",
-    address: "রাজশাহী, রাজশাহী",
-    private: false,
-    icons: { check: "black", camera: "red" },
-  },
-];
-
-// Sample data for "Other's Records"
-const othersRecordsData = [
-  {
-    date: "01/04/2025",
-    mobile: "MS466",
-    name: "প্রিয়া, সাহা",
-    address: "খুলনা, খুলনা",
-    private: true,
-  },
-  {
-    date: "25/03/2025",
-    mobile: "MS467",
-    name: "কাজল, মিত্র",
-    address: "বরিশাল, বরিশাল",
-    private: false,
-  },
-  {
-    date: "14/02/2025",
-    mobile: "MS468",
-    name: "তানিয়া, আক্তার",
-    address: "ময়মনসিংহ, ময়মনসিংহ",
-    private: true,
-  },
-  {
-    date: "26/01/2025",
-    mobile: "MS469",
-    name: "অর্জুন, সেন",
-    address: "ঢাকা, ঢাকা",
-    private: false,
-  },
-];
 
 // PaymentTracker component
 const ContactPage = () => {
   const [activeTab, setActiveTab] = useState("myRecords");
-  const [searchTerm, setSearchTerm] = useState("");
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
-    total: myRecordsData.length,
+    total: 0,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
+  const router = useRouter();
+
+  const type = activeTab === "myRecords" ? "sent" : "received";
+
+  const { data: proposalData } = useGetAllContactsQuery({
+    type,
+    page: pagination.page,
+    limit: pagination.limit,
+    searchTerm: searchTerm,
+  });
+
+  const handleReset = () => {
+    setIsModalOpen(null);
+    setSelectedId(null);
+    setSearchTerm("");
+    setPagination({
+      page: 1,
+      limit: 10,
+      total: 0,
+    });
+  };
 
   // Define columns for the table
   const columns: ColumnDef<any>[] = [
     {
       accessorKey: "date",
       header: "তারিখ",
+      cell: ({ row }) => {
+        const date = new Date(row.original.createdAt);
+        const formattedDate = date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return formattedDate;
+      },
     },
     {
-      accessorKey: "mobile",
-      header: "মোবাইল নম্বর",
+      accessorKey: "bioNo",
+      header: "বায়োডাটা নং",
       cell: ({ row }) => (
         <div>
-          {row.original.mobile}{" "}
-          {row.original.private && (
+          {row?.original?.bioNo}{" "}
+          {row?.original.bioVisibility === "PRIVATE" && (
             <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-sm">
               প্রাইভেট
             </span>
@@ -103,45 +75,99 @@ const ContactPage = () => {
       ),
     },
     {
-      accessorKey: "name",
-      header: "ফুল নাম",
-    },
-    {
-      accessorKey: "address",
-      header: "ঠিকানা",
-    },
-    {
-      id: "view",
-      header: "বায়োডাটা দেখুন",
+      accessorKey: "bioPermanentAddress",
+      header: "স্থায়ী ঠিকানা",
       cell: ({ row }) => (
-        <div>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-            View
-          </button>
+        <div className="flex items-center justify-center">
+          {row?.original?.bioPermanentCity
+            ? getUpazilaTitle(row?.original?.bioPermanentCity)
+            : "-"}
+          {", "}
+          {row?.original?.bioPermanentState
+            ? getDistrictTitle(row?.original?.bioPermanentState)
+            : "-"}
         </div>
       ),
     },
+    {
+      accessorKey: "bioPresentAddress",
+      header: "বর্তমান ঠিকানা",
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          {row?.original?.bioPresentCity
+            ? getUpazilaTitle(row?.original?.bioPresentCity)
+            : "-"}{" "}
+          {row?.original?.bioPresentState
+            ? getDistrictTitle(row?.original?.bioPresentState)
+            : "-"}
+        </div>
+      ),
+    },
+
     ...(activeTab === "myRecords"
       ? [
           {
-            id: "viewContact",
-            header: "যোগাযোগ তথ্য দেখুন",
+            id: "view",
+            header: "বায়োডাটা দেখুন",
             cell: ({ row }) => (
               <div>
-                <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-                  যোগাযোগ নাম্বার
+                <button
+                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  onClick={() => {
+                    row?.original.bioVisibility === "PRIVATE"
+                      ? setIsModalOpen("private")
+                      : router.push(`/biodatas/${row?.original?.biodataId}`);
+                  }}
+                >
+                  View & Respond
                 </button>
               </div>
             ),
           },
+          {
+            id: "status",
+            header: "যোগাযোগ নম্বর দেখুন",
+            cell: ({ row }) => {
+              const status = getTitleById(
+                proposalStatusOptions,
+                row?.original?.status
+              );
+              return (
+                <div>
+                  <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
+                    {status}
+                  </button>
+                </div>
+              );
+            },
+          },
         ]
-      : []),
+      : [
+          {
+            id: "view",
+            header: "বায়োডাটা দেখুন",
+            cell: ({ row }) => (
+              <div>
+                <button
+                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  onClick={() => {
+                    row?.original.bioVisibility === "PRIVATE"
+                      ? setIsModalOpen("private")
+                      : router.push(`/biodatas/${row?.original?.biodataId}`);
+                  }}
+                >
+                  View
+                </button>
+              </div>
+            ),
+          },
+        ]),
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-pink-100 p-6 flex justify-center items-center font-solaiman">
-      <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-6 font-solaiman">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-pink-100 p-4 flex  justify-center items-center">
+      <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg p-4 py-8">
+        <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
           যোগাযোগ তথ্যের তালিকা
         </h1>
         {/* <div className="flex justify-center mb-6">
@@ -153,10 +179,10 @@ const ContactPage = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div> */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-3">
           <button
             onClick={() => setActiveTab("myRecords")}
-            className={`px-6 py-2 rounded-lg font-medium transition font-solaiman ${
+            className={`px-6 py-2 rounded-lg font-medium transition ${
               activeTab === "myRecords"
                 ? "bg-[#c65c5c] text-white z-10"
                 : "bg-[#d9d9d9] text-[#777] z-0"
@@ -166,7 +192,7 @@ const ContactPage = () => {
           </button>
           <button
             onClick={() => setActiveTab("othersRecords")}
-            className={`px-6 py-2 rounded-lg -ml-2 font-medium transition font-solaiman ${
+            className={`px-6 py-2 rounded-lg -ml-2 font-medium transition ${
               activeTab === "othersRecords"
                 ? "bg-[#c65c5c] text-white z-10"
                 : "bg-[#d9d9d9] text-[#777] z-0"
@@ -175,8 +201,9 @@ const ContactPage = () => {
             আমার যোগাযোগ তথ্য যারা কিনেছে
           </button>
         </div>
+
         <ReusableTable
-          data={activeTab === "myRecords" ? myRecordsData : othersRecordsData}
+          data={proposalData?.data || []}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
@@ -186,6 +213,15 @@ const ContactPage = () => {
           onSearchChange={setSearchTerm}
         />
       </div>
+
+      {/* <ReusableModal
+        open={isModalOpen === "cancel"}
+        onClose={() => handleReset()}
+        onConfirm={() => handleCancelProposal()}
+        loading={isCancelling}
+        title="প্রস্তাবটি বাতিল করতে চান?"
+        description="এই প্রস্তাবটি বাতিল করতে চান কি? বাতিল করার পর টোকেন রিফান্ড পাবেন"
+      /> */}
     </div>
   );
 };
