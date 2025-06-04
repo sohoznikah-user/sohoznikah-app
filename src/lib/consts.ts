@@ -588,3 +588,26 @@ export const tokenTypeOptions = [
   { id: "APPROVED", title: "APPROVED" },
   { id: "REJECTED", title: "REJECTED" },
 ];
+export const emailVerificationOptions = [
+  { id: "VERIFIED", title: "VERIFIED" },
+  { id: "UNVERIFIED", title: "UNVERIFIED" },
+];
+
+export const userStatusOptions = [
+  { id: "ACTIVE", title: "ACTIVE" },
+  { id: "PENDING", title: "PENDING" },
+  { id: "BLOCKED", title: "BLOCKED" },
+];
+
+export const biodataVisibilityOptions = [
+  { id: "PUBLIC", title: "PUBLIC" },
+  { id: "PRIVATE", title: "PRIVATE" },
+];
+export const biodataStatusOptions = [
+  { id: "PENDING", title: "PENDING" },
+  { id: "APPROVED", title: "APPROVED" },
+  { id: "REJECTED", title: "REJECTED" },
+  { id: "UPDATE_REQUESTED", title: "UPDATE_REQUESTED" },
+  { id: "DELETE_REQUESTED", title: "DELETE_REQUESTED" },
+  { id: "DELETED", title: "DELETED" },
+];

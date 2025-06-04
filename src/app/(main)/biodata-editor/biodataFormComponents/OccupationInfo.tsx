@@ -1,4 +1,7 @@
 // File: src/app/(main)/biodata-editor/biodataFormComponents/OccupationInfo.tsx
+
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {

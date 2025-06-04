@@ -2,6 +2,7 @@
 import EditDeleteButtons from "@/components/shared/EditDeleteButtons";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -87,7 +88,35 @@ export default function AdminTokenPage() {
   };
 
   const columns: ColumnDef<any>[] = [
-    { accessorKey: "tokenType", header: "টাইপ" },
+    {
+      accessorKey: "tokenType",
+      header: "টাইপ",
+      cell: ({ row }) => {
+        const tokenType = row.original.tokenType;
+
+        return (
+          <div className="truncate max-w-[300px]">
+            {tokenType === "BUNDLE1" ? (
+              <Badge className="bg-cyan-500 text-white dark:bg-cyan-600">
+                {tokenType}
+              </Badge>
+            ) : tokenType === "BUNDLE2" ? (
+              <Badge className="bg-teal-500 text-white dark:bg-teal-600">
+                {tokenType}
+              </Badge>
+            ) : tokenType === "BUNDLE3" ? (
+              <Badge className="bg-blue-500 text-white dark:bg-blue-600">
+                {tokenType}
+              </Badge>
+            ) : (
+              <Badge className="bg-red-500 text-white dark:bg-red-600">
+                {tokenType}
+              </Badge>
+            )}
+          </div>
+        );
+      },
+    },
     {
       accessorKey: "quantity",
       header: "টোকেন সংখ্যা",
@@ -113,7 +142,25 @@ export default function AdminTokenPage() {
     {
       accessorKey: "tokenStatus",
       header: "স্ট্যাটাস",
-      cell: ({ row }) => row.original.tokenStatus,
+      cell: ({ row }) => {
+        const biodataType = row.original.tokenStatus;
+
+        return (
+          <div className="truncate max-w-[300px]">
+            {biodataType === "REQUESTED" ? (
+              <Badge className="bg-yellow-500 text-white dark:bg-yellow-600">
+                {biodataType}
+              </Badge>
+            ) : biodataType === "APPROVED" ? (
+              <Badge className="bg-green-500 text-white dark:bg-green-600">
+                {biodataType}
+              </Badge>
+            ) : (
+              <Badge variant="destructive"> {biodataType}</Badge>
+            )}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "createdAt",
@@ -154,8 +201,8 @@ export default function AdminTokenPage() {
   ];
 
   return (
-    <div className="min-h-screen p-4 flex justify-center items-center">
-      <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg p-6">
+    <div className="min-h-screen p-5 flex justify-center items-center">
+      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg py-8">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
           টোকেন
         </h1>

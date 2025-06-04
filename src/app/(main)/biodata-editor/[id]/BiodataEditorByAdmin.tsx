@@ -2,8 +2,8 @@
 
 import Loading from "@/app/loading";
 import {
-  useGetMyBiodataQuery,
-  useUpdateMyBiodataMutation,
+  useGetBiodataByIdByAdminQuery,
+  useUpdateBiodataMutation,
 } from "@/redux/features/biodata/biodataApi";
 import {
   setAllBiodata,
@@ -16,8 +16,8 @@ import { mapBiodataFormDataToApi } from "@/utils/mapBiodataFormDataToApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import Breadcrumbs from "./biodataFormComponents/Breadcrumbs";
-import { steps } from "./steps";
+import Breadcrumbs from "../biodataFormComponents/Breadcrumbs";
+import { steps } from "../steps";
 
 // Map step keys to Redux state keys
 export const stepKeyToStateKey: Record<string, string> = {
@@ -38,21 +38,33 @@ export const stepKeyToStateKey: Record<string, string> = {
 
 interface BiodataEditorProps {
   biodataToEdit: any | null;
+  id: string;
 }
 
-export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
+export default function BiodataEditorByAdmin({
+  biodataToEdit,
+  id,
+}: BiodataEditorProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
   const { user, acesstoken } = useAppSelector((state) => state.auth);
-  const [updateMyBiodata, { isLoading: isUpdating }] =
-    useUpdateMyBiodataMutation();
+  const [updateBiodataByAdmin, { isLoading: isUpdating }] =
+    useUpdateBiodataMutation();
+  // const {
+  //   data: fetchedBiodata,
+  //   isLoading: isFetching,
+  //   error: fetchError,
+  //   refetch,
+  // } = useGetMyBiodataQuery(undefined, {
+  //   skip: !user || !acesstoken,
+  // });
   const {
     data: fetchedBiodata,
     isLoading: isFetching,
     error: fetchError,
     refetch,
-  } = useGetMyBiodataQuery(undefined, {
+  } = useGetBiodataByIdByAdminQuery(id, {
     skip: !user || !acesstoken,
   });
 
@@ -63,13 +75,13 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
     [currentStepKey]
   );
 
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!user || !acesstoken) {
-      const redirectUrl = `/biodata-editor?step=${currentStepKey}`;
-      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
-    }
-  }, [user, acesstoken, router, currentStepKey]);
+  // // Redirect to login if not authenticated
+  // useEffect(() => {
+  //   if (!user || !acesstoken) {
+  //     const redirectUrl = `/biodata-editor?step=${currentStepKey}`;
+  //     router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+  //   }
+  // }, [user, acesstoken, router, currentStepKey]);
 
   // Populate Redux with fetched biodata
   useEffect(() => {
@@ -131,7 +143,10 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
       const payload = mapBiodataFormDataToApi(currentStepKey, formData);
       console.log("Saving data:", { completeBiodata, payload });
 
-      const result = await updateMyBiodata(completeBiodata).unwrap();
+      const result = await updateBiodataByAdmin({
+        id: id,
+        updatedData: completeBiodata,
+      }).unwrap();
       if (result.success) {
         toast.success("Biodata saved successfully!");
         await refetch(); // Sync state again
@@ -148,7 +163,7 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
     biodataFormData,
     setStep,
     dispatch,
-    updateMyBiodata,
+    updateBiodataByAdmin,
     user,
     router,
     currentStepKey,

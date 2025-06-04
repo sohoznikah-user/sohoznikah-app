@@ -165,8 +165,8 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-pink-100 p-4 flex  justify-center items-center">
-      <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg p-4 py-8">
+    <div className="min-h-screen p-5 flex justify-center items-center">
+      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg py-8">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
           যোগাযোগ তথ্যের তালিকা
         </h1>

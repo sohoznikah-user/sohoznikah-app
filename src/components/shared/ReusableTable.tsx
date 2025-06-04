@@ -143,11 +143,14 @@ export function ReusableTable<T>({
       <div className="rounded-lg border border-border bg-foreground text-background shadow-sm overflow-x-auto">
         <Table>
           {caption && <caption className="text-left p-2">{caption}</caption>}
-          <TableHeader className="bg-[#5B8EAA] text-white">
+          <TableHeader className="bg-[#5B8EAA] text-white ">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="text-white">
+                  <TableHead
+                    key={header.id}
+                    className="text-white text-center font-semibold"
+                  >
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
@@ -169,7 +172,7 @@ export function ReusableTable<T>({
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

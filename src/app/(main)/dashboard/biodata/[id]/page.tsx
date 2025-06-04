@@ -1,20 +1,20 @@
 // File: src/app/(main)/biodatas/[id]/page.tsx
 "use client";
+import AddressInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/AddressInfo";
+import EducationAndOccupationInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/EducationAndOccupationInfo";
+import FamilyInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/FamilyInfo";
+import FooterSection from "@/app/(main)/biodatas/[id]/viewBioDataComponents/FooterSection";
+import GeneralInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/GeneralInfo";
+import HeaderSection from "@/app/(main)/biodatas/[id]/viewBioDataComponents/HeaderSection";
+import MarriageInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/MarriageInfo";
+import PersonalInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/PersonalInfo";
+import PrimaryInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/PrimaryInfo";
+import ReligiousInfo from "@/app/(main)/biodatas/[id]/viewBioDataComponents/ReligiousInfo";
 import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
+import { useGetBiodataByIdByAdminQuery } from "@/redux/features/biodata/biodataApi";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
 import { use, useEffect, useRef, useState } from "react";
-import AddressInfo from "./viewBioDataComponents/AddressInfo";
-import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
-import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
-import FooterSection from "./viewBioDataComponents/FooterSection";
-import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
-import HeaderSection from "./viewBioDataComponents/HeaderSection";
-import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
-import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
-import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
-import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
 
 type PageParams = {
   id: string;
@@ -67,7 +67,7 @@ export default function BiodataPage({
     data: fetchedBiodata,
     isLoading,
     isError,
-  } = useGetBiodataByIdQuery(id);
+  } = useGetBiodataByIdByAdminQuery(id);
 
   useEffect(() => {
     if (fetchedBiodata?.data) {

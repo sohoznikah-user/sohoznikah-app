@@ -83,12 +83,15 @@ export function Navbar() {
       </div>
 
       <div className="min-w-96 flex justify-end space-x-4">
-        <Link
-          href="/biodata-editor"
-          className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
-        >
-          বায়োডাটা তৈরী করুন
-        </Link>
+        {user?.role === "USER" && (
+          <Link
+            href="/biodata-editor"
+            className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+          >
+            বায়োডাটা তৈরী করুন
+          </Link>
+        )}
+
         {!user && !token && (
           <Link
             href="/login"
@@ -99,7 +102,7 @@ export function Navbar() {
         )}
         {user && token && (
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none">
+            <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none cursor-pointer">
               <Avatar>
                 <AvatarImage
                   src={biodata?.profilePic}
@@ -113,13 +116,13 @@ export function Navbar() {
               className="mt-2 bg-[#307fa7] border-none"
             >
               <DropdownMenuItem
-                className="focus:bg-[#E25A6F]"
+                className="focus:bg-[#E25A6F] cursor-pointer"
                 onClick={() => router.push("/dashboard")}
               >
                 Profile
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="focus:bg-[#E25A6F]"
+                className="focus:bg-[#E25A6F] cursor-pointer"
                 onClick={() => dispatch(logout())}
               >
                 Logout

@@ -2,7 +2,7 @@
 import { baseApi } from "@/redux/api/baseApi";
 import { tagTypes } from "@/redux/tag-Types";
 
-const USER_URL = "/user";
+const USER_URL = "/users";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -52,6 +52,14 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.user],
     }),
+    giveToken: build.mutation({
+      query: ({ id, token }) => ({
+        url: `${USER_URL}/${id}/give-token`,
+        method: "POST",
+        data: token,
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
     deleteUser: build.mutation({
       query: (id) => ({
         url: `${USER_URL}/${id}`,
@@ -70,4 +78,5 @@ export const {
   useUpdateMyProfileMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useGiveTokenMutation,
 } = userApi;

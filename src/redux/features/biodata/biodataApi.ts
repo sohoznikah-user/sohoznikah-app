@@ -30,6 +30,13 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.biodata],
     }),
+    getBiodatasByAdmin: build.query({
+      query: () => ({
+        url: `${BIODATA_URL}/all`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.biodata],
+    }),
     getBiodataById: build.query({
       query: (id) => ({
         url: `${BIODATA_URL}/${id}`,
@@ -44,6 +51,13 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.biodata],
     }),
+    getBiodataByIdByAdmin: build.query({
+      query: (id) => ({
+        url: `${BIODATA_URL}/${id}/admin`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.biodata],
+    }),
     updateMyBiodata: build.mutation({
       query: (updatedData) => ({
         url: `${BIODATA_URL}/my-biodata`,
@@ -52,10 +66,18 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.biodata],
     }),
+    updateBiodataStatus: build.mutation({
+      query: ({ id, updatedData }) => ({
+        url: `${BIODATA_URL}/${id}/status`,
+        method: "PATCH",
+        data: updatedData,
+      }),
+      invalidatesTags: [tagTypes.biodata],
+    }),
     updateBiodata: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${BIODATA_URL}/${id}`,
-        method: "PUT",
+        method: "PATCH",
         data: updatedData,
       }),
       invalidatesTags: [tagTypes.biodata],
@@ -73,9 +95,12 @@ export const biodataApi = baseApi.injectEndpoints({
 export const {
   useCreateBiodataMutation,
   useGetAllBiodatasQuery,
+  useGetBiodatasByAdminQuery,
   useGetBiodataByIdQuery,
+  useGetBiodataByIdByAdminQuery,
   useGetMyBiodataQuery,
   useUpdateMyBiodataMutation,
+  useUpdateBiodataStatusMutation,
   useUpdateBiodataMutation,
   useDeleteBiodataMutation,
   useRequestDeleteBiodataMutation,
