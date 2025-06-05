@@ -6,6 +6,7 @@ export interface IBiodata {
   status: string;
   visibility: string;
   token?: string | number;
+  biodataCompleted: string | number;
 }
 
 export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
@@ -18,6 +19,7 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
     status: apiData?.status || "",
     visibility: apiData?.visibility || "",
     token: apiData?.token || "0",
+    biodataCompleted: apiData?.biodataCompleted || "0",
   };
 
   const biodataFormData = {

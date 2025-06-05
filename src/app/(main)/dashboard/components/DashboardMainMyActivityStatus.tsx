@@ -1,5 +1,11 @@
+"use client";
 // File: src/app/(main)/dashboard/DashboardMainMyActivityStatus.tsx
-export default function DashboardMainMyActivityStatus() {
+
+export default function DashboardMainMyActivityStatus({
+  biodataAnalytics,
+}: {
+  biodataAnalytics: any;
+}) {
   return (
     <div className="w-96 bg-[#f2f4fc] p-8 flex flex-col space-y-4 rounded-xl">
       <div className="text-2xl text-[#005381] text-center mb-8">
@@ -7,27 +13,39 @@ export default function DashboardMainMyActivityStatus() {
       </div>
       <div className="flex justify-between">
         <div>ভিউ হয়েছে</div>
-        <div className="w-6 text-center">১২</div>
+        <div className="w-6 text-center">
+          {biodataAnalytics?.data?.totalViews || 0}
+        </div>
       </div>
       <div className="flex justify-between">
         <div>পছন্দের তালিকায় রেখেছে</div>
-        <div className="w-6 text-center">৮</div>
+        <div className="w-6 text-center">
+          {biodataAnalytics?.data?.totalFavouriteReceived || 0}
+        </div>
       </div>
       <div className="flex justify-between">
         <div>শর্টলিস্টে রেখেছে</div>
-        <div className="w-6 text-center">৫</div>
+        <div className="w-6 text-center">
+          {biodataAnalytics?.data?.totalShortlistReceived || 0}
+        </div>
       </div>
       <div className="flex justify-between">
         <div>প্রাথমিক প্রস্তাব এসেছে</div>
-        <div className="w-6 text-center">১২</div>
+        <div className="w-6 text-center">
+          {biodataAnalytics?.data?.totalProposalReceived || 0}
+        </div>
       </div>
       <div className="flex justify-between">
         <div>যোগাযোগ তথ্য নিয়েছে</div>
-        <div className="w-6 text-center">৩</div>
+        <div className="w-6 text-center">
+          {biodataAnalytics?.data?.totalContactReceived || 0}
+        </div>
       </div>
       <div className="flex justify-between">
         <div>রিপোর্ট এসেছে</div>
-        <div className="w-6 text-center">৩</div>
+        <div className="w-6 text-center">
+          {biodataAnalytics?.data?.totalReportReceived || 0}
+        </div>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { ReactNode } from "react";
 
-interface ReusableModalProps {
+export interface ReusableModalProps {
   open: boolean;
   onClose?: () => void;
   title?: string;

@@ -89,7 +89,7 @@ const LoginForm = () => {
         toast.error(result.message || "Invalid email or password!");
       }
     } catch (error: any) {
-      console.error("Login Error:", error);
+      // console.error("Login Error:", error);
       toast.error(error?.message || "Invalid email or password!");
     }
   };

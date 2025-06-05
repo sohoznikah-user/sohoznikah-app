@@ -584,7 +584,6 @@ export const proposalStatusOptions = [
 ];
 
 export const tokenTypeOptions = [
-  { id: "REQUESTED", title: "REQUESTED" },
   { id: "APPROVED", title: "APPROVED" },
   { id: "REJECTED", title: "REJECTED" },
 ];
@@ -604,10 +603,7 @@ export const biodataVisibilityOptions = [
   { id: "PRIVATE", title: "PRIVATE" },
 ];
 export const biodataStatusOptions = [
-  { id: "PENDING", title: "PENDING" },
   { id: "APPROVED", title: "APPROVED" },
   { id: "REJECTED", title: "REJECTED" },
-  { id: "UPDATE_REQUESTED", title: "UPDATE_REQUESTED" },
-  { id: "DELETE_REQUESTED", title: "DELETE_REQUESTED" },
   { id: "DELETED", title: "DELETED" },
 ];

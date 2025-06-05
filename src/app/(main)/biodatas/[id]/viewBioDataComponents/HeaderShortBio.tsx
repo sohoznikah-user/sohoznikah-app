@@ -25,6 +25,7 @@ export default function HeaderShortBio({
   biodataFormData: BiodataFormData;
 }) {
   const {
+    primaryInfoFormData,
     generalInfoFormData,
     educationInfoFormData,
     occupationInfoFormData,
@@ -42,7 +43,8 @@ export default function HeaderShortBio({
     <Card className="w-1/2 bg-white text-black border-none rounded-4xl">
       <CardHeader className="flex items-center">
         <div className="text-lg text-white bg-[#016ca7] p-4 rounded-xl">
-          পাত্রের সংক্ষিপ্ত বিবরণ
+          {`${primaryInfoFormData?.biodataType === "BRIDE" ? "পাত্রীর" : "পাত্রের"} `}
+          সংক্ষিপ্ত বিবরণ
         </div>
       </CardHeader>
       <CardContent>

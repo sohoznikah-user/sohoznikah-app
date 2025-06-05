@@ -12,11 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  biodataVisibilityOptions,
-  emailVerificationOptions,
-  userStatusOptions,
-} from "@/lib/consts";
+import { emailVerificationOptions, userStatusOptions } from "@/lib/consts";
 import {
   useGetAllUsersQuery,
   useGiveTokenMutation,
@@ -82,8 +78,6 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     if (selectedData) {
       setUpdatedData({
-        token: selectedData?.token,
-        biodataStatus: selectedData?.biodatas?.visibility,
         emailConfirmed: selectedData?.emailConfirmed
           ? "VERIFIED"
           : "UNVERIFIED",
@@ -443,7 +437,7 @@ export default function AdminDashboardPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+              {/* <div>
                 <label htmlFor="biodataStatus">Biodata Status</label>
                 <Select
                   value={updatedData?.biodataStatus}
@@ -484,7 +478,7 @@ export default function AdminDashboardPage() {
                     })
                   }
                 />
-              </div>
+              </div> */}
             </div>
           </form>
         </ReusableModal>

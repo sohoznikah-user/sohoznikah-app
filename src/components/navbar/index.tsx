@@ -29,12 +29,9 @@ export interface MenuItem {
 export function Navbar() {
   const user = useAppSelector((state) => state.auth.user);
   const token = useAppSelector((state) => state.auth.acesstoken);
-  const biodata = useAppSelector((state) => state.biodata.biodata);
-  const biodataFormData = useAppSelector(
-    (state) => state.biodata.biodataFormData
-  );
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
 
   const menuItems: MenuItem[] = [
     {
@@ -84,12 +81,41 @@ export function Navbar() {
 
       <div className="min-w-96 flex justify-end space-x-4">
         {user?.role === "USER" && (
-          <Link
-            href="/biodata-editor"
-            className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
-          >
-            বায়োডাটা তৈরী করুন
-          </Link>
+          <>
+            {biodata?.status === "" ? (
+              <Link
+                href="/biodata-editor"
+                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+              >
+                বায়োডাটা তৈরী করুন
+              </Link>
+            ) : biodata?.status === "PROCESSING" ? (
+              <Link
+                href="/biodata-editor"
+                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+              >
+                বায়োডাটা সম্পূর্ণ করুন
+              </Link>
+            ) : biodata?.status === "PENDING" ||
+              biodata?.status === "EDIT_PENDING" ? (
+              <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all">
+                Pending Approval
+              </button>
+            ) : biodata?.status === "UPDATE_REQUESTED" ? (
+              <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all">
+                Complete Update & Submit
+              </button>
+            ) : biodata?.status === "APPROVED" ? (
+              <Link
+                href="/biodatas/my-biodata"
+                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+              >
+                আমার বায়োডাটা
+              </Link>
+            ) : (
+              ""
+            )}
+          </>
         )}
 
         {!user && !token && (

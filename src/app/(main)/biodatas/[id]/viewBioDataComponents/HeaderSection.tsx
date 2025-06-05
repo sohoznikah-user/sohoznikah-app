@@ -2,18 +2,17 @@
 "use client";
 import Loading from "@/app/loading";
 import male from "@/assets/images/male-5.svg";
-import Alert from "@/components/ui/Alert";
+import NeedLoginModal from "@/components/shared/NeedLoginModal";
+import { ReusableModal } from "@/components/shared/ReusableModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { BiodataFormData } from "@/lib/types";
 import {
   useCreateFavouriteMutation,
-  useDeleteFavouriteMutation,
   useGetFavouriteByIdQuery,
 } from "@/redux/features/admin/favouriteApi";
 import { useCreateProposalMutation } from "@/redux/features/admin/proposalApi";
 import {
   useCreateShortlistMutation,
-  useDeleteShortlistMutation,
   useGetShortlistByIdQuery,
 } from "@/redux/features/admin/shortlistApi";
 import {
@@ -21,7 +20,7 @@ import {
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
-import { CircleChevronDown, Copy, Heart, IdCard, Send } from "lucide-react";
+import { CircleChevronDown, Copy, Heart, Send, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -40,7 +39,7 @@ export default function HeaderSection({
   biodataFormData: BiodataFormData;
 }) {
   const searchParams = useSearchParams();
-  console.log("params", searchParams);
+  const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
   const token = useAppSelector(selectCurrentToken);
@@ -54,76 +53,72 @@ export default function HeaderSection({
   });
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
-  const [deleteFavourite, { isLoading: isDeleting }] =
-    useDeleteFavouriteMutation();
-
   const [createShortlist, { isLoading: isCreatingShortlist }] =
     useCreateShortlistMutation();
-  const [deleteShortlist, { isLoading: isDeletingShortlist }] =
-    useDeleteShortlistMutation();
-
   const [createProposal, { isLoading: isCreatingProposal }] =
     useCreateProposalMutation();
 
   useEffect(() => {
-    if (favourite?.data) {
+    if (favourite?.success) {
       setIsFavourite(true);
+    } else {
+      setIsFavourite(false);
     }
   }, [favourite]);
 
   useEffect(() => {
-    if (shortlist?.data) {
+    if (shortlist?.success) {
       setIsShortlisted(true);
+    } else {
+      setIsShortlisted(false);
     }
   }, [shortlist]);
+  console.log("shortlist", shortlist?.success);
 
   const handleFavourite = async (type: "add" | "remove") => {
     if (!token || !user) {
-      return;
+      setIsModalOpen("login");
     }
     try {
-      if (type === "add") {
-        const res = await createFavourite({
-          biodataId: biodata?.biodata?.id,
-        }).unwrap();
-        if (res?.success) {
-          toast.success("প্রিয় তালিকায় যোগ করা হয়েছে");
+      const res = await createFavourite({
+        biodataId: biodataId,
+      }).unwrap();
+      if (res?.success) {
+        if (res?.statusCode === 201) {
+          toast.success("ফেভারিট লিস্টে যোগ করা হয়েছে");
           setIsFavourite(true);
-        }
-      } else {
-        const res = await deleteFavourite(biodata?.biodata?.id).unwrap();
-        if (res?.success) {
-          toast.success("প্রিয় তালিকায় থেকে সরানো হয়েছে");
+        } else if (res?.statusCode === 200) {
+          toast.error("ফেভারিট লিস্ট থেকে মুছে ফেলা হয়েছে।");
           setIsFavourite(false);
         }
       }
     } catch (error) {
-      toast.error(error?.message || "কিছু ভুল হয়েছে");
+      toast.error("কিছু ভুল হয়েছে। আবার চেষ্টা করুন");
+    } finally {
+      handleReset();
     }
   };
-
   const handleShortlist = async (type: "add" | "remove") => {
     if (!token || !user) {
-      return;
+      setIsModalOpen("login");
     }
     try {
-      if (type === "add") {
-        const res = await createShortlist({
-          biodataId: biodata?.biodata?.id,
-        }).unwrap();
-        if (res?.success) {
-          toast.success(res?.message || "চুড়ান্ত তালিকায় যোগ করা হয়েছে");
-          setIsShortlisted(true);
-        }
-      } else {
-        const res = await deleteShortlist(biodata?.biodata?.id).unwrap();
-        if (res?.success) {
-          toast.success(res?.message || "চুড়ান্ত তালিকায় থেকে সরানো হয়েছে");
-          setIsShortlisted(false);
+      const res = await createShortlist({
+        biodataId: biodataId,
+      }).unwrap();
+      if (res?.success) {
+        if (res?.statusCode === 201) {
+          toast.success("চুড়ান্ত তালিকায় যোগ করা হয়েছে");
+          setIsFavourite(true);
+        } else if (res?.statusCode === 200) {
+          toast.error("চুড়ান্ত তালিকা থেকে মুছে ফেলা হয়েছে");
+          setIsFavourite(false);
         }
       }
     } catch (error) {
-      toast.error(error?.message || "কিছু ভুল হয়েছে");
+      toast.error("কিছু ভুল হয়েছে। আবার চেষ্টা করুন");
+    } finally {
+      handleReset();
     }
   };
 
@@ -158,6 +153,12 @@ export default function HeaderSection({
     }
   };
 
+  const handleReset = () => {
+    setIsModalOpen(null);
+    setIsFavourite(false);
+    setIsShortlisted(false);
+  };
+
   if (!biodata) return <Loading />;
 
   const status =
@@ -177,12 +178,7 @@ export default function HeaderSection({
                       {status}
                     </div>
                     <Image
-                      src={
-                        // biodata?.biodata?.profilePic
-                        //   ? biodata.biodata.profilePic
-                        //   : male
-                        male
-                      }
+                      src={biodata?.biodata?.profilePic || male}
                       alt="Profile"
                       width={100}
                       height={40}
@@ -200,50 +196,25 @@ export default function HeaderSection({
                   </div>
 
                   <div className="flex space-x-4 border border-gray-400 rounded-xl p-4 ">
-                    {!token || !user ? (
-                      <Alert>
-                        <Heart
-                          className={`h-6 w-6 cursor-pointer ${
-                            isFavourite ? "text-[#e25a6f]" : "text-black"
-                          }`}
-                          onClick={() =>
-                            handleFavourite(isFavourite ? "remove" : "add")
-                          }
-                          fill={isFavourite ? "red" : "white"}
-                        />
-                      </Alert>
-                    ) : (
-                      <Heart
-                        className={`h-6 w-6 cursor-pointer ${
-                          isFavourite ? "text-[#e25a6f]" : "text-black"
-                        }`}
-                        onClick={() =>
-                          handleFavourite(isFavourite ? "remove" : "add")
-                        }
-                        fill={isFavourite ? "red" : "white"}
-                      />
-                    )}
-                    {!token || !user ? (
-                      <Alert>
-                        <IdCard
-                          className={`h-6 w-6 cursor-pointer ${
-                            isShortlisted ? "text-[#e25a6f]" : "text-black"
-                          }`}
-                          onClick={() =>
-                            handleShortlist(isShortlisted ? "remove" : "add")
-                          }
-                        />
-                      </Alert>
-                    ) : (
-                      <IdCard
-                        className={`h-6 w-6 cursor-pointer ${
-                          isShortlisted ? "text-[#e25a6f]" : "text-black"
-                        }`}
-                        onClick={() =>
-                          handleShortlist(isShortlisted ? "remove" : "add")
-                        }
-                      />
-                    )}
+                    <Heart
+                      className={`h-6 w-6 cursor-pointer ${
+                        isFavourite ? "text-[#e25a6f]" : "text-black"
+                      }`}
+                      onClick={() =>
+                        setIsModalOpen(!token || !user ? "login" : "favourite")
+                      }
+                      fill={isFavourite ? "red" : "white"}
+                    />
+
+                    <Star
+                      className={`h-6 w-6 cursor-pointer ${
+                        isShortlisted ? "text-[#e25a6f]" : "text-black"
+                      }`}
+                      onClick={() =>
+                        setIsModalOpen(!token || !user ? "login" : "shortlist")
+                      }
+                      fill={isShortlisted ? "#FFCD06" : "white"}
+                    />
 
                     <Copy
                       className="h-6 w-6 rotate-90 cursor-pointer hover:text-[#e25a6f]"
@@ -268,19 +239,18 @@ export default function HeaderSection({
                         ১টি টোকেন খরচ হবে
                       </div>
                     </div>
-                    <Alert>
-                      <div
-                        className="bg-[#e25a6f] px-4 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f]"
-                        onClick={handleCreateProposal}
-                      >
-                        <Send
-                          className="h-6 w-6"
-                          fill="white"
-                          stroke="#e25a6f"
-                          strokeOpacity={0.5}
-                        />
-                      </div>
-                    </Alert>
+
+                    <div
+                      className="bg-[#e25a6f] px-4 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f]"
+                      onClick={handleCreateProposal}
+                    >
+                      <Send
+                        className="h-6 w-6"
+                        fill="white"
+                        stroke="#e25a6f"
+                        strokeOpacity={0.5}
+                      />
+                    </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col space-x-2">
@@ -320,6 +290,38 @@ export default function HeaderSection({
           </div>
         </div>
       </div>
+
+      <NeedLoginModal
+        open={isModalOpen === "login"}
+        onClose={() => setIsModalOpen(null)}
+        loading={isLoading}
+      />
+
+      <ReusableModal
+        open={isModalOpen === "favourite"}
+        onClose={() => setIsModalOpen(null)}
+        loading={isLoading}
+        onConfirm={() => handleFavourite(isFavourite ? "remove" : "add")}
+        confirmText={isFavourite ? "মুছে ফেলুন" : "যোগ করন"}
+        cancelText="বাতিল"
+        title={`আপনি কি ফেভারিট ${
+          isFavourite ? "লিস্ট থেকে মুছে ফেলতে" : "লিস্টে যোগ করতে"
+        } চান?`}
+        description={`ফেভারিট  ${isFavourite ? "লিস্ট থেকে মুছে ফেলতে মুছে ফেলুন" : "লিস্টে যোগ করতে চাইলে যোগ করুন"} বাটনে ক্লিক করতে হবে।`}
+      />
+
+      <ReusableModal
+        open={isModalOpen === "shortlist"}
+        onClose={() => setIsModalOpen(null)}
+        loading={isLoading}
+        onConfirm={() => handleShortlist(isShortlisted ? "remove" : "add")}
+        confirmText={isShortlisted ? "মুছে ফেলুন" : "যোগ করন"}
+        cancelText="বাতিল"
+        title={`আপনি কি চুড়ান্ত  ${
+          isShortlisted ? "তালিকা থেকে মুছে ফেলতে" : "তালিকায় যোগ করতে"
+        } চান?`}
+        description={`চুড়ান্ত ${isShortlisted ? "তালিকা থেকে মুছে ফেলতে মুছে ফেলুন" : "তালিকায় যোগ করতে যোগ করুন"} বাটনে ক্লিক করতে হবে।`}
+      />
     </div>
   );
 }

@@ -7,8 +7,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 export default function DashboardMainBioStatus() {
-  const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
-  console.log({ biodata, biodataFormData });
+  const { biodata } = useAppSelector((state) => state.biodata);
+  // console.log({ biodata, biodataFormData });
 
   const [updateBioStatus, { isLoading: isUpdatingBioStatus }] =
     useUpdateMyBiodataMutation();
@@ -34,7 +34,7 @@ export default function DashboardMainBioStatus() {
     <div className="bg-[#f2f4fc] p-8 flex flex-col space-y-2 rounded-xl">
       <div className="text-[#005381] text-center text-2xl">বায়োডাটা</div>
       <div className="text-xs text-[#8c8e92] text-center">
-        বায়োডাটা পাবলিশ হয়েছে ৫ নভেম্বর, ২০২৪
+        {/* বায়োডাটা পাবলিশ হয়েছে ৫ নভেম্বর, ২০২৪ */}
       </div>
       <div className="flex space-x-6 text-black mt-4">
         <div className="flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl">
@@ -64,8 +64,14 @@ export default function DashboardMainBioStatus() {
         </div>
         <div className="w-72 flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl">
           <div className="text-lg">বায়োডাটা সম্পূর্ণতা</div>
-          <Slider value={[70]} min={0} max={100} step={1} className="w-full" />
-          <div>৭০%</div>
+          <Slider
+            value={[Number(biodata?.biodataCompleted || 0)]}
+            min={0}
+            max={100}
+            step={1}
+            className="w-full"
+          />
+          <div>{biodata?.biodataCompleted || 0}%</div>
         </div>
         <div className="flex flex-col items-center space-y-6">
           <Link

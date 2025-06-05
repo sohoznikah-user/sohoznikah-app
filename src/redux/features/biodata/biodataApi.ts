@@ -89,6 +89,13 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.biodata],
     }),
+    getBiodataAnalytics: build.query({
+      query: () => ({
+        url: `${BIODATA_URL}/analytics`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.biodata],
+    }),
   }),
 });
 
@@ -104,4 +111,5 @@ export const {
   useUpdateBiodataMutation,
   useDeleteBiodataMutation,
   useRequestDeleteBiodataMutation,
+  useGetBiodataAnalyticsQuery,
 } = biodataApi;

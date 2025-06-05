@@ -45,7 +45,7 @@ instance.interceptors.response.use(
     if (error?.response?.status === 401 || error?.response?.status === 403) {
       toast.error(error?.response?.data?.message || "UnAuthorized Access.");
 
-      window.location.href = "/login"; // Redirect to login
+      window.location.href = "/unauthorized"; // Redirect to login
       return Promise.reject("Unauthorized. Redirecting to login.");
     }
 

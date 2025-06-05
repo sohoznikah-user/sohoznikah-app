@@ -9,6 +9,7 @@ interface BiodataState {
     status: string;
     visibility: string;
     token: string | number;
+    biodataCompleted: string | number;
   };
   biodataFormData: {
     [key: string]: any; // each step’s data
@@ -24,6 +25,7 @@ const initialState: BiodataState = {
     status: "",
     visibility: "",
     token: "",
+    biodataCompleted: "",
   },
   biodataFormData: {}, // not null
 };
