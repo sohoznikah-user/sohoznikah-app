@@ -59,7 +59,7 @@ export function Navbar() {
   };
 
   return (
-    <div className="sticky top-0 flex items-center z-20 justify-center p-4 text-[#1f4f69] bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
+    <div className=" flex items-center z-20 justify-center p-4 text-[#1f4f69] bg-transparent  border-b border-gray-200">
       <NavigationMenu className="min-w-96">
         <NavigationMenuList className="flex space-x-2 justify-center">
           {menuItems.map((item, index) => (
@@ -79,36 +79,36 @@ export function Navbar() {
         <Image src={logo} alt="Logo" width={80} height={50} priority />
       </div>
 
-      <div className="min-w-96 flex justify-end space-x-4">
+      <div className="min-w-96 flex justify-end space-x-4 text-md">
         {user?.role === "USER" && (
           <>
             {biodata?.status === "" ? (
               <Link
                 href="/biodata-editor"
-                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md"
               >
                 বায়োডাটা তৈরী করুন
               </Link>
             ) : biodata?.status === "PROCESSING" ? (
               <Link
                 href="/biodata-editor"
-                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md"
               >
                 বায়োডাটা সম্পূর্ণ করুন
               </Link>
             ) : biodata?.status === "PENDING" ||
               biodata?.status === "EDIT_PENDING" ? (
-              <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all">
+              <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md">
                 Pending Approval
               </button>
             ) : biodata?.status === "UPDATE_REQUESTED" ? (
-              <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all">
+              <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md">
                 Complete Update & Submit
               </button>
             ) : biodata?.status === "APPROVED" ? (
               <Link
                 href="/biodatas/my-biodata"
-                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all"
+                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md"
               >
                 আমার বায়োডাটা
               </Link>

@@ -87,12 +87,12 @@ export default function BiodatasPageSearchByBiodataNo({
     >
       <div className="w-32">
         <Select onValueChange={handleGenderChange} value={gender}>
-          <SelectTrigger className="text-[#1f4f69]">
+          <SelectTrigger className="text-[#1f4f69] text-md border-gray-300 px-1">
             <SelectValue placeholder="পাত্র/পাত্রী" />
           </SelectTrigger>
-          <SelectContent className="bg-white text-[#1f4f69]">
+          <SelectContent className="bg-white text-[#1f4f69] ">
             <SelectItem
-              className="focus:bg-[#E25A6F] focus:text-white"
+              className="focus:bg-[#E25A6F] focus:text-white "
               value="male"
             >
               পাত্র (M)
@@ -110,7 +110,7 @@ export default function BiodatasPageSearchByBiodataNo({
       <div className="relative w-64">
         <div className="space-y-2">
           <Input
-            className="w-full px-4 py-2 border rounded-md text-[#1f4f69] selection:bg-[#E25A6F] selection:text-white"
+            className="w-full px-3 border rounded-md text-[#1f4f69] selection:bg-[#E25A6F] selection:text-white md:text-md text-md border-gray-300"
             id="biodataNo"
             type="text"
             placeholder="বায়োডাটা নং"
@@ -127,7 +127,7 @@ export default function BiodatasPageSearchByBiodataNo({
       </div>
       <button
         type="button"
-        className="py-2 px-4 bg-[#e25a6f] text-white rounded-xl"
+        className="py-2 px-4 bg-[#e25a6f] text-white rounded-xl text-md"
         onClick={handleReset}
       >
         রিসেট

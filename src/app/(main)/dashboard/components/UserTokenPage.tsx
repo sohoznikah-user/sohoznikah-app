@@ -128,7 +128,7 @@ const UserTokenPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-pink-100 flex justify-center items-start py-16">
+    <div className="min-h-[500px]  flex justify-center items-start py-16">
       {!showPaymentForm && (
         <div className="w-full max-w-3xl">
           {/* Page Title */}
@@ -407,7 +407,7 @@ const UserTokenPage = () => {
                 যে নম্বর থেকে সেন্ড মানি করেছেন:
               </label>
               <input
-                type="text"
+                type="number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-[55%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -430,7 +430,7 @@ const UserTokenPage = () => {
             {/* Send Button */}
             <button
               onClick={handlePaymentSubmit}
-              className="w-full mt-3 bg-[#E25A6F] text-white font-medium py-2 rounded-lg hover:bg-[#CA2740]/80 transition-all duration-300 border-none border-0"
+              className="w-full mt-3 bg-[#E25A6F] text-white font-medium py-2 rounded-lg hover:bg-[#CA2740]/80 transition-all duration-300 border-none border-0 cursor-pointer"
             >
               Send
             </button>

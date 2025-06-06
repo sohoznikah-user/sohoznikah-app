@@ -108,9 +108,9 @@ export default function BioCard({
     <>
       <Card
         key={id}
-        className="border-none overflow-hidden bg-gradient-to-t from-[#e6f2ff] to-[#fff0f6]"
+        className="border-none overflow-hidden bg-gradient-to-t from-[#e6f2ff] to-[#fff0f6] "
       >
-        <CardContent className="p-4">
+        <CardContent className="p-7">
           <div className="flex justify-between items-start mb-4">
             <div className="w-1/3">
               <Heart
@@ -121,7 +121,7 @@ export default function BioCard({
                 }
               />
             </div>
-            <div className="w-1/3 flex items-center justify-center">
+            <div className="w-1/3 flex items-center justify-center mt-3">
               <Image
                 src={profilePic || male}
                 alt="Male"
@@ -142,12 +142,12 @@ export default function BioCard({
             </div>
           </div>
 
-          <div className="space-y-3 text-black">
-            <div className="flex justify-between">
+          <div className="space-y-2 text-black">
+            <div className="flex justify-between text-md">
               <span>বৈবাহিক অবস্থা:</span>
               <span>{getTitleById(maritalStatuses, maritalStatus)}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between  text-md">
               <span>জন্মসন:</span>
               <span>
                 {birthYear
@@ -157,15 +157,15 @@ export default function BioCard({
                   : "--"}
               </span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between  text-md">
               <span>উচ্চতা:</span>
               <span>{getTitleById(heights, String(height))}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between  text-md">
               <span>স্থায়ী ঠিকানা:</span>
               <span>{getDistrictTitle(permanentAddress)}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between  text-md">
               <span>পেশা:</span>
               <span>
                 {occupation ? (
@@ -182,7 +182,7 @@ export default function BioCard({
         </CardContent>
         <CardFooter>
           <Button
-            className="w-full text-white bg-[#E25A6F]  hover:bg-[#D14A5F]"
+            className="w-full text-white bg-[#E25A6F]  hover:bg-[#D14A5F] text-md"
             onClick={handleOnClick}
           >
             বায়োডাটা দেখুন

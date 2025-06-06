@@ -5,7 +5,7 @@ export default function DashboardMainMyBioStatus({
   biodataAnalytics: any;
 }) {
   return (
-    <div className="w-96 bg-[#f2f4fc] p-8 flex flex-col space-y-4 rounded-xl">
+    <div className="w-96 bg-[#F5F4FC] p-8 flex flex-col space-y-4 rounded-xl">
       <div className="text-2xl text-[#005381] text-center mb-8">
         আপনি সর্বমোট বায়োডাটা
       </div>

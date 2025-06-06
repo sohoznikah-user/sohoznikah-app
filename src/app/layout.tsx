@@ -2,29 +2,19 @@
 import RootProvider from "@/lib/provider/RootProvider";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { Noto_Serif_Bengali } from "next/font/google";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// const tiroBangla = Tiro_Bangla({
+//   subsets: ["bengali"],
+//   weight: ["400"],
+// });
 
-const customFont = localFont({
-  src: [
-    {
-      path: "fonts/SolaimanLipi_22-02-2012.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "fonts/SolaimanLipi_22-02-2012.ttf",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-custom",
-  display: "swap",
+const notoSerifBengali = Noto_Serif_Bengali({
+  subsets: ["bengali", "latin"],
+  weight: ["400", "700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -42,9 +32,9 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={customFont.variable}>
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} font-sans `}
+        className={`${notoSerifBengali.className} `}
         suppressHydrationWarning
       >
         <RootProvider>

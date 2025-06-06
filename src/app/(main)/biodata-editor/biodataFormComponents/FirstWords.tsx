@@ -78,7 +78,7 @@ export default function FirstWords({
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8">
-      <div className="text-3xl text-center text-[#004972]">
+      <div className="text-3xl text-center text-[#004972] mt-10">
         বায়োডাটা তৈরির পূর্বে কিছু গুরুত্বপূর্ণ কথা
       </div>
       <div className="max-w-4xl w-full space-y-4 text-sm text-black">

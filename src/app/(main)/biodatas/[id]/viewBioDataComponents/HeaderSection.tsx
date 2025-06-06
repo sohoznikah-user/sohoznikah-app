@@ -169,9 +169,9 @@ export default function HeaderSection({
     <div className="bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
       <div className=" container mx-auto px-4 py-12 flex justify-center ">
         <div className="min-w-7xl flex space-x-8">
-          <div className="w-1/4 flex flex-col space-y-8">
-            <Card className="bg-white text-black border-none rounded-4xl">
-              <CardContent className="pt-6">
+          <div className="w-1/4 flex flex-col justify-between space-y-8">
+            <Card className="bg-white text-black border-none rounded-4xl h-full">
+              <CardContent className="pt-8">
                 <div className="flex flex-col items-center space-y-4">
                   <div className="w-full flex items-start justify-between">
                     <div className="w-1 text-[#00b754] text-md font-semibold">
@@ -226,9 +226,9 @@ export default function HeaderSection({
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white text-black border-none rounded-4xl">
-              <CardContent className="pt-6">
-                <div className="flex flex-col space-y-4">
+            <Card className="bg-white text-black border-none rounded-4xl h-full">
+              <CardContent className="pt-10">
+                <div className="flex flex-col space-y-6">
                   <div className="text-xl font-medium text-center mb-4 text-[#b52d1f]">
                     আপনি আগ্রহী?
                   </div>
@@ -270,7 +270,7 @@ export default function HeaderSection({
                   </div>
                   <Link
                     href="/tutorial"
-                    className="text-xs text-center hover:underline text-blue-300"
+                    className="text-xs text-center hover:underline text-blue-300 mt-4"
                   >
                     (বিস্তারিত জানুন)
                   </Link>

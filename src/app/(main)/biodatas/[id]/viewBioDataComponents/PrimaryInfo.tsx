@@ -16,7 +16,7 @@ export default function PrimaryInfo({
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
       <CardHeader>
-        <CardTitle className="text-[#004972] text-center font-medium">
+        <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           প্রাথমিক তথ্য
         </CardTitle>
       </CardHeader>

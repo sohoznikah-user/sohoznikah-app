@@ -78,7 +78,7 @@ export default function ProfilePic({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">প্রোফাইল পিকচার</div>
       <Form {...form}>
         <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
@@ -87,7 +87,7 @@ export default function ProfilePic({
             name="photoId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
+                <FormLabel className="text-lg text-center mb-5">
                   আপনার সাথে মানানসই বা সামঞ্জস্যপূর্ণ একটি প্রোফাইল পিকচার
                   বাছাই করুন:
                 </FormLabel>

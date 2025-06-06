@@ -95,7 +95,7 @@ export default function GeneralInfo({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">সাধারণ তথ্য</div>
       <Form {...form}>
         <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-4">
@@ -107,7 +107,7 @@ export default function GeneralInfo({
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     <div>জন্ম তারিখ:</div>
-                    <div className="text-xs">(আসল, সার্টিফিকেট অনুযায়ী নয়)</div>
+                    <div className="text-md">(আসল, সার্টিফিকেট অনুযায়ী নয়)</div>
                   </FormLabel>
                   <FormControl>
                     <Popover>
@@ -347,7 +347,7 @@ export default function GeneralInfo({
                                     );
                                     field.onChange(newValue);
                                   }}
-                                  className="hover:text-gray-200 cursor-pointer text-xs ml-1"
+                                  className="hover:text-gray-200 cursor-pointer text-md ml-1"
                                   role="button"
                                   tabIndex={0}
                                 >

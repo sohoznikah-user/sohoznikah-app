@@ -174,8 +174,8 @@ export default function PrimaryInfo({
   }, [form, handleSave]);
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
-      <div className="text-3xl text-center text-black">প্রাথমিক তথ্য</div>
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
+      <div className="text-3xl text-center text-black ">প্রাথমিক তথ্য</div>
       <Form {...form}>
         <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-4">
           <FormField
@@ -216,7 +216,7 @@ export default function PrimaryInfo({
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-col space-y-2">
-                  <FormLabel className="text-lg font-medium text-[#005889]">
+                  <FormLabel className="text-md font-medium text-[#005889]">
                     বায়োডাটা কার জন্য তৈরী করছেন?
                   </FormLabel>
                   <FormControl>
@@ -233,7 +233,7 @@ export default function PrimaryInfo({
                         />
                         <label
                           htmlFor="self"
-                          className="text-xs text-[#005889]"
+                          className="text-md text-[#005889]"
                         >
                           নিজের জন্য
                         </label>
@@ -246,7 +246,7 @@ export default function PrimaryInfo({
                         />
                         <label
                           htmlFor="other"
-                          className="text-xs text-[#005889]"
+                          className="text-md text-[#005889]"
                         >
                           বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য
                         </label>
@@ -266,7 +266,7 @@ export default function PrimaryInfo({
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     <div>পাত্র/পাত্রীর সম্পূর্ণ নাম:</div>
-                    <div className="text-xs">
+                    <div className="text-md">
                       (NID কার্ডে যে নাম আছে। নাম বায়োডাটায় প্রকাশ করা হবে না।
                       শুধুমাত্র ভেরিফিকেশন ও অপরপক্ষকে যোগাযোগ তথ্য প্রদানের
                       ক্ষেত্রে প্রয়োজন হবে।)
@@ -292,7 +292,7 @@ export default function PrimaryInfo({
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     <div>পিতার নাম:</div>
-                    <div className="text-xs">
+                    <div className="text-md">
                       (পূর্ণ নাম লিখবেন। বায়োডাটায় প্রকাশ করা হবে না।)
                     </div>
                   </FormLabel>
@@ -316,7 +316,7 @@ export default function PrimaryInfo({
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     <div>মাতার নাম:</div>
-                    <div className="text-xs">
+                    <div className="text-md">
                       (পূর্ণ নাম লিখবেন। বায়োডাটায় প্রকাশ করা হবে না।)
                     </div>
                   </FormLabel>
@@ -340,7 +340,7 @@ export default function PrimaryInfo({
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     <div>ইমেইল আইডি:</div>
-                    <div className="text-xs">
+                    <div className="text-md">
                       (পাত্র/পাত্রীর সাথে আমাদের যোগাযোগের জন্য প্রয়োজন হবে।
                       অপরপক্ষ যোগাযোগ তথ্য নিতে চাইলে যুক্তিসঙ্গত কারণ বা
                       প্রয়োজন ছাড়া পাঠানো হবে না।)
@@ -367,7 +367,7 @@ export default function PrimaryInfo({
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     <div>পাত্র/পাত্রীর মোবাইল নম্বর:</div>
-                    <div className="text-xs">
+                    <div className="text-md">
                       (মোবাইল নম্বর শুধুমাত্র ভেরিফিকেশনের জন্য আমাদের কাছে
                       থাকবে। কাউকে প্রদান করা হবে না।)
                     </div>
@@ -389,7 +389,7 @@ export default function PrimaryInfo({
             <FormLabel className="flex items-center justify-between space-x-8">
               <div className="text-md space-y-1 leading-4.5">
                 <div>পাত্র/পাত্রীর অভিভাবকের মোবাইল নম্বর:</div>
-                <div className="text-xs">
+                <div className="text-md">
                   <div>
                     কমপক্ষে ২ টি সচল নম্বর প্রদান করতে হবে। কেউ আপনার বায়োডাটার
                     যোগাযোগ তথ্য কিনলে তাদেরকে এই তথ্য প্রদান করা হবে।

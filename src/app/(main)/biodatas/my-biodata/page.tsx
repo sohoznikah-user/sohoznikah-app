@@ -119,7 +119,7 @@ export default function BiodataPage() {
               <TabsTrigger
                 key={tab}
                 value={tab}
-                className="data-[state=active]:bg-[#e25a6f] data-[state=active]:text-white text-[#004972] rounded-full px-4 py-2"
+                className="data-[state=active]:bg-[#e25a6f] data-[state=active]:text-white text-[#004972] rounded-full px-4 py-2 text-md"
               >
                 {tab}
               </TabsTrigger>
@@ -127,7 +127,7 @@ export default function BiodataPage() {
           </TabsList>
         </Tabs>
 
-        <div className="w-full max-w-6xl space-y-6">
+        <div className="w-full max-w-6xl space-y-6  sticky top-0">
           <div ref={primaryInfoRef}>
             <PrimaryInfo
               biodata={biodata}

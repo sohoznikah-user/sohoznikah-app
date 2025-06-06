@@ -2,7 +2,6 @@
 "use client";
 import { useGetBiodataAnalyticsQuery } from "@/redux/features/biodata/biodataApi";
 import DashboardMainBioStatus from "./DashboardMainBioStatus";
-import DashboardMainContactUs from "./DashboardMainContactUs";
 import DashboardMainMyActivityStatus from "./DashboardMainMyActivityStatus";
 import DashboardMainMyBioStatus from "./DashboardMainMyBioStatus";
 import DashboardMainNotifications from "./DashboardMainNotifications";
@@ -19,7 +18,7 @@ export default function DashboardMainContent() {
         <DashboardMainMyBioStatus biodataAnalytics={biodataAnalytics} />
       </div>
       <DashboardMainNotifications />
-      <DashboardMainContactUs />
+      {/* <DashboardMainContactUs /> */}
     </div>
   );
 }

@@ -43,19 +43,30 @@ export function HomeSearchBiodata() {
     };
     console.log("Dispatching Filters:", filters); // Debug
     dispatch(setFilterData(filters));
-    router.push("/biodatas");
+    // Convert number values to strings for URLSearchParams
+    const searchParams = {
+      ...filters,
+      ageMin: filters.ageMin.toString(),
+      ageMax: filters.ageMax.toString(),
+    };
+    router.push(`/biodatas?${new URLSearchParams(searchParams).toString()}`);
   };
 
   return (
     <div className="bg-white p-8 shadow-lg flex flex-wrap">
       <div className="w-1/3 space-y-2 p-2">
-        <Label>আমি খুঁজছি</Label>
+        <Label className="text-md">আমি খুঁজছি</Label>
         <Select value={biodataType} onValueChange={setBiodataType}>
-          <SelectTrigger>
+          <SelectTrigger className="border-gray-300">
             <SelectValue placeholder="সকল বায়োডাটা" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">সকল বায়োডাটা</SelectItem>
+          <SelectContent
+            className="bg-slate-100 text-black border-gray-300 
+          "
+          >
+            <SelectItem value="all" className="text-md">
+              সকল বায়োডাটা
+            </SelectItem>
             {biodataTypes.map((type) => (
               <SelectItem key={type.id} value={type.id}>
                 {type.title}
@@ -66,13 +77,18 @@ export function HomeSearchBiodata() {
       </div>
 
       <div className="w-1/3 space-y-2 p-2">
-        <Label>বৈবাহিক অবস্থা</Label>
+        <Label className="text-md">বৈবাহিক অবস্থা</Label>
         <Select value={maritalStatus} onValueChange={setMaritalStatus}>
-          <SelectTrigger>
+          <SelectTrigger className="border-gray-300">
             <SelectValue placeholder="সকল অবস্থা" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">সকল অবস্থা</SelectItem>
+          <SelectContent
+            className="bg-slate-100 text-black border-gray-300 
+          "
+          >
+            <SelectItem value="all" className="text-md">
+              সকল অবস্থা
+            </SelectItem>
             {maritalStatuses
               .filter((m) => m.for === biodataType || m.for === "both")
               .map((status) => (
@@ -85,13 +101,18 @@ export function HomeSearchBiodata() {
       </div>
 
       <div className="w-1/3 space-y-2 p-2">
-        <Label>স্থায়ী জেলা</Label>
+        <Label className="text-md">স্থায়ী জেলা</Label>
         <Select value={state} onValueChange={setState}>
-          <SelectTrigger>
+          <SelectTrigger className="border-gray-300">
             <SelectValue placeholder="সকল ঠিকানা" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">সকল ঠিকানা</SelectItem>
+          <SelectContent
+            className="bg-slate-100 text-black border-gray-300 
+          "
+          >
+            <SelectItem value="all" className="text-md">
+              সকল ঠিকানা
+            </SelectItem>
             {Object.keys(districtsAndUpazilas).map((district) => (
               <SelectItem
                 key={districtsAndUpazilas[district].value}
@@ -105,13 +126,18 @@ export function HomeSearchBiodata() {
       </div>
 
       <div className="w-1/3 space-y-2 p-2">
-        <Label>ধর্মীয় লাইফস্টাইল</Label>
+        <Label className="text-md">ধর্মীয় লাইফস্টাইল</Label>
         <Select value={muslimType} onValueChange={setMuslimType}>
-          <SelectTrigger>
+          <SelectTrigger className="border-gray-300">
             <SelectValue placeholder="সকল" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">সকল</SelectItem>
+          <SelectContent
+            className="bg-slate-100 text-black border-gray-300 
+          "
+          >
+            <SelectItem value="all" className="text-md">
+              সকল
+            </SelectItem>
             {religiousLifestyle.map((type) => (
               <SelectItem key={type.id} value={type.id}>
                 {type.title}
@@ -123,7 +149,7 @@ export function HomeSearchBiodata() {
 
       <div className="w-1/3 space-y-3 p-2">
         <Label
-          className="block font-medium text-[#1f4f69] text-center"
+          className="block text-md text-[#1f4f69] text-center"
           htmlFor="religious"
         >
           বয়স
@@ -142,9 +168,9 @@ export function HomeSearchBiodata() {
         </div>
       </div>
       <div className="w-1/3 space-y-1 p-2">
-        <p className="text-center text-sm text-gray-700">বিসমিল্লাহ</p>
+        <p className="text-center text-md text-gray-700">বিসমিল্লাহ</p>
         <Button
-          className="w-full p-2 bg-[#E25A6F] text-white rounded hover:bg-[#D14A5F]"
+          className="w-full p-2 bg-[#E25A6F] text-white rounded hover:bg-[#D14A5F] text-md"
           onClick={handleSearchClick}
         >
           খুঁজুন

@@ -40,7 +40,7 @@ export default function HeaderShortBio({
   // console.log("biodataFormData", biodata?.biodataFormData);
 
   return (
-    <Card className="w-1/2 bg-white text-black border-none rounded-4xl">
+    <Card className="w-1/2 bg-white text-black border-none rounded-4xl px-4">
       <CardHeader className="flex items-center">
         <div className="text-lg text-white bg-[#016ca7] p-4 rounded-xl">
           {`${primaryInfoFormData?.biodataType === "BRIDE" ? "পাত্রীর" : "পাত্রের"} `}
@@ -49,7 +49,7 @@ export default function HeaderShortBio({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col space-y-2">
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>বৈবাহিক অবস্থা</div>
             <div>
               {getTitleById(
@@ -58,25 +58,25 @@ export default function HeaderShortBio({
               )}
             </div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>জন্মসন</div>
             <div>{generalInfoFormData?.dateOfBirth}</div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>উচ্চতা</div>
             <div>{getTitleById(heights, generalInfoFormData?.height)}</div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>গাত্রবর্ণ</div>
             <div>{getTitleById(skinTones, generalInfoFormData?.skinTone)}</div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>শিক্ষা</div>
             <div>
               {getTitleById(degreeTypes, educationInfoFormData?.highestDegree)}
             </div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div className="mr-5">পেশা</div>
             <p className="text-end">
               {getTitleById(
@@ -85,21 +85,21 @@ export default function HeaderShortBio({
               )}
             </p>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>জেলা</div>
             <div>{getDistrictTitle(bangladeshAddress?.state)}</div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>ওজন</div>
             <div>{getTitleById(weights, generalInfoFormData?.weight)}</div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>রক্তের গ্রুপ</div>
             <div>
               {getTitleById(bloodGroups, generalInfoFormData?.bloodGroup)}
             </div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>পরিবার</div>
             <div>
               {getTitleById(
@@ -108,13 +108,13 @@ export default function HeaderShortBio({
               )}
             </div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>জাতীয়তা</div>
             <div>
               {getTitleById(nationalities, generalInfoFormData?.nationality)}
             </div>
           </div>
-          <div className="flex justify-between text-sm pb-2 border-b border-gray-200">
+          <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>ধর্মীয় লাইফস্টাইল</div>
             <div>
               {getTitleById(religiousLifestyle, religiousInfoFormData?.type)}

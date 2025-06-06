@@ -1,6 +1,5 @@
 // File: src/app/(main)/dashboard/DashboardLeftNav.tsx
 import profilePic from "@/assets/images/profile-pic.png";
-import { Separator } from "@/components/ui/separator";
 import { useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +8,7 @@ export default function DashboardLeftNav() {
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
 
   return (
-    <div className="py-12 w-72 flex flex-col items-center space-y-1 bg-[#5b8eaa]">
+    <div className="py-12 w-72 flex flex-col items-center space-y-1 bg-[#307FA7]">
       <Image
         src={biodata?.profilePic || profilePic}
         alt="Male"
@@ -79,7 +78,7 @@ export default function DashboardLeftNav() {
       >
         বিবাহ সম্পন্ন
       </Link> */}
-      <Separator className="bg-white my-4" />
+      {/* <Separator className="bg-white my-4" />
       <div className="p-2 w-full text-center hover:bg-[#eff9ff] hover:text-black">
         জিজ্ঞাসা
       </div>
@@ -91,7 +90,7 @@ export default function DashboardLeftNav() {
       </div>
       <div className="p-2 w-full text-center hover:bg-[#eff9ff] hover:text-black">
         মন্তব্য
-      </div>
+      </div> */}
     </div>
   );
 }

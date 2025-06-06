@@ -22,7 +22,7 @@ export default function GeneralInfo({
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
       <CardHeader>
-        <CardTitle className="text-[#004972] text-center font-medium">
+        <CardTitle className="text-[#004972] text-center   text-3xl font-normal">
           সাধারণ তথ্য
         </CardTitle>
       </CardHeader>

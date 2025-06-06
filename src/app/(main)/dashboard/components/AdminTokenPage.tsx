@@ -201,8 +201,8 @@ export default function AdminTokenPage() {
   ];
 
   return (
-    <div className="min-h-screen p-5 flex justify-center items-center">
-      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg py-8">
+    <div className="min-h-[500px] p-5 flex justify-center items-center">
+      <div className="w-full max-w-6xl bg-[#F5F4FC] rounded-lg shadow-lg py-6 pt-10">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
           টোকেন
         </h1>

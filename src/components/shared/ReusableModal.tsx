@@ -42,12 +42,12 @@ export const ReusableModal = ({
 }: ReusableModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className=" text-black bg-gradient-to-r from-blue-100 to-pink-100  overflow-y-auto">
+      <DialogContent className=" text-black bg-[#F5F4FC]  overflow-y-auto">
         {(title || description) && (
           <DialogHeader>
             {title && <DialogTitle>{title}</DialogTitle>}
             {description && (
-              <DialogDescription className="text-sm text-gray-600 my-3">
+              <DialogDescription className="text-md text-gray-600 my-3">
                 {description}
               </DialogDescription>
             )}
@@ -64,7 +64,7 @@ export const ReusableModal = ({
                   <Button
                     variant="outline"
                     onClick={onClose}
-                    className="text-white border-gray-300"
+                    className="text-white border-gray-300 text-md"
                   >
                     {cancelText}
                   </Button>
@@ -72,7 +72,7 @@ export const ReusableModal = ({
                 <Button
                   onClick={onConfirm}
                   disabled={loading}
-                  className="bg-red-600 text-white hover:bg-red-700"
+                  className="bg-red-600 text-white hover:bg-red-700 text-md"
                 >
                   {loading ? "প্রসেসিং..." : confirmText}
                 </Button>

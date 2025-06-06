@@ -23,7 +23,7 @@ export default function EducationAndOccupationInfo({
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
       <CardHeader>
-        <CardTitle className="text-[#004972] text-center font-medium">
+        <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           শিক্ষাগত যোগ্যতা
         </CardTitle>
       </CardHeader>
@@ -62,7 +62,7 @@ export default function EducationAndOccupationInfo({
         </div>
       </CardContent>
       <CardHeader>
-        <CardTitle className="text-[#004972] text-center font-medium">
+        <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           পেশা
         </CardTitle>
       </CardHeader>

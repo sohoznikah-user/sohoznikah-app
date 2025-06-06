@@ -67,16 +67,19 @@ export default function FinalWords({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-[#004972]">শেষ কথা</div>
       <Form {...form}>
         <form className="max-w-4xl w-full bg-[#f6f6f6] p-10 space-y-4 text-black rounded-4xl">
-          <div className="text-[#005A8B] text-xl text-center">
+          <div className="text-[#005A8B] text-2xl text-center">
             প্রতিশ্রুতি নামা
           </div>
           <div className="text-[#cd0000] space-y-3">
             <div className="flex items-center space-x-2">
-              <Label htmlFor="preApprove1" className="text-[#6C0011] leading-5">
+              <Label
+                htmlFor="preApprove1"
+                className="text-[#6C0011] text-lg leading-5"
+              >
                 আমি আল্লাহর নামে শপথ করছি যে,
               </Label>
             </div>
@@ -190,8 +193,8 @@ export default function FinalWords({
                             htmlFor={`biodataVisibility-${x.id}`}
                             className="leading-4.5 text-[#005A8B] flex flex-col"
                           >
-                            <span className="font-semibold ">{x.title}</span>{" "}
-                            <span className="text-xs text-[#cd0000]">
+                            <span className=" ">{x.title}</span>{" "}
+                            <span className=" text-[#cd0000] leading-4.5">
                               ({x.description})
                             </span>
                           </Label>

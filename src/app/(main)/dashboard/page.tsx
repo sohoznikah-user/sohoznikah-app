@@ -13,7 +13,7 @@ export default function DashboardPage() {
       {user?.role === "SUPER_ADMIN" || user?.role === "ADMIN" ? (
         <AdminDashboard />
       ) : (
-        <div className="flex justify-between flex-grow bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
+        <div className="flex justify-between flex-grow ">
           <DashboardMainContent />
           <DashboardRightSection />
         </div>

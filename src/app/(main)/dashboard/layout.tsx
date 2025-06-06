@@ -62,7 +62,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex justify-start flex-grow bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
       <DashboardLeftNav />
-      <div className="w-full bg-gradient-to-r from-blue-100 to-pink-100 text-background">
+      <div className="w-full bg-gradient-to-r from-blue-100 to-pink-100 text-background p-4">
         {children}
       </div>
     </main>

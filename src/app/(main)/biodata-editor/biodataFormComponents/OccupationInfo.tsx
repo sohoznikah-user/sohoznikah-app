@@ -69,7 +69,7 @@ export default function OccupationInfo({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">পেশা</div>
       <Form {...form}>
         <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">

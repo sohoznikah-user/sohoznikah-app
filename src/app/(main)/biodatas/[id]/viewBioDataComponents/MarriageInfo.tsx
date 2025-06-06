@@ -13,7 +13,7 @@ export default function MarriageInfo({
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black">
       <CardHeader>
-        <CardTitle className="text-[#004972] text-center font-medium">
+        <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           বিয়ে সংক্রান্ত তথ্য
         </CardTitle>
       </CardHeader>

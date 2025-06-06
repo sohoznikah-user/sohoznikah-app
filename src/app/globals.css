@@ -1,6 +1,6 @@
 /* File: src/app/globals.css */
-@import "tailwindcss";
 
+@import "tailwindcss";
 @plugin "tailwindcss-animate";
 
 /* Targeting the scrollbar */
@@ -143,6 +143,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: "Noto Serif Bengali", serif;
+    font-size: 16px;
   }
   body {
     @apply bg-background text-foreground;

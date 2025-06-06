@@ -26,7 +26,7 @@ export default function SpousePreferenceInfo({
       {spousePreferenceInfoFormData && (
         <>
           <CardHeader>
-            <CardTitle className="text-[#004972] text-center font-medium">
+            <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
               যেমন জীবনসঙ্গী আশা করেন
             </CardTitle>
           </CardHeader>
