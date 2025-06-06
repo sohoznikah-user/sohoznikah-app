@@ -12,6 +12,7 @@ import {
   useCreateFavouriteMutation,
   useGetFavouriteByIdQuery,
 } from "@/redux/features/admin/favouriteApi";
+import { useGetShortlistByIdQuery } from "@/redux/features/admin/shortlistApi";
 import {
   selectCurrentToken,
   selectCurrentUser,
@@ -26,9 +27,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export interface BiodatasPageCardProps {
-  id: number;
+  id: string;
   name: string;
-  code: number;
+  code: string;
   profilePic: string;
   birthYear: string | Date;
   height: number;
@@ -53,7 +54,7 @@ export default function BioCard({
   const user = useAppSelector(selectCurrentUser);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const { biodata } = useAppSelector((state) => state.biodata);
-
+  console.log("sdfsdfsd id", id);
   const { data: favourite } = useGetFavouriteByIdQuery(
     {
       biodataId: id,
@@ -62,18 +63,22 @@ export default function BioCard({
       skip: !token || !user,
     }
   );
-  // const { data: shortlist } = useGetShortlistByIdQuery(
-  //   {
-  //     biodataId: id,
-  //   },
-  //   {
-  //     skip: !token || !user,
-  //   }
-  // );
+  const { data: shortlist } = useGetShortlistByIdQuery(
+    {
+      biodataId: id,
+    },
+    {
+      skip: !token || !user,
+    }
+  );
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
 
-  const handleOnClick = () => {
+  const handleOnClick = (id: string) => {
+    if (typeof id !== "string") {
+      console.error("Invalid ID provided:", id);
+      return;
+    }
     router.push(`/biodatas/${id}`);
   };
   const handleFavourite = async (type: "add" | "remove") => {
@@ -183,7 +188,7 @@ export default function BioCard({
         <CardFooter>
           <Button
             className="w-full text-white bg-[#E25A6F]  hover:bg-[#D14A5F] text-md"
-            onClick={handleOnClick}
+            onClick={() => handleOnClick(id)}
           >
             বায়োডাটা দেখুন
           </Button>
