@@ -46,7 +46,7 @@ export const proposalApi = baseApi.injectEndpoints({
     updateProposal: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${URL}/${id}`,
-        method: "PUT",
+        method: "PATCH",
         data: updatedData,
       }),
       invalidatesTags: [tagTypes.proposal],

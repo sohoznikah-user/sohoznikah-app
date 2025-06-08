@@ -1,5 +1,6 @@
 "use client";
 
+import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
 import { proposalStatusOptions } from "@/lib/consts";
 import { useGetAllContactsQuery } from "@/redux/features/admin/contactApi";
@@ -9,8 +10,10 @@ import {
   getUpazilaTitle,
 } from "@/utils/getBanglaTitle";
 import { ColumnDef } from "@tanstack/react-table";
+import { Copy } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 // PaymentTracker component
 const ContactPage = () => {
@@ -22,12 +25,13 @@ const ContactPage = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedData, setSelectedData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const router = useRouter();
 
   const type = activeTab === "myRecords" ? "sent" : "received";
 
-  const { data: proposalData } = useGetAllContactsQuery({
+  const { data: proposalData, isLoading } = useGetAllContactsQuery({
     type,
     page: pagination.page,
     limit: pagination.limit,
@@ -119,7 +123,7 @@ const ContactPage = () => {
                       : router.push(`/biodatas/${row?.original?.biodataId}`);
                   }}
                 >
-                  View & Respond
+                  View
                 </button>
               </div>
             ),
@@ -134,8 +138,14 @@ const ContactPage = () => {
               );
               return (
                 <div>
-                  <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-                    {status}
+                  <button
+                    className="bg-[#129900] text-white px-4 py-1 rounded hover:bg-[#129900ee] transition cursor-pointer"
+                    onClick={() => {
+                      setSelectedData(row?.original);
+                      setIsModalOpen("showContacts");
+                    }}
+                  >
+                    যোগাযোগ নম্বর
                   </button>
                 </div>
               );
@@ -214,14 +224,65 @@ const ContactPage = () => {
         />
       </div>
 
-      {/* <ReusableModal
-        open={isModalOpen === "cancel"}
+      <ReusableModal
+        open={isModalOpen === "showContacts"}
+        onConfirm={() => handleReset()}
         onClose={() => handleReset()}
-        onConfirm={() => handleCancelProposal()}
-        loading={isCancelling}
-        title="প্রস্তাবটি বাতিল করতে চান?"
-        description="এই প্রস্তাবটি বাতিল করতে চান কি? বাতিল করার পর টোকেন রিফান্ড পাবেন"
-      /> */}
+        loading={false}
+        title="যোগাযোগ নম্বর দেখুন"
+        hideCancelButton
+      >
+        <>
+          {selectedData?.contacts?.length > 0 ? (
+            <div className="w-full mt-2 mb-2 border border-gray-300 rounded-md bg-white">
+              <div className="grid grid-cols-8 border-b border-gray-200">
+                <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-3">
+                  নাম
+                </div>
+                <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-2">
+                  সম্পর্ক
+                </div>
+                <div className="py-1 px-3 text-center font-semibold text-[#016CA7] col-span-3">
+                  মোবাইল নম্বর
+                </div>
+              </div>
+              {selectedData.contacts?.map((contact: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="grid grid-cols-8 border-b last:border-b-0 border-gray-100"
+                >
+                  <div className="py-2 px-3 text-center text-black col-span-3">
+                    {contact.fullName}
+                  </div>
+                  <div className="py-2 px-3 text-center text-black col-span-2">
+                    {contact.relation}
+                  </div>
+                  <div className="py-2 px-3 flex items-center justify-center gap-2 col-span-3 text-center">
+                    <span className="text-black">{contact.phoneNumber}</span>
+                    <button
+                      className="ml-1 p-1 rounded hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        navigator.clipboard.writeText(contact.phoneNumber);
+                        toast.success("নম্বর কপি করা হয়েছে");
+                      }}
+                      title="Copy"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 justify-start ">
+              <p className="text-lg font-semibold">
+                আপনার পক্ষ এখনো রাজি হয়নি। রাজি হলে তারপর আপনি যোগাযোগ নম্বর
+                দেখতে পারবেন।
+              </p>
+            </div>
+          )}
+        </>
+      </ReusableModal>
     </div>
   );
 };

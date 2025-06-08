@@ -22,6 +22,13 @@ export const contactApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.contact],
     }),
+    getContactByBiodataId: build.query({
+      query: (biodataId) => ({
+        url: `${URL}/biodata/${biodataId}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.contact],
+    }),
     getContactById: build.query({
       query: (id) => ({
         url: `${URL}/${id}`,
@@ -51,6 +58,7 @@ export const contactApi = baseApi.injectEndpoints({
 export const {
   useCreateContactMutation,
   useGetAllContactsQuery,
+  useGetContactByBiodataIdQuery,
   useGetContactByIdQuery,
   useUpdateContactMutation,
   useDeleteContactMutation,

@@ -1,5 +1,6 @@
 "use client";
 import male from "@/assets/images/male-5.svg";
+import NeedLoginModal from "@/components/shared/NeedLoginModal";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -194,6 +195,13 @@ const ProfileCard = ({
           </div>
         </CardContent>
       </Card>
+
+      {/* Modal for login */}
+      <NeedLoginModal
+        open={isModalOpen === "login"}
+        onClose={() => setIsModalOpen(null)}
+        loading={isLoading}
+      />
 
       {/* Modal for favourite */}
       <ReusableModal
