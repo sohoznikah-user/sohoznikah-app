@@ -4,7 +4,7 @@ export function getTimeDifference(
 ): string {
   const now = to ? new Date(to) : new Date();
   const end = new Date(from);
-  console.log({ now, end });
+  // console.log({ now, end });
 
   const diffMs = end.getTime() - now.getTime();
   if (diffMs <= 0) return "00:00";

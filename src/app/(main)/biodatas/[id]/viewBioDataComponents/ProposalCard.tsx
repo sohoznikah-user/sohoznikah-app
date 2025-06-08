@@ -60,8 +60,8 @@ const ProposalCard = ({
     skip: !token || !user || activeTab !== "contact",
   });
 
-  console.log("getProposal", getProposal);
-  console.log("getContact", getContact);
+  // console.log("getProposal", getProposal);
+  // console.log("getContact", getContact);
   // create proposal
   const handleCreateProposal = async () => {
     if (!token || !user) {
@@ -135,6 +135,8 @@ const ProposalCard = ({
       handleReset();
     }
   };
+
+  // console.log({ user, token });
   // reset state
   const handleReset = () => {
     setIsModalOpen(null);
@@ -655,6 +657,39 @@ const ProposalCard = ({
                       </>
                     </div>
                   ) : (
+                    <>
+                      <div className="flex flex-col items-center justify-between w-full gap-3  rounded-xl mt-2 mb-2 ">
+                        <div className="font-bold text-md text-black text-center">
+                          এই বায়োডাটার অভিভাবকের যোগাযোগ নম্বর দেখার জন্য অনুরোধ
+                          পাঠান
+                        </div>
+
+                        <button
+                          className="mt-1 bg-[#e25a6f] text-white px-4 py-2 rounded-lg font-semibold text-md shadow hover:bg-[#d14a5f] transition-all cursor-pointer"
+                          onClick={() =>
+                            setIsModalOpen(
+                              !token || !user ? "login" : "createContact"
+                            )
+                          }
+                        >
+                          অনুরোধ পাঠান
+                        </button>
+
+                        <p className="text-sm text-center text-[#e25a6f] font-semibold ">
+                          ২টি টোকেন খরচ হবে
+                        </p>
+                      </div>
+
+                      <Link
+                        href="/tutorial"
+                        className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium"
+                      >
+                        বিস্তারিত
+                      </Link>
+                    </>
+                  )}
+
+                  {(token === null || user === null) && (
                     <>
                       <div className="flex flex-col items-center justify-between w-full gap-3  rounded-xl mt-2 mb-2 ">
                         <div className="font-bold text-md text-black text-center">
