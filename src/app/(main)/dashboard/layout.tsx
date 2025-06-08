@@ -14,6 +14,7 @@ import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import ContactResponse from "./components/ContactResponse";
 import DashboardLeftNav from "./components/DashboardLeftNav";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
@@ -63,6 +64,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     <main className="flex justify-start flex-grow bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
       <DashboardLeftNav />
       <div className="w-full bg-gradient-to-r from-blue-100 to-pink-100 text-background p-4">
+        <ContactResponse />
         {children}
       </div>
     </main>

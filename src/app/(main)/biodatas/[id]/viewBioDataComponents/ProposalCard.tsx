@@ -55,6 +55,7 @@ const ProposalCard = ({
   const { data: getProposal } = useGetProposalByBiodataIdQuery(biodataId, {
     skip: !token || !user || activeTab !== "proposal",
   });
+
   const { data: getContact } = useGetContactByBiodataIdQuery(biodataId, {
     skip: !token || !user || activeTab !== "contact",
   });
@@ -537,124 +538,121 @@ const ProposalCard = ({
               )}
               {activeTab === "contact" && (
                 <>
-                  {getContact?.success ? (
+                  {getContact?.data?.senderId === user?.userId ? (
                     <div className="flex flex-col items-center justify-center">
                       {/* contact sender */}
-                      {getContact?.data?.senderId === user?.userId && (
-                        <>
-                          {getContact?.data?.contactStatus === "PENDING" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-2">
-                                আপনি যোগাযোগের জন্য অনুরোধ পাঠিয়েছেন
-                              </h4>
 
-                              <p className="text-center text-sm font-medium mb-2  text-[#A53521]">
-                                অপরপক্ষ একসেপ্ট করলে সরাসরি অভিভাবকের যোগাযোগ
-                                নম্বর দেখতে পারবেন। রাজি না থাকলে আপনি টোকেন
-                                রিফান্ড পাবেন। ৭২ ঘণ্টার মধ্যে উত্তর না আসলে
-                                অটোমেটিক অনুরোধটি বাতিল হবে এবং টোকেন রিফান্ড
-                                পাবেন।
-                              </p>
+                      <>
+                        {getContact?.data?.contactStatus === "PENDING" && (
+                          <>
+                            <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                              আপনি যোগাযোগের জন্য অনুরোধ পাঠিয়েছেন
+                            </h4>
 
-                              <p className="text-center text-sm font-semibold mt-1 text-[#575757]">
-                                সময় বাকি আছে:{" "}
-                                <span className="text-[#28AB00]">
-                                  {contactTimeLeft}
-                                </span>{" "}
-                                ঘন্টা
-                              </p>
-                            </>
-                          )}
-                          {getContact?.data?.contactStatus === "ACCEPTED" && (
-                            <>
-                              {responseTab === "viewContact" ? (
-                                <>
-                                  <div className="flex items-center gap-3 justify-start ">
-                                    <ArrowLeft
-                                      className="w-6 h-6 cursor-pointer hover:text-[#e25a6f] text-[#016CA7] "
-                                      onClick={() => setResponseTab(null)}
-                                    />{" "}
-                                    <p className="text-lg font-semibold">
-                                      {getContact?.data?.fullName}
-                                    </p>
-                                  </div>
-                                  <div className="w-full max-w-xs mt-2 mb-2 border border-gray-300 rounded-md bg-white">
-                                    <div className="grid grid-cols-5 border-b border-gray-200">
-                                      <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-2">
-                                        সম্পর্ক
-                                      </div>
-                                      <div className="py-1 px-3 text-center font-semibold text-[#016CA7] col-span-3">
-                                        মোবাইল নম্বর
-                                      </div>
+                            <p className="text-center text-sm font-medium mb-2  text-[#A53521]">
+                              অপরপক্ষ একসেপ্ট করলে সরাসরি অভিভাবকের যোগাযোগ
+                              নম্বর দেখতে পারবেন। রাজি না থাকলে আপনি টোকেন
+                              রিফান্ড পাবেন। ৭২ ঘণ্টার মধ্যে উত্তর না আসলে
+                              অটোমেটিক অনুরোধটি বাতিল হবে এবং টোকেন রিফান্ড
+                              পাবেন।
+                            </p>
+
+                            <p className="text-center text-sm font-semibold mt-1 text-[#575757]">
+                              সময় বাকি আছে:{" "}
+                              <span className="text-[#28AB00]">
+                                {contactTimeLeft}
+                              </span>{" "}
+                              ঘন্টা
+                            </p>
+                          </>
+                        )}
+                        {getContact?.data?.contactStatus === "ACCEPTED" && (
+                          <>
+                            {responseTab === "viewContact" ? (
+                              <>
+                                <div className="flex items-center gap-3 justify-start ">
+                                  <ArrowLeft
+                                    className="w-6 h-6 cursor-pointer hover:text-[#e25a6f] text-[#016CA7] "
+                                    onClick={() => setResponseTab(null)}
+                                  />{" "}
+                                  <p className="text-lg font-semibold">
+                                    {getContact?.data?.fullName}
+                                  </p>
+                                </div>
+                                <div className="w-full max-w-xs mt-2 mb-2 border border-gray-300 rounded-md bg-white">
+                                  <div className="grid grid-cols-5 border-b border-gray-200">
+                                    <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-2">
+                                      সম্পর্ক
                                     </div>
-                                    {getContact?.data?.contacts?.map(
-                                      (contact: any, idx: number) => (
-                                        <div
-                                          key={idx}
-                                          className="grid grid-cols-5 border-b last:border-b-0 border-gray-100"
-                                        >
-                                          <div className="py-2 px-3 text-center text-black col-span-2">
-                                            {contact.relation}
-                                          </div>
-                                          <div className="py-2 px-3 flex items-center justify-center gap-2 col-span-3 text-center">
-                                            <span className="text-black">
-                                              {contact.phoneNumber}
-                                            </span>
-                                            <button
-                                              className="ml-1 p-1 rounded hover:bg-gray-100 cursor-pointer"
-                                              onClick={() => {
-                                                navigator.clipboard.writeText(
-                                                  contact.phoneNumber
-                                                );
-                                                toast.success(
-                                                  "নম্বর কপি করা হয়েছে"
-                                                );
-                                              }}
-                                              title="Copy"
-                                            >
-                                              <Copy className="w-4 h-4" />
-                                            </button>
-                                          </div>
-                                        </div>
-                                      )
-                                    )}
+                                    <div className="py-1 px-3 text-center font-semibold text-[#016CA7] col-span-3">
+                                      মোবাইল নম্বর
+                                    </div>
                                   </div>
-                                </>
-                              ) : (
-                                <>
-                                  <h4 className="text-center text-md font-semibold mb-2 mt-3">
-                                    আপনি যোগাযোগের জন্য অনুরোধ পাঠিয়েছেন
-                                  </h4>
-                                  <h4 className="text-center text-md font-semibold mb-3 mt-1 text-[#129900]">
-                                    অনুরোধ গৃহীত হয়েছে
-                                  </h4>
-                                  <button
-                                    className="mt-1 bg-[#129900] text-white px-6 py-2 rounded-lg font-semibold text-md shadow hover:bg-[#129900ee] transition-all cursor-pointer"
-                                    onClick={() =>
-                                      setResponseTab("viewContact")
-                                    }
-                                  >
-                                    যোগাযোগ নম্বর দেখুন
-                                  </button>
-                                </>
-                              )}
-                            </>
-                          )}
-                          {getContact?.data?.contactStatus === "REJECTED" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-2">
-                                আপনি যোগাযোগের জন্য অনুরোধ পাঠিয়েছেন
-                              </h4>
-                              <p className="text-center text-md font-semibold mb-2 mt-4 text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
-                                অপরপক্ষ অনুরোধ প্রত্যাখ্যান করেছেন
-                              </p>
-                              <p className="text-sm text-center text-[#e25a6f] font-semibold ">
-                                ২টি টোকেন রিফান্ড পেয়েছেন
-                              </p>
-                            </>
-                          )}
-                        </>
-                      )}
+                                  {getContact?.data?.contacts?.map(
+                                    (contact: any, idx: number) => (
+                                      <div
+                                        key={idx}
+                                        className="grid grid-cols-5 border-b last:border-b-0 border-gray-100"
+                                      >
+                                        <div className="py-2 px-3 text-center text-black col-span-2">
+                                          {contact.relation}
+                                        </div>
+                                        <div className="py-2 px-3 flex items-center justify-center gap-2 col-span-3 text-center">
+                                          <span className="text-black">
+                                            {contact.phoneNumber}
+                                          </span>
+                                          <button
+                                            className="ml-1 p-1 rounded hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => {
+                                              navigator.clipboard.writeText(
+                                                contact.phoneNumber
+                                              );
+                                              toast.success(
+                                                "নম্বর কপি করা হয়েছে"
+                                              );
+                                            }}
+                                            title="Copy"
+                                          >
+                                            <Copy className="w-4 h-4" />
+                                          </button>
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <h4 className="text-center text-md font-semibold mb-2 mt-3">
+                                  আপনি যোগাযোগের জন্য অনুরোধ পাঠিয়েছেন
+                                </h4>
+                                <h4 className="text-center text-md font-semibold mb-3 mt-1 text-[#129900]">
+                                  অনুরোধ গৃহীত হয়েছে
+                                </h4>
+                                <button
+                                  className="mt-1 bg-[#129900] text-white px-6 py-2 rounded-lg font-semibold text-md shadow hover:bg-[#129900ee] transition-all cursor-pointer"
+                                  onClick={() => setResponseTab("viewContact")}
+                                >
+                                  যোগাযোগ নম্বর দেখুন
+                                </button>
+                              </>
+                            )}
+                          </>
+                        )}
+                        {getContact?.data?.contactStatus === "REJECTED" && (
+                          <>
+                            <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                              আপনি যোগাযোগের জন্য অনুরোধ পাঠিয়েছেন
+                            </h4>
+                            <p className="text-center text-md font-semibold mb-2 mt-4 text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
+                              অপরপক্ষ অনুরোধ প্রত্যাখ্যান করেছেন
+                            </p>
+                            <p className="text-sm text-center text-[#e25a6f] font-semibold ">
+                              ২টি টোকেন রিফান্ড পেয়েছেন
+                            </p>
+                          </>
+                        )}
+                      </>
                     </div>
                   ) : (
                     <>

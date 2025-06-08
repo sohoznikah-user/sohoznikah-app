@@ -31,7 +31,7 @@ const ContactPage = () => {
 
   const type = activeTab === "myRecords" ? "sent" : "received";
 
-  const { data: proposalData, isLoading } = useGetAllContactsQuery({
+  const { data: contactData, isLoading } = useGetAllContactsQuery({
     type,
     page: pagination.page,
     limit: pagination.limit,
@@ -213,7 +213,7 @@ const ContactPage = () => {
         </div>
 
         <ReusableTable
-          data={proposalData?.data || []}
+          data={contactData?.data || []}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
@@ -276,8 +276,8 @@ const ContactPage = () => {
           ) : (
             <div className="flex items-center gap-3 justify-start ">
               <p className="text-lg font-semibold">
-                আপনার পক্ষ এখনো রাজি হয়নি। রাজি হলে তারপর আপনি যোগাযোগ নম্বর
-                দেখতে পারবেন।
+                অপর পক্ষ এখনো রাজি হয়নি। রাজি হলে তারপর আপনি যোগাযোগ নম্বর দেখতে
+                পারবেন।
               </p>
             </div>
           )}

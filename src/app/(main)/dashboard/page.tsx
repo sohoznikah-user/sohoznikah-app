@@ -9,15 +9,17 @@ import DashboardRightSection from "./components/DashboardRightSection";
 export default function DashboardPage() {
   const user = useAppSelector(selectCurrentUser);
   return (
-    <>
+    <div className="relative">
       {user?.role === "SUPER_ADMIN" || user?.role === "ADMIN" ? (
         <AdminDashboard />
       ) : (
-        <div className="flex justify-between flex-grow ">
-          <DashboardMainContent />
-          <DashboardRightSection />
-        </div>
+        <>
+          <div className="flex justify-between flex-grow relative">
+            <DashboardMainContent />
+            <DashboardRightSection />
+          </div>
+        </>
       )}
-    </>
+    </div>
   );
 }

@@ -40,7 +40,7 @@ export const contactApi = baseApi.injectEndpoints({
     updateContact: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${URL}/${id}`,
-        method: "PUT",
+        method: "PATCH",
         data: updatedData,
       }),
       invalidatesTags: [tagTypes.contact],
