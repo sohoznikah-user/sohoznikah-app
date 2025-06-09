@@ -16,7 +16,7 @@ const HowItWorksCard = ({
   imageSrc,
 }: HowItWorksCardProps) => (
   <div className="relative bg-white/80 rounded-full lg:w-80 lg:h-80 md:w-72 md:h-72 w-72 h-72 mx-auto flex flex-col items-center justify-center md:p-8 p-4 text-center z-20">
-    <div className="absolute lg:text-[220px] md:text-[200px] text-[150px] text-slate-200 font-bold md:-left-16 -left-12 md:-top-32 -top-24 select-none pointer-events-none z-0">
+    <div className="absolute lg:text-[220px] md:text-[200px] text-[150px] text-black opacity-5 font-bold md:-left-16 -left-12 md:-top-32 -top-24 select-none pointer-events-none z-0">
       {step}
     </div>
     <div className="flex flex-col items-center ">

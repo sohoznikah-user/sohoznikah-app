@@ -1,8 +1,6 @@
-import cardIcon1 from "@/assets/images/cardIcon1.png";
-import cardIcon2 from "@/assets/images/cardIcon2.png";
-import cardIcon2mid from "@/assets/images/cardIcon2middle.png";
-import cardIcon2top from "@/assets/images/cardIcon2top.png";
-import cardIcon3 from "@/assets/images/cardIcon3.png";
+import cardIcon1 from "@/assets/images/cardIcon1.svg";
+import cardIcon2 from "@/assets/images/cardIcon2.svg";
+import cardIcon3 from "@/assets/images/cardIcon3.svg";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import Title from "../shared/Title";
@@ -18,25 +16,7 @@ const cardData = [
     ],
   },
   {
-    icon: (
-      <div className="relative w-[70px] h-[70px]">
-        <Image src={cardIcon2} alt="cardIcon1" width={70} height={70} />
-        <Image
-          src={cardIcon2mid}
-          alt="cardIcon2mid"
-          width={20}
-          height={20}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-        />
-        <Image
-          src={cardIcon2top}
-          alt="cardIcon2top"
-          width={25}
-          height={25}
-          className="absolute top-0 -right-3"
-        />
-      </div>
-    ), // Privacy Control
+    icon: <Image src={cardIcon2} alt="cardIcon1" width={80} height={80} />,
     title: "প্রাইভেসি কন্ট্রোল",
     features: [
       "তথ্য নিয়ন্ত্রণের সুযোগ।",
@@ -81,7 +61,7 @@ const HowSelectSohojNikah = () => {
         <Title leftTitle="কেন" rightTitle="বেছে নিবেন?" />
 
         <div className="flex  justify-center max-w-xl mx-auto items-center  gap-6 mb-8">
-          <h3 className="text-2xl font-semibold text-center mb-3 text-[#2D2D2D]">
+          <h3 className="text-2xl font-semibold text-center mb-3 bg-gradient-to-r from-[#016CA7] to-[#E25A6F] inline-block text-transparent bg-clip-text">
             বায়োডাটা সম্পূর্ণ গোপন রেখে <br className="md:block hidden" />
             যোগাযোগ এবং প্রাথমিক প্রস্তাব পাঠানোর সুযোগ
           </h3>

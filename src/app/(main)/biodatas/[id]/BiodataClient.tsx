@@ -13,7 +13,6 @@ import { useEffect, useRef, useState } from "react";
 import AddressInfo from "./viewBioDataComponents/AddressInfo";
 import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
 import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
-import FooterSection from "./viewBioDataComponents/FooterSection";
 import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
 import HeaderSection from "./viewBioDataComponents/HeaderSection";
 import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
@@ -139,7 +138,7 @@ export default function BiodataClient({
         myBiodata={myBiodata}
         isAdmin={isAdmin}
       />
-      <div className="py-12 flex flex-col items-center justify-center space-y-6">
+      <div className="py-12 flex flex-col items-center justify-center space-y-6 container mx-auto">
         <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
         <Tabs
           defaultValue="ঠিকানা"
@@ -159,7 +158,7 @@ export default function BiodataClient({
           </TabsList>
         </Tabs>
 
-        <div className="w-full max-w-6xl space-y-6 text-md">
+        <div className="w-full  space-y-6 text-md">
           <div ref={primaryInfoRef}>
             <PrimaryInfo
               biodata={biodata?.biodata}
@@ -236,13 +235,10 @@ export default function BiodataClient({
           </div>
         </div>
       </div>
-      <FooterSection
+      {/* <FooterSection
         biodata={biodata}
         biodataFormData={biodata?.biodataFormData}
-      />
+      /> */}
     </div>
-    // <div>
-    //   <h1>BiodataClient</h1>
-    // </div>
   );
 }

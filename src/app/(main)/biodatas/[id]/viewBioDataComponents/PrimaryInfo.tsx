@@ -14,13 +14,13 @@ export default function PrimaryInfo({
   primaryInfoFormData: PrimaryInfoFormData;
 }) {
   return (
-    <Card className="border-gray-200 bg-[#fcfcfc] text-black">
+    <Card className="border-gray-200 bg-[#fcfcfc] text-black w-full">
       <CardHeader>
         <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           প্রাথমিক তথ্য
         </CardTitle>
       </CardHeader>
-      <CardContent className="px-6 py-4 space-y-2">
+      <CardContent className="px-6 py-4 space-y-2 w-full">
         <div className="flex items-center space-x-2">
           <div className="w-1/2">বায়োডাটার ধরন:</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">

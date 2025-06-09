@@ -41,7 +41,6 @@ export function HomeSearchBiodata() {
       ageMin: range[0],
       ageMax: range[1],
     };
-    console.log("Dispatching Filters:", filters); // Debug
     dispatch(setFilterData(filters));
     // Convert number values to strings for URLSearchParams
     const searchParams = {
@@ -54,7 +53,7 @@ export function HomeSearchBiodata() {
 
   return (
     <div className="bg-white p-8 shadow-lg flex flex-wrap">
-      <div className="w-1/3 space-y-2 p-2">
+      <div className="md:md:w-1/3 w-full w-full space-y-2 p-2">
         <Label className="text-md">আমি খুঁজছি</Label>
         <Select value={biodataType} onValueChange={setBiodataType}>
           <SelectTrigger className="border-gray-300">
@@ -76,7 +75,7 @@ export function HomeSearchBiodata() {
         </Select>
       </div>
 
-      <div className="w-1/3 space-y-2 p-2">
+      <div className="md:md:w-1/3 w-full w-full space-y-2 p-2">
         <Label className="text-md">বৈবাহিক অবস্থা</Label>
         <Select value={maritalStatus} onValueChange={setMaritalStatus}>
           <SelectTrigger className="border-gray-300">
@@ -100,7 +99,7 @@ export function HomeSearchBiodata() {
         </Select>
       </div>
 
-      <div className="w-1/3 space-y-2 p-2">
+      <div className="md:w-1/3 w-full space-y-2 p-2">
         <Label className="text-md">স্থায়ী জেলা</Label>
         <Select value={state} onValueChange={setState}>
           <SelectTrigger className="border-gray-300">
@@ -125,7 +124,7 @@ export function HomeSearchBiodata() {
         </Select>
       </div>
 
-      <div className="w-1/3 space-y-2 p-2">
+      <div className="md:w-1/3 w-full space-y-2 p-2">
         <Label className="text-md">ধর্মীয় লাইফস্টাইল</Label>
         <Select value={muslimType} onValueChange={setMuslimType}>
           <SelectTrigger className="border-gray-300">
@@ -147,7 +146,7 @@ export function HomeSearchBiodata() {
         </Select>
       </div>
 
-      <div className="w-1/3 space-y-3 p-2">
+      <div className="md:w-1/3 w-full space-y-3 p-2">
         <Label
           className="block text-md text-[#1f4f69] text-center"
           htmlFor="religious"
@@ -167,7 +166,7 @@ export function HomeSearchBiodata() {
           <div className="text-[#1f4f69]">{range[1]}</div>
         </div>
       </div>
-      <div className="w-1/3 space-y-1 p-2">
+      <div className="md:w-1/3 w-full space-y-1 p-2">
         <p className="text-center text-md text-gray-700">বিসমিল্লাহ</p>
         <Button
           className="w-full p-2 bg-[#E25A6F] text-white rounded hover:bg-[#D14A5F] text-md"

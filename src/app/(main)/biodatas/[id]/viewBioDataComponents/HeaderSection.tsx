@@ -24,8 +24,8 @@ export default function HeaderSection({
 
   return (
     <div className="bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
-      <div className=" container mx-auto px-4 py-12 flex justify-center ">
-        <div className="min-w-7xl flex space-x-8">
+      <div className=" container mx-auto px-4 py-12 ">
+        <div className="min-w-7xl flex space-x-8 mx-auto">
           <div className="w-1/4 flex flex-col justify-between space-y-8">
             {/* Status & Profile card */}
             <ProfileCard
@@ -49,10 +49,12 @@ export default function HeaderSection({
               biodata={biodata}
               biodataFormData={biodataFormData}
             />
-            <HeaderSpousePreferenceRequierment
-              biodata={biodata}
-              biodataFormData={biodataFormData}
-            />
+            <div className="hidden md:block">
+              <HeaderSpousePreferenceRequierment
+                biodata={biodata}
+                biodataFormData={biodataFormData}
+              />
+            </div>
           </div>
         </div>
       </div>

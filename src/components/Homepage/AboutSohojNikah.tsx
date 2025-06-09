@@ -1,5 +1,5 @@
-import leftHeart from "@/assets/images/left-about.png";
-import rightHeart from "@/assets/images/right-about.png";
+import leftHeart from "@/assets/images/left-about.svg";
+import rightHeart from "@/assets/images/right-about.svg";
 import Image from "next/image";
 import Title from "../shared/Title";
 
