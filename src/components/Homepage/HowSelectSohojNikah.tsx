@@ -37,14 +37,14 @@ const cardData = [
 
 function InfoCard({ icon, title, features }) {
   return (
-    <Card className="flex flex-col items-center bg-gradient-to-b from-[#FFF5F5] to-[#EAF6FB] md:p-8 p-4 rounded-2xl shadow-md  max-w-[365px] border-none">
+    <Card className="flex flex-col items-center min-w-auto  bg-gradient-to-b from-[#FFF5F5] to-[#EAF6FB] md:p-8 p-4 rounded-2xl shadow-md border-none md:max-w-[365px] w-full">
       <div className=" mb-5">{icon}</div>
       <h3 className="text-2xl font-semibold text-center mb-3 mt-2 text-[#2D2D2D]">
         {title}
       </h3>
       <ul className="text-[#333] text-base space-y-1 list-inside">
         {features.map((f, i) => (
-          <li key={i} className="flex items-start gap-2">
+          <li key={i} className="flex items-start flex-wrap gap-2">
             <span className="text-[#016CA7] mt-1">✔</span>
             <span>{f}</span>
           </li>
@@ -66,7 +66,7 @@ const HowSelectSohojNikah = () => {
             যোগাযোগ এবং প্রাথমিক প্রস্তাব পাঠানোর সুযোগ
           </h3>
         </div>
-        <div className="flex flex-col md:flex-row flex-wrap justify-center md:items-stretch items-center  md:gap-10 gap-6 mt-8">
+        <div className="flex flex-col md:flex-row flex-wrap justify-center md:items-stretch items-center  md:gap-10 gap-6 mt-8 w-full px-2">
           {cardData.map((card, idx) => (
             <InfoCard key={idx} {...card} />
           ))}

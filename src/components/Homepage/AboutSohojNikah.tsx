@@ -5,7 +5,7 @@ import Title from "../shared/Title";
 
 export default function AboutSohojNikah() {
   return (
-    <section className=" bg-white lg:py-20 md:py-16 py-8 px-2 sm:px-4">
+    <section className=" bg-white lg:py-20 md:py-16 py-8 px-2 sm:px-4 overflow-hidden">
       {/* Decorative hearts */}
 
       <Title rightTitle="কি?" />
