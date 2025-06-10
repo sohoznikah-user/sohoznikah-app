@@ -131,7 +131,7 @@ export default function BiodatasPageFilters({
   };
 
   return (
-    <div className="w-72 bg-white ml-4 px-4 space-y-2 text-lg">
+    <div className="lg:w-64 w-full bg-white space-y-2 text-lg">
       <div className="flex items-center justify-center text-center text-[#1f4f69] pb-2">
         <div className="pb-1 border-b border-[#1f4f69] text-lg font-semibold">
           ফিল্টার করুন

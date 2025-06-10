@@ -16,8 +16,8 @@ export default function HeaderSection({
 }: {
   biodata: any;
   biodataId?: string;
-  biodataFormData: BiodataFormData;
-  myBiodata: boolean;
+  biodataFormData?: BiodataFormData;
+  myBiodata?: boolean;
   isAdmin?: boolean;
 }) {
   if (!biodata) return <Loading />;

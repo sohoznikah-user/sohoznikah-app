@@ -113,9 +113,9 @@ export default function BioCard({
     <>
       <Card
         key={id}
-        className="border-none overflow-hidden bg-gradient-to-t from-[#e6f2ff] to-[#fff0f6] "
+        className="border-none overflow-hidden bg-gradient-to-t from-[#e6f2ff] to-[#fff0f6]  min-w-auto md:max-w-[365px]  mx-auto"
       >
-        <CardContent className="p-7">
+        <CardContent className="md:p-7 p-5 lg:p-6">
           <div className="flex justify-between items-start mb-4">
             <div className="w-1/3">
               <Heart

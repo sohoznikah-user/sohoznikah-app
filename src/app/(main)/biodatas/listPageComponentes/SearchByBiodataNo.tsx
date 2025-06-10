@@ -85,7 +85,7 @@ export default function BiodatasPageSearchByBiodataNo({
         handleSearch();
       }}
     >
-      <div className="w-32">
+      <div className="md:w-28 flex-1">
         <Select onValueChange={handleGenderChange} value={gender}>
           <SelectTrigger className="text-[#1f4f69] text-md border-gray-300 px-1">
             <SelectValue placeholder="পাত্র/পাত্রী" />
@@ -107,7 +107,7 @@ export default function BiodatasPageSearchByBiodataNo({
         </Select>
       </div>
 
-      <div className="relative w-64">
+      <div className="relative md:w-48 flex-2">
         <div className="space-y-2">
           <Input
             className="w-full px-3 border rounded-md text-[#1f4f69] selection:bg-[#E25A6F] selection:text-white md:text-md text-md border-gray-300"
@@ -127,7 +127,7 @@ export default function BiodatasPageSearchByBiodataNo({
       </div>
       <button
         type="button"
-        className="py-2 px-4 bg-[#e25a6f] text-white rounded-xl text-md"
+        className="py-1.5 px-4 bg-[#e25a6f] text-white rounded-lg cursor-pointer text-md"
         onClick={handleReset}
       >
         রিসেট

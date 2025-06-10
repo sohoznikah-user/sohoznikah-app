@@ -1,6 +1,6 @@
 // File: src/app/(main)/biodatas/my-biodata/page.tsx
 
-import BiodataClient from "../[id]/BiodataClient";
+import BiodataClient from "../[biodataId]/BiodataClient2";
 
 const MyBiodata = () => {
   return (

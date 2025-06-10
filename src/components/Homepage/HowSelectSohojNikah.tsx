@@ -37,7 +37,7 @@ const cardData = [
 
 function InfoCard({ icon, title, features }) {
   return (
-    <Card className="flex flex-col items-center min-w-auto  bg-gradient-to-b from-[#FFF5F5] to-[#EAF6FB] md:p-8 p-4 rounded-2xl shadow-md border-none md:max-w-[365px] w-full">
+    <Card className="flex flex-col items-center   bg-gradient-to-b from-[#FFF5F5] to-[#EAF6FB] md:p-8 p-4 rounded-2xl shadow-md border-none min-w-auto md:max-w-[365px] w-full">
       <div className=" mb-5">{icon}</div>
       <h3 className="text-2xl font-semibold text-center mb-3 mt-2 text-[#2D2D2D]">
         {title}

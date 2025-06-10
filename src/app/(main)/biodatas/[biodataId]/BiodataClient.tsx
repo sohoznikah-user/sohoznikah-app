@@ -3,10 +3,7 @@
 import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import {
-  useGetBiodataByIdQuery,
-  useGetMyBiodataQuery,
-} from "@/redux/features/biodata/biodataApi";
+import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
 import { useAppSelector } from "@/redux/hooks";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
 import { useEffect, useRef, useState } from "react";
@@ -20,19 +17,19 @@ import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
 import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
 import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
 
-export default function BiodataClient({
-  biodataId,
-  myBiodata = false,
-  isAdmin = false,
-}: {
-  biodataId?: string;
-  myBiodata?: boolean;
-  isAdmin?: boolean;
-}) {
+export default function BiodataClient({ biodataId }: { biodataId: string }) {
   const [biodata, setBiodata] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const user = useAppSelector(selectCurrentUser);
   const acesstoken = useAppSelector(selectCurrentUser);
+
+  const {
+    data: fetchedBiodata,
+    isLoading: isFetchingBiodata,
+    isError: isErrorBiodata,
+  } = useGetBiodataByIdQuery(biodataId, {
+    skip: !biodataId || typeof biodataId !== "string",
+  });
 
   const tabs = [
     "প্রাথমিক তথ্য",
@@ -82,36 +79,14 @@ export default function BiodataClient({
   //   }, [myBiodata, user, acesstoken, router]);
 
   // Fetch my biodata when myBiodata is true
-  const {
-    data: myBiodataData,
-    isLoading: isFetchingMyBiodata,
-    isError: isErrorMyBiodata,
-  } = useGetMyBiodataQuery(undefined, {
-    skip: !myBiodata,
-  });
-
-  // Fetch biodata by ID when myBiodata is false and biodataId is valid
-  const {
-    data: fetchedBiodata,
-    isLoading: isFetchingBiodata,
-    isError: isErrorBiodata,
-  } = useGetBiodataByIdQuery(biodataId || "", {
-    skip: myBiodata || !biodataId,
-  });
 
   // Set biodata based on fetched data
   useEffect(() => {
-    if (myBiodata && myBiodataData?.data) {
-      const mapped = mapApiToBiodataFormData(myBiodataData.data);
-      setBiodata(mapped);
-    } else if (!myBiodata && fetchedBiodata?.data) {
+    if (fetchedBiodata?.data) {
       const mapped = mapApiToBiodataFormData(fetchedBiodata.data);
       setBiodata(mapped);
     }
-  }, [myBiodata, myBiodataData, fetchedBiodata]);
-
-  //   console.log("biodataId", biodataId);
-  //   console.log("myBiodata", myBiodata);
+  }, [fetchedBiodata]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -121,11 +96,11 @@ export default function BiodataClient({
     }
   };
 
-  if (isFetchingMyBiodata || isFetchingBiodata) {
+  if (isFetchingBiodata) {
     return <Loading />;
   }
 
-  if (isErrorMyBiodata || isErrorBiodata) {
+  if (isErrorBiodata) {
     return <div>Error loading data</div>;
   }
 
@@ -135,8 +110,8 @@ export default function BiodataClient({
         biodata={biodata}
         biodataId={biodataId}
         biodataFormData={biodata?.biodataFormData}
-        myBiodata={myBiodata}
-        isAdmin={isAdmin}
+        // myBiodata={myBiodata}
+        // isAdmin={isAdmin}
       />
       <div className="py-12 flex flex-col items-center justify-center space-y-6 container mx-auto">
         <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>

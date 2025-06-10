@@ -74,7 +74,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
     selectedFilters: FilterState,
     handleRadioChange: (key: keyof FilterState, value: string) => void
   ) => (
-    <AccordionContent className="bg-white text-[#1f4f69] space-y-0.5 pt-2 pb-4 px-4 shadow-sm rounded-b-xl ">
+    <AccordionContent className="bg-white text-[#1f4f69] space-y-0.5 pt-1 pb-3 px-4 shadow-sm rounded-b-xl ">
       <RadioGroup
         className="text-md font-semibold"
         value={(selectedFilters[key] as string) || ""}
@@ -102,7 +102,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
       checked: boolean
     ) => void
   ) => (
-    <AccordionContent className="bg-white text-[#1f4f69] space-y-2 pt-2 pb-4 px-4 shadow-sm rounded-b-xl">
+    <AccordionContent className="bg-white text-[#1f4f69] space-y-2 pt-1 pb-3 px-4 shadow-sm rounded-b-xl">
       {options.map((option) => (
         <div key={option.id} className="flex items-center space-x-2">
           <Checkbox
@@ -131,7 +131,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
     min: number,
     max: number
   ) => (
-    <AccordionContent className="bg-white text-[#1f4f69] space-y-0.5 pt-2 pb-4 px-4 shadow-sm rounded-b-xl">
+    <AccordionContent className="bg-white text-[#1f4f69] space-y-0.5 pt-1 pb-3 px-4 shadow-sm rounded-b-xl">
       <div className="flex items-center space-x-2">
         <div className="text-[#1f4f69]">{value[0]}</div>
         <Slider
