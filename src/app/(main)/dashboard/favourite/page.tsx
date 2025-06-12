@@ -219,12 +219,12 @@ const FavouritePage = () => {
   }
 
   return (
-    <div className="min-h-[500px] p-5 flex justify-center items-center">
-      <div className="w-full max-w-6xl bg-[#F5F4FC] rounded-lg shadow-lg py-6 pt-10">
+    <div className="min-h-[500px] flex justify-center items-center lg:p-5 mb-10">
+      <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
           পছন্দের তালিকা
         </h1>
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 px-4">
           <button
             onClick={() => setActiveTab("myRecords")}
             className={`px-6 py-2 rounded-lg font-medium transition cursor-pointer ${

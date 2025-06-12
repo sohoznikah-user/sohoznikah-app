@@ -110,7 +110,7 @@ export function ReusableTable<T>({
   });
 
   return (
-    <div className=" p-5">
+    <div className=" md:p-5 lg:p-6">
       <div className="flex flex-wrap justify-between items-center gap-4">
         {/* Search */}
         {searchable && onSearchChange && (
@@ -139,61 +139,98 @@ export function ReusableTable<T>({
         )}
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <Table>
-          {caption && <caption className="text-left p-2">{caption}</caption>}
-          <TableHeader className=" rounded-full border-none text-[#333333] bg-white">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="hover:bg-transparent cursor-default rounded-full"
-              >
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="text-center font-semibold text-md border-b-0"
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel()?.rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
+      <div>
+        {/* Table for desktop */}
+        <div className="overflow-x-auto hidden sm:block">
+          <Table>
+            {caption && <caption className="text-left p-2">{caption}</caption>}
+            <TableHeader className=" rounded-full border-none text-[#333333] bg-white">
+              {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
-                  key={row.id}
-                  className={
-                    // index % 2 === 0
-                    //   ? "bg-white hover:bg-gradient-to-r hover:from-blue-200 hover:to-pink-300"
-                    //   : "bg-gradient-to-r from-blue-100 to-pink-100 hover:bg-gradient-to-r hover:from-blue-200 hover:to-pink-300"
-                    " hover:bg-[#E8E8E8] border-none "
-                  }
+                  key={headerGroup.id}
+                  className="hover:bg-transparent cursor-default rounded-full"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-center">
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      className="text-center font-semibold text-md border-b-0"
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel()?.rows?.length ? (
+                table.getRowModel().rows.map((row, index) => (
+                  <TableRow
+                    key={row.id}
+                    className={
+                      // index % 2 === 0
+                      //   ? "bg-white hover:bg-gradient-to-r hover:from-blue-200 hover:to-pink-300"
+                      //   : "bg-gradient-to-r from-blue-100 to-pink-100 hover:bg-gradient-to-r hover:from-blue-200 hover:to-pink-300"
+                      " hover:bg-[#E8E8E8] border-none "
+                    }
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="text-center">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Cards for mobile */}
+        <div className="block sm:hidden">
+          {table.getRowModel()?.rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <div
+                key={row.id}
+                className="bg-[#F5F4FC] rounded-lg shadow p-4 mb-4"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <div
+                    key={cell.id}
+                    className="mb-2 flex gap-2 justify-start items-center flex-wrap"
+                  >
+                    <span className="font-semibold">
+                      {flexRender(
+                        cell.column.columnDef.header,
+                        cell.getContext()
+                      )}
+                      :
+                    </span>
+                    <span className="ml-2">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ))
+          ) : (
+            <div className="text-center">No results.</div>
+          )}
+        </div>
       </div>
 
       <div className="flex justify-between items-center gap-4 text-background mt-5">

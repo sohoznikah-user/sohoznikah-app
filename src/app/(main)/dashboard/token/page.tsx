@@ -6,7 +6,7 @@ import UserTokenPage from "../components/UserTokenPage";
 
 const TokenPage = () => {
   const user = useAppSelector(selectCurrentUser);
-  console.log("user", user);
+  // console.log("user", user);
 
   if (user?.role === "SUPER_ADMIN" || user?.role === "ADMIN") {
     return <AdminTokenPage />;

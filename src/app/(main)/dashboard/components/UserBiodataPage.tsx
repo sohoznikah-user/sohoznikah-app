@@ -87,17 +87,17 @@ export default function UserBiodataPage() {
   };
 
   return (
-    <div className=" w-full p-8 flex flex-col space-y-2 rounded-xl">
+    <div className=" w-full flex flex-col space-y-2 rounded-xl lg:p-5 mb-20">
       <div className="text-[#005381] text-center text-2xl font-semibold">
         বায়োডাটা
       </div>
       <div className="text-xs text-[#8c8e92] text-center">
         {/* বায়োডাটা পাবলিশ হয়েছে ৫ নভেম্বর, ২০২৪ */}
       </div>
-      <div className="flex space-x-6 text-black mt-4">
+      <div className="flex flex-col md:flex-col lg:flex-row gap-5 text-black mt-4 ">
         {/* Biodata Status */}
-        <div className="flex  justify-between items-center  gap-4 bg-[#F5F4FC] p-4 rounded-2xl">
-          <div className="flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl">
+        <div className="flex flex-col md:flex-row lg:flex-row justify-between items-center  gap-4 bg-[#F5F4FC] p-4 rounded-2xl w-full md:w-2/3 lg:w-1/2 mx-auto flex-wrap">
+          <div className="flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl min-w-60 w-full">
             <div className="text-lg">বায়োডাটা স্ট্যাটাস</div>
             <div className="flex">
               <div
@@ -122,7 +122,7 @@ export default function UserBiodataPage() {
               </div>
             </div>
           </div>
-          <div className="w-72 flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl">
+          <div className="w-full flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl min-w-60">
             <div className="text-lg">বায়োডাটা সম্পূর্ণতা</div>
             <Slider
               value={[70]}
@@ -136,7 +136,7 @@ export default function UserBiodataPage() {
         </div>
 
         {/* Biodata Action Buttons */}
-        <div className="grid grid-cols-2  gap-4 bg-[#F5F4FC] p-4 rounded-2xl justify-center items-center">
+        <div className="grid grid-cols-2  gap-4 bg-[#F5F4FC] p-4 rounded-2xl justify-center items-center w-full md:w-2/3 lg:w-1/2 mx-auto">
           <Link href={`/biodatas/my-biodata`}>
             <button className="w-full p-4  px-8 bg-[#E8E8E8] shadow-md rounded-xl text-[#353535] text-center cursor-pointer">
               বায়োডাটা দেখুন

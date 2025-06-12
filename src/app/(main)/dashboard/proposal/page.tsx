@@ -244,8 +244,8 @@ const ProposalPage = () => {
   ];
 
   return (
-    <div className="min-h-[500px] p-5 flex justify-center items-center">
-      <div className="w-full max-w-6xl bg-[#F5F4FC] rounded-lg shadow-lg py-8">
+    <div className="min-h-[500px] flex justify-center items-center lg:p-5 mb-10">
+      <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
           প্রাথমিক প্রস্তাবের তালিকা
         </h1>
@@ -258,7 +258,7 @@ const ProposalPage = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div> */}
-        <div className="flex justify-center mb-3">
+        <div className="flex justify-center mb-3 px-4">
           <button
             onClick={() => setActiveTab("myRecords")}
             className={`px-6 py-2 rounded-lg font-medium transition ${
@@ -281,7 +281,7 @@ const ProposalPage = () => {
           </button>
         </div>
 
-        <p className="text-center text-sm text-[#C65C5C] pt-6 mb-1 max-w-2xl mx-auto">
+        <p className="text-center text-sm text-[#C65C5C] pt-6 mb-1 max-w-2xl mx-auto px-4">
           {activeTab === "myRecords"
             ? "আপনাকে প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে কোনো রেসপন্স না করলে অপরপক্ষ চাইলে প্রস্তাবটি বাতিল করতে পারবে"
             : "আপনি প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে অপরপক্ষ রেসপন্স না করলে প্রস্তাবটি বাতিল করার অপশন পাবেন। বাতিল করলে টোকেন রিফান্ড পাবেন, চাইলে অপেক্ষাও করতে পারেন"}

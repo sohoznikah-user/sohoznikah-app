@@ -23,7 +23,7 @@ export default function DashboardPage() {
               <DashboardRightSection />
             </div>
           </div>
-          <div className="w-full  h-full">
+          <div className="w-full  h-full lg:mt-10 mt-6 mb-6">
             <DashboardMainNotifications />
           </div>
         </>

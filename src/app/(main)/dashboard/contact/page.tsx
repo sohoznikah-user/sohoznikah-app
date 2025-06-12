@@ -175,8 +175,8 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-[500px] p-5 flex justify-center items-center">
-      <div className="w-full max-w-6xl bg-[#F5F4FC] rounded-lg shadow-lg py-6 pt-10 ">
+    <div className="min-h-[500px] lg:p-5 flex justify-center items-center">
+      <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
           যোগাযোগ তথ্যের তালিকা
         </h1>
@@ -189,7 +189,7 @@ const ContactPage = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div> */}
-        <div className="flex justify-center mb-3">
+        <div className="flex justify-center mb-3 px-4">
           <button
             onClick={() => setActiveTab("myRecords")}
             className={`px-6 py-2 rounded-lg font-medium transition ${

@@ -169,7 +169,9 @@ export default function AdminDashboardPage() {
       header: "ইমেইল",
       cell: ({ row }) => {
         const email = row.original.email;
-        return <div className="truncate max-w-[80px]">{email || "-"}</div>;
+        return (
+          <div className="truncate md:max-w-[80px] w-full">{email || "-"}</div>
+        );
       },
     },
     {
@@ -178,7 +180,9 @@ export default function AdminDashboardPage() {
       cell: ({ row }) => {
         const phoneNumber = row.original.phoneNumber;
         return (
-          <div className="truncate max-w-[80px]">{phoneNumber || "-"}</div>
+          <div className="truncate md:max-w-[80px] w-full">
+            {phoneNumber || "-"}
+          </div>
         );
       },
     },
@@ -322,8 +326,8 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen p-5 flex justify-center items-center">
-      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg py-8">
+    <div className="min-h-screen flex justify-center items-center lg:p-5 mb-10">
+      <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
           ইউজার তালিকা
         </h1>
