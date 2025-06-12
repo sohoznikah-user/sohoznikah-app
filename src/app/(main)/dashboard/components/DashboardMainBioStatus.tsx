@@ -31,18 +31,20 @@ export default function DashboardMainBioStatus() {
   };
 
   return (
-    <div className=" p-8 flex flex-col space-y-2 rounded-xl">
-      <div className="text-[#005381] text-center text-2xl">বায়োডাটা</div>
-      <div className="text-xs text-[#8c8e92] text-center">
-        {/* বায়োডাটা পাবলিশ হয়েছে ৫ নভেম্বর, ২০২৪ */}
+    <div className="p-4 md:p-8 flex flex-col space-y-2 rounded-xl w-full">
+      <div className="text-[#005381] md:text-center text-start text-xl md:text-2xl">
+        বায়োডাটা
       </div>
-      <div className="flex space-x-6 text-black mt-4">
-        <div className="flex flex-col items-center bg-[#F5F4FC] p-6 space-y-6 rounded-xl">
-          <div className="text-lg">বায়োডাটা স্ট্যাটাস</div>
-          <div className="flex">
+      <div className="text-xs text-[#8c8e92] text-center">
+        {/* বায়োডাটা পাবলিশ হয়েছে ৫ নভেম্বর, ২০২৪ */}
+      </div>
+      <div className="flex flex-col md:flex-col lg:flex-row  space-y-6 md:space-y-8 lg:space-y-0 text-black mt-4 w-full lg:justify-between flex-wrap gap-4">
+        <div className="flex flex-col items-center bg-[#F5F4FC] p-4 md:p-6 space-y-4 md:space-y-6 rounded-xl w-full md:w-auto">
+          <div className="text-base md:text-lg">বায়োডাটা স্ট্যাটাস</div>
+          <div className="flex w-full justify-center">
             <div
               onClick={() => handleBioStatus("PRIVATE")}
-              className={`py-3 rounded-2xl  px-8  cursor-pointer ${
+              className={`py-2 md:py-3 rounded-2xl px-6 md:px-8 cursor-pointer ${
                 biodata?.visibility === "PRIVATE"
                   ? "bg-[#c65c5c] text-white z-10"
                   : "bg-[#d9d9d9] text-[#777] z-0"
@@ -52,7 +54,7 @@ export default function DashboardMainBioStatus() {
             </div>
             <div
               onClick={() => handleBioStatus("PUBLIC")}
-              className={`py-3 rounded-2xl px-8 -ml-5 cursor-pointer ${
+              className={`py-2 md:py-3 rounded-2xl px-6 md:px-8 -ml-5 cursor-pointer ${
                 biodata?.visibility === "PUBLIC"
                   ? "bg-[#c65c5c] text-white z-10"
                   : "bg-[#d9d9d9] text-[#777] z-0"
@@ -62,8 +64,8 @@ export default function DashboardMainBioStatus() {
             </div>
           </div>
         </div>
-        <div className="w-72 flex flex-col items-center bg-[#F5F4FC] p-6 space-y-6 rounded-xl">
-          <div className="text-lg">বায়োডাটা সম্পূর্ণতা</div>
+        <div className="flex flex-col items-center bg-[#F5F4FC] p-4 md:p-6 space-y-4 md:space-y-6 rounded-xl w-full md:w-auto lg:w-72">
+          <div className="text-base md:text-lg">বায়োডাটা সম্পূর্ণতা</div>
           <Slider
             value={[Number(biodata?.biodataCompleted || 0)]}
             min={0}
@@ -73,18 +75,18 @@ export default function DashboardMainBioStatus() {
           />
           <div>{biodata?.biodataCompleted || 0}%</div>
         </div>
-        <div className="flex flex-col items-center justify-center space-y-6">
+        <div className="flex flex-col md:flex-row lg:flex-col items-center justify-center  gap-4 w-full md:w-auto lg:w-auto">
           <Link
             href={`/biodatas/my-biodata`}
-            className="w-48 p-4 bg-[#5b8eaa] rounded-xl text-white text-center"
+            className="w-full md:max-w-60 p-3 md:p-4 bg-[#5b8eaa] rounded-xl text-white text-center"
           >
-            বায়োডাটা দেখুন
+            বায়োডাটা দেখুন
           </Link>
           <Link
             href={`/biodata-editor`}
-            className="w-48 p-4 bg-[#5b8eaa] rounded-xl text-white text-center"
+            className="w-full md:max-w-60 p-3 md:p-4 bg-[#5b8eaa] rounded-xl text-white text-center"
           >
-            বায়োডাটা এডিট করুন
+            বায়োডাটা এডিট করুন
           </Link>
         </div>
       </div>

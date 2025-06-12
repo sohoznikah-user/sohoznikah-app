@@ -63,10 +63,10 @@ export function Navbar() {
 
   return (
     <div className="relative py-2  px-4 text-[#1f4f69] bg-transparent border-b border-gray-200">
-      <div className="flex items-center z-50 justify-between md:justify-center container mx-auto">
+      <div className="flex items-center z-50 justify-between lg:justify-center container mx-auto">
         {/* Hamburger for mobile */}
         <button
-          className="md:hidden flex items-center px-2 py-1 bg-white rounded-lg cursor-pointer text-[#1f4f69] border-[#1f4f69] focus:outline-none"
+          className="lg:hidden flex items-center px-2 py-1 bg-white rounded-lg cursor-pointer text-[#1f4f69] border-[#1f4f69] focus:outline-none"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
           aria-label="Toggle menu"
         >
@@ -87,7 +87,7 @@ export function Navbar() {
         </button>
 
         {/* Navigation Menu - Desktop */}
-        <NavigationMenu className="flex-1 hidden md:block w-auto">
+        <NavigationMenu className="flex-1 hidden lg:block w-auto">
           <NavigationMenuList className="flex space-x-2 justify-center">
             {menuItems.map((item, index) => (
               <NavigationMenuItem key={index}>
@@ -103,14 +103,14 @@ export function Navbar() {
         </NavigationMenu>
 
         {/* Logo - Centered on mobile, center on desktop */}
-        <div className="flex-1 flex justify-center md:min-w-80 md:ml-0 w-auto">
+        <div className="flex-1 flex justify-center lg:min-w-80 lg:ml-0 w-auto">
           <Link href="/">
             <Image src={logo} alt="Logo" width={80} height={50} priority />
           </Link>
         </div>
 
         {/* Right actions - Desktop */}
-        <div className="w-auto flex-1 hidden md:flex justify-end space-x-4 text-md">
+        <div className="w-auto flex-1 hidden lg:flex justify-end space-x-4 text-md">
           {user?.role === "USER" && (
             <>
               {biodata?.status === "" ? (
@@ -194,12 +194,12 @@ export function Navbar() {
           <>
             {/* Overlay */}
             <div
-              className="fixed inset-0 bg-black opacity-50 z-40 md:hidden"
+              className="fixed inset-0 bg-black opacity-50 z-40 lg:hidden"
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu overlay"
             />
             {/* Drawer */}
-            <div className="fixed top-[90px] left-0 w-full bg-white shadow-md z-50 flex flex-col items-center py-4 md:hidden animate-fade-in">
+            <div className="fixed top-[90px] left-0 w-full bg-white shadow-md z-50 flex flex-col items-center py-4 lg:hidden animate-fade-in">
               <nav className="w-full flex flex-col items-center space-y-2 mb-4">
                 {menuItems.map((item, index) => (
                   <Link

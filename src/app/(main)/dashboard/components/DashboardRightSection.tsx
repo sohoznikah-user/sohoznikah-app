@@ -6,8 +6,8 @@ import Link from "next/link";
 export default function DashboardRightSection() {
   const { biodata } = useAppSelector((state) => state.biodata);
   return (
-    <div className="py-12 mr-8 flex flex-col items-center space-y-6">
-      <div className="p-10 bg-[#f9f3f9] rounded-3xl flex flex-col items-center justify-center space-y-4">
+    <div className="lg:py-12 py-5 lg:mr-2 lg:ml-4 flex flex-col items-center space-y-6">
+      <div className="p-10 bg-[#f9f3f9] rounded-3xl flex flex-col items-center justify-center space-y-4 w-full md:w-2/3 lg:w-full">
         <div className="text-black text-center">আপনার সর্বমোট টোকেন সংখ্যা</div>
         <div className="text-8xl text-[#ad0000] font-semibold">
           {biodata?.token || 0}
@@ -19,7 +19,7 @@ export default function DashboardRightSection() {
           টোকেন কিনুন
         </Link>
       </div>
-      <div className="p-10 bg-[#f9f3f9] rounded-3xl flex flex-col items-center justify-center space-y-4">
+      <div className="p-10 bg-[#f9f3f9] rounded-3xl flex flex-col items-center justify-center space-y-4 w-full md:w-2/3 lg:w-full">
         <div className="text-black text-center">
           আপনার কি বিবাহ সম্পন্ন হয়েছে?
         </div>

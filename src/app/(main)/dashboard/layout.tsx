@@ -11,8 +11,9 @@ import {
 } from "@/redux/features/biodata/biodataSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
+import { CircleUserRound } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ContactResponse from "./components/ContactResponse";
 import DashboardLeftNav from "./components/DashboardLeftNav";
@@ -22,6 +23,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const token = useAppSelector(selectCurrentToken);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -62,8 +64,20 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <main className="flex justify-start flex-grow bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
-      <DashboardLeftNav />
-      <div className="w-full bg-gradient-to-r from-blue-100 to-pink-100 text-background p-4">
+      {/* Dashboard Toggle Button - Only visible on mobile */}
+      <button
+        className="fixed top-5 right-4 z-50 lg:hidden  p-2 rounded-lg cursor-pointer"
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        <CircleUserRound className="w-8 h-8 text-gray-500" />
+      </button>
+
+      <DashboardLeftNav
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+
+      <div className="w-full bg-gradient-to-r from-blue-100 to-pink-100 text-background px-4 md:px-6 lg:px-5 py-5">
         {user?.role === "USER" && <ContactResponse />}
         {children}
       </div>
