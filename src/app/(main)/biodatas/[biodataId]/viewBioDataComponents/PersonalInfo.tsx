@@ -14,7 +14,7 @@ export default function PersonalInfo({
   personalInfoFormData: PersonalInfoFormData;
 }) {
   return (
-    <Card className="border-gray-200 bg-[#fcfcfc] text-black">
+    <Card className="border-gray-200 bg-[#fcfcfc] text-black  lg:max-w-[450px] min-w-auto">
       <CardHeader>
         <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           ব্যক্তিগত তথ্য

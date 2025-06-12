@@ -40,7 +40,7 @@ export default function HeaderShortBio({
   // console.log("biodataFormData", biodata?.biodataFormData);
 
   return (
-    <Card className="w-1/2 bg-white text-black border-none rounded-4xl px-4">
+    <Card className=" bg-white text-black border-none rounded-4xl px-4 lg:max-w-[450px] w-full min-w-auto">
       <CardHeader className="flex items-center">
         <div className="text-lg text-white bg-[#016ca7] p-4 rounded-xl">
           {`${primaryInfoFormData?.biodataType === "BRIDE" ? "পাত্রীর" : "পাত্রের"} `}

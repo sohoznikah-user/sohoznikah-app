@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function MobileFooter() {
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-around items-center py-2 z-50 md:hidden">
+    <nav className="fixed bottom-0 left-0  w-full bg-white border-t border-gray-200 flex justify-around items-center py-2 z-50 md:hidden">
       <Link
         href="/"
         className="flex items-center text-[#1f4f69] hover:text-[#E25A6F]"

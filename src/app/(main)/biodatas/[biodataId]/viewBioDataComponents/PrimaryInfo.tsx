@@ -14,7 +14,7 @@ export default function PrimaryInfo({
   primaryInfoFormData: PrimaryInfoFormData;
 }) {
   return (
-    <Card className="border-gray-200 bg-[#fcfcfc] text-black w-full">
+    <Card className="border-gray-200 bg-[#fcfcfc] text-black max-w-full min-w-auto">
       <CardHeader>
         <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           প্রাথমিক তথ্য

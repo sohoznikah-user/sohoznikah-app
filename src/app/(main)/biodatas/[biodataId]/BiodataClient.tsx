@@ -18,6 +18,7 @@ import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
 import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
 
 export default function BiodataClient({ biodataId }: { biodataId: string }) {
+  console.log("biodataId from component", biodataId);
   const [biodata, setBiodata] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const user = useAppSelector(selectCurrentUser);
@@ -105,13 +106,11 @@ export default function BiodataClient({ biodataId }: { biodataId: string }) {
   }
 
   return (
-    <div className="">
+    <div className="lg:px-0 px-4">
       <HeaderSection
-        biodata={biodata}
+        biodata={biodata?.biodata}
         biodataId={biodataId}
         biodataFormData={biodata?.biodataFormData}
-        // myBiodata={myBiodata}
-        // isAdmin={isAdmin}
       />
       <div className="py-12 flex flex-col items-center justify-center space-y-6 container mx-auto">
         <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
@@ -133,7 +132,7 @@ export default function BiodataClient({ biodataId }: { biodataId: string }) {
           </TabsList>
         </Tabs>
 
-        <div className="w-full  space-y-6 text-md">
+        <div className="max-w-5xl mx-auto px-4 space-y-6 text-md overflow hidden">
           <div ref={primaryInfoRef}>
             <PrimaryInfo
               biodata={biodata?.biodata}

@@ -135,7 +135,7 @@ const ProfileCard = ({
 
   return (
     <>
-      <Card className="bg-white text-black border-none rounded-4xl h-full">
+      <Card className="bg-white text-black border-none rounded-4xl   lg:max-w-[450px] min-w-auto">
         <CardContent className="pt-8">
           <div
             className={`flex flex-col items-center ${isAdmin || myBiodata ? " justify-center" : ""} space-y-4 `}

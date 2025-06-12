@@ -25,7 +25,7 @@ export default function HeaderSection({
   return (
     <div className="bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
       <div className=" container mx-auto px-4 py-12 ">
-        <div className="min-w-7xl flex space-x-8 mx-auto">
+        <div className="min-w-7xl flex lg:flex-row flex-col space-x-8 mx-auto">
           <div className="w-1/4 flex flex-col justify-between space-y-8">
             {/* Status & Profile card */}
             <ProfileCard
@@ -35,21 +35,23 @@ export default function HeaderSection({
               isAdmin={isAdmin}
             />
 
-            <ProposalCard
-              biodataId={biodataId}
-              biodata={biodata}
-              myBiodata={myBiodata}
-              isAdmin={isAdmin}
-            />
+            <div className="hidden lg:block">
+              <ProposalCard
+                biodataId={biodataId}
+                biodata={biodata}
+                myBiodata={myBiodata}
+                isAdmin={isAdmin}
+              />
+            </div>
           </div>
 
           {/* Biodata & Spouse Preference card */}
-          <div className="w-3/4 flex space-x-8">
+          <div className="w-3/4 flex space-x-8 box-border">
             <HeaderShortBio
               biodata={biodata}
               biodataFormData={biodataFormData}
             />
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <HeaderSpousePreferenceRequierment
                 biodata={biodata}
                 biodataFormData={biodataFormData}

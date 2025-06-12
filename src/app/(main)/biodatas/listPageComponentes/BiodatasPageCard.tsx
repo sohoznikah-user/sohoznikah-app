@@ -81,6 +81,7 @@ export default function BioCard({
     }
     router.push(`/biodatas/${id}`);
   };
+
   const handleFavourite = async (type: "add" | "remove") => {
     if (!token || !user) {
       return;

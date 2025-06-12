@@ -6,9 +6,9 @@ import Quote from "./Quote";
 
 const AdviceToGurdians = () => {
   return (
-    <section className=" px-2 sm:px-4 md:py-20 py-10 bg-[#f9f6f2] min-h-screen flex flex-col items-center">
+    <section className=" px-2 md:px-4 md:py-20 py-10 bg-[#f9f6f2] min-h-screen flex flex-col items-center">
       <div
-        className="relative max-w-3xl w-full bg-white rounded-xl shadow-xl px-6  py-12 mt-8 mb-8 border border-[#e5e2de]"
+        className="relative max-w-3xl w-full bg-white rounded-xl shadow-xl px-6 md:px-12 py-12 mt-8 mb-8 border border-[#e5e2de]"
         style={{ boxShadow: "0 8px 32px 0 rgba(60, 60, 60, 0.10)" }}
       >
         <Title rightTitle="অভিভাবকদের উদ্দেশ্যে নাসীহাহ" hideCenter />

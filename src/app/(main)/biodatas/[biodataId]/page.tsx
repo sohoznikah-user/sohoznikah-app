@@ -9,6 +9,7 @@ export default async function BiodataPage({
 }) {
   // Ensure we have a valid string ID
   const biodataId = (await params).biodataId;
+
   if (!biodataId || typeof biodataId !== "string") {
     return <div>Invalid Biodata ID</div>;
   } else {

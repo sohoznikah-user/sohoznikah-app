@@ -1,42 +1,40 @@
 // File: src/app/(main)/biodatas/[id]/BiodataClient.tsx
 "use client";
+import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  useGetBiodataByIdQuery,
-  useGetMyBiodataQuery,
-} from "@/redux/features/biodata/biodataApi";
+import { useGetMyBiodataQuery } from "@/redux/features/biodata/biodataApi";
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import AddressInfo from "./viewBioDataComponents/AddressInfo";
-import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
-import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
-import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
-import HeaderSection from "./viewBioDataComponents/HeaderSection";
-import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
-import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
-import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
-import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
+import AddressInfo from "../[biodataId]/viewBioDataComponents/AddressInfo";
+import EducationAndOccupationInfo from "../[biodataId]/viewBioDataComponents/EducationAndOccupationInfo";
+import FamilyInfo from "../[biodataId]/viewBioDataComponents/FamilyInfo";
+import GeneralInfo from "../[biodataId]/viewBioDataComponents/GeneralInfo";
+import HeaderSection from "../[biodataId]/viewBioDataComponents/HeaderSection";
+import MarriageInfo from "../[biodataId]/viewBioDataComponents/MarriageInfo";
+import PersonalInfo from "../[biodataId]/viewBioDataComponents/PersonalInfo";
+import PrimaryInfo from "../[biodataId]/viewBioDataComponents/PrimaryInfo";
+import ReligiousInfo from "../[biodataId]/viewBioDataComponents/ReligiousInfo";
 
-export default function BiodataClient2({
-  biodataId,
-  myBiodata = false,
+export default function MyBiodataClient({
+  myBiodata = true,
   isAdmin = false,
 }: {
-  biodataId?: string;
   myBiodata?: boolean;
   isAdmin?: boolean;
 }) {
   const [biodata, setBiodata] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<string | null>(null);
-  console.log({ biodataId });
+  const router = useRouter();
+  const { user, acesstoken } = useAppSelector((state: RootState) => state.auth);
 
-  const { data: myBiodataData, isLoading: isFetchingMyBiodata } =
-    useGetMyBiodataQuery(undefined, { skip: !biodataId || !myBiodata });
-
-  const { data: fetchedBiodata, isLoading: isFetchingBiodata } =
-    useGetBiodataByIdQuery(biodataId, {
-      skip: !biodataId || typeof biodataId !== "string",
-    });
+  const {
+    data: myBiodataData,
+    isLoading: isFetchingMyBiodata,
+    isError: isErrorMyBiodata,
+  } = useGetMyBiodataQuery(undefined);
 
   const tabs = [
     "প্রাথমিক তথ্য",
@@ -73,33 +71,22 @@ export default function BiodataClient2({
   };
 
   // Redirect to login if not authenticated
-  //   useEffect(() => {
-  //     if (!myBiodata) {
-  //       return;
-  //     }
-  //     if (myBiodata) {
-  //       if (!user || !acesstoken) {
-  //         const redirectUrl = `/my-biodata`;
-  //         router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
-  //       }
-  //     }
-  //   }, [myBiodata, user, acesstoken, router]);
+  useEffect(() => {
+    if (!user || !acesstoken) {
+      const redirectUrl = `/my-biodata`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    }
+  }, [user, acesstoken, router]);
 
   // Fetch my biodata when myBiodata is true
 
   // Set biodata based on fetched data
   useEffect(() => {
-    if (myBiodata && myBiodataData?.data) {
+    if (myBiodataData?.data) {
       const mapped = mapApiToBiodataFormData(myBiodataData.data);
       setBiodata(mapped);
-    } else if (!myBiodata && fetchedBiodata?.data) {
-      const mapped = mapApiToBiodataFormData(fetchedBiodata.data);
-      setBiodata(mapped);
     }
-  }, [myBiodata, myBiodataData, fetchedBiodata]);
-
-  //   console.log("biodataId", biodataId);
-  //   console.log("myBiodata", myBiodata);
+  }, [myBiodataData]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -109,22 +96,21 @@ export default function BiodataClient2({
     }
   };
 
-  // if (isFetchingMyBiodata || isFetchingBiodata) {
-  //   return <Loading />;
-  // }
+  if (isFetchingMyBiodata) {
+    return <Loading />;
+  }
 
-  // if (isErrorMyBiodata || isErrorBiodata) {
-  //   return <div>Error loading data</div>;
-  // }
+  if (isErrorMyBiodata) {
+    return <div>Error loading data</div>;
+  }
 
   return (
     <div className="">
       <HeaderSection
-        biodata={biodata}
-        biodataId={biodataId}
+        biodata={biodata?.biodata}
         biodataFormData={biodata?.biodataFormData}
-        myBiodata={myBiodata}
         isAdmin={isAdmin}
+        myBiodata={true}
       />
       <div className="py-12 flex flex-col items-center justify-center space-y-6 container mx-auto">
         <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
@@ -157,7 +143,7 @@ export default function BiodataClient2({
           </div>
           <div ref={generalInfoRef}>
             <GeneralInfo
-              biodata={biodata}
+              biodata={biodata?.biodata}
               generalInfoFormData={
                 biodata?.biodataFormData?.generalInfoFormData
               }
@@ -165,7 +151,7 @@ export default function BiodataClient2({
           </div>
           <div ref={addressRef}>
             <AddressInfo
-              biodata={biodata}
+              biodata={biodata?.biodata}
               addressInfoFormData={
                 biodata?.biodataFormData?.addressInfoFormData
               }
@@ -173,7 +159,7 @@ export default function BiodataClient2({
           </div>
           <div ref={educationRef}>
             <EducationAndOccupationInfo
-              biodata={biodata}
+              biodata={biodata?.biodata}
               educationInfoFormData={
                 biodata?.biodataFormData?.educationAndOccupationFormData
               }
@@ -184,13 +170,13 @@ export default function BiodataClient2({
           </div>
           <div ref={familyRef}>
             <FamilyInfo
-              biodata={biodata}
+              biodata={biodata?.biodata}
               familyInfoFormData={biodata?.biodataFormData?.familyInfoFormData}
             />
           </div>
           <div ref={religiousRef}>
             <ReligiousInfo
-              biodata={biodata}
+              biodata={biodata?.biodata}
               religiousInfoFormData={
                 biodata?.biodataFormData?.religiousInfoFormData
               }
@@ -201,7 +187,7 @@ export default function BiodataClient2({
           </div>
           <div ref={personalRef}>
             <PersonalInfo
-              biodata={biodata}
+              biodata={biodata?.biodata}
               personalInfoFormData={
                 biodata?.biodataFormData?.personalInfoFormData
               }
@@ -209,7 +195,7 @@ export default function BiodataClient2({
           </div>
           <div ref={marriageRef}>
             <MarriageInfo
-              biodata={biodata}
+              biodata={biodata?.biodata}
               biodataFormData={biodata?.biodataFormData}
             />
           </div>
