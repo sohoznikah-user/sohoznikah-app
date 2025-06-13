@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { tokenOptions } from "@/lib/consts";
 import { useCreateTokenMutation } from "@/redux/features/admin/tokenApi";
+import { useAppSelector } from "@/redux/hooks";
 import { Copy, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -62,6 +63,7 @@ const UserTokenPage = () => {
     "custom"
   );
   const [customQuantity, setCustomQuantity] = useState<number>(1);
+  const { biodata } = useAppSelector((state) => state.biodata);
 
   // State to control the visibility of the payment form
   const [showPaymentForm, setShowPaymentForm] = useState(false);
@@ -128,175 +130,219 @@ const UserTokenPage = () => {
   };
 
   return (
-    <div className="min-h-[500px]  flex justify-center items-start py-6 lg:pt-10 md:pt-8 pt-5 pb-20">
+    <div className="min-h-[500px]  flex flex-col justify-center items-center py-6 lg:pt-10 md:pt-8 pt-5 pb-20">
       {!showPaymentForm && (
-        <div className="w-full max-w-3xl">
-          {/* Page Title */}
-          <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
-            টোকেন কিনুন
-          </h1>
-
-          {/* Main White Container */}
-          <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-            {/* Header Row */}
-            <div className="grid grid-cols-4 text-center bg-gray-50 px-8 py-5">
-              <div className="col-span-1 text-[#005381] font-medium">
-                বাছাই করুন
+        <>
+          <div className="w-full max-w-4xl mx-auto mb-10 flex md:flex-row flex-col justify-center items-stretch gap-6">
+            <div className="flex flex-col md:flex-row gap-6  rounded-2xl md:p-8 p-4 bg-white">
+              {/* What is Token */}
+              <div className="flex-1">
+                <div className="text-[#b52d1f] text-lg font-bold mb-2">
+                  টোকেন কি?
+                </div>
+                <div className="text-md text-gray-800">
+                  টোকেন খরচ করে আপনি পছন্দের বায়োডাটায় প্রস্তাব পাঠাতে পারবেন
+                  এবং অভিভাবকের যোগাযোগ নম্বর দেখতে পারবেন।
+                </div>
               </div>
-              <div className="col-span-1 text-[#005381] font-medium">
-                টোকেন সংখ্যা
+              {/* Token Usage */}
+              <div className="flex-1">
+                <div className="text-[#b52d1f] text-lg font-bold mb-2">
+                  টোকেনের ব্যবহার
+                </div>
+                <ul className="text-sm text-gray-800 list-disc pl-5">
+                  <li>প্রতি টোকেনের মূল্য ৫০ টাকা।</li>
+                  <li>১টি বায়োডাটায় প্রস্তাব পাঠাতে ১টি টোকেন প্রয়োজন হবে।</li>
+                  <li>
+                    ১টি বায়োডাটার অভিভাবকের যোগাযোগ নম্বর দেখতে ২টি টোকেন
+                    প্রয়োজন হবে।
+                  </li>
+                </ul>
               </div>
-              <div className="col-span-1 text-[#005381] font-medium">মূল্য</div>
-              <div className="col-span-1 text-[#005381] font-medium">কিনুন</div>
             </div>
 
-            {/* CUSTOM ROW */}
-            <div
-              className={`grid grid-cols-4 items-center px-6 py-4 border-b border-gray-200`}
-            >
-              {/* Radio Button */}
-              <div className="flex justify-center">
-                <RadioGroup
-                  value={selectedOption}
-                  onValueChange={(val) => setSelectedOption(val)}
-                  className="flex"
-                >
-                  <div className="flex items-center">
-                    <RadioGroupItem
-                      value="custom"
-                      id="radio-custom"
-                      className={`
+            <div className=" flex justify-center items-center gap-4 flex-col font-semibold bg-white rounded-2xl p-4  min-w-[200px]">
+              <h2 className="text-center text-xl md:text-2xl text-black">
+                আপনার বর্তমান টোকেন সংখ্যা:
+              </h2>
+              <span className="text-[#b52d1f] text-4xl md:text-5xl font-bold ">
+                {biodata?.token || 0}
+              </span>
+            </div>
+          </div>
+
+          <div className="w-full max-w-3xl mx-auto">
+            {/* Page Title */}
+            <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
+              টোকেন কিনুন
+            </h1>
+
+            {/* Main White Container */}
+            <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+              {/* Header Row */}
+              <div className="grid grid-cols-4 text-center bg-gray-50 px-8 py-5">
+                <div className="col-span-1 text-[#005381] font-medium">
+                  বাছাই করুন
+                </div>
+                <div className="col-span-1 text-[#005381] font-medium">
+                  টোকেন সংখ্যা
+                </div>
+                <div className="col-span-1 text-[#005381] font-medium">
+                  মূল্য
+                </div>
+                <div className="col-span-1 text-[#005381] font-medium">
+                  কিনুন
+                </div>
+              </div>
+
+              {/* CUSTOM ROW */}
+              <div
+                className={`grid grid-cols-4 items-center px-6 py-4 border-b border-gray-200`}
+              >
+                {/* Radio Button */}
+                <div className="flex justify-center">
+                  <RadioGroup
+                    value={selectedOption}
+                    onValueChange={(val) => setSelectedOption(val)}
+                    className="flex"
+                  >
+                    <div className="flex items-center">
+                      <RadioGroupItem
+                        value="custom"
+                        id="radio-custom"
+                        className={`
                       h-5 w-5 rounded-full border-1 border-[#307DA7]
                       text-[#5B8EAA] focus:ring-0
                       ${selectedOption === "custom" ? "bg-[#307DA7]" : "bg-white"}
                     `}
-                    />
-                    <label htmlFor="radio-custom" className="sr-only">
-                      Custom Quantity
-                    </label>
-                  </div>
-                </RadioGroup>
-              </div>
+                      />
+                      <label htmlFor="radio-custom" className="sr-only">
+                        Custom Quantity
+                      </label>
+                    </div>
+                  </RadioGroup>
+                </div>
 
-              {/* Quantity Select  (e.g. ১, ২, ৩, ... ) × ৫০ */}
-              <div className="flex justify-center space-x-2">
-                <Select
-                  onValueChange={(val) => setCustomQuantity(Number(val))}
-                  value={String(customQuantity)}
-                >
-                  <SelectTrigger className="h-10 w-20 bg-white border border-gray-300 rounded-lg text-center">
-                    <SelectValue placeholder="১" className="text-center" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-gray-200 rounded-lg">
-                    {tokenOptions.map((opt) => (
-                      <SelectItem
-                        key={opt.id}
-                        value={String(opt.id)}
-                        className="p-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        {opt.title}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <span className="text-green-600 font-medium mt-2">× ৳৫০</span>
-              </div>
+                {/* Quantity Select  (e.g. ১, ২, ৩, ... ) × ৫০ */}
+                <div className="flex justify-center space-x-2">
+                  <Select
+                    onValueChange={(val) => setCustomQuantity(Number(val))}
+                    value={String(customQuantity)}
+                  >
+                    <SelectTrigger className="h-10 w-20 bg-white border border-gray-300 rounded-lg text-center">
+                      <SelectValue placeholder="১" className="text-center" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border border-gray-200 rounded-lg">
+                      {tokenOptions.map((opt) => (
+                        <SelectItem
+                          key={opt.id}
+                          value={String(opt.id)}
+                          className="p-2 text-gray-700 hover:bg-gray-100"
+                        >
+                          {opt.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <span className="text-green-600 font-medium mt-2">× ৳৫০</span>
+                </div>
 
-              {/* Price Column (customQuantity * ৫০) */}
-              <div className="text-center text-gray-800 font-medium">
-                {customQuantity * 50} টাকা
-              </div>
+                {/* Price Column (customQuantity * ৫০) */}
+                <div className="text-center text-gray-800 font-medium">
+                  {customQuantity * 50} টাকা
+                </div>
 
-              {/* Buy Button */}
-              <div className="flex justify-center">
-                <button
-                  onClick={handleBuy}
-                  className={`
+                {/* Buy Button */}
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleBuy}
+                    className={`
                   px-4 py-2 rounded-lg font-medium text-white cursor-pointer
                   ${selectedOption === "custom" ? "bg-[#E25A6F] hover:bg-[#CA2740]" : "bg-red-300 cursor-not-allowed"}
                 `}
-                  disabled={selectedOption !== "custom"}
-                >
-                  কিনুন
-                </button>
+                    disabled={selectedOption !== "custom"}
+                  >
+                    কিনুন
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* PREDEFINED BUNDLES */}
-            {PREDEFINED_BUNDLES.map((bundle) => {
-              const isSelected = selectedOption === bundle.id;
-              return (
-                <div
-                  key={bundle.id}
-                  className={`grid grid-cols-4 items-center px-6 py-4 ${
-                    bundle.id !==
-                    PREDEFINED_BUNDLES[PREDEFINED_BUNDLES.length - 1].id
-                      ? "border-b border-gray-200"
-                      : ""
-                  }`}
-                >
-                  {/* Radio Button */}
-                  <div className="flex justify-center">
-                    <RadioGroup
-                      value={selectedOption}
-                      onValueChange={(val) => setSelectedOption(val)}
-                      className="flex"
-                    >
-                      <div className="flex items-center">
-                        <RadioGroupItem
-                          value={bundle.id}
-                          id={`radio-${bundle.id}`}
-                          className={`
+              {/* PREDEFINED BUNDLES */}
+              {PREDEFINED_BUNDLES.map((bundle) => {
+                const isSelected = selectedOption === bundle.id;
+                return (
+                  <div
+                    key={bundle.id}
+                    className={`grid grid-cols-4 items-center px-6 py-4 ${
+                      bundle.id !==
+                      PREDEFINED_BUNDLES[PREDEFINED_BUNDLES.length - 1].id
+                        ? "border-b border-gray-200"
+                        : ""
+                    }`}
+                  >
+                    {/* Radio Button */}
+                    <div className="flex justify-center">
+                      <RadioGroup
+                        value={selectedOption}
+                        onValueChange={(val) => setSelectedOption(val)}
+                        className="flex"
+                      >
+                        <div className="flex items-center">
+                          <RadioGroupItem
+                            value={bundle.id}
+                            id={`radio-${bundle.id}`}
+                            className={`
                           h-5 w-5 rounded-full border-1 border-[#307DA7]
                           text-[#5B8EAA] focus:ring-0
                           ${isSelected ? "bg-[#307DA7]" : "bg-white"}
                         `}
-                        />
-                        <label
-                          htmlFor={`radio-${bundle.id}`}
-                          className="sr-only"
-                        >
-                          {bundle.title}
-                        </label>
-                      </div>
-                    </RadioGroup>
-                  </div>
+                          />
+                          <label
+                            htmlFor={`radio-${bundle.id}`}
+                            className="sr-only"
+                          >
+                            {bundle.title}
+                          </label>
+                        </div>
+                      </RadioGroup>
+                    </div>
 
-                  {/* Bundle Box: white background, rounded, with blue header and token text */}
-                  <div className="flex justify-center">
-                    <div className="bg-white border border-gray-200 rounded-xl text-center w-36">
-                      <div className="bg-[#307DA7] text-white text-sm font-medium py-1 rounded-t-xl">
-                        {bundle.title}
-                      </div>
-                      <div className="py-2 text-gray-700 text-xs">
-                        {bundle.tokenTitle}টি টোকেন
+                    {/* Bundle Box: white background, rounded, with blue header and token text */}
+                    <div className="flex justify-center">
+                      <div className="bg-white border border-gray-200 rounded-xl text-center w-36">
+                        <div className="bg-[#307DA7] text-white text-sm font-medium py-1 rounded-t-xl">
+                          {bundle.title}
+                        </div>
+                        <div className="py-2 text-gray-700 text-xs">
+                          {bundle.tokenTitle}টি টোকেন
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Price Column */}
-                  <div className="text-center text-gray-800 font-medium">
-                    {bundle.price} টাকা
-                  </div>
+                    {/* Price Column */}
+                    <div className="text-center text-gray-800 font-medium">
+                      {bundle.price} টাকা
+                    </div>
 
-                  {/* Buy Button */}
-                  <div className="flex justify-center">
-                    <button
-                      onClick={handleBuy}
-                      className={`
+                    {/* Buy Button */}
+                    <div className="flex justify-center">
+                      <button
+                        onClick={handleBuy}
+                        className={`
                       px-4 py-2 rounded-lg font-medium text-white cursor-pointer
                       ${isSelected ? "bg-[#E25A6F] hover:bg-[#CA2740]" : "bg-red-300 cursor-not-allowed"}
                     `}
-                      disabled={!isSelected}
-                    >
-                      কিনুন
-                    </button>
+                        disabled={!isSelected}
+                      >
+                        কিনুন
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {showPaymentForm && (
