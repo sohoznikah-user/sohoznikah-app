@@ -40,14 +40,14 @@ export default function HeaderShortBio({
   // console.log("biodataFormData", biodata?.biodataFormData);
 
   return (
-    <Card className=" bg-white text-black border-none rounded-4xl px-4 lg:max-w-[450px] w-full min-w-auto">
+    <Card className=" bg-white text-black border-none rounded-4xl lg:max-w-[450px] w-full min-w-auto">
       <CardHeader className="flex items-center">
         <div className="text-lg text-white bg-[#016ca7] p-4 rounded-xl">
           {`${primaryInfoFormData?.biodataType === "BRIDE" ? "পাত্রীর" : "পাত্রের"} `}
           সংক্ষিপ্ত বিবরণ
         </div>
       </CardHeader>
-      <CardContent className="lg:px-5 px-2">
+      <CardContent className="lg:px-10 md:px-7 px-5">
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>বৈবাহিক অবস্থা</div>

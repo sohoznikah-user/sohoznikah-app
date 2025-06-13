@@ -1,8 +1,10 @@
-// File: src/app/(main)/biodatas/[id]/viewBioDataComponents/HeaderSection.tsx
+// File: src/app/(main)/biodatas/[biodataId]/viewBioDataComponents/HeaderSection.tsx
 "use client";
 import NeedLoginModal from "@/components/shared/NeedLoginModal";
+import PolicySection from "@/components/shared/PolicySection";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { Card, CardContent } from "@/components/ui/card";
+import { tokenDetailsData } from "@/lib/tokenDetailsData";
 import {
   useCreateContactMutation,
   useGetContactByBiodataIdQuery,
@@ -17,9 +19,9 @@ import {
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { getTimeDifference } from "@/utils/getTimeDifference";
 import { ArrowLeft, Copy, Send } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -38,6 +40,9 @@ const ProposalCard = ({
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectCurrentToken);
+  const { biodata: myBiodataData } = useAppSelector(
+    (state: RootState) => state.biodata
+  );
   const [activeTab, setActiveTab] = useState<"proposal" | "contact">(
     "proposal"
   );
@@ -157,7 +162,7 @@ const ProposalCard = ({
   return (
     <>
       {/* Proposal  & contact card*/}
-      <Card className="bg-white text-black border-none rounded-4xl h-full   lg:max-w-[450px] w-full min-w-auto">
+      <Card className="bg-white text-black border-none rounded-4xl h-full   md:max-w-[450px] w-full min-w-auto">
         <CardContent className=" h-full lg:px-10 p-5">
           {myBiodata || isAdmin ? (
             <div className="flex justify-center items-center h-full">
@@ -495,10 +500,10 @@ const ProposalCard = ({
                     </div>
                   ) : (
                     <>
-                      <div className="text-2xl font-semibold text-center mb-2 text-[#b52d1f]">
+                      <div className="text-2xl font-semibold text-center mb-2 mt-3 text-[#b52d1f]">
                         আপনি আগ্রহী?
                       </div>
-                      <div className="text-[#00476E] text-center text-md font-medium mb-2 mt-2">
+                      <div className="text-black text-center text-md font-bold mb-3 mt-1">
                         অপরপক্ষ আপনার প্রতি আগ্রহী কিনা জানতে
                       </div>
                       {/* Proposal section */}
@@ -528,12 +533,24 @@ const ProposalCard = ({
                         </div>
                       </div>
 
-                      <Link
-                        href="/tutorial"
-                        className="text-sm text-center text-[#2563EB] hover:underline mt-4 font-medium"
-                      >
-                        বিস্তারিত
-                      </Link>
+                      <div className="flex items-center justify-center gap-6 mt-2">
+                        <button
+                          className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
+                          onClick={() => {
+                            setIsModalOpen("token");
+                          }}
+                        >
+                          টোকেন সম্পর্কে
+                        </button>
+                        <button
+                          className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
+                          onClick={() => {
+                            setIsModalOpen("token-details");
+                          }}
+                        >
+                          বিস্তারিত জানুন
+                        </button>
+                      </div>
                     </>
                   )}
                 </>
@@ -680,12 +697,24 @@ const ProposalCard = ({
                         </p>
                       </div>
 
-                      <Link
-                        href="/tutorial"
-                        className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium"
-                      >
-                        বিস্তারিত
-                      </Link>
+                      <div className="flex items-center justify-center gap-6 mt-2">
+                        <button
+                          className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
+                          onClick={() => {
+                            setIsModalOpen("token");
+                          }}
+                        >
+                          টোকেন সম্পর্কে
+                        </button>
+                        <button
+                          className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
+                          onClick={() => {
+                            setIsModalOpen("token-details");
+                          }}
+                        >
+                          বিস্তারিত জানুন
+                        </button>
+                      </div>
                     </>
                   )}
 
@@ -713,12 +742,24 @@ const ProposalCard = ({
                         </p>
                       </div>
 
-                      <Link
-                        href="/tutorial"
-                        className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium"
-                      >
-                        বিস্তারিত
-                      </Link>
+                      <div className="flex items-center justify-center gap-6 mt-2">
+                        <button
+                          className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
+                          onClick={() => {
+                            setIsModalOpen("token");
+                          }}
+                        >
+                          টোকেন সম্পর্কে
+                        </button>
+                        <button
+                          className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
+                          onClick={() => {
+                            setIsModalOpen("token-details");
+                          }}
+                        >
+                          বিস্তারিত জানুন
+                        </button>
+                      </div>
                     </>
                   )}
                 </>
@@ -760,6 +801,104 @@ const ProposalCard = ({
         title={`যোগাযোগ নম্বর দেখার জন্য অনুরোধ পাঠাতে চান?`}
         description={`অনুরোধ পাঠাতে চাইলে অনুরোধ পাঠান বাটনে ক্লিক করতে হবে। ২টি টোকেন খরচ হবে।`}
       />
+
+      {/* Modal for token */}
+      <ReusableModal
+        open={isModalOpen === "token"}
+        onClose={() => setIsModalOpen(null)}
+        loading={isLoading}
+        fullScreen={true}
+        hideFooter={true}
+        title="No Title"
+      >
+        <div className="w-full mx-auto md:px-4 p-1">
+          {/* Current Token Count */}
+          <div className="text-center text-xl md:text-2xl font-semibold mb-2">
+            আপনার বর্তমান টোকেন সংখ্যা:{" "}
+            <span className="text-[#b52d1f] text-xl md:text-2xl font-bold ">
+              {myBiodataData?.token || 0}
+            </span>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6 mt-6 mb-4">
+            {/* What is Token */}
+            <div className="flex-1">
+              <div className="text-[#b52d1f] text-lg font-bold mb-2">
+                টোকেন কি?
+              </div>
+              <div className="text-md text-gray-800">
+                টোকেন খরচ করে আপনি পছন্দের বায়োডাটায় প্রস্তাব পাঠাতে পারবেন এবং
+                অভিভাবকের যোগাযোগ নম্বর দেখতে পারবেন।
+              </div>
+            </div>
+            {/* Token Usage */}
+            <div className="flex-1">
+              <div className="text-[#b52d1f] text-lg font-bold mb-2">
+                টোকেনের ব্যবহার
+              </div>
+              <ul className="text-sm text-gray-800 list-disc pl-5">
+                <li>প্রতি টোকেনের মূল্য ৫০ টাকা।</li>
+                <li>১টি বায়োডাটায় প্রস্তাব পাঠাতে ১টি টোকেন প্রয়োজন হবে।</li>
+                <li>
+                  ১টি বায়োডাটার অভিভাবকের যোগাযোগ নম্বর দেখতে ২টি টোকেন প্রয়োজন
+                  হবে।
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <hr className="my-5 border-gray-400" />
+          {/* Details Section */}
+          <div className=" text-md text-gray-700 mb-4 ">
+            আপনি প্রাথমিক প্রস্তাব পাঠাতে চাইলে বা অভিভাবকের যোগাযোগ নম্বর নিতে
+            চাইলে টোকেন খরচ করতে হয়। তাই আগে টোকেন কিনতে হবে।
+            <br />
+            <br />
+            বোঝার স্বার্থে ধরুন, আপনি পার্কে বেড়াতে গেলেন। সেখানে অনেক রাইডস
+            আছে। নাগরদোলা আছে, রেলগাড়ি আছে, নৌকা আছে। আপনি ৩টি রাইডেই চড়তে চান।
+            এর জন্য আপনাকে ৩টি টিকেট কাটতে হবে। প্রতি টিকেট ৫০ টাকা হলে ১৫০ টাকা
+            লাগবে। এখন আপনি রেলগাড়িতে চড়তে গেলে শুধু টিকেট দেখাতে হবে, কোনো টাকা
+            দিতে হবে না। অর্থাৎ সেখানে আপনার ১টি টিকেট খরচ হয়ে গেলো। বাকি ২টা
+            রাইডে যখন চড়তে যাবেন তখন ২টি টিকেট খরচ হবে। আপনি আরো অন্য যে কয়টা
+            রাইডে চড়তে চান, আবার সেই কয়টা টিকেট কিনতে হবে।
+            <br />
+            <br />
+            আমাদের টোকেন সিস্টেমটি ওই টিকেটের মত। আগে টোকেন কিনতে হবে। তারপর যখন
+            প্রস্তাব পাঠাতে বা যোগাযোগ করতে চাইবেন তখন শুধু টোকেন খরচ হবে, টাকা
+            নয়।
+          </div>
+          {/* Buy Token Button */}
+          <div className="flex justify-center mt-6">
+            <button
+              className="bg-[#232d36] hover:bg-[#1a2228] text-white font-semibold px-8 py-3 rounded-lg text-lg shadow transition-all cursor-pointer"
+              onClick={() => {
+                setIsModalOpen(null);
+                router.push("/dashboard/token");
+              }}
+            >
+              টোকেন কিনুন
+            </button>
+          </div>
+        </div>
+      </ReusableModal>
+
+      {/* Modal for token details */}
+      <ReusableModal
+        open={isModalOpen === "token-details"}
+        onClose={() => setIsModalOpen(null)}
+        loading={isLoading}
+        fullScreen={true}
+        hideFooter={true}
+        title="No Title"
+      >
+        <div className="max-w-[100%] mx-auto md:px-4 p-1 max-h-[80vh] overflow-y-auto flex flex-col gap-10">
+          <PolicySection data={tokenDetailsData.slice(0, 2)} />
+          <PolicySection data={tokenDetailsData.slice(2, 4)} />
+          <h2 className="text-lg font-semibold text-[#AB2929] text-center">
+            শুধুমাত্র বায়োডাটা ডিলিট করলে অবশিষ্ট টোকেনের মূল্য অর্থাৎ টাকা
+            রিফান্ড করা হয়।
+          </h2>
+        </div>
+      </ReusableModal>
     </>
   );
 };

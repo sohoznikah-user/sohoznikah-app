@@ -161,14 +161,14 @@ const FavouritePage = () => {
       cell: ({ row }) => (
         <div>
           <button
-            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
             onClick={() => {
               row?.original.bioVisibility === "PRIVATE"
                 ? setIsModalOpen("private")
                 : router.push(`/biodatas/${row?.original?.biodataId}`);
             }}
+            className="text-md bg-[#E25A6F] text-white px-3 py-1 rounded-md cursor-pointer"
           >
-            View
+            বায়োডাটা দেখুন
           </button>
         </div>
       ),
@@ -246,6 +246,8 @@ const FavouritePage = () => {
             আমাকে যারা পছন্দের তালিকায় রেখেছে
           </button>
         </div>
+
+        {/* mobile view */}
         <div className="flex flex-col gap-4 md:hidden sm:block">
           {data?.data?.map((item: any) => (
             <ReusableMobileCard
@@ -258,7 +260,7 @@ const FavouritePage = () => {
               }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
               date={item.createdAt}
               isShortlisted={item.isShortlisted}
-              view={item.bioVisibility}
+              visibility={item.bioVisibility}
               onDelete={() => {
                 setSelectedId(item.id);
                 setIsModalOpen("delete");
@@ -279,6 +281,8 @@ const FavouritePage = () => {
             />
           ))}
         </div>
+
+        {/* desktop & tablet view */}
         <ReusableTable
           data={data?.data || []} // Use API data
           columns={columns}

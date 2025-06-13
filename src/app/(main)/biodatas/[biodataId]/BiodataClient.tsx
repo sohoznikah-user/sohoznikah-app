@@ -123,7 +123,7 @@ export default function BiodataClient({
         isAdmin={isAdmin}
       />
 
-      <div className="lg:px-0 px-4">
+      <div className="lg:px-0 px-4 lg:bg-white bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
         <div className="py-12 flex flex-col items-center justify-center space-y-6 container mx-auto">
           <div className="text-4xl text-center text-black">
             সম্পূর্ণ বায়োডাটা

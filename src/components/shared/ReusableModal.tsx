@@ -9,10 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ReactNode } from "react";
 
 export interface ReusableModalProps {
   open: boolean;
+  fullScreen?: boolean;
   onClose?: () => void;
   title?: string;
   description?: string;
@@ -28,6 +31,7 @@ export interface ReusableModalProps {
 
 export const ReusableModal = ({
   open,
+  fullScreen = false,
   onClose,
   title,
   description,
@@ -42,10 +46,23 @@ export const ReusableModal = ({
 }: ReusableModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className=" text-black bg-[#F5F4FC]  overflow-y-auto">
+      <DialogContent
+        className={cn(
+          "text-black bg-[#F5F4FC] overflow-y-auto",
+          fullScreen
+            ? "w-full max-w-3xl sm:w-[90%] md:w-[95%] lg:w-[90%]"
+            : " sm:w-[90%] md:max-w-lg"
+        )}
+      >
         {(title || description) && (
           <DialogHeader>
-            {title && <DialogTitle>{title}</DialogTitle>}
+            {title === "No Title" ? (
+              <VisuallyHidden>
+                <DialogTitle>No Title</DialogTitle>
+              </VisuallyHidden>
+            ) : (
+              <DialogTitle>{title}</DialogTitle>
+            )}
             {description && (
               <DialogDescription className="text-md text-gray-600 my-3">
                 {description}
@@ -57,7 +74,7 @@ export const ReusableModal = ({
         {children && <div className="p-2">{children}</div>}
 
         {!hideFooter && (
-          <DialogFooter>
+          <DialogFooter className="flex justify-center">
             {!hideButtons && (
               <>
                 {!hideCancelButton && (
