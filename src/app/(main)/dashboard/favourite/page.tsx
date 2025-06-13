@@ -251,7 +251,11 @@ const FavouritePage = () => {
             <ReusableMobileCard
               key={item.id}
               biodataNo={item.bioNo}
-              permanentAddress={item.bioPermanentAddress}
+              permanentAddress={`${
+                item.bioPermanentCity
+                  ? getUpazilaTitle(item.bioPermanentCity)
+                  : "-"
+              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
               date={item.createdAt}
               isShortlisted={item.isShortlisted}
               view={item.bioVisibility}
@@ -259,11 +263,19 @@ const FavouritePage = () => {
                 setSelectedId(item.id);
                 setIsModalOpen("delete");
               }}
-              // onView={() => {
-              //   handleViewNotification(item.id);
-              //   setSelectedData(item);
-              //   setIsModalOpen("view");
-              // }}
+              onShortlist={() => {
+                if (item.isShortlisted) {
+                  toast.error("এই বায়োডাটাটি চুড়ান্ত তালিকায় রয়েছে");
+                  return;
+                }
+                setSelectedId(item.biodataId);
+                setIsModalOpen("shortlist");
+              }}
+              onView={() => {
+                item.bioVisibility === "PRIVATE"
+                  ? setIsModalOpen("private")
+                  : router.push(`/biodatas/${item.biodataId}`);
+              }}
             />
           ))}
         </div>

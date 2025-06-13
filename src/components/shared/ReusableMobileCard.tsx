@@ -1,41 +1,39 @@
 "use client";
 import { format } from "date-fns";
-import { Trash2 } from "lucide-react";
+import { CircleCheck, Trash2 } from "lucide-react";
 import React from "react";
 
 interface ReusableMobileCardProps {
   isShortlisted?: boolean;
-  view?: string;
   biodataNo?: string;
   permanentAddress?: string;
   visibility?: string;
-  message?: string;
   date: string;
   type?: string;
   isRead?: boolean;
   onDelete?: () => void;
   onView?: () => void;
+  onShortlist?: () => void;
 }
 
 const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
   isShortlisted,
-  view,
   visibility,
   biodataNo,
   permanentAddress,
-  message,
   date,
   onDelete,
   onView,
+  onShortlist,
 }) => {
   return (
     <div
-      className={`border-[#B3D6F6] border-none rounded-xl shadow-md p-4 flex flex-col min-w-0 cursor-pointer relative bg-white`}
+      className={`border-[#B3D6F6] border-none rounded-xl shadow-md p-4 flex justify-between min-w-0 cursor-pointer relative bg-white`}
     >
-      <div className={` font-bold text-base mb-1 flex justify-between gap-1`}>
+      <div className={` flex flex-col justify-between gap-1`}>
         {biodataNo && (
-          <p className="text-[15px] relative">
-            বায়োডাটা নং: {biodataNo}
+          <p className="text-md relative font-semibold pb-0.5">
+            <span className="text-[#005381]">বায়োডাটা নং:</span> {biodataNo}
             {visibility === "PRIVATE" && (
               <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-sm absolute top-0 right-0">
                 প্রাইভেট
@@ -44,17 +42,29 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
           </p>
         )}
         {permanentAddress && (
-          <p className="text-[15px]">স্থায়ী: {permanentAddress}</p>
+          <p className="text-md text-[#005381] pb-0.5">
+            স্থায়ী: {permanentAddress}
+          </p>
         )}
-        {message && (
-          <div className="text-[#222] text-[15px] py-2 mr-5">{message}</div>
+        {onShortlist && (
+          <div className="text-[#222] text-[15px] flex items-center justify-start gap-3">
+            <p className="text-md text-[#005381]">চুড়ান্ত তালিকায় রাখুন</p>
+            <button onClick={onShortlist}>
+              <CircleCheck
+                className={`w-5 h-5 rounded-full cursor-pointer ${isShortlisted ? "bg-black text-white" : "bg-gray-400 text-white "}`}
+              />
+            </button>
+          </div>
         )}
       </div>
-      <div>
-        {biodataNo && <p className="text-[15px]">{biodataNo}</p>}
-        {permanentAddress && <p className="text-[15px]">{permanentAddress}</p>}
-        {message && (
-          <div className="text-[#222] text-[15px] py-2 mr-5">{message}</div>
+      <div className="flex items-center justify-center">
+        {onView && (
+          <button
+            onClick={onView}
+            className="text-md bg-[#E25A6F] text-white px-3 py-1 rounded-md cursor-pointer"
+          >
+            বায়োডাটা দেখুন
+          </button>
         )}
       </div>
       <div className="absolute top-5 -translate-y-1/2 right-4 flex items-center gap-2">
