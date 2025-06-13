@@ -2,6 +2,7 @@
 "use client";
 import Loading from "@/app/loading";
 import { BiodataFormData } from "@/lib/types";
+import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 import HeaderShortBio from "./HeaderShortBio";
 import HeaderSpousePreferenceRequierment from "./HeaderSpousePreferenceRequierment";
 import ProfileCard from "./ProfileCard";
@@ -14,19 +15,25 @@ export default function HeaderSection({
   myBiodata,
   isAdmin,
 }: {
-  biodata: any;
+  biodata: IBiodata;
   biodataId?: string;
   biodataFormData?: BiodataFormData;
   myBiodata?: boolean;
   isAdmin?: boolean;
 }) {
+  // console.log("biodata from header section", biodata);
+  // console.log("biodataFormData from header section", biodataFormData);
+  // console.log("biodataId from header section", biodataId);
+  // console.log("myBiodata from header section", myBiodata);
+  // console.log("isAdmin from header section", isAdmin);
+
   if (!biodata) return <Loading />;
 
   return (
     <div className="bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
       <div className=" container mx-auto px-4 py-12 ">
-        <div className="min-w-7xl flex lg:flex-row flex-col space-x-8 mx-auto">
-          <div className="w-1/4 flex flex-col justify-between space-y-8">
+        <div className="lg:min-w-5xl w-full flex lg:flex-row flex-col mx-auto lg:gap-6 gap-5">
+          <div className="flex-1 w-full flex flex-col items-center justify-between gap-5">
             {/* Status & Profile card */}
             <ProfileCard
               biodataId={biodataId}
@@ -35,7 +42,7 @@ export default function HeaderSection({
               isAdmin={isAdmin}
             />
 
-            <div className="hidden lg:block">
+            <div className="hidden lg:block w-full h-full">
               <ProposalCard
                 biodataId={biodataId}
                 biodata={biodata}
@@ -46,12 +53,12 @@ export default function HeaderSection({
           </div>
 
           {/* Biodata & Spouse Preference card */}
-          <div className="w-3/4 flex space-x-8 box-border">
+          <div className="flex-2 w-full flex box-border lg:flex-row flex-col lg:gap-6 gap-5 justify-between lg:items-stretch items-center">
             <HeaderShortBio
               biodata={biodata}
               biodataFormData={biodataFormData}
             />
-            <div className="hidden lg:block">
+            <div className="hidden lg:block w-full h-full">
               <HeaderSpousePreferenceRequierment
                 biodata={biodata}
                 biodataFormData={biodataFormData}

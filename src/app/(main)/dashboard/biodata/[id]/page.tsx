@@ -9,5 +9,5 @@ export default async function BiodataPage({
 }) {
   const { id } = await params;
 
-  return <BiodataClient biodataId={id} myBiodata={false} isAdmin={true} />;
+  return <BiodataClient biodataId={id} isAdmin={true} />;
 }

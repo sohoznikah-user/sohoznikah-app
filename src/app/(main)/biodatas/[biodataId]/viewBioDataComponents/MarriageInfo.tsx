@@ -11,7 +11,7 @@ export default function MarriageInfo({
   biodataFormData: BiodataFormData;
 }) {
   return (
-    <Card className="border-gray-200 bg-[#fcfcfc] text-black  lg:max-w-[450px] min-w-auto">
+    <Card className="border-gray-200 bg-[#fcfcfc] text-black max-w-full min-w-auto mx-auto">
       <CardHeader>
         <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
           বিয়ে সংক্রান্ত তথ্য

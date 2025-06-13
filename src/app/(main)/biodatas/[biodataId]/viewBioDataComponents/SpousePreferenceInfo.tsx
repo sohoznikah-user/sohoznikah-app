@@ -22,14 +22,14 @@ export default function SpousePreferenceInfo({
 }) {
   // console.log("spousePreferenceInfoFormData", spousePreferenceInfoFormData);
   return (
-    <Card className="border-gray-200 bg-[#fcfcfc] text-black box-border ">
-      {spousePreferenceInfoFormData && (
-        <>
-          <CardHeader>
-            <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
-              যেমন জীবনসঙ্গী আশা করেন
-            </CardTitle>
-          </CardHeader>
+    <Card className="border-gray-200 bg-[#fcfcfc] text-black max-w-full min-w-auto mx-auto">
+      <>
+        <CardHeader>
+          <CardTitle className="text-[#004972] text-center  text-3xl font-normal">
+            যেমন জীবনসঙ্গী আশা করেন
+          </CardTitle>
+        </CardHeader>
+        {spousePreferenceInfoFormData && (
           <CardContent className="px-6 py-4 space-y-2">
             {spousePreferenceInfoFormData?.age && (
               <div className="flex items-center space-x-2">
@@ -178,8 +178,8 @@ export default function SpousePreferenceInfo({
               </div>
             </div>
           </CardContent>
-        </>
-      )}
+        )}
+      </>
     </Card>
   );
 }

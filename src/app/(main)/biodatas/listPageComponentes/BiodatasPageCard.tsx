@@ -87,9 +87,7 @@ export default function BioCard({
       return;
     }
     try {
-      const res = await createFavourite({
-        biodataId: id,
-      }).unwrap();
+      const res = await createFavourite(id).unwrap();
       if (res?.success) {
         if (res?.statusCode === 201) {
           toast.success("ফেভারিট লিস্টে যোগ করা হয়েছে");

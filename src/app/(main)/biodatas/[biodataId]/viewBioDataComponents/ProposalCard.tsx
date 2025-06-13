@@ -157,8 +157,8 @@ const ProposalCard = ({
   return (
     <>
       {/* Proposal  & contact card*/}
-      <Card className="bg-white text-black border-none rounded-4xl h-full  lg:max-w-[450px] min-w-auto">
-        <CardContent className="pt-4 h-full">
+      <Card className="bg-white text-black border-none rounded-4xl h-full   lg:max-w-[450px] w-full min-w-auto">
+        <CardContent className=" h-full lg:px-10 p-5">
           {myBiodata || isAdmin ? (
             <div className="flex justify-center items-center h-full">
               <h3 className="text-2xl font-semibold text-center mb-2 text-[#b52d1f]">

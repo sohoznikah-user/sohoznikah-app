@@ -1,8 +1,10 @@
 "use client";
 
 import Loading from "@/app/loading";
+import DashboardTitle from "@/components/shared/DashboardTitle";
 import { DeleteConfirmationModal } from "@/components/shared/DeleteConfirmationModal";
 import EditDeleteButtons from "@/components/shared/EditDeleteButtons";
+import ReusableMobileCard from "@/components/shared/ReusableMobileCard";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
 import {
@@ -221,9 +223,7 @@ const FavouritePage = () => {
   return (
     <div className="min-h-[500px] flex justify-center items-center lg:p-5 mb-10">
       <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
-          পছন্দের তালিকা
-        </h1>
+        <DashboardTitle title="পছন্দের তালিকা" />
         <div className="flex justify-center mb-6 px-4">
           <button
             onClick={() => setActiveTab("myRecords")}
@@ -245,6 +245,27 @@ const FavouritePage = () => {
           >
             আমাকে যারা পছন্দের তালিকায় রেখেছে
           </button>
+        </div>
+        <div className="flex flex-col gap-4 md:hidden sm:block">
+          {data?.data?.map((item: any) => (
+            <ReusableMobileCard
+              key={item.id}
+              biodataNo={item.bioNo}
+              permanentAddress={item.bioPermanentAddress}
+              date={item.createdAt}
+              isShortlisted={item.isShortlisted}
+              view={item.bioVisibility}
+              onDelete={() => {
+                setSelectedId(item.id);
+                setIsModalOpen("delete");
+              }}
+              // onView={() => {
+              //   handleViewNotification(item.id);
+              //   setSelectedData(item);
+              //   setIsModalOpen("view");
+              // }}
+            />
+          ))}
         </div>
         <ReusableTable
           data={data?.data || []} // Use API data

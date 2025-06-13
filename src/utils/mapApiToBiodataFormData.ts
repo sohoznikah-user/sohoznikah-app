@@ -10,12 +10,15 @@ export interface IBiodata {
 }
 
 export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
-  console.log("apiData", apiData);
+  // console.log("apiData", apiData);
   const biodata = {
     id: apiData?.id || "",
     code: apiData?.code || "",
-    biodataType: apiData?.biodataType || "",
-    profilePic: apiData?.profilePic || "",
+    biodataType:
+      apiData?.primaryInfoFormData?.[0]?.biodataType ||
+      apiData?.primaryInfoFormData?.biodataType ||
+      "",
+    profilePic: apiData?.profilePicFormData || "",
     status: apiData?.status || "",
     visibility: apiData?.visibility || "",
     token: apiData?.token || "0",

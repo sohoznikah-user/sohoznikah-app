@@ -17,6 +17,7 @@ import MarriageInfo from "../[biodataId]/viewBioDataComponents/MarriageInfo";
 import PersonalInfo from "../[biodataId]/viewBioDataComponents/PersonalInfo";
 import PrimaryInfo from "../[biodataId]/viewBioDataComponents/PrimaryInfo";
 import ReligiousInfo from "../[biodataId]/viewBioDataComponents/ReligiousInfo";
+import SpousePreferenceInfo from "../[biodataId]/viewBioDataComponents/SpousePreferenceInfo";
 
 export default function MyBiodataClient({
   myBiodata = true,
@@ -105,114 +106,128 @@ export default function MyBiodataClient({
   }
 
   return (
-    <div className="">
+    <>
       <HeaderSection
         biodata={biodata?.biodata}
-        biodataFormData={biodata?.biodataFormData}
-        isAdmin={isAdmin}
         myBiodata={true}
+        biodataFormData={biodata?.biodataFormData}
       />
-      <div className="py-12 flex flex-col items-center justify-center space-y-6 container mx-auto">
-        <div className="text-4xl text-center text-black">সম্পূর্ণ বায়োডাটা</div>
-        <Tabs
-          defaultValue="ঠিকানা"
-          className="max-w-7xl"
-          onValueChange={handleTabChange}
-        >
-          <TabsList className="flex flex-wrap h-auto space-x-2 bg-[#f6f6f6] rounded-2xl p-2">
-            {tabs.map((tab) => (
-              <TabsTrigger
-                key={tab}
-                value={tab}
-                className="data-[state=active]:bg-[#e25a6f] data-[state=active]:text-white text-[#004972] rounded-full px-4 py-2 text-md"
-              >
-                {tab}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
 
-        <div className="w-full  space-y-6 text-md">
-          <div ref={primaryInfoRef}>
-            <PrimaryInfo
-              biodata={biodata?.biodata}
-              primaryInfoFormData={
-                biodata?.biodataFormData?.primaryInfoFormData
-              }
-            />
+      <div className="lg:px-0 px-4">
+        <div className="py-12 flex flex-col items-center justify-center space-y-6 container mx-auto">
+          <div className="text-4xl text-center text-black">
+            সম্পূর্ণ বায়োডাটা
           </div>
-          <div ref={generalInfoRef}>
-            <GeneralInfo
-              biodata={biodata?.biodata}
-              generalInfoFormData={
-                biodata?.biodataFormData?.generalInfoFormData
-              }
-            />
-          </div>
-          <div ref={addressRef}>
-            <AddressInfo
-              biodata={biodata?.biodata}
-              addressInfoFormData={
-                biodata?.biodataFormData?.addressInfoFormData
-              }
-            />
-          </div>
-          <div ref={educationRef}>
-            <EducationAndOccupationInfo
-              biodata={biodata?.biodata}
-              educationInfoFormData={
-                biodata?.biodataFormData?.educationAndOccupationFormData
-              }
-              occupationInfoFormData={
-                biodata?.biodataFormData?.educationAndOccupationFormData
-              }
-            />
-          </div>
-          <div ref={familyRef}>
-            <FamilyInfo
-              biodata={biodata?.biodata}
-              familyInfoFormData={biodata?.biodataFormData?.familyInfoFormData}
-            />
-          </div>
-          <div ref={religiousRef}>
-            <ReligiousInfo
-              biodata={biodata?.biodata}
-              religiousInfoFormData={
-                biodata?.biodataFormData?.religiousInfoFormData
-              }
-              primaryInfoFormData={
-                biodata?.biodataFormData?.primaryInfoFormData
-              }
-            />
-          </div>
-          <div ref={personalRef}>
-            <PersonalInfo
-              biodata={biodata?.biodata}
-              personalInfoFormData={
-                biodata?.biodataFormData?.personalInfoFormData
-              }
-            />
-          </div>
-          <div ref={marriageRef}>
-            <MarriageInfo
-              biodata={biodata?.biodata}
-              biodataFormData={biodata?.biodataFormData}
-            />
-          </div>
-          <div ref={spouseRef}>
-            {/* <SpousePreferenceInfo
-              biodata={biodata}
-              biodataFormData={
-                biodata?.biodataFormData?.spousePreferenceFormData
-              }
-            /> */}
+          <Tabs
+            defaultValue="ঠিকানা"
+            className="max-w-7xl"
+            onValueChange={handleTabChange}
+          >
+            <TabsList className="flex flex-wrap h-auto space-x-2 bg-[#f6f6f6] rounded-2xl p-2">
+              {tabs.map((tab) => (
+                <TabsTrigger
+                  key={tab}
+                  value={tab}
+                  className="data-[state=active]:bg-[#e25a6f] data-[state=active]:text-white text-[#004972] rounded-full px-4 py-2 text-md"
+                >
+                  {tab}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+
+          <div className="lg:max-w-5xl w-full lg:mx-auto space-y-6 text-md ">
+            <div ref={primaryInfoRef}>
+              <PrimaryInfo
+                biodata={biodata?.biodata}
+                primaryInfoFormData={
+                  biodata?.biodataFormData?.primaryInfoFormData
+                }
+              />
+            </div>
+            <div ref={generalInfoRef}>
+              <GeneralInfo
+                biodata={biodata}
+                generalInfoFormData={
+                  biodata?.biodataFormData?.generalInfoFormData
+                }
+              />
+            </div>
+            <div ref={addressRef}>
+              <AddressInfo
+                biodata={biodata}
+                addressInfoFormData={
+                  biodata?.biodataFormData?.addressInfoFormData
+                }
+              />
+            </div>
+            <div ref={educationRef}>
+              <EducationAndOccupationInfo
+                biodata={biodata}
+                educationInfoFormData={
+                  biodata?.biodataFormData?.educationAndOccupationFormData
+                }
+                occupationInfoFormData={
+                  biodata?.biodataFormData?.educationAndOccupationFormData
+                }
+              />
+            </div>
+            <div ref={familyRef}>
+              <FamilyInfo
+                biodata={biodata}
+                familyInfoFormData={
+                  biodata?.biodataFormData?.familyInfoFormData
+                }
+              />
+            </div>
+            <div ref={religiousRef}>
+              <ReligiousInfo
+                biodata={biodata}
+                religiousInfoFormData={
+                  biodata?.biodataFormData?.religiousInfoFormData
+                }
+                primaryInfoFormData={
+                  biodata?.biodataFormData?.primaryInfoFormData
+                }
+              />
+            </div>
+            <div ref={personalRef}>
+              <PersonalInfo
+                biodata={biodata}
+                personalInfoFormData={
+                  biodata?.biodataFormData?.personalInfoFormData
+                }
+              />
+            </div>
+            <div ref={marriageRef}>
+              <MarriageInfo
+                biodata={biodata}
+                biodataFormData={biodata?.biodataFormData}
+              />
+            </div>
+            <div ref={spouseRef}>
+              <SpousePreferenceInfo
+                biodata={biodata}
+                spousePreferenceInfoFormData={
+                  biodata?.biodataFormData?.spousePreferenceFormData
+                }
+              />
+            </div>
           </div>
         </div>
+
+        {/* <div className=" lg:hidden flex justify-center items-center pb-20">
+          <ProposalCard
+            biodata={biodata?.biodata}
+            myBiodata={true}
+            isAdmin={true}
+          />
+        </div> */}
+        {/* <FooterSection
+      biodata={biodata}
+      biodataFormData={biodata?.biodataFormData}
+    /> */}
       </div>
-      {/* <FooterSection
-        biodata={biodata}
-        biodataFormData={biodata?.biodataFormData}
-      /> */}
-    </div>
+    </>
   );
 }

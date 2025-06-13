@@ -1,4 +1,5 @@
 "use client";
+import female from "@/assets/images/female-5.svg";
 import male from "@/assets/images/male-5.svg";
 import NeedLoginModal from "@/components/shared/NeedLoginModal";
 import { ReusableModal } from "@/components/shared/ReusableModal";
@@ -16,6 +17,7 @@ import {
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
+import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 import { CircleChevronDown, Copy, Heart, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -28,10 +30,15 @@ const ProfileCard = ({
   isAdmin,
 }: {
   biodataId: string;
-  biodata: any;
+  biodata: IBiodata;
   myBiodata: boolean;
   isAdmin?: boolean;
 }) => {
+  console.log("biodata from profile card", biodata);
+  console.log("biodataId from profile card", biodataId);
+  console.log("myBiodata from profile card", myBiodata);
+  console.log("isAdmin from profile card", isAdmin);
+
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
@@ -129,13 +136,13 @@ const ProfileCard = ({
     setIsShortlisted(false);
   };
 
-  const status =
-    biodata?.biodata?.status === "APPROVED" ? "Verified" : "Unverified";
-  const code = biodata?.biodata?.code || "SNM---";
+  const status = biodata?.status === "APPROVED" ? "Verified" : "Unverified";
+  const code = biodata?.code || "SNM---";
+  const profileImage = biodata?.biodataType === "GROOM" ? male : female;
 
   return (
     <>
-      <Card className="bg-white text-black border-none rounded-4xl   lg:max-w-[450px] min-w-auto">
+      <Card className="bg-white text-black border-none rounded-4xl lg:max-w-[450px] w-full min-w-auto">
         <CardContent className="pt-8">
           <div
             className={`flex flex-col items-center ${isAdmin || myBiodata ? " justify-center" : ""} space-y-4 `}
@@ -145,7 +152,7 @@ const ProfileCard = ({
                 {status}
               </div>
               <Image
-                src={biodata?.biodata?.profilePic || male}
+                src={biodata?.profilePic || profileImage}
                 alt="Profile"
                 width={isAdmin || myBiodata ? 170 : 100}
                 height={40}

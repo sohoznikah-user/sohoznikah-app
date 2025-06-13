@@ -47,7 +47,7 @@ export default function HeaderShortBio({
           সংক্ষিপ্ত বিবরণ
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="lg:px-5 px-2">
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>বৈবাহিক অবস্থা</div>

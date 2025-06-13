@@ -96,7 +96,7 @@ export default function ProfilePic({
                     {images.map((image, index) => (
                       <div
                         key={index}
-                        className="w-1/3 mb-4 flex items-center justify-center relative"
+                        className="md:w-1/3 w-full mb-4 flex items-center justify-center relative"
                       >
                         <div
                           className={`border p-12 rounded-3xl cursor-pointer transition-all relative ${
