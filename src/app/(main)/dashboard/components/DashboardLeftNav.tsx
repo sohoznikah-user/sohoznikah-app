@@ -28,7 +28,7 @@ export default function DashboardLeftNav({
 
       {/* Sidebar */}
       <div
-        className={`fixed lg:static overflow-y-auto  top-0 left-0 h-screen lg:h-full  py-12 pb-20 lg:pb-12 w-72 flex flex-col items-center space-y-1 bg-[#307FA7] lg:bg-[#307FA7] z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+        className={`fixed lg:static overflow-y-auto  top-0 left-0 min-h-screen max-h-full lg:h-full  py-8 pb-20 lg:pb-12 w-72 flex flex-col items-center space-y-1 bg-[#307FA7] lg:bg-[#307FA7] z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
         {/* Close button for mobile */}
         <button

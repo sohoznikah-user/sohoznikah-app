@@ -1,7 +1,8 @@
 "use client";
+import DashboardTitle from "@/components/shared/DashboardTitle";
 import { DeleteConfirmationModal } from "@/components/shared/DeleteConfirmationModal";
 import EditDeleteButtons from "@/components/shared/EditDeleteButtons";
-import { ReusableModal } from "@/components/shared/ReusableModal";
+import NotificationCard from "@/components/shared/NotificationCard";
 import { ReusableTable } from "@/components/shared/ReusableTable";
 import {
   useDeleteNotificationMutation,
@@ -90,7 +91,18 @@ export default function NotificationsPage() {
   };
 
   const columns: ColumnDef<any>[] = [
-    { accessorKey: "type", header: "টাইপ" },
+    ...(user?.role === "SUPER_ADMIN" || user?.role === "ADMIN"
+      ? [
+          {
+            accessorKey: "type",
+            header: "টাইপ",
+            cell: ({ row }) => {
+              return <div className="text-[#1F4F69]">{row.original.type}</div>;
+            },
+          },
+        ]
+      : []),
+
     {
       accessorKey: "message",
       header: "বার্তা",
@@ -99,26 +111,19 @@ export default function NotificationsPage() {
       ),
     },
     {
-      accessorKey: "isRead",
-      header: "পড়া হয়েছে",
-      cell: ({ row }) => (row.original.isRead ? "হ্যা" : "না"),
-    },
-    {
       accessorKey: "createdAt",
       header: "তারিখ",
       cell: ({ row }) => {
-        const date = new Date(row.original.createdAt);
-        const formattedDate = date.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return formattedDate;
+        return (
+          <div className="w-28">
+            {format(new Date(row.original.createdAt), "dd MMM yyyy")}
+          </div>
+        );
       },
     },
     {
       id: "view",
-      header: "বায়োডাটা দেখুন",
+      header: "বিস্তারিত",
       cell: ({ row }) => (
         <button
           className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer"
@@ -148,11 +153,31 @@ export default function NotificationsPage() {
   ];
 
   return (
-    <div className="min-h-[500px] w-full flex justify-center lg:p-5 items-center">
+    <div className="min-h-[500px] w-full flex justify-center lg:p-5 items-center mb-10">
       <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
-          নোটিফিকেশন
-        </h1>
+        <DashboardTitle title="নোটিফিকেশন" />
+
+        <div className="flex flex-col gap-4 md:hidden sm:block">
+          {data?.data?.map((item: any) => (
+            <NotificationCard
+              key={item.id}
+              title={item.type}
+              message={item.message}
+              date={item.createdAt}
+              type={item.type}
+              isRead={item.isRead}
+              onDelete={() => {
+                setSelectedId(item.id);
+                setIsModalOpen("delete");
+              }}
+              onView={() => {
+                handleViewNotification(item.id);
+                setSelectedData(item);
+                setIsModalOpen("view");
+              }}
+            />
+          ))}
+        </div>
 
         <ReusableTable
           data={data?.data}
@@ -172,7 +197,7 @@ export default function NotificationsPage() {
           itemName={`নোটিফিকেশন`}
         />
 
-        <ReusableModal
+        {/* <ReusableModal
           open={isModalOpen === "view"}
           onClose={() => handleReset()}
           title="নোটিফিকেশন বিস্তারিত"
@@ -192,7 +217,7 @@ export default function NotificationsPage() {
               </p>
             </div>
           )}
-        </ReusableModal>
+        </ReusableModal> */}
       </div>
     </div>
   );

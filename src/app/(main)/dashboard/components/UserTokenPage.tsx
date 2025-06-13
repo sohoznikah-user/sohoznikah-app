@@ -128,7 +128,7 @@ const UserTokenPage = () => {
   };
 
   return (
-    <div className="min-h-[500px]  flex justify-center items-start py-16">
+    <div className="min-h-[500px]  flex justify-center items-start py-6 lg:pt-10 md:pt-8 pt-5 pb-20">
       {!showPaymentForm && (
         <div className="w-full max-w-3xl">
           {/* Page Title */}

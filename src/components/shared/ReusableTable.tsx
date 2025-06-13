@@ -198,7 +198,7 @@ export function ReusableTable<T>({
         </div>
 
         {/* Cards for mobile */}
-        <div className="block sm:hidden">
+        {/* <div className="block sm:hidden">
           {table.getRowModel()?.rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <div
@@ -230,14 +230,14 @@ export function ReusableTable<T>({
           ) : (
             <div className="text-center">No results.</div>
           )}
-        </div>
+        </div> */}
       </div>
 
       <div className="flex justify-between items-center gap-4 text-background mt-5">
         {/* Limit */}
         {enablePagination && pagination && setPagination && (
           <div className="flex items-center w-full gap-2">
-            <span className="text-sm">Rows per page:</span>
+            <span className="text-sm w-28">Rows per page:</span>
             <Select
               value={String(pagination.limit)}
               onValueChange={(val) =>
