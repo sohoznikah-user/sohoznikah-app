@@ -52,7 +52,7 @@ export function HomeSearchBiodata() {
   };
 
   return (
-    <div className="bg-white p-8 shadow-lg flex flex-wrap">
+    <div className="bg-white md:p-8 p-4 shadow-lg flex flex-wrap">
       <div className="md:md:w-1/3 w-full w-full space-y-2 p-2">
         <Label className="text-md">আমি খুঁজছি</Label>
         <Select value={biodataType} onValueChange={setBiodataType}>

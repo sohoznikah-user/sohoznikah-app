@@ -1,6 +1,7 @@
 // File: src/app/(main)/biodata-editor/biodataFormComponents/GeneralInfo.tsx
 
 "use client";
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -406,6 +407,8 @@ export default function GeneralInfo({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

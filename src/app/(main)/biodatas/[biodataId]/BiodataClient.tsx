@@ -6,7 +6,10 @@ import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
 import { useAppSelector } from "@/redux/hooks";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import AddressInfo from "./viewBioDataComponents/AddressInfo";
 import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
 import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
@@ -30,6 +33,7 @@ export default function BiodataClient({
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const user = useAppSelector(selectCurrentUser);
   const acesstoken = useAppSelector(selectCurrentUser);
+  const router = useRouter();
 
   const {
     data: fetchedBiodata,
@@ -111,7 +115,27 @@ export default function BiodataClient({
   }
 
   if (isErrorBiodata) {
-    return <div>Error loading data</div>;
+    toast.error("বায়োডাটা খুঁজে পাওয়া যায়নি।");
+    return (
+      <div className="flex flex-col justify-center items-center h-[60vh] text-red-500 gap-5">
+        <div className="text-2xl font-bold">বায়োডাটা খুঁজে পাওয়া যায়নি।</div>
+        <div className="text-md text-gray-500">দয়া করে আবার চেষ্টা করুন।</div>
+        <div className="flex gap-4">
+          <Link
+            href="/"
+            className="text-blue-500 cursor-pointer hover:underline"
+          >
+            হোম পেজ
+          </Link>
+          <button
+            onClick={() => router.back()}
+            className="text-blue-500 cursor-pointer hover:underline"
+          >
+            ফিরে যান
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

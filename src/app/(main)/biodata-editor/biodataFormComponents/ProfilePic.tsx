@@ -14,6 +14,7 @@ import male3 from "@/assets/images/male-3.svg";
 import male4 from "@/assets/images/male-4.svg";
 import male5 from "@/assets/images/male-5.svg";
 import male6 from "@/assets/images/male-6.svg";
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -144,6 +145,8 @@ export default function ProfilePic({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

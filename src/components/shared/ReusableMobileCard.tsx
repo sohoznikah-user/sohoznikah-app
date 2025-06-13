@@ -57,7 +57,7 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
           </div>
         )}
       </div>
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col mt-6 gap-2">
         {onView && (
           <button
             onClick={onView}
@@ -71,7 +71,7 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
         <span className="text-[13px] text-[#A1A1A1]">
           {format(date, "dd MMM yyyy")}
         </span>
-        <button onClick={onDelete}>
+        <button onClick={onDelete} className="cursor-pointer">
           <Trash2 className="w-5 h-5 text-[#F36B7F]" />
         </button>
       </div>

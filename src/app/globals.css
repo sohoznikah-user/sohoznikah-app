@@ -120,6 +120,8 @@
   --color-sidebar: var(--sidebar);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --font-share-tech: "Share Tech", sans-serif;
+  --font-noto-serif-bengali: "Noto Serif Bengali", serif;
 
   @keyframes accordion-down {
     from {

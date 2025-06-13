@@ -1,5 +1,6 @@
 // File: src/app/(main)/biodata-editor/biodataFormComponents/PersonalInfo.tsx
 
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -325,6 +326,8 @@ export default function PersonalInfo({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

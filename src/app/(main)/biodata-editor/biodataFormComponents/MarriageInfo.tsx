@@ -1,3 +1,4 @@
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -574,6 +575,8 @@ export default function MarriageInfo({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

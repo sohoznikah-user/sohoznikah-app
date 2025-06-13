@@ -11,7 +11,7 @@ import { Navbar } from "@/components/navbar";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#FFE6F0] to-[#D6EAFF]">
       <Navbar />
 
       <Banner />

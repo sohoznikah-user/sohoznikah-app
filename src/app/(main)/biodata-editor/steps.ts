@@ -236,7 +236,7 @@ export const steps: BiodataFormStep[] = [
   },
   {
     key: "final-words",
-    title: "শেষ শপথ",
+    title: "পাবলিশ",
     component: FinalWords,
     prev: "profile-pic",
     next: "",

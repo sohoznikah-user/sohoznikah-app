@@ -203,8 +203,7 @@ const ShortlistPage = () => {
         onClose={() => setIsModalOpen(null)}
         onDelete={handleDeleteFromShortlist}
         loading={isDeleting}
-        description="আপনি কি পছন্দের তালিকা থেকে এই বায়োডাটা মুছে ফেলে চান?
-(যদি চূড়ান্ত তালিকায় রেখে থাকেন তাহলে সেখান থেকেও মুছে যাবে"
+        description="আপনি কি চুড়ান্ত তালিকা থেকে এই বায়োডাটা মুছে ফেলে চান?"
       />
     </div>
   );

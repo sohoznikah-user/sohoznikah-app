@@ -1,3 +1,4 @@
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -68,7 +69,7 @@ export default function FinalWords({
 
   return (
     <div className="flex flex-col items-center justify-center space-y-8 mt-10">
-      <div className="text-3xl text-center text-[#004972]">শেষ কথা</div>
+      <div className="text-3xl text-center text-[#004972]">পাবলিশ করুন</div>
       <Form {...form}>
         <form className="max-w-4xl w-full bg-[#f6f6f6] p-10 space-y-4 text-black rounded-4xl">
           <div className="text-[#005A8B] text-2xl text-center">
@@ -218,6 +219,8 @@ export default function FinalWords({
           Submit and Send For Approval
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

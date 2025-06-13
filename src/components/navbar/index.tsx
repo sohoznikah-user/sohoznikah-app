@@ -66,7 +66,7 @@ export function Navbar() {
       <div className="flex items-center z-50 justify-between lg:justify-center container mx-auto">
         {/* Hamburger for mobile */}
         <button
-          className="lg:hidden flex items-center px-2 py-1 bg-white rounded-lg cursor-pointer text-[#1f4f69] border-[#1f4f69] focus:outline-none"
+          className="lg:hidden fixed top-6 left-5 px-2 py-1 bg-white rounded-lg cursor-pointer text-[#1f4f69] border-[#1f4f69] focus:outline-none z-50"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
           aria-label="Toggle menu"
         >
@@ -87,8 +87,8 @@ export function Navbar() {
         </button>
 
         {/* Navigation Menu - Desktop */}
-        <NavigationMenu className="flex-1 hidden lg:block w-auto">
-          <NavigationMenuList className="flex space-x-2 justify-center">
+        <NavigationMenu className=" w-full hidden lg:block">
+          <NavigationMenuList className="flex space-x-2 justify-start">
             {menuItems.map((item, index) => (
               <NavigationMenuItem key={index}>
                 <NavigationMenuLink
@@ -103,14 +103,14 @@ export function Navbar() {
         </NavigationMenu>
 
         {/* Logo - Centered on mobile, center on desktop */}
-        <div className="flex-1 flex justify-center lg:min-w-80 lg:ml-0 w-auto">
+        <div className="lg:min-w-80 w-auto mx-auto flex justify-center items-center">
           <Link href="/">
             <Image src={logo} alt="Logo" width={80} height={50} priority />
           </Link>
         </div>
 
         {/* Right actions - Desktop */}
-        <div className="w-auto flex-1 hidden lg:flex justify-end space-x-4 text-md">
+        <div className="w-full hidden lg:flex justify-end space-x-4 text-md">
           {user?.role === "USER" && (
             <>
               {biodata?.status === "" ? (
