@@ -2,97 +2,62 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  useResendOTPMutation,
-  useVerifyEmailMutation,
-} from "@/redux/features/auth/authApi";
+import { useChangeEmailMutation } from "@/redux/features/auth/authApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-interface VerifyFormValues {
-  email: string;
-  otp: string;
-}
-
-interface ResendOTPValues {
+interface ChangeEmailValues {
   email: string;
 }
 
-const VerifyForm = () => {
+const ChangeEmailForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
-  const [resendOTP, { isLoading: isResendOTPLoading }] = useResendOTPMutation();
+  const [changeEmail, { isLoading }] = useChangeEmailMutation();
 
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<VerifyFormValues>({
+  } = useForm<ChangeEmailValues>({
     mode: "onChange",
-    defaultValues: { email: "", otp: "" },
+    defaultValues: { email: "" },
   });
 
   useEffect(() => {
     const email = searchParams.get("email");
-    const otp = searchParams.get("otp");
 
     if (email) {
       setValue("email", email);
     }
-    if (otp) {
-      setValue("otp", otp);
-    }
   }, [searchParams, setValue]);
 
-  const handleVerifyEmail = async (values: VerifyFormValues) => {
-    const verifyData = {
-      email: values.email,
-      otp: Number(values.otp),
-    };
-
-    try {
-      const res = await verifyEmail(verifyData).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Email has been verified!");
-        router.push("/login");
-      } else {
-        toast.error(res?.message || "Failed to verify your email!");
-      }
-    } catch (error: any) {
-      // console.error("Error verifying email:", error);
-      toast.error(error?.message || "Failed to verify your email!");
-    }
-  };
-
-  const handleResendOTP = async (values: ResendOTPValues) => {
-    const verifyData = {
+  const handleChangeEmail = async (values: ChangeEmailValues) => {
+    const changeEmailData = {
       email: values.email,
     };
 
     try {
-      const res = await resendOTP(verifyData).unwrap();
+      const res = await changeEmail(changeEmailData).unwrap();
       if (res?.success) {
-        toast.success(res?.message || "OTP has been resend!");
+        toast.success(res?.message || "Email has been changed!");
+        router.push(`/verify-email?email=${values.email}`);
       } else {
-        toast.error(res?.message || "Failed to resend OTP!");
+        toast.error(res?.message || "Failed to change email!");
       }
     } catch (error: any) {
-      console.error("Error resending OTP:", error);
-      toast.error(error?.message || "Failed to resend OTP!");
+      console.error("Error changing email:", error);
+      toast.error(error?.message || "Failed to change email!");
     }
   };
-
-  const isEmailAutoFilled = !!searchParams.get("email");
-  const isOtpAutoFilled = !!searchParams.get("otp");
 
   return (
     <>
       <form
-        onSubmit={handleSubmit(handleVerifyEmail)}
+        onSubmit={handleSubmit(handleChangeEmail)}
         className="space-y-4 w-full max-w-md"
       >
         <div className="space-y-2">
@@ -101,7 +66,6 @@ const VerifyForm = () => {
             id="email"
             type="email"
             placeholder="Email"
-            disabled={isEmailAutoFilled}
             {...register("email", {
               required: "Email is required",
               pattern: {
@@ -115,31 +79,15 @@ const VerifyForm = () => {
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="otp">OTP</Label>
-          <Input
-            id="otp"
-            type="text" // Changed to text to handle string OTPs
-            placeholder="OTP"
-            disabled={isOtpAutoFilled}
-            {...register("otp", {
-              required: "OTP is required",
-            })}
-          />
-          {errors.otp && (
-            <p className="text-red-500 text-sm mt-1">{errors.otp.message}</p>
-          )}
-        </div>
-
         <Button
           className="w-full bg-[#E25A6F] text-white py-2 rounded-md hover:bg-[#D14A5F] disabled:opacity-50 mt-3"
           type="submit"
           disabled={isLoading || isSubmitting}
         >
-          {isLoading || isSubmitting ? "Verifying..." : "Verify"}
+          {isLoading || isSubmitting ? "Changing..." : "Change"}
         </Button>
       </form>
-      <div className="flex gap-1 mt-5 justify-between items-center w-full px-4">
+      {/* <div className="flex gap-1 mt-5 justify-between items-center w-full px-4">
         <button
           disabled={isResendOTPLoading}
           className="text-sm text-blue-500 text-center cursor-pointer hover:underline hover:text-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -150,7 +98,7 @@ const VerifyForm = () => {
         <button
           className="text-sm text-blue-500 text-center cursor-pointer hover:underline hover:text-blue-500"
           onClick={() =>
-            router.push(`/change-email?email=${searchParams.get("email")}`)
+            handleChangeEmail({ email: searchParams.get("email") })
           }
         >
           Change Email
@@ -161,9 +109,9 @@ const VerifyForm = () => {
         >
           Logout
         </button>
-      </div>
+      </div> */}
     </>
   );
 };
 
-export default VerifyForm;
+export default ChangeEmailForm;

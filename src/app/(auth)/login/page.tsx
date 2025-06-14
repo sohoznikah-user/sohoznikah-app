@@ -25,16 +25,6 @@ export default function LoginPage() {
       </div>
 
       <LoginForm />
-
-      <p className="text-sm text-gray-600 mt-2 text-center">
-        Not verified yet? Please
-        <Link
-          href="/verify-email"
-          className="text-blue-500 hover:underline ml-1"
-        >
-          Verify
-        </Link>
-      </p>
     </>
   );
 }

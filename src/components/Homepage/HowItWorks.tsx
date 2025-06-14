@@ -45,7 +45,7 @@ const HowItWorks = () => {
     <section className=" px-2 sm:px-4 py-20">
       <div className="max-w-7xl mx-auto box-border">
         <Title rightTitle="যেভাবে কাজ করে" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 justify-center md:items-stretch items-center  mt-8 md:mt-20 space-y-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 justify-center md:items-stretch items-center  mt-8 md:mt-20 space-y-20 max-w-5xl mx-auto">
           {cardData.map((card, idx) => (
             <HowItWorksCard key={idx} {...card} />
           ))}

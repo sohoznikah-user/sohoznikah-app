@@ -78,13 +78,13 @@ export default function DashboardMainBioStatus() {
         <div className="flex flex-col md:flex-row lg:flex-col items-center justify-center  gap-4 w-full md:w-auto lg:w-auto">
           <Link
             href={`/biodatas/my-biodata`}
-            className="w-full md:max-w-60 p-3 md:p-4 bg-[#5b8eaa] rounded-xl text-white text-center"
+            className="w-full md:max-w-60 p-3 md:p-4 bg-[#307FA7] rounded-xl text-white text-center"
           >
             বায়োডাটা দেখুন
           </Link>
           <Link
             href={`/biodata-editor`}
-            className="w-full md:max-w-60 p-3 md:p-4 bg-[#5b8eaa] rounded-xl text-white text-center"
+            className="w-full md:max-w-60 p-3 md:p-4 bg-[#FFD255] rounded-xl text-black text-center"
           >
             বায়োডাটা এডিট করুন
           </Link>

@@ -1,6 +1,6 @@
 // File: src/app/(main)/dashboard/biodata/[id]/page.tsx
 
-import BiodataClient from "@/app/(main)/biodatas/[biodataId]/BiodataClient";
+import AdminBiodataClient from "./AdminBiodataClient";
 
 export default async function BiodataPage({
   params,
@@ -9,5 +9,5 @@ export default async function BiodataPage({
 }) {
   const { id } = await params;
 
-  return <BiodataClient biodataId={id} isAdmin={true} />;
+  return <AdminBiodataClient biodataId={id} />;
 }

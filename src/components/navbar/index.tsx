@@ -110,36 +110,36 @@ export function Navbar() {
         </div>
 
         {/* Right actions - Desktop */}
-        <div className="w-full hidden lg:flex justify-end space-x-4 text-md">
+        <div className="w-full hidden lg:flex justify-end items-center space-x-4 text-md">
           {user?.role === "USER" && (
             <>
               {biodata?.status === "" ? (
                 <Link
                   href="/biodata-editor"
-                  className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md"
+                  className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
                 >
                   বায়োডাটা তৈরী করুন
                 </Link>
               ) : biodata?.status === "PROCESSING" ? (
                 <Link
                   href="/biodata-editor"
-                  className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md"
+                  className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
                 >
                   বায়োডাটা সম্পূর্ণ করুন
                 </Link>
               ) : biodata?.status === "PENDING" ||
                 biodata?.status === "EDIT_PENDING" ? (
-                <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md">
+                <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg">
                   Pending Approval
                 </button>
               ) : biodata?.status === "UPDATE_REQUESTED" ? (
-                <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md">
+                <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg">
                   Complete Update & Submit
                 </button>
               ) : biodata?.status === "APPROVED" ? (
                 <Link
                   href="/biodatas/my-biodata"
-                  className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md"
+                  className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
                 >
                   আমার বায়োডাটা
                 </Link>
@@ -150,12 +150,21 @@ export function Navbar() {
           )}
 
           {!user && !token && (
-            <Link
-              href="/login"
-              className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all"
-            >
-              Login
-            </Link>
+            <>
+              <Link
+                href="/biodata-editor"
+                className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-lg rounded-lg"
+              >
+                বায়োডাটা তৈরী করুন
+              </Link>
+
+              <Link
+                href="/login"
+                className="border-2 border-[#1f4f69] text-[#1f4f69] bg-transparent hover:bg-[#1b3c50] hover:text-white px-4 py-2 transition-all text-lg rounded-lg"
+              >
+                লগইন
+              </Link>
+            </>
           )}
           {user && token && (
             <DropdownMenu>
@@ -176,13 +185,13 @@ export function Navbar() {
                   className="focus:bg-[#E25A6F] cursor-pointer"
                   onClick={() => router.push("/dashboard")}
                 >
-                  Profile
+                  ড্যাশবোর্ড
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="focus:bg-[#E25A6F] cursor-pointer"
                   onClick={() => dispatch(logout())}
                 >
-                  Logout
+                  লগআউট
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

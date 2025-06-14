@@ -70,21 +70,39 @@ const LoginForm = () => {
     try {
       const result = await loginUser(values).unwrap();
       if (result.success) {
-        toast.success(result.message || "You have successfully logged in!");
+        if (result.data.emailConfirmed) {
+          toast.success(result.message || "You have successfully logged in!");
+          const accessToken = result.data.accessToken;
+          const refreshToken = result.data.refreshToken;
+          const decodedToken = jwtDecode<TUser>(accessToken);
 
-        const accessToken = result.data.accessToken;
-        const refreshToken = result.data.refreshToken;
-        const decodedToken = jwtDecode<TUser>(accessToken);
+          dispatch(
+            setUser({
+              user: decodedToken,
+              acesstoken: accessToken,
+              refreshtoken: refreshToken,
+            })
+          );
 
-        dispatch(
-          setUser({
-            user: decodedToken,
-            acesstoken: accessToken,
-            refreshtoken: refreshToken,
-          })
-        );
+          router.push(decodeURIComponent(redirectUrl)); // Redirect to the specified URL
+        } else {
+          toast.error(result.message || "Please verify your email!");
+          const accessToken = result.data.accessToken;
+          const refreshToken = result.data.refreshToken;
+          const decodedToken = jwtDecode<TUser>(accessToken);
 
-        router.push(decodeURIComponent(redirectUrl)); // Redirect to the specified URL
+          dispatch(
+            setUser({
+              user: decodedToken,
+              acesstoken: accessToken,
+              refreshtoken: refreshToken,
+            })
+          );
+
+          router.push(
+            `/verify-email?email=${encodeURIComponent(values.email)}`
+          );
+        }
       } else {
         toast.error(result.message || "Invalid email or password!");
       }

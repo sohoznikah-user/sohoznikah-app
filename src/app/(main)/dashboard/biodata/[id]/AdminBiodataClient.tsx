@@ -1,29 +1,30 @@
 // File: src/app/(main)/biodatas/[id]/BiodataClient.tsx
 "use client";
+import AddressInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/AddressInfo";
+import EducationAndOccupationInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/EducationAndOccupationInfo";
+import FamilyInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/FamilyInfo";
+import GeneralInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/GeneralInfo";
+import HeaderSection from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/HeaderSection";
+import MarriageInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/MarriageInfo";
+import PersonalInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/PersonalInfo";
+import PrimaryInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/PrimaryInfo";
+import ReligiousInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/ReligiousInfo";
+import SpousePreferenceInfo from "@/app/(main)/biodatas/[biodataId]/viewBioDataComponents/SpousePreferenceInfo";
 import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetMyBiodataQuery } from "@/redux/features/biodata/biodataApi";
+import { useGetBiodataByIdByAdminQuery } from "@/redux/features/biodata/biodataApi";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import AddressInfo from "../[biodataId]/viewBioDataComponents/AddressInfo";
-import EducationAndOccupationInfo from "../[biodataId]/viewBioDataComponents/EducationAndOccupationInfo";
-import FamilyInfo from "../[biodataId]/viewBioDataComponents/FamilyInfo";
-import GeneralInfo from "../[biodataId]/viewBioDataComponents/GeneralInfo";
-import HeaderSection from "../[biodataId]/viewBioDataComponents/HeaderSection";
-import MarriageInfo from "../[biodataId]/viewBioDataComponents/MarriageInfo";
-import PersonalInfo from "../[biodataId]/viewBioDataComponents/PersonalInfo";
-import PrimaryInfo from "../[biodataId]/viewBioDataComponents/PrimaryInfo";
-import ReligiousInfo from "../[biodataId]/viewBioDataComponents/ReligiousInfo";
-import SpousePreferenceInfo from "../[biodataId]/viewBioDataComponents/SpousePreferenceInfo";
+import { toast } from "sonner";
 
-export default function MyBiodataClient({
-  myBiodata = true,
-  isAdmin = false,
+export default function AdminBiodataClient({
+  biodataId,
 }: {
-  myBiodata?: boolean;
+  biodataId: string;
   isAdmin?: boolean;
 }) {
   const [biodata, setBiodata] = useState<any>(null);
@@ -32,10 +33,10 @@ export default function MyBiodataClient({
   const { user, acesstoken } = useAppSelector((state: RootState) => state.auth);
 
   const {
-    data: myBiodataData,
-    isLoading: isFetchingMyBiodata,
-    isError: isErrorMyBiodata,
-  } = useGetMyBiodataQuery(undefined);
+    data: biodataData,
+    isLoading: isFetchingBiodata,
+    isError: isErrorBiodata,
+  } = useGetBiodataByIdByAdminQuery(biodataId);
 
   const tabs = [
     "প্রাথমিক তথ্য",
@@ -83,11 +84,11 @@ export default function MyBiodataClient({
 
   // Set biodata based on fetched data
   useEffect(() => {
-    if (myBiodataData?.data) {
-      const mapped = mapApiToBiodataFormData(myBiodataData.data);
+    if (biodataData?.data) {
+      const mapped = mapApiToBiodataFormData(biodataData.data);
       setBiodata(mapped);
     }
-  }, [myBiodataData]);
+  }, [biodataData]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -97,19 +98,40 @@ export default function MyBiodataClient({
     }
   };
 
-  if (isFetchingMyBiodata) {
+  if (isFetchingBiodata) {
     return <Loading />;
   }
 
-  if (isErrorMyBiodata) {
-    return <div>Error loading data</div>;
+  if (isErrorBiodata) {
+    toast.error("বায়োডাটা খুঁজে পাওয়া যায়নি।");
+    return (
+      <div className="flex flex-col justify-center items-center h-[60vh] text-red-500 gap-5">
+        <div className="text-2xl font-bold">বায়োডাটা খুঁজে পাওয়া যায়নি।</div>
+        <div className="text-md text-gray-500">দয়া করে আবার চেষ্টা করুন।</div>
+        <div className="flex gap-4">
+          <Link
+            href="/dashboard"
+            className="text-blue-500 cursor-pointer hover:underline"
+          >
+            হোম পেজ
+          </Link>
+          <button
+            onClick={() => router.back()}
+            className="text-blue-500 cursor-pointer hover:underline"
+          >
+            ফিরে যান
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
     <>
       <HeaderSection
         biodata={biodata?.biodata}
-        myBiodata={true}
+        myBiodata={false}
+        isAdmin={true}
         biodataFormData={biodata?.biodataFormData}
       />
 
