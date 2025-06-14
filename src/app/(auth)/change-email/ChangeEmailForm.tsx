@@ -63,6 +63,7 @@ const ChangeEmailForm = () => {
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
+            className="border border-gray-300"
             id="email"
             type="email"
             placeholder="Email"

@@ -99,7 +99,7 @@ const ResetPassForm = () => {
           New Password
         </Label>
         <Input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border border-gray-300"
           id="newPassword"
           type="password"
           placeholder="New Password"
@@ -121,7 +121,7 @@ const ResetPassForm = () => {
           Confirm Password
         </Label>
         <Input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border border-gray-300"
           id="confirmPassword"
           type="password"
           placeholder="Confirm Password"

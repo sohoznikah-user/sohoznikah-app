@@ -41,7 +41,7 @@ const RegisterForm = () => {
       const result = await registerUser(values).unwrap();
       if (result.success) {
         toast.success(result.message || "Successfully registered!");
-        router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
+        router.push(`/login?email=${encodeURIComponent(values.email)}`);
       }
     } catch (error: any) {
       console.error("Register Error:", error);
@@ -56,6 +56,7 @@ const RegisterForm = () => {
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
         <Input
+          className="border border-gray-300"
           id="name"
           type="text"
           placeholder="Name"
@@ -75,6 +76,7 @@ const RegisterForm = () => {
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
+          className="border border-gray-300"
           id="email"
           type="email"
           placeholder="Email"
@@ -94,6 +96,7 @@ const RegisterForm = () => {
       <div className="space-y-2">
         <Label htmlFor="phoneNumber">Mobile Number</Label>
         <Input
+          className="border border-gray-300"
           id="phoneNumber"
           type="text"
           placeholder="Mobile Number"
@@ -115,6 +118,7 @@ const RegisterForm = () => {
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
         <Input
+          className="border border-gray-300"
           id="password"
           type="password"
           placeholder="Password"

@@ -10,6 +10,7 @@ import { TUser } from "@/utils/tokenHelper";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -28,16 +29,22 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    setValue,
     watch,
     trigger,
+    formState: { errors, isSubmitting, isValid },
   } = useForm<LoginFormValues>({
     mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
+
+  useEffect(() => {
+    const email = searchParams.get("email");
+
+    if (email) {
+      setValue("email", email);
+    }
+  }, [searchParams, setValue]);
 
   const email = watch("email");
   const password = watch("password");
@@ -112,11 +119,14 @@ const LoginForm = () => {
     }
   };
 
+  const isEmailAutoFilled = !!searchParams.get("email");
+
   return (
     <form onSubmit={handleSubmit(onFinish)} className="space-y-4">
       <div>
         <Label htmlFor="email">Email/Mobile Number</Label>
         <Input
+          className="border border-gray-300"
           id="email"
           type="text"
           {...register("email", {
@@ -131,6 +141,7 @@ const LoginForm = () => {
       <div>
         <Label htmlFor="password">Password</Label>
         <Input
+          className="border border-gray-300"
           id="password"
           type="password"
           {...register("password", {

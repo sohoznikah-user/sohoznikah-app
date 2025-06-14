@@ -98,6 +98,7 @@ const VerifyForm = () => {
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
+            className="border border-gray-300"
             id="email"
             type="email"
             placeholder="Email"
@@ -118,6 +119,7 @@ const VerifyForm = () => {
         <div className="space-y-2">
           <Label htmlFor="otp">OTP</Label>
           <Input
+            className="border border-gray-300"
             id="otp"
             type="text" // Changed to text to handle string OTPs
             placeholder="OTP"
