@@ -18,6 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import {
   ColumnDef,
   flexRender,
@@ -67,6 +69,7 @@ export function ReusableTable<T>({
   searchTerm,
 }: ReusableTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState("");
+  const user = useAppSelector(selectCurrentUser);
 
   const table = useReactTable({
     data,
@@ -198,39 +201,41 @@ export function ReusableTable<T>({
         </div>
 
         {/* Cards for mobile */}
-        {/* <div className="block sm:hidden">
-          {table.getRowModel()?.rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <div
-                key={row.id}
-                className="bg-[#F5F4FC] rounded-lg shadow p-4 mb-4"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <div
-                    key={cell.id}
-                    className="mb-2 flex gap-2 justify-start items-center flex-wrap"
-                  >
-                    <span className="font-semibold">
-                      {flexRender(
-                        cell.column.columnDef.header,
-                        cell.getContext()
-                      )}
-                      :
-                    </span>
-                    <span className="ml-2">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ))
-          ) : (
-            <div className="text-center">No results.</div>
-          )}
-        </div> */}
+        {(user?.role === "SUPER_ADMIN" || user?.role === "ADMIN") && (
+          <div className="block sm:hidden">
+            {table.getRowModel()?.rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <div
+                  key={row.id}
+                  className="bg-[#F5F4FC] rounded-lg shadow p-4 mb-4"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <div
+                      key={cell.id}
+                      className="mb-2 flex gap-2 justify-start items-center flex-wrap"
+                    >
+                      {/* <span className="font-semibold">
+                        {flexRender(
+                          cell.column.columnDef.header,
+                          cell.getContext()
+                        )}
+                        :
+                      </span> */}
+                      <span className="ml-2">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ))
+            ) : (
+              <div className="text-center">No results.</div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="flex justify-between items-center gap-4 text-background mt-5">

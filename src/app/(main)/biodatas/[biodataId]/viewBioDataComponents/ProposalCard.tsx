@@ -164,10 +164,12 @@ const ProposalCard = ({
       {/* Proposal  & contact card*/}
       <Card className="bg-white text-black border-none rounded-4xl h-full   md:max-w-[450px] w-full min-w-auto">
         <CardContent className=" h-full lg:px-10 p-5">
-          {myBiodata || isAdmin ? (
+          {myBiodata || isAdmin || myBiodataData?.id === biodataId ? (
             <div className="flex justify-center items-center h-full">
               <h3 className="text-2xl font-semibold text-center mb-2 text-[#b52d1f]">
-                {myBiodata ? "আমার বায়োডাটা" : "আপনার এখানে এক্সেস নেই"}
+                {myBiodata || myBiodataData?.id === biodataId
+                  ? "আমার বায়োডাটা"
+                  : "আপনার এখানে এক্সেস নেই"}
               </h3>
             </div>
           ) : (

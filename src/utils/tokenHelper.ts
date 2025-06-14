@@ -2,7 +2,7 @@
 import { jwtDecode } from "jwt-decode";
 
 export type TUser = {
-  userId: number;
+  userId: string;
   email: string;
   role: string;
   iat: number;

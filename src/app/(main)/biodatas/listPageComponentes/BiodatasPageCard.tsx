@@ -1,6 +1,7 @@
 // File: src/app/(main)/biodatas/listPageComponentes/BiodatasPageCard.tsx
 
 "use client";
+import female from "@/assets/images/female-1.svg";
 import male from "@/assets/images/male-5.svg";
 import NeedLoginModal from "@/components/shared/NeedLoginModal";
 import { ReusableModal } from "@/components/shared/ReusableModal";
@@ -8,11 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { heights, maritalStatuses, occupationsList } from "@/lib/consts";
-import {
-  useCreateFavouriteMutation,
-  useGetFavouriteByIdQuery,
-} from "@/redux/features/admin/favouriteApi";
-import { useGetShortlistByIdQuery } from "@/redux/features/admin/shortlistApi";
+import { useCreateFavouriteMutation } from "@/redux/features/admin/favouriteApi";
 import {
   selectCurrentToken,
   selectCurrentUser,
@@ -36,41 +33,29 @@ export interface BiodatasPageCardProps {
   permanentAddress: string;
   occupation: string;
   maritalStatus: string;
+  biodataType: string;
+  isFavourite: boolean;
 }
 
-export default function BioCard({
-  id,
-  code,
-  profilePic,
-  birthYear,
-  height,
-  occupation,
-  maritalStatus,
-  permanentAddress,
-}: BiodatasPageCardProps) {
-  const [isFavourite, setIsFavourite] = useState(false);
+export default function BioCard(biodata: BiodatasPageCardProps) {
+  console.log("biodata from card", biodata);
+  const {
+    id,
+    code,
+    biodataType,
+    profilePic,
+    birthYear,
+    height,
+    occupation,
+    maritalStatus,
+    permanentAddress,
+    isFavourite,
+  } = biodata;
+
   const router = useRouter();
   const token = useAppSelector(selectCurrentToken);
   const user = useAppSelector(selectCurrentUser);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
-  const { biodata } = useAppSelector((state) => state.biodata);
-  console.log("sdfsdfsd id", id);
-  const { data: favourite } = useGetFavouriteByIdQuery(
-    {
-      biodataId: id,
-    },
-    {
-      skip: !token || !user,
-    }
-  );
-  const { data: shortlist } = useGetShortlistByIdQuery(
-    {
-      biodataId: id,
-    },
-    {
-      skip: !token || !user,
-    }
-  );
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
 
@@ -86,15 +71,16 @@ export default function BioCard({
     if (!token || !user) {
       return;
     }
+    const favouriteData = {
+      biodataId: id,
+    };
     try {
-      const res = await createFavourite(id).unwrap();
+      const res = await createFavourite(favouriteData).unwrap();
       if (res?.success) {
         if (res?.statusCode === 201) {
           toast.success("ফেভারিট লিস্টে যোগ করা হয়েছে");
-          setIsFavourite(true);
         } else if (res?.statusCode === 200) {
           toast.error("ফেভারিট লিস্ট থেকে মুছে ফেলা হয়েছে");
-          setIsFavourite(false);
         }
       }
     } catch (error) {
@@ -107,6 +93,8 @@ export default function BioCard({
   const handleReset = () => {
     setIsModalOpen(null);
   };
+
+  const profileImage = biodataType === "BRIDE" ? female : male;
 
   return (
     <>
@@ -127,8 +115,8 @@ export default function BioCard({
             </div>
             <div className="w-1/3 flex items-center justify-center mt-3">
               <Image
-                src={profilePic || male}
-                alt="Male"
+                src={profilePic || profileImage}
+                alt="Profile"
                 width={80}
                 height={40}
                 priority
@@ -163,7 +151,9 @@ export default function BioCard({
             </div>
             <div className="flex justify-between  text-md">
               <span>উচ্চতা:</span>
-              <span>{getTitleById(heights, String(height))}</span>
+              <span>
+                {heights ? getTitleById(heights, String(height)) : "--"}
+              </span>
             </div>
             <div className="flex justify-between  text-md">
               <span>স্থায়ী ঠিকানা:</span>

@@ -91,7 +91,7 @@ export default function NotificationsPage() {
   };
 
   const columns: ColumnDef<any>[] = [
-    ...(user?.role === "SUPER_ADMIN" || user?.role === "ADMIN"
+    ...(user && (user?.role === "SUPER_ADMIN" || user?.role === "ADMIN")
       ? [
           {
             accessorKey: "type",

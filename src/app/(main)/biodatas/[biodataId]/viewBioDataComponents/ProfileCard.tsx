@@ -1,5 +1,5 @@
 "use client";
-import female from "@/assets/images/female-5.svg";
+import female from "@/assets/images/female-1.svg";
 import male from "@/assets/images/male-5.svg";
 import NeedLoginModal from "@/components/shared/NeedLoginModal";
 import { ReusableModal } from "@/components/shared/ReusableModal";
@@ -17,6 +17,7 @@ import {
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 import { CircleChevronDown, Copy, Heart, Star } from "lucide-react";
 import Image from "next/image";
@@ -34,16 +35,19 @@ const ProfileCard = ({
   myBiodata: boolean;
   isAdmin?: boolean;
 }) => {
-  console.log("biodata from profile card", biodata);
-  console.log("biodataId from profile card", biodataId);
-  console.log("myBiodata from profile card", myBiodata);
-  console.log("isAdmin from profile card", isAdmin);
+  // console.log("biodata from profile card", biodata);
+  // console.log("biodataId from profile card", biodataId);
+  // console.log("myBiodata from profile card", myBiodata);
+  // console.log("isAdmin from profile card", isAdmin);
 
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
   const token = useAppSelector(selectCurrentToken);
   const user = useAppSelector(selectCurrentUser);
+  const { biodata: myBiodataData } = useAppSelector(
+    (state: RootState) => state.biodata
+  );
 
   const { data: favourite } = useGetFavouriteByIdQuery(biodataId, {
     skip: !biodataId || !token || !user,
@@ -154,7 +158,11 @@ const ProfileCard = ({
               <Image
                 src={biodata?.profilePic || profileImage}
                 alt="Profile"
-                width={isAdmin || myBiodata ? 170 : 100}
+                width={
+                  isAdmin || myBiodata || myBiodataData?.id === biodataId
+                    ? 170
+                    : 100
+                }
                 height={40}
                 priority
                 onError={(e) => {
@@ -169,7 +177,7 @@ const ProfileCard = ({
               বায়োডাটা কোড: <span className="font-semibold">{code}</span>
             </div>
 
-            {!myBiodata && !isAdmin && (
+            {!myBiodata && !isAdmin && myBiodataData?.id !== biodataId && (
               <div className="flex space-x-4 border border-gray-400 rounded-xl p-4 ">
                 <Heart
                   className={`h-6 w-6 cursor-pointer ${

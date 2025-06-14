@@ -10,6 +10,7 @@ import {
 } from "@/redux/features/filter/filterSlice";
 import { useAppDispatch, useAppSelector, useDebounced } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -231,7 +232,7 @@ const BiodataPage = () => {
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
-  // console.log("biodatas", biodatas);
+  console.log("biodatas", biodatas);
   return (
     <div className="relative">
       {/* Mobile Filter Button */}
@@ -295,15 +296,19 @@ const BiodataPage = () => {
             />
           </div>
           {isLoading ? (
-            <div className="text-center py-4">Loading...</div>
-          ) : biodatas && biodatas.data.length > 0 ? (
+            <div className="text-center py-4 flex justify-center items-center min-h-[300px]">
+              <Loader2 className="w-6 h-6 animate-spin" />
+            </div>
+          ) : biodatas && biodatas?.data?.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 md:gap-10 gap-5 mx-auto ">
               {biodatas?.data?.map((biodata) => (
                 <BiodatasPageCard key={biodata.id} {...biodata} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-4">No biodatas found</div>
+            <div className="text-center py-4 min-h-[300px] text-red-500 flex justify-center items-center">
+              No biodatas found
+            </div>
           )}
         </div>
       </div>

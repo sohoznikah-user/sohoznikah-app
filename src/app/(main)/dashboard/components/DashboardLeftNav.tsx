@@ -1,5 +1,6 @@
 // File: src/app/(main)/dashboard/DashboardLeftNav.tsx
-import profilePic from "@/assets/images/profile-pic.png";
+import female from "@/assets/images/female-1.svg";
+import male from "@/assets/images/male-5.svg";
 import { useAppSelector } from "@/redux/hooks";
 import { X } from "lucide-react";
 import Image from "next/image";
@@ -15,6 +16,7 @@ export default function DashboardLeftNav({
   onClose,
 }: DashboardLeftNavProps) {
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
+  const profileImage = biodata?.biodataType === "GROOM" ? male : female;
 
   return (
     <>
@@ -39,7 +41,7 @@ export default function DashboardLeftNav({
         </button>
 
         <Image
-          src={biodata?.profilePic || profilePic}
+          src={biodata?.profilePic || profileImage}
           alt="Male"
           width={80}
           height={40}

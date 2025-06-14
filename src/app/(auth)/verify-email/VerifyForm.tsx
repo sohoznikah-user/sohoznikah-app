@@ -6,6 +6,8 @@ import {
   useResendOTPMutation,
   useVerifyEmailMutation,
 } from "@/redux/features/auth/authApi";
+import { logout } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -23,6 +25,7 @@ interface ResendOTPValues {
 const VerifyForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const dispatch = useAppDispatch();
   const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
   const [resendOTP, { isLoading: isResendOTPLoading }] = useResendOTPMutation();
 
@@ -159,7 +162,11 @@ const VerifyForm = () => {
         </button>
         <button
           className="text-sm text-blue-500 text-center cursor-pointer hover:underline hover:text-blue-500"
-          onClick={() => handleResendOTP({ email: searchParams.get("email") })}
+          onClick={() => {
+            dispatch(logout());
+            toast.success("Logged out successfully");
+            router.push("/");
+          }}
         >
           Logout
         </button>

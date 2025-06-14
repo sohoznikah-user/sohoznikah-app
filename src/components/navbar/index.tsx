@@ -1,13 +1,15 @@
 // File: src/components/navbar/index.tsx
-
 "use client";
+import female from "@/assets/images/female-1.svg";
 import logo from "@/assets/images/logo.svg";
+import male from "@/assets/images/male-5.svg";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -34,7 +36,8 @@ export function Navbar() {
   const router = useRouter();
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  console.log(mobileMenuOpen);
+
+  const profileImage = biodata?.biodataType === "GROOM" ? male : female;
 
   const menuItems: MenuItem[] = [
     {
@@ -171,8 +174,8 @@ export function Navbar() {
               <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none cursor-pointer">
                 <Avatar>
                   <AvatarImage
-                    src={biodata?.profilePic}
-                    alt={biodataFormData?.primaryInfoFormData?.fullName}
+                    src={biodata?.profilePic || profileImage}
+                    // alt={biodataFormData?.primaryInfoFormData?.fullName}
                   />
                   <AvatarFallback>{test?.name.charAt(0)}</AvatarFallback>
                 </Avatar>
@@ -189,7 +192,11 @@ export function Navbar() {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="focus:bg-[#E25A6F] cursor-pointer"
-                  onClick={() => dispatch(logout())}
+                  onClick={() => {
+                    dispatch(logout());
+                    toast.success("Logged out successfully");
+                    router.push("/");
+                  }}
                 >
                   লগআউট
                 </DropdownMenuItem>
