@@ -1,40 +1,26 @@
 // File: src/app/page.tsx
 import { Footer } from "@/components/footer";
+import AboutSohojNikah from "@/components/Homepage/AboutSohojNikah";
+import AdviceToBrideGroom from "@/components/Homepage/AdviceToBrideGroom";
+import AdviceToGurdians from "@/components/Homepage/AdviceToGurdians";
+import AfterChoice from "@/components/Homepage/AfterChoice";
+import Banner from "@/components/Homepage/Banner";
+import HowItWorks from "@/components/Homepage/HowItWorks";
+import HowSelectSohojNikah from "@/components/Homepage/HowSelectSohojNikah";
 import { Navbar } from "@/components/navbar";
-import { HomeSearchBiodata } from "./HomeSearchBiodata";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#FFE6F0] to-[#D6EAFF]">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mt-12 mx-auto flex flex-col text-[#1f4f69]">
-        <div className="text-3xl text-center mb-8">
-          বিবাহযোগ্য মুসলিম পাত্র-পাত্রী খোঁজার সহজ মাধ্যম
-        </div>
-
-        <p className="text-center mb-4">
-          Bangladesh's Trusted Matrimony Platform
-        </p>
-
-        <div className="text-center mb-12">
-          <blockquote className="italic text-[#b1466e]">
-            "তোমরা সহজ করো এবং কঠিন করো না।
-            <br />
-            সুসংবাদ দাও এবং বিরক্ত করো না।"
-          </blockquote>
-          <p className="text-gray-500 mt-2">(বুখারী ৩০৩৮)</p>
-        </div>
-
-        <div className="flex items-center justify-center">
-          <div className="text-2xl text-center mb-4 pb-4 border-b-4 border-[#1f4f69]">
-            জীবনসঙ্গী খুঁজুন
-          </div>
-        </div>
-        <div className="p-4 bg-gradient-to-r from-[#dce9f0] to-[#fbe6e9]">
-          <HomeSearchBiodata />
-        </div>
-      </main>
+      <Banner />
+      <AboutSohojNikah />
+      <HowSelectSohojNikah />
+      <HowItWorks />
+      <AfterChoice />
+      <AdviceToGurdians />
+      <AdviceToBrideGroom />
 
       <Footer />
     </div>

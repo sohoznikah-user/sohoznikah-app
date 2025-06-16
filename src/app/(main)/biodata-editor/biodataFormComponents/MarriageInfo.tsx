@@ -1,3 +1,4 @@
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -107,7 +108,7 @@ export default function MarriageInfo({
   const maritalStatus = biodataFormData?.generalInfoFormData?.maritalStatus;
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">বিয়ে সংক্রান্ত তথ্য</div>
       <Form {...form}>
         <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
@@ -574,6 +575,8 @@ export default function MarriageInfo({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

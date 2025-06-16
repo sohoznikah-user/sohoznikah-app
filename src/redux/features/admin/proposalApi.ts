@@ -29,10 +29,24 @@ export const proposalApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.proposal],
     }),
+    getProposalByBiodataId: build.query({
+      query: (biodataId) => ({
+        url: `${URL}/biodata/${biodataId}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.proposal],
+    }),
+    cancelProposal: build.mutation({
+      query: (id) => ({
+        url: `${URL}/${id}/cancel`,
+        method: "POST",
+      }),
+      invalidatesTags: [tagTypes.proposal],
+    }),
     updateProposal: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${URL}/${id}`,
-        method: "PUT",
+        method: "PATCH",
         data: updatedData,
       }),
       invalidatesTags: [tagTypes.proposal],
@@ -51,6 +65,8 @@ export const {
   useCreateProposalMutation,
   useGetAllProposalsQuery,
   useGetProposalByIdQuery,
+  useGetProposalByBiodataIdQuery,
+  useCancelProposalMutation,
   useUpdateProposalMutation,
   useDeleteProposalMutation,
 } = proposalApi;

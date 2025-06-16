@@ -20,7 +20,7 @@ export default function Breadcrumbs({
   setCurrentStep,
 }: BreadcrumbsProps) {
   return (
-    <Breadcrumb className="max-w-6xl bg-[#f6f6f6] rounded-2xl p-2">
+    <Breadcrumb className="max-w-6xl bg-[#f6f6f6] rounded-2xl p-2 mx-auto">
       <BreadcrumbList className="flex justify-center">
         {steps.map((step) => (
           <BreadcrumbItem

@@ -14,11 +14,26 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.biodata],
     }),
+    requestDeleteBiodata: build.mutation({
+      query: (deleteData) => ({
+        url: `${BIODATA_URL}/delete-request`,
+        method: "POST",
+        data: deleteData,
+      }),
+      invalidatesTags: [tagTypes.biodata],
+    }),
     getAllBiodatas: build.query({
       query: (arg: Record<string, any>) => ({
         url: `${BIODATA_URL}`,
         method: "GET",
         params: arg,
+      }),
+      providesTags: [tagTypes.biodata],
+    }),
+    getBiodatasByAdmin: build.query({
+      query: () => ({
+        url: `${BIODATA_URL}/all`,
+        method: "GET",
       }),
       providesTags: [tagTypes.biodata],
     }),
@@ -36,6 +51,13 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.biodata],
     }),
+    getBiodataByIdByAdmin: build.query({
+      query: (id) => ({
+        url: `${BIODATA_URL}/${id}/admin`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.biodata],
+    }),
     updateMyBiodata: build.mutation({
       query: (updatedData) => ({
         url: `${BIODATA_URL}/my-biodata`,
@@ -44,10 +66,18 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.biodata],
     }),
+    updateBiodataStatus: build.mutation({
+      query: ({ id, updatedData }) => ({
+        url: `${BIODATA_URL}/${id}/status`,
+        method: "PATCH",
+        data: updatedData,
+      }),
+      invalidatesTags: [tagTypes.biodata],
+    }),
     updateBiodata: build.mutation({
       query: ({ id, updatedData }) => ({
         url: `${BIODATA_URL}/${id}`,
-        method: "PUT",
+        method: "PATCH",
         data: updatedData,
       }),
       invalidatesTags: [tagTypes.biodata],
@@ -59,15 +89,27 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.biodata],
     }),
+    getBiodataAnalytics: build.query({
+      query: () => ({
+        url: `${BIODATA_URL}/analytics`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.biodata],
+    }),
   }),
 });
 
 export const {
   useCreateBiodataMutation,
   useGetAllBiodatasQuery,
+  useGetBiodatasByAdminQuery,
   useGetBiodataByIdQuery,
+  useGetBiodataByIdByAdminQuery,
   useGetMyBiodataQuery,
   useUpdateMyBiodataMutation,
+  useUpdateBiodataStatusMutation,
   useUpdateBiodataMutation,
   useDeleteBiodataMutation,
+  useRequestDeleteBiodataMutation,
+  useGetBiodataAnalyticsQuery,
 } = biodataApi;

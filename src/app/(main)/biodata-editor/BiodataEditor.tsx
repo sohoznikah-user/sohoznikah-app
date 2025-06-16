@@ -20,7 +20,7 @@ import Breadcrumbs from "./biodataFormComponents/Breadcrumbs";
 import { steps } from "./steps";
 
 // Map step keys to Redux state keys
-const stepKeyToStateKey: Record<string, string> = {
+export const stepKeyToStateKey: Record<string, string> = {
   "first-words": "firstWordsFormData",
   "primary-info": "primaryInfoFormData",
   "general-info": "generalInfoFormData",
@@ -174,12 +174,14 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
       >
         Clear Biodata
       </button> */}
-      {process.env.NODE_ENV === "development" && (
+      {/* {process.env.NODE_ENV === "development" && (
         <>
-          <pre>{JSON.stringify(biodataFormData, null, 2)}</pre>
+          <pre>
+            {JSON.stringify(biodataFormData?.primaryInfoFormData, null, 2)}
+          </pre>
           <pre>{JSON.stringify(biodata, null, 2)}</pre>
         </>
-      )}
+      )} */}
     </div>
   );
 }

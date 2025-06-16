@@ -1,4 +1,3 @@
-"use client";
 import DashboardMainNotifications from "../components/DashboardMainNotifications";
 
 const NotificationPage = () => {

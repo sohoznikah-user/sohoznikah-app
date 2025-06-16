@@ -10,6 +10,7 @@ import { TUser } from "@/utils/tokenHelper";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -28,16 +29,22 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    setValue,
     watch,
     trigger,
+    formState: { errors, isSubmitting, isValid },
   } = useForm<LoginFormValues>({
     mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
+
+  useEffect(() => {
+    const email = searchParams.get("email");
+
+    if (email) {
+      setValue("email", email);
+    }
+  }, [searchParams, setValue]);
 
   const email = watch("email");
   const password = watch("password");
@@ -70,35 +77,56 @@ const LoginForm = () => {
     try {
       const result = await loginUser(values).unwrap();
       if (result.success) {
-        toast.success(result.message || "You have successfully logged in!");
+        if (result.data.emailConfirmed) {
+          toast.success(result.message || "You have successfully logged in!");
+          const accessToken = result.data.accessToken;
+          const refreshToken = result.data.refreshToken;
+          const decodedToken = jwtDecode<TUser>(accessToken);
 
-        const accessToken = result.data.accessToken;
-        const refreshToken = result.data.refreshToken;
-        const decodedToken = jwtDecode<TUser>(accessToken);
+          dispatch(
+            setUser({
+              user: decodedToken,
+              acesstoken: accessToken,
+              refreshtoken: refreshToken,
+            })
+          );
 
-        dispatch(
-          setUser({
-            user: decodedToken,
-            acesstoken: accessToken,
-            refreshtoken: refreshToken,
-          })
-        );
+          router.push(decodeURIComponent(redirectUrl)); // Redirect to the specified URL
+        } else {
+          toast.error(result.message || "Please verify your email!");
+          const accessToken = result.data.accessToken;
+          const refreshToken = result.data.refreshToken;
+          const decodedToken = jwtDecode<TUser>(accessToken);
 
-        router.push(decodeURIComponent(redirectUrl)); // Redirect to the specified URL
+          dispatch(
+            setUser({
+              user: decodedToken,
+              acesstoken: accessToken,
+              refreshtoken: refreshToken,
+            })
+          );
+
+          router.push(
+            `/verify-email?email=${encodeURIComponent(values.email)}`
+          );
+        }
       } else {
         toast.error(result.message || "Invalid email or password!");
       }
     } catch (error: any) {
-      console.error("Login Error:", error);
+      // console.error("Login Error:", error);
       toast.error(error?.message || "Invalid email or password!");
     }
   };
+
+  const isEmailAutoFilled = !!searchParams.get("email");
 
   return (
     <form onSubmit={handleSubmit(onFinish)} className="space-y-4">
       <div>
         <Label htmlFor="email">Email/Mobile Number</Label>
         <Input
+          className="border border-gray-300"
           id="email"
           type="text"
           {...register("email", {
@@ -113,6 +141,7 @@ const LoginForm = () => {
       <div>
         <Label htmlFor="password">Password</Label>
         <Input
+          className="border border-gray-300"
           id="password"
           type="password"
           {...register("password", {

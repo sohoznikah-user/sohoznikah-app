@@ -1,7 +1,9 @@
+import CommingSoon from "@/components/shared/CommingSoon";
+
 const FaqPage = () => {
   return (
     <div>
-      <h1 className="text-black">This is FaqPage component</h1>
+      <CommingSoon />
     </div>
   );
 };

@@ -12,7 +12,7 @@ export const shortlistApi = baseApi.injectEndpoints({
         method: "POST",
         data: shortlistData,
       }),
-      invalidatesTags: [tagTypes.shortlist],
+      invalidatesTags: [tagTypes.shortlist, tagTypes.favourite],
     }),
     getAllShortlists: build.query({
       query: (arg: Record<string, any>) => ({
@@ -42,9 +42,10 @@ export const shortlistApi = baseApi.injectEndpoints({
         url: `${SHORTLIST_URL}/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypes.shortlist],
+      invalidatesTags: [tagTypes.shortlist, tagTypes.favourite],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

@@ -1,15 +1,7 @@
 /* File: src/app/globals.css */
+
 @import "tailwindcss";
-
 @plugin "tailwindcss-animate";
-
-@font-face {
-  font-family: SolaimanLipi;
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url("/fonts/SolaimanLipi_22-02-2012.ttf") format("woff2");
-}
 
 /* Targeting the scrollbar */
 ::-webkit-scrollbar {
@@ -128,6 +120,8 @@
   --color-sidebar: var(--sidebar);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --font-share-tech: "Share Tech", sans-serif;
+  --font-noto-serif-bengali: "Noto Serif Bengali", serif;
 
   @keyframes accordion-down {
     from {
@@ -151,6 +145,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: "Noto Serif Bengali", serif;
+    font-size: 16px;
   }
   body {
     @apply bg-background text-foreground;

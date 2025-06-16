@@ -42,9 +42,10 @@ export const favouriteApi = baseApi.injectEndpoints({
         url: `${FAVOURITE_URL}/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypes.favourite],
+      invalidatesTags: [tagTypes.favourite, tagTypes.shortlist],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

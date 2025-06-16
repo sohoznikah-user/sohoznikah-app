@@ -14,6 +14,7 @@ import male3 from "@/assets/images/male-3.svg";
 import male4 from "@/assets/images/male-4.svg";
 import male5 from "@/assets/images/male-5.svg";
 import male6 from "@/assets/images/male-6.svg";
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -78,7 +79,7 @@ export default function ProfilePic({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">প্রোফাইল পিকচার</div>
       <Form {...form}>
         <form className="max-w-4xl w-full text-[#005889] flex flex-col space-y-6">
@@ -87,7 +88,7 @@ export default function ProfilePic({
             name="photoId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
+                <FormLabel className="text-lg text-center mb-5">
                   আপনার সাথে মানানসই বা সামঞ্জস্যপূর্ণ একটি প্রোফাইল পিকচার
                   বাছাই করুন:
                 </FormLabel>
@@ -96,7 +97,7 @@ export default function ProfilePic({
                     {images.map((image, index) => (
                       <div
                         key={index}
-                        className="w-1/3 mb-4 flex items-center justify-center relative"
+                        className="md:w-1/3 w-full mb-4 flex items-center justify-center relative"
                       >
                         <div
                           className={`border p-12 rounded-3xl cursor-pointer transition-all relative ${
@@ -144,6 +145,8 @@ export default function ProfilePic({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

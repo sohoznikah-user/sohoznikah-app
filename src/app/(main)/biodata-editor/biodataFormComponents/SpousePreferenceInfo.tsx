@@ -1,4 +1,5 @@
 // File: src/app/(main)/biodata-editor/biodataFormComponents/SpousePreferenceInfo.tsx
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -110,7 +111,7 @@ export default function SpousePreferenceInfo({
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">
         যেমন জীবনসঙ্গী আশা করেন
       </div>
@@ -580,6 +581,8 @@ export default function SpousePreferenceInfo({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

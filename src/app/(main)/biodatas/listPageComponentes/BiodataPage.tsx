@@ -1,5 +1,6 @@
 "use client";
 
+import filterIcon from "@/assets/images/filter.svg";
 import { useGetAllBiodatasQuery } from "@/redux/features/biodata/biodataApi";
 import {
   filterInitialState,
@@ -9,6 +10,8 @@ import {
 } from "@/redux/features/filter/filterSlice";
 import { useAppDispatch, useAppSelector, useDebounced } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import BiodatasPageCard from "./BiodatasPageCard";
@@ -21,6 +24,7 @@ const BiodataPage = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [pagination, setPagination] = useState({
     page: 1,
@@ -228,33 +232,85 @@ const BiodataPage = () => {
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
-  console.log(biodatas);
+  console.log("biodatas", biodatas);
   return (
-    <div className="flex justify-between  gap-5">
-      <BiodatasPageFilters
-        onFilterChange={handleFilter}
-        onReset={handleReset}
-        filters={filters}
-      />
-      <div className="flex-grow max-w-7xl">
-        <div className="flex justify-end items-center mb-6">
-          <BiodatasPageSearchByBiodataNo
-            onSearchChange={handleSearchChange}
+    <div className="relative">
+      {/* Mobile Filter Button */}
+      <div className="lg:hidden flex justify-end items-center mb-4">
+        <button
+          onClick={() => setIsFilterOpen(true)}
+          className="flex items-center gap-2 px-3 py-1.5  rounded-md border border-gray-300 cursor-pointer"
+        >
+          <Image src={filterIcon} alt="filter" width={70} height={20} />
+        </button>
+      </div>
+
+      <div className="flex flex-col md:flex-row justify-between gap-5">
+        {/* Filter Panel - Mobile */}
+        <div
+          className={`fixed inset-0 bg-black/20  z-40 lg:hidden transition-opacity duration-300 ${
+            isFilterOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={() => setIsFilterOpen(false)}
+        >
+          <div
+            className={`absolute right-0 top-0 h-full md:w-96 w-full bg-white shadow-lg transform transition-transform duration-300 overflow-y-auto pb-10 ${
+              isFilterOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Filters</h2>
+                <button
+                  onClick={() => setIsFilterOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+              <BiodatasPageFilters
+                onFilterChange={handleFilter}
+                onReset={handleReset}
+                filters={filters}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Filter Panel - Desktop */}
+        <div className="hidden lg:block">
+          <BiodatasPageFilters
+            onFilterChange={handleFilter}
             onReset={handleReset}
-            initialSearchTerm={searchTerm}
+            filters={filters}
           />
         </div>
-        {isLoading ? (
-          <div className="text-center py-4">Loading...</div>
-        ) : biodatas && biodatas.data.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {biodatas?.data?.map((biodata) => (
-              <BiodatasPageCard key={biodata.id} {...biodata} />
-            ))}
+
+        <div className="flex-grow max-w-7xl">
+          <div className="flex justify-end items-center mb-6">
+            <BiodatasPageSearchByBiodataNo
+              onSearchChange={handleSearchChange}
+              onReset={handleReset}
+              initialSearchTerm={searchTerm}
+            />
           </div>
-        ) : (
-          <div className="text-center py-4">No biodatas found</div>
-        )}
+          {isLoading ? (
+            <div className="text-center py-4 flex justify-center items-center min-h-[300px]">
+              <Loader2 className="w-6 h-6 animate-spin" />
+            </div>
+          ) : biodatas && biodatas?.data?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-5 md:gap-10 gap-5 mx-auto ">
+              {biodatas?.data?.map((biodata) => (
+                <BiodatasPageCard key={biodata.id} {...biodata} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-4 min-h-[300px] text-red-500 flex justify-center items-center">
+              No biodatas found
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import BiodataEditText from "@/components/shared/BiodataEditText";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -87,7 +88,7 @@ export default function ReligiousInfo({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-8">
+    <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">ধর্মীয় লাইফস্টাইল</div>
       <Form {...form}>
         <div>
@@ -573,6 +574,8 @@ export default function ReligiousInfo({
           Save & Next
         </Button>
       </div>
+
+      <BiodataEditText />
     </div>
   );
 }

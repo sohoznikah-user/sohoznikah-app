@@ -131,13 +131,15 @@ export default function BiodatasPageFilters({
   };
 
   return (
-    <div className="w-72 bg-white ml-4 px-4 space-y-2">
+    <div className="lg:w-64 w-full bg-white space-y-2 text-lg">
       <div className="flex items-center justify-center text-center text-[#1f4f69] pb-2">
-        <div className="pb-1 border-b border-[#1f4f69]">ফিল্টার করুন</div>
+        <div className="pb-1 border-b border-[#1f4f69] text-lg font-semibold">
+          ফিল্টার করুন
+        </div>
       </div>
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-between mb-4">
         <button
-          className={`mr-[-1rem] rounded-xl py-3 px-4 z-10 ${
+          className={`mr-[-1rem] rounded-xl py-3 px-4 z-10 w-full text-md font-semibold ${
             activeTab === "searching"
               ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7] z-10"
               : "text-[#989898] border border-[#989898] z-0"
@@ -147,7 +149,7 @@ export default function BiodatasPageFilters({
           আমি খুঁজছি
         </button>
         <button
-          className={`py-3 rounded-xl px-4 ${
+          className={`py-3 rounded-xl px-4 w-full text-md font-semibold ${
             activeTab === "beingSearched"
               ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7] z-10"
               : "text-[#989898] border border-[#989898] z-0"

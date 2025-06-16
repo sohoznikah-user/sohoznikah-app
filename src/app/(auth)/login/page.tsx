@@ -9,23 +9,22 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <>
-      <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
-      <LoginForm />
-      <p className="text-sm text-gray-600 mt-3 text-center">
-        Don&apos;t have an account? Please
-        <Link href="/register" className="text-blue-500 hover:underline ml-1">
+      <div className="flex justify-between items-center gap-8 bg-gray-200 rounded-lg p-2 mb-8">
+        <Link
+          href="/login"
+          className="text-xl w-full px-5 py-2 bg-white font-semibold  text-center rounded-lg"
+        >
+          Login
+        </Link>
+        <Link
+          href="/register"
+          className="text-xl w-full px-5 py-2 hover:bg-white font-semibold  text-center rounded-lg"
+        >
           Register
         </Link>
-      </p>
-      <p className="text-sm text-gray-600 mt-2 text-center">
-        Not verified yet? Please
-        <Link
-          href="/verify-email"
-          className="text-blue-500 hover:underline ml-1"
-        >
-          Verify
-        </Link>
-      </p>
+      </div>
+
+      <LoginForm />
     </>
   );
 }
