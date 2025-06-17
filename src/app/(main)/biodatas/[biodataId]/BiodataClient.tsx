@@ -34,6 +34,7 @@ export default function BiodataClient({
   const user = useAppSelector(selectCurrentUser);
   const acesstoken = useAppSelector(selectCurrentUser);
   const router = useRouter();
+  console.log("biodata", biodata);
 
   const {
     data: fetchedBiodata,

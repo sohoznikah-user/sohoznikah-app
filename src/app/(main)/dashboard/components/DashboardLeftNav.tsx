@@ -1,6 +1,7 @@
 // File: src/app/(main)/dashboard/DashboardLeftNav.tsx
 import female from "@/assets/images/female-1.svg";
 import male from "@/assets/images/male-5.svg";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { X } from "lucide-react";
 import Image from "next/image";
@@ -17,6 +18,7 @@ export default function DashboardLeftNav({
 }: DashboardLeftNavProps) {
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
   const profileImage = biodata?.biodataType === "GROOM" ? male : female;
+  const user = useAppSelector(selectCurrentUser);
 
   return (
     <>
@@ -41,7 +43,11 @@ export default function DashboardLeftNav({
         </button>
 
         <Image
-          src={biodata?.profilePic || profileImage}
+          src={
+            user?.role === "SUPER_ADMIN"
+              ? male
+              : biodata?.profilePic || profileImage
+          }
           alt="Male"
           width={80}
           height={40}
@@ -52,8 +58,14 @@ export default function DashboardLeftNav({
           {biodataFormData?.primaryInfoFormData?.fullName}
         </div>
         <div className="mb-4 p-3 bg-[#c6d8e1] text-black rounded-xl">
-          বায়োডাটা নং:{" "}
-          <span className="font-semibold">{biodata?.code || "--"}</span>
+          {user?.role === "SUPER_ADMIN" ? (
+            <span className="font-semibold">SUPER ADMIN</span>
+          ) : (
+            <>
+              বায়োডাটা নং:{" "}
+              <span className="font-semibold">{biodata?.code || "--"}</span>
+            </>
+          )}
         </div>
         <Link
           href={`/dashboard`}

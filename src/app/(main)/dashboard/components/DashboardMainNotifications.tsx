@@ -13,6 +13,7 @@ import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector, useDebounced } from "@/redux/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -27,6 +28,7 @@ export default function NotificationsPage() {
     limit: 10,
     total: 0,
   });
+  const router = useRouter();
 
   const user = useAppSelector(selectCurrentUser);
   const debouncedSearch = useDebounced({ searchQuery: searchTerm, delay: 600 });
@@ -100,16 +102,24 @@ export default function NotificationsPage() {
               return <div className="text-[#1F4F69]">{row.original.type}</div>;
             },
           },
+          {
+            accessorKey: "adminMessage",
+            header: "বার্তা",
+            cell: ({ row }) => (
+              <div className="truncate">{row.original.adminMessage}</div>
+            ),
+          },
         ]
-      : []),
+      : [
+          {
+            accessorKey: "message",
+            header: "বার্তা",
+            cell: ({ row }) => (
+              <div className="truncate">{row.original.message}</div>
+            ),
+          },
+        ]),
 
-    {
-      accessorKey: "message",
-      header: "বার্তা",
-      cell: ({ row }) => (
-        <div className="truncate max-w-[300px]">{row.original.message}</div>
-      ),
-    },
     {
       accessorKey: "createdAt",
       header: "তারিখ",
@@ -130,8 +140,19 @@ export default function NotificationsPage() {
           onClick={(e) => {
             e.stopPropagation();
             handleViewNotification(row?.original?.id);
-            setSelectedData(row.original);
-            setIsModalOpen("view");
+            (row.original.type === "TOKEN_CREATED" ||
+              row.original.type === "TOKEN_APPROVED") &&
+              router.push(`/dashboard/token`);
+            (row.original.type === "NEW_BIODATA" ||
+              row.original.type === "UPDATE_BIODATA") &&
+              router.push(`/dashboard/biodata`);
+            row.original.type === "SHORTLIST_CREATED" &&
+              router.push(`/dashboard/shortlist`);
+            row.original.type === "FAVOURITE_CREATED" &&
+              router.push(`/dashboard/favourite`);
+            (row.original.type === "NEW_PROPOSAL" ||
+              row.original.type === "PROPOSAL_RESPONSE") &&
+              router.push(`/dashboard/proposal`);
           }}
         >
           View
