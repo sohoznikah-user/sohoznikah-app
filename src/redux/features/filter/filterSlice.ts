@@ -13,10 +13,11 @@ export interface FilterState {
   permanentLocation?: string;
   permanentState?: string[];
   permanentCity?: string[];
-  allCountries?: boolean;
+  allCountriesPermanent?: boolean;
   currentLocation?: string;
   currentState?: string[];
   currentCity?: string[];
+  allCountriesCurrent?: boolean;
   religiousLifestyle?: string[];
   occupation?: string[];
   education?: string[];
@@ -25,13 +26,14 @@ export interface FilterState {
   madhhab?: string[];
   bloodGroup?: string[];
   specialCategory?: string[];
-  partnerBiodataType?: string;
-  partnerMaritalStatus?: string[];
-  partnerAgeMin?: number;
-  partnerAgeMax?: number;
-  partnerHeightMin?: number;
-  partnerHeightMax?: number;
-  partnerSkinTone?: string;
+  myBiodataType?: string;
+  mySpecialCategory?: string[];
+  myMaritalStatus?: string[];
+  myAgeMin?: number;
+  myAgeMax?: number;
+  myHeightMin?: number;
+  myHeightMax?: number;
+  mySkinTone?: string;
 }
 
 export const filterInitialState: FilterState = {
@@ -45,10 +47,11 @@ export const filterInitialState: FilterState = {
   permanentLocation: "",
   permanentState: [],
   permanentCity: [],
-  allCountries: false,
+  allCountriesPermanent: false,
   currentLocation: "",
   currentState: [],
   currentCity: [],
+  allCountriesCurrent: false,
   religiousLifestyle: [],
   occupation: [],
   education: [],
@@ -57,13 +60,14 @@ export const filterInitialState: FilterState = {
   madhhab: [],
   bloodGroup: [],
   specialCategory: [],
-  partnerBiodataType: "",
-  partnerMaritalStatus: [],
-  // partnerAgeMin: 18,
-  // partnerAgeMax: 80,
-  // partnerHeightMin: 36,
-  // partnerHeightMax: 84,
-  // partnerSkinTone: "",
+  myBiodataType: "",
+  mySpecialCategory: [],
+  // myMaritalStatus: [],
+  // myAgeMin: 18,
+  // myAgeMax: 80,
+  // myHeightMin: 36,
+  // myHeightMax: 84,
+  // mySkinTone: "",
 };
 
 const filterSlice = createSlice({

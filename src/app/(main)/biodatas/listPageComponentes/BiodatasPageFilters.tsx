@@ -7,16 +7,16 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
+  biodataSelfTypes,
   biodataTypes,
   bloodGroups,
-  education,
   familyBackgrounds,
   madhhabs,
   maritalStatuses,
   occupationsList,
-  religiousEducation,
   religiousLifestyle,
   skinTones,
+  specialCatagories,
 } from "@/lib/consts";
 import { districtsAndUpazilas } from "@/lib/districtsAndUpazilas";
 import {
@@ -27,8 +27,10 @@ import {
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { searchingFilters } from "./biodataFilterOptions";
+import { Educationfilter } from "./Educationfilter";
 import { FilterAccordion } from "./FilterAccordian";
 import { PermanentAddressFilter } from "./PermanentAddressFilter"; // Import the new component
+import { PresentAddressFilter } from "./PresentAddressFilter";
 
 interface BiodatasPageFiltersProps {
   onReset: () => void;
@@ -103,6 +105,17 @@ export default function BiodatasPageFilters({
     title: upazila.title,
   }));
 
+  // Permanent Address Filter
+  const permanentAddressValue = {
+    permanent_address_type: filters.permanentLocation as
+      | "bangladesh"
+      | "foreign"
+      | undefined,
+    district: filters.permanentState || [],
+    subdistrict: filters.permanentCity || [],
+    all_countries: filters.allCountriesPermanent || false,
+  };
+
   const handlePermanentAddressChange = (updatedFilters: {
     permanent_address_type?: "bangladesh" | "foreign";
     district?: string[];
@@ -114,20 +127,35 @@ export default function BiodatasPageFilters({
         permanentLocation: updatedFilters.permanent_address_type,
         permanentState: updatedFilters.district,
         permanentCity: updatedFilters.subdistrict,
-        allCountries: updatedFilters.all_countries,
+        allCountriesPermanent: updatedFilters.all_countries,
       })
     );
     onFilterChange();
   };
 
-  const permanentAddressValue = {
-    permanent_address_type: filters.permanentLocation as
-      | "bangladesh"
-      | "foreign"
-      | undefined,
-    district: filters.permanentState || [],
-    subdistrict: filters.permanentCity || [],
-    all_countries: filters.allCountries || false,
+  // Present Address Filter
+  const presentAddressValue = {
+    present_address_type: filters.currentLocation as "bangladesh" | "foreign",
+    district: filters.currentState || [],
+    subdistrict: filters.currentCity || [],
+    all_countries: filters.allCountriesCurrent || false,
+  };
+
+  const handlePresentAddressChange = (updatedFilters: {
+    present_address_type?: "bangladesh" | "foreign";
+    district?: string[];
+    subdistrict?: string[];
+    all_countries?: boolean;
+  }) => {
+    dispatch(
+      setFilterData({
+        currentLocation: updatedFilters.present_address_type,
+        currentState: updatedFilters.district,
+        currentCity: updatedFilters.subdistrict,
+        allCountriesCurrent: updatedFilters.all_countries,
+      })
+    );
+    onFilterChange();
   };
 
   return (
@@ -217,31 +245,62 @@ export default function BiodatasPageFilters({
                 selectedFilters={filters}
                 handleCheckboxChange={handleCheckboxChange}
               />
+              {/* Permanent Address Filter */}
               <AccordionItem
-                className="border border-gray-300 rounded-xl px-4"
+                className="border border-gray-300 rounded-xl text-md px-4"
                 value="স্থায়ী ঠিকানা"
               >
-                <AccordionTrigger className="hover:no-underline text-[#1f4f69]">
+                <AccordionTrigger className="hover:no-underline text-md text-[#1f4f69]">
                   স্থায়ী ঠিকানা
                 </AccordionTrigger>
                 <AccordionContent className="bg-white text-[#1f4f69] space-y-4">
                   <PermanentAddressFilter
+                    filters={filters}
                     filterValue={permanentAddressValue}
                     onChange={handlePermanentAddressChange}
                     districtOptions={districtOptions}
                     subdistrictOptions={subdistrictOptions}
+                    handleCheckboxChange={handleCheckboxChange}
                   />
                 </AccordionContent>
               </AccordionItem>
-              <FilterAccordion
+
+              {/* Present Address Filter */}
+              <AccordionItem
+                className="border border-gray-300 rounded-xl text-md px-4"
                 value="বর্তমান ঠিকানা"
-                title="বর্তমান ঠিকানা"
-                contentType="checkbox"
-                filterKey="currentState"
-                options={districtOptions}
-                selectedFilters={filters}
-                handleCheckboxChange={handleCheckboxChange}
-              />
+              >
+                <AccordionTrigger className="hover:no-underline text-md text-[#1f4f69]">
+                  বর্তমান ঠিকানা
+                </AccordionTrigger>
+                <AccordionContent className="bg-white text-[#1f4f69] space-y-4">
+                  <PresentAddressFilter
+                    filters={filters}
+                    filterValue={presentAddressValue}
+                    onChange={handlePresentAddressChange}
+                    districtOptions={districtOptions}
+                    subdistrictOptions={subdistrictOptions}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Education Filter */}
+              <AccordionItem
+                className="border border-gray-300 rounded-xl text-md px-4"
+                value="শিক্ষা"
+              >
+                <AccordionTrigger className="hover:no-underline text-md text-[#1f4f69]">
+                  শিক্ষা
+                </AccordionTrigger>
+                <AccordionContent className="bg-white text-[#1f4f69] space-y-4">
+                  <Educationfilter
+                    filters={filters}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+
               <FilterAccordion
                 value="ধর্মীয় লাইফস্টাইল"
                 title="ধর্মীয় লাইফস্টাইল"
@@ -260,24 +319,7 @@ export default function BiodatasPageFilters({
                 selectedFilters={filters}
                 handleCheckboxChange={handleCheckboxChange}
               />
-              <FilterAccordion
-                value="শিক্ষা"
-                title="শিক্ষা"
-                contentType="checkbox"
-                filterKey="education"
-                options={education}
-                selectedFilters={filters}
-                handleCheckboxChange={handleCheckboxChange}
-              />
-              <FilterAccordion
-                value="দ্বীনি যোগ্যতা"
-                title="দ্বীনি যোগ্যতা"
-                contentType="checkbox"
-                filterKey="religiousEducation"
-                options={religiousEducation}
-                selectedFilters={filters}
-                handleCheckboxChange={handleCheckboxChange}
-              />
+
               <FilterAccordion
                 value="পরিবারের আর্থসামাজিক অবস্থা"
                 title="পরিবারের আর্থসামাজিক অবস্থা"
@@ -321,8 +363,8 @@ export default function BiodatasPageFilters({
                 value="বায়োডাটার ধরন"
                 title="বায়োডাটার ধরন"
                 contentType="radio"
-                filterKey="partnerBiodataType"
-                options={biodataTypes}
+                filterKey="myBiodataType"
+                options={biodataSelfTypes}
                 selectedFilters={filters}
                 handleRadioChange={handleRadioChange}
               />
@@ -330,8 +372,11 @@ export default function BiodatasPageFilters({
                 value="বিশেষ ক্যাটাগরি"
                 title="বিশেষ ক্যাটাগরি"
                 contentType="checkbox"
-                filterKey="specialCategory"
-                options={searchingFilters.specialCategory}
+                filterKey="mySpecialCategory"
+                options={specialCatagories.filter(
+                  (item) =>
+                    item.for === filters.myBiodataType || item.for === "both"
+                )}
                 selectedFilters={filters}
                 handleCheckboxChange={handleCheckboxChange}
               />

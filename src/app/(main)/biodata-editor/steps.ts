@@ -222,7 +222,7 @@ export const steps: BiodataFormStep[] = [
   },
   {
     key: "spouse-preference-info",
-    title: "জীবনসঙ্গীর পছন্দ",
+    title: "প্রত্যাশিত জীবনসঙ্গী",
     component: SpousePreferenceInfo,
     prev: "marriage-info",
     next: "profile-pic",

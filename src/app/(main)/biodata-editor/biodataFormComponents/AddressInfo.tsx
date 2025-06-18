@@ -278,40 +278,6 @@ export default function AddressInfo({
                         </FormItem>
                       )}
                     />
-
-                    <FormField
-                      control={form.control}
-                      name={`addresses.${index}.cityzenshipStatus`}
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel className="text-md space-y-2 leading-4.5">
-                            সিটিজেনশিপ আছে?
-                          </FormLabel>
-                          <div className="flex flex-col space-y-2">
-                            <div className="flex items-center space-x-2">
-                              <FormControl>
-                                <RadioGroup
-                                  className="w-full flex flex-wrap gap-0 min-h-12"
-                                  onValueChange={field.onChange}
-                                  value={field.value || ""}
-                                >
-                                  {citizenshipOptions.map((x) => (
-                                    <div
-                                      key={x.id}
-                                      className="w-1/3 flex items-center space-x-2"
-                                    >
-                                      <RadioGroupItem value={x.id} id={x.id} />
-                                      <Label htmlFor={x.id}>{x.title}</Label>
-                                    </div>
-                                  ))}
-                                </RadioGroup>
-                              </FormControl>
-                            </div>
-                            <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
                   </>
                 )}
 
@@ -442,6 +408,45 @@ export default function AddressInfo({
                     );
                   }}
                 />
+
+                {form.getValues(`addresses.${index}.location`) ===
+                  "foreign" && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name={`addresses.${index}.cityzenshipStatus`}
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="text-md space-y-2 leading-4.5">
+                            সিটিজেনশিপ আছে?
+                          </FormLabel>
+                          <div className="flex flex-col space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <FormControl>
+                                <RadioGroup
+                                  className="w-full flex flex-wrap gap-0 min-h-12"
+                                  onValueChange={field.onChange}
+                                  value={field.value || ""}
+                                >
+                                  {citizenshipOptions.map((x) => (
+                                    <div
+                                      key={x.id}
+                                      className="w-1/3 flex items-center space-x-2"
+                                    >
+                                      <RadioGroupItem value={x.id} id={x.id} />
+                                      <Label htmlFor={x.id}>{x.title}</Label>
+                                    </div>
+                                  ))}
+                                </RadioGroup>
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
 
                 {form.getValues(`addresses.${index}.location`) ===
                   "bangladesh" && (

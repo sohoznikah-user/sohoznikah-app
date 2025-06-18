@@ -32,7 +32,7 @@ interface FilterAccordionProps {
 }
 
 export const FilterAccordion = (props: FilterAccordionProps) => {
-  const { value, title, contentType } = props;
+  const { value, title, contentType, className } = props;
 
   // Validation for radio
   if (
@@ -104,7 +104,10 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
   ) => (
     <AccordionContent className="bg-white text-[#1f4f69] space-y-2 pt-1 pb-3 px-4 shadow-sm rounded-b-xl">
       {options.map((option) => (
-        <div key={option.id} className="flex items-center space-x-2">
+        <div
+          key={`${key}-${option.id}`}
+          className="flex items-center space-x-2"
+        >
           <Checkbox
             id={`${key}-${option.id}`}
             checked={
@@ -149,7 +152,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
 
   return (
     <AccordionItem
-      className="border border-gray-300 rounded-xl px-4 max-h-60 overflow-y-auto"
+      className={`${className ? className : "border border-gray-300"} rounded-xl px-4 max-h-60 overflow-y-auto`}
       value={value}
     >
       <AccordionTrigger className="hover:no-underline text-[#1f4f69] text-md">

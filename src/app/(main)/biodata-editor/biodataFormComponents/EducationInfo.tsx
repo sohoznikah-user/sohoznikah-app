@@ -118,28 +118,75 @@ export default function EducationInfo({
                     শিক্ষার ধরণ:
                   </FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
-                        <SelectValue placeholder="শিক্ষার ধরণ" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-                        {educationTypes.map((x) => (
-                          <SelectItem
-                            key={x.id}
-                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                            value={x.id}
-                          >
-                            {x.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="space-y-2">
+                      {Array.isArray(field.value) && field.value.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {field.value.map((value) => {
+                            const educationType = educationTypes.find(
+                              (n) => n.id === value
+                            );
+                            return (
+                              <div
+                                key={value}
+                                className="bg-[#E25A6F] text-white px-3 py-1 rounded-full flex items-center gap-2"
+                              >
+                                <span>{educationType?.title}</span>
+                                <span
+                                  onClick={() => {
+                                    const currentValue = Array.isArray(
+                                      field.value
+                                    )
+                                      ? field.value
+                                      : [];
+                                    const newValue = currentValue.filter(
+                                      (v) => v !== value
+                                    );
+                                    field.onChange(newValue);
+                                  }}
+                                  className="hover:text-gray-200 cursor-pointer text-md ml-1"
+                                  role="button"
+                                  tabIndex={0}
+                                >
+                                  ×
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                      <Select
+                        onValueChange={(value) => {
+                          const currentValue = Array.isArray(field.value)
+                            ? field.value
+                            : [];
+                          if (!currentValue.includes(value)) {
+                            field.onChange([...currentValue, value]);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
+                          <SelectValue placeholder="জাতীয়তা" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
+                          {educationTypes.map((x) => (
+                            <SelectItem
+                              key={x.id}
+                              className="focus:bg-transparent focus:text-[#E25A6F] p-2"
+                              value={x.id}
+                            >
+                              {x.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </FormControl>
                 </div>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="highestDegree"

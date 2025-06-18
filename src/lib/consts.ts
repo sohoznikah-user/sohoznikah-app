@@ -2,6 +2,11 @@ export const biodataTypes = [
   { id: "GROOM", title: "পাত্রের বায়োডাটা" },
   { id: "BRIDE", title: "পাত্রীর বায়োডাটা" },
 ];
+export const biodataSelfTypes = [
+  { id: "GROOM", title: "আমি পাত্র" },
+  { id: "BRIDE", title: "আমি পাত্রী" },
+];
+
 export const biodataFor = [
   { id: "self", title: "নিজের জন্য" },
   { id: "other", title: " বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য" },
@@ -9,10 +14,17 @@ export const biodataFor = [
 
 export const maritalStatuses = [
   { id: "unmarried", title: "অবিবাহিত", for: "both" },
-  { id: "married", title: "বিবাহিত", for: "both" },
+  { id: "married", title: "বিবাহিত", for: "GROOM" },
   { id: "divorced", title: "ডিভোর্সড", for: "both" },
   { id: "widowed_male", title: "বিপত্নীক", for: "GROOM" },
   { id: "widowed_female", title: "বিধবা", for: "BRIDE" },
+];
+export const spouseMaritalStatuses = [
+  { id: "unmarried", title: "অবিবাহিত", for: "both" },
+  { id: "married", title: "বিবাহিত", for: "BRIDE" },
+  { id: "divorced", title: "ডিভোর্সড", for: "both" },
+  { id: "widowed_male", title: "বিপত্নীক", for: "BRIDE" },
+  { id: "widowed_female", title: "বিধবা", for: "GROOM" },
 ];
 
 export const religiousLifestyle = [
@@ -161,7 +173,6 @@ export const education = [
   { id: "bachelor", title: "স্নাতক", for: "both" },
   { id: "masters", title: "স্নাতকোত্তর", for: "both" },
   { id: "doctoral", title: "ডক্টরাল", for: "both" },
-  { id: "bcs", title: "বি.সি.এস (BCS)", for: "both" },
   { id: "medical", title: "মেডিকেল", for: "both" },
   { id: "defense", title: "ডিফেন্স", for: "both" },
   { id: "police_law", title: "পুলিশ/আইন-শৃঙ্খলা বাহিনী", for: "both" },
@@ -184,6 +195,28 @@ export const religiousEducation = [
   { id: "adib", title: "আদিব", for: "both" },
   { id: "qari_male", title: "ক্বারী", for: "GROOM" },
   { id: "qaria_female", title: "ক্বারিয়া", for: "BRIDE" },
+  { id: "talib_quran", title: "তালিবে কুরআন", for: "both" },
+  { id: "tajwid_student", title: "তাজবীদ শিক্ষার্থী", for: "both" },
+  { id: "muallim_talim", title: "মুয়াল্লিমুন ফি তালিম", for: "both" },
+  { id: "islamic_scholar", title: "ইসলামিক স্কলার", for: "both" },
+];
+
+export const spouseReligiousEducation = [
+  { id: "hafiz_male", title: "হাফেজ", for: "BRIDE" },
+  { id: "hafiza_female", title: "হাফেজা", for: "GROOM" },
+  { id: "maulana_male", title: "মাওলানা", for: "BRIDE" },
+  { id: "alema_female", title: "আলেমা", for: "GROOM" },
+  { id: "mufti_male", title: "মুফতি", for: "BRIDE" },
+  { id: "muftia_female", title: "মুফতিয়া", for: "GROOM" },
+  { id: "muhaddis_male", title: "মুহাদ্দিস", for: "BRIDE" },
+  { id: "muhaddisa_female", title: "মুহাদ্দিসা", for: "GROOM" },
+  { id: "mufassir", title: "মুফাসসির", for: "both" },
+  { id: "faqih", title: "ফকিহ", for: "both" },
+  { id: "daee_male", title: "দা'য়ী", for: "BRIDE" },
+  { id: "daiya_female", title: "দাঈয়া", for: "GROOM" },
+  { id: "adib", title: "আদিব", for: "both" },
+  { id: "qari_male", title: "ক্বারী", for: "BRIDE" },
+  { id: "qaria_female", title: "ক্বারিয়া", for: "GROOM" },
   { id: "talib_quran", title: "তালিবে কুরআন", for: "both" },
   { id: "tajwid_student", title: "তাজবীদ শিক্ষার্থী", for: "both" },
   { id: "muallim_talim", title: "মুয়াল্লিমুন ফি তালিম", for: "both" },
@@ -215,7 +248,8 @@ export const characteristics = [
 ];
 
 export const specialCatagories = [
-  { id: "bcs_cadre", title: "আমি বিসিএস ক্যাডার", for: "both" },
+  { id: "expatriate", title: "আমি একজন প্রবাসী", for: "both" },
+
   { id: "social_worker", title: "আমি একজন সমাজ সেবক", for: "both" },
   { id: "tabligh_member", title: "আমি তাবলীগ এর সাথে যুক্ত", for: "both" },
   {
@@ -238,7 +272,7 @@ export const specialCatagories = [
   },
   {
     id: "short_height",
-    title: "আমি স্বল্প উচ্চতার মানুষ আলহামদুলিল্লাহ",
+    title: "আমি স্বল্প উচ্চতার আলহামদুলিল্লাহ",
     for: "both",
   },
   {
@@ -259,12 +293,17 @@ export const specialCatagories = [
   {
     id: "single_father",
     title: "আমি সিঙ্গেল ফাদার-সন্তান আছে কিন্তু মা নেই বা দায়িত্বে নেই",
-    for: "BRIDE",
+    for: "GROOM",
   },
   {
     id: "single_mother",
     title: "আমি সিঙ্গেল মাদার-সন্তান আছে কিন্তু বাবা নেই বা দায়িত্বে নেই",
-    for: "GROOM",
+    for: "BRIDE",
+  },
+  {
+    id: "not_applicable",
+    title: "প্রযোজ্য নয়",
+    for: "both",
   },
 ];
 
@@ -285,19 +324,19 @@ export const spouseSpecialCatagories = [
   { id: "older_age", title: "বয়সে বেশি", for: "both" },
   { id: "urban_resident", title: "শহরে বসবাসকারী", for: "both" },
   { id: "rural_resident", title: "গ্রামে বসবাসকারী", for: "both" },
-  {
-    id: "allow_wife_job",
-    title: "স্ত্রীকে চাকরি/ব্যবসা করতে দিবে",
-    for: "BRIDE",
-  },
-  { id: "allow_wife_study", title: "স্ত্রীকে পড়াশোনা করতে দিবে", for: "BRIDE" },
+  // {
+  //   id: "allow_wife_job",
+  //   title: "স্ত্রীকে চাকরি/ব্যবসা করতে দিবে",
+  //   for: "BRIDE",
+  // },
+  // { id: "allow_wife_study", title: "স্ত্রীকে পড়াশোনা করতে দিবে", for: "BRIDE" },
   { id: "employed_female", title: "চাকরিজীবী", for: "GROOM" },
-  {
-    id: "job_interest_post_marriage",
-    title: "বিয়ের পর চাকরি/ব্যাবসায় আগ্রহী",
-    for: "GROOM",
-  },
-  { id: "masna_interest", title: "মাসনায় আগ্রহী", for: "GROOM" },
+  // {
+  //   id: "job_interest_post_marriage",
+  //   title: "বিয়ের পর চাকরি/ব্যাবসায় আগ্রহী",
+  //   for: "GROOM",
+  // },
+  // { id: "masna_interest", title: "মাসনায় আগ্রহী", for: "GROOM" },
 ];
 
 export const afterMarriageStudies = [
