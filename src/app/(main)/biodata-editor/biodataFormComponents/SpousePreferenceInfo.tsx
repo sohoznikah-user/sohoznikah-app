@@ -19,6 +19,7 @@ import {
   religiousLifestyle,
   secondMarriageOptions,
   skinTones,
+  spouseBlackSkinInterestOptions,
   spouseLocationOptions,
   spouseMaritalStatuses,
   spouseReligiousEducation,
@@ -61,13 +62,15 @@ export default function SpousePreferenceInfo({
       religiousType:
         biodataFormData?.spousePreferenceInfoFormData?.religiousType || [],
       occupation:
-        biodataFormData?.spousePreferenceInfoFormData?.occupation || [],
+        biodataFormData?.spousePreferenceInfoFormData?.occupation || "",
       familyBackground:
         biodataFormData?.spousePreferenceInfoFormData?.familyBackground || [],
       secondMarriage:
         biodataFormData?.spousePreferenceInfoFormData?.secondMarriage || "",
       location: biodataFormData?.spousePreferenceInfoFormData?.location || "",
       qualities: biodataFormData?.spousePreferenceInfoFormData?.qualities || "",
+      blackSkinInterest:
+        biodataFormData?.spousePreferenceInfoFormData?.blackSkinInterest || "",
     },
   });
 
@@ -491,6 +494,41 @@ export default function SpousePreferenceInfo({
                         value={field.value}
                       >
                         {secondMarriageOptions.map((x) => (
+                          <div
+                            key={x.id}
+                            className="w-1/4 flex items-center space-x-2 mb-2"
+                          >
+                            <RadioGroupItem value={x.id} id={x.id} />
+                            <Label htmlFor={x.id}>{x.title}</Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          {biodataFormData?.primaryInfoFormData?.biodataType === "GROOM" && (
+            <FormField
+              control={form.control}
+              name="blackSkinInterest"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex flex-col space-y-2">
+                    <FormLabel className="text-md space-y-1 leading-4.5">
+                      আল্লাহ যাদেরকে গাঢ় ত্বক বা কালো বর্ণ দিয়েছেন, এরকম
+                      পাত্রীর প্রতি আপনি আগ্রহী?
+                    </FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        className="w-full flex flex-wrap gap-0"
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        {spouseBlackSkinInterestOptions.map((x) => (
                           <div
                             key={x.id}
                             className="w-1/4 flex items-center space-x-2 mb-2"

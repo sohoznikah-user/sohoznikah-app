@@ -42,7 +42,7 @@ export default function EducationInfo({
   const form = useForm<EducationInfoFormData>({
     resolver: zodResolver(educationInfoFormData),
     defaultValues: {
-      type: biodataFormData?.educationInfoFormData?.type || "",
+      type: biodataFormData?.educationInfoFormData?.type || [],
       highestDegree:
         biodataFormData?.educationInfoFormData?.highestDegree || "",
       degrees:
@@ -165,7 +165,7 @@ export default function EducationInfo({
                         }}
                       >
                         <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] m-0">
-                          <SelectValue placeholder="জাতীয়তা" />
+                          <SelectValue placeholder="শিক্ষার ধরণ" />
                         </SelectTrigger>
                         <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
                           {educationTypes.map((x) => (

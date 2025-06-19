@@ -200,10 +200,10 @@ export default function BiodataClient({
               <EducationAndOccupationInfo
                 biodata={biodata}
                 educationInfoFormData={
-                  biodata?.biodataFormData?.educationAndOccupationFormData
+                  biodata?.biodataFormData?.educationInfoFormData
                 }
                 occupationInfoFormData={
-                  biodata?.biodataFormData?.educationAndOccupationFormData
+                  biodata?.biodataFormData?.occupationInfoFormData
                 }
               />
             </div>
@@ -244,7 +244,7 @@ export default function BiodataClient({
               <SpousePreferenceInfo
                 biodata={biodata}
                 spousePreferenceInfoFormData={
-                  biodata?.biodataFormData?.spousePreferenceFormData
+                  biodata?.biodataFormData?.spousePreferenceInfoFormData
                 }
               />
             </div>

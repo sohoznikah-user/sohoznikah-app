@@ -106,7 +106,7 @@ export const addressInfoFormData = z.object({
         permanentHomeAddress: optionalString,
       })
       .superRefine((data, ctx) => {
-        if (data.type === "foregin" && !data.country) {
+        if (data.location === "foreign") {
           if (!data.country) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
@@ -127,7 +127,7 @@ export const addressInfoFormData = z.object({
 });
 
 export const educationInfoFormData = z.object({
-  type: requiredString.min(1, {
+  type: z.array(requiredString).min(1, {
     message: "শিক্ষার ধরন প্রদান করা আবশ্যক।",
   }),
   highestDegree: requiredString.min(1, {
@@ -333,7 +333,7 @@ export const spousePreferenceInfoFormData = z.object({
   maritalStatus: z.array(optionalString).optional(),
   specialCategory: z.array(optionalString).optional(),
   religiousType: z.array(optionalString).optional(),
-  occupation: z.array(optionalString).optional(),
+  occupation: z.string(optionalString).optional(),
   familyBackground: z.array(optionalString).optional(),
   secondMarriage: optionalString,
   location: requiredString.min(1, {

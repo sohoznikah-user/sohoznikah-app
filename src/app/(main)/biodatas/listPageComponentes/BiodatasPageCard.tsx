@@ -142,11 +142,7 @@ export default function BioCard(biodata: BiodatasPageCardProps) {
             <div className="flex justify-between  text-md">
               <span>জন্মসন:</span>
               <span>
-                {birthYear
-                  ? typeof birthYear === "string" && birthYear.length === 4
-                    ? birthYear
-                    : format(new Date(birthYear), "yyyy")
-                  : "--"}
+                {birthYear ? format(new Date(birthYear), "yyyy") : "--"}
               </span>
             </div>
             <div className="flex justify-between  text-md">
@@ -157,7 +153,7 @@ export default function BioCard(biodata: BiodatasPageCardProps) {
             </div>
             <div className="flex justify-between  text-md">
               <span>স্থায়ী ঠিকানা:</span>
-              <span>{getDistrictTitle(permanentAddress)}</span>
+              <span>{getDistrictTitle(permanentAddress || "--")}</span>
             </div>
             <div className="flex justify-between  text-md">
               <span>পেশা:</span>

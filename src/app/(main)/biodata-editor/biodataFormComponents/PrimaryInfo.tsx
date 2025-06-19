@@ -223,7 +223,7 @@ export default function PrimaryInfo({
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                       className="flex flex-col space-y-1"
                     >
                       <div className="flex items-center space-x-2">
@@ -241,7 +241,7 @@ export default function PrimaryInfo({
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value="other"
+                          value={field.value === "self" ? "other" : field.value}
                           id="other"
                           className="h-5 w-5 border-2 border-[#005889] text-[#005889] focus:ring-[#005889]"
                         />
@@ -249,7 +249,21 @@ export default function PrimaryInfo({
                           htmlFor="other"
                           className="text-md text-[#005889]"
                         >
-                          বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য
+                          <Input
+                            value={field.value === "self" ? "" : field.value}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              field.onChange(value || "self");
+                            }}
+                            onFocus={() => {
+                              if (field.value === "self") {
+                                field.onChange("");
+                              }
+                            }}
+                            type="text"
+                            placeholder="বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য"
+                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                          />
                         </label>
                       </div>
                     </RadioGroup>

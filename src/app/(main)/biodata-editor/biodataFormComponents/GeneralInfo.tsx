@@ -127,9 +127,9 @@ export default function GeneralInfo({
                           )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 border-none rounded-lg">
+                      <PopoverContent className="w-auto p-0 border-none rounded-lg bg-white">
                         <Calendar
-                          className="bg-gray-100 text-black border-gray-300 border rounded-lg"
+                          className="bg-white text-black border-gray-300 border rounded-lg"
                           classNames={{
                             day_selected: "bg-[#307DA7] text-white",
                             day_today:

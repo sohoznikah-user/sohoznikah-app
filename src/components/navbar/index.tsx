@@ -136,9 +136,12 @@ export function Navbar() {
                   Pending Approval
                 </button>
               ) : biodata?.status === "UPDATE_REQUESTED" ? (
-                <button className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg">
-                  Complete Update & Submit
-                </button>
+                <Link
+                  href="/biodata-editor"
+                  className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
+                >
+                  এডিট সম্পূর্ণ করে পাবলিশ করুন
+                </Link>
               ) : biodata?.status === "APPROVED" ? (
                 <Link
                   href="/biodatas/my-biodata"

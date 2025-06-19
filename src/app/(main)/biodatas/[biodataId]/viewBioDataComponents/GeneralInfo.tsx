@@ -11,6 +11,7 @@ import {
 import { GeneralInfoFormData } from "@/lib/types";
 import { getTitleById } from "@/utils/getBanglaTitle";
 import { IBiodata } from "@/utils/mapApiToBiodataFormData";
+import { format } from "date-fns";
 
 export default function GeneralInfo({
   biodata,
@@ -30,7 +31,9 @@ export default function GeneralInfo({
         <div className="flex items-center space-x-2">
           <div className="w-1/2">জন্ম তারিখ:</div>
           <div className="w-1/2 pl-2 border-l border-gray-200">
-            {generalInfoFormData?.dateOfBirth}
+            {generalInfoFormData?.dateOfBirth
+              ? format(new Date(generalInfoFormData?.dateOfBirth), "yyyy")
+              : "--"}
           </div>
         </div>
         <div className="flex items-center space-x-2">

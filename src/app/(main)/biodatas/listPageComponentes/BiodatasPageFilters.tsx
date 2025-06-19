@@ -233,8 +233,8 @@ export default function BiodatasPageFilters({
                 onRangeChange={(val: [number, number]) =>
                   handleSliderChange("height", val)
                 }
-                min={36}
-                max={84}
+                min={47}
+                max={85}
               />
               <FilterAccordion
                 value="গাত্রবর্ণ"

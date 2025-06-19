@@ -101,28 +101,7 @@ export default function AddressInfo({
   // Watch addresses.0.detail and append/update grown_up address
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
-      if (name === "addresses.0.detail" && value.addresses?.[0]?.detail) {
-        const detailValue = value.addresses[0].detail;
-        const grownUpIndex = fields.findIndex(
-          (field) => field.type === "grown_up"
-        );
-
-        const grownUpData = {
-          ...defaultAddress,
-          type: "grown_up",
-          detail: detailValue,
-        };
-
-        if (grownUpIndex >= 0) {
-          // Update existing grown_up address
-          update(grownUpIndex, grownUpData);
-        } else {
-          // Append new grown_up address
-          append(grownUpData);
-        }
-      }
-
-      // Sync form data to parent state
+      // Only sync form data to parent state, don't watch addresses.0.detail here
       const currentValues = biodataFormData?.addressInfoFormData;
       if (JSON.stringify(value) !== JSON.stringify(currentValues)) {
         setBiodataFormData(value as BiodataFormData);
@@ -138,6 +117,30 @@ export default function AddressInfo({
     setBiodataFormData,
     biodataFormData?.addressInfoFormData,
   ]);
+
+  // Handle grown_up address sync on blur
+  const handleGrownUpDetailBlur = () => {
+    const detailValue = form.getValues("addresses.0.detail");
+    if (detailValue) {
+      const grownUpIndex = fields.findIndex(
+        (field) => field.type === "grown_up"
+      );
+
+      const grownUpData = {
+        ...defaultAddress,
+        type: "grown_up",
+        detail: detailValue,
+      };
+
+      if (grownUpIndex >= 0) {
+        // Update existing grown_up address
+        update(grownUpIndex, grownUpData);
+      } else {
+        // Append new grown_up address
+        append(grownUpData);
+      }
+    }
+  };
 
   // Handle next button click
   const handleNextClick = async () => {
@@ -516,6 +519,7 @@ export default function AddressInfo({
                         className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                         type="text"
                         placeholder="(ছোটবেলা থেকে এখন পর্যন্ত কোথায় কোথায় থাকা হয়েছে তার সংক্ষিপ্ত বিবরণ দিন)"
+                        onBlur={handleGrownUpDetailBlur}
                       />
                     </FormControl>
                   </div>

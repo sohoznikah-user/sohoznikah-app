@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import { ages, heights } from "@/lib/consts";
 import { FilterState } from "@/redux/features/filter/filterSlice";
 
 interface FilterAccordionProps {
@@ -135,17 +136,35 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
     max: number
   ) => (
     <AccordionContent className="bg-white text-[#1f4f69] space-y-0.5 pt-1 pb-3 px-4 shadow-sm rounded-b-xl">
-      <div className="flex items-center space-x-2">
-        <div className="text-[#1f4f69]">{value[0]}</div>
+      <div className="flex flex-col items-center space-x-2 space-y-1">
+        <div className="flex justify-between w-full items-center space-x-2 mb-2">
+          <div className="text-[#1f4f69] flex-1 overflow-hidden">
+            {props.filterKey === "height"
+              ? heights?.find((x) => Number(x.id) === value[0])?.title ||
+                "৪ ফুটের কম"
+              : props.filterKey === "age"
+                ? ages?.find((x) => Number(x.id) === value[0])?.title ||
+                  "১৮ বছর"
+                : value[0]}
+          </div>
+          <div className="text-[#1f4f69] ">
+            {props.filterKey === "height"
+              ? heights?.find((x) => Number(x.id) === value[1])?.title ||
+                "৭ ফুটের বেশি"
+              : props.filterKey === "age"
+                ? ages?.find((x) => Number(x.id) === value[1])?.title ||
+                  "৭৫ বছর"
+                : value[1]}
+          </div>
+        </div>
         <Slider
           value={value}
           onValueChange={(val) => onChange(val)}
           min={min}
           max={max}
           step={1}
-          className="w-full"
+          className="w-full mb-2"
         />
-        <div className="text-[#1f4f69]">{value[1]}</div>
       </div>
     </AccordionContent>
   );

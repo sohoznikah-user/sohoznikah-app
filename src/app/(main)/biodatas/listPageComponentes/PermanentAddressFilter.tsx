@@ -81,7 +81,7 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
               permanent_address_type: "foreign",
               district: [],
               subdistrict: [],
-              all_countries: true,
+              all_countries: false,
             });
           }}
         >

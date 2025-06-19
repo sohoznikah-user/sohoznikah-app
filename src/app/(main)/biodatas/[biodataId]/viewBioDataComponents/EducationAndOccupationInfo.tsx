@@ -20,6 +20,7 @@ export default function EducationAndOccupationInfo({
   educationInfoFormData: EducationInfoFormData;
   occupationInfoFormData: OccupationInfoFormData;
 }) {
+  console.log({ educationInfoFormData, occupationInfoFormData });
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black max-w-full min-w-auto mx-auto">
       <CardHeader>
