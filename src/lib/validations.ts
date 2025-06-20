@@ -279,10 +279,7 @@ export const marriageInfoFormData = z.object({
       "যৌথ বা একক পরিবারে থাকার ব্যাপারে আপনি কোনটি পছন্দ করেন তা উল্লেখ করুন।",
   }),
   arrangeHijab: optionalString,
-  dowryExpectation: requiredString.min(1, {
-    message:
-      "বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক / উপহার / অর্থ আশা করবেন কিনা নির্বাচন করুন।",
-  }),
+  dowryExpectation: optionalString,
   allowShowingPhotoOnline: optionalString,
   additionalMarriageInfo: optionalString,
 });
@@ -333,7 +330,8 @@ export const spousePreferenceInfoFormData = z.object({
   maritalStatus: z.array(optionalString).optional(),
   specialCategory: z.array(optionalString).optional(),
   religiousType: z.array(optionalString).optional(),
-  occupation: z.string(optionalString).optional(),
+  occupation: z.array(optionalString).optional(),
+  blackSkinInterest: optionalString,
   familyBackground: z.array(optionalString).optional(),
   secondMarriage: optionalString,
   location: requiredString.min(1, {

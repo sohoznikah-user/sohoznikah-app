@@ -31,6 +31,7 @@ export function getDistrictTitle(value: string): string {
 }
 
 export function getUpazilaTitle(upazilaValue: string): string {
+  // console.log("getUpazilaTitle upazilaValue", upazilaValue);
   for (const district of Object.values(districtsAndUpazilas)) {
     const upazila = district.upazilas.find((u) => u.value === upazilaValue);
     if (upazila) {
@@ -38,4 +39,34 @@ export function getUpazilaTitle(upazilaValue: string): string {
     }
   }
   return upazilaValue;
+}
+
+export function getBanglaDistrictAndUpazila(
+  districtEn: string,
+  upazilaEn: string
+): string | null {
+  // Find the matching district entry
+  const matchedDistrict = Object.entries(districtsAndUpazilas).find(
+    ([_, district]) => district?.value === districtEn?.toLowerCase()?.trim()
+  );
+
+  if (!matchedDistrict) return "--";
+
+  const [districtBn, districtObj] = matchedDistrict;
+
+  // Find the matching upazila inside the district
+  const matchedUpazila = districtObj.upazilas.find(
+    (u) => u.value === upazilaEn?.toLowerCase()?.trim()
+  );
+
+  if (!matchedUpazila) return "--";
+
+  // Return both as comma-separated Bangla string
+  return `${districtBn}, ${matchedUpazila.title}`;
+}
+
+export function getBanglaLocation(location: string): string | null {
+  if (location === "bangladesh") return "বাংলাদেশ";
+  if (location === "foreign") return "বিদেশ";
+  if (location === "other") return "অন্যান্য";
 }

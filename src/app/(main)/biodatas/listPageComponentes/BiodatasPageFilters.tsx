@@ -16,7 +16,6 @@ import {
   occupationsList,
   religiousLifestyle,
   skinTones,
-  specialCatagories,
 } from "@/lib/consts";
 import { districtsAndUpazilas } from "@/lib/districtsAndUpazilas";
 import {
@@ -26,7 +25,7 @@ import {
 } from "@/redux/features/filter/filterSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
-import { searchingFilters } from "./biodataFilterOptions";
+import { beingSearchedFilters, searchingFilters } from "./biodataFilterOptions";
 import { Educationfilter } from "./Educationfilter";
 import { FilterAccordion } from "./FilterAccordian";
 import { PermanentAddressFilter } from "./PermanentAddressFilter"; // Import the new component
@@ -67,7 +66,42 @@ export default function BiodatasPageFilters({
     } else {
       updatedValues = currentValues.filter((item) => item !== value);
     }
-    dispatch(setFilterData({ [key]: updatedValues }));
+
+    // If this is a district change, we need to clear invalid subdistrict selections
+    if (key === "permanentState") {
+      const validSubdistricts = getFilteredSubdistricts(updatedValues).map(
+        (option) => option.originalValue
+      );
+      const currentSubdistricts = filters.permanentCity || [];
+      const validSubdistrictSelections = currentSubdistricts.filter(
+        (subdistrict) => validSubdistricts.includes(subdistrict)
+      );
+
+      dispatch(
+        setFilterData({
+          [key]: updatedValues,
+          permanentCity: validSubdistrictSelections,
+        })
+      );
+    } else if (key === "currentState") {
+      const validSubdistricts = getFilteredSubdistricts(updatedValues).map(
+        (option) => option.originalValue
+      );
+      const currentSubdistricts = filters.currentCity || [];
+      const validSubdistrictSelections = currentSubdistricts.filter(
+        (subdistrict) => validSubdistricts.includes(subdistrict)
+      );
+
+      dispatch(
+        setFilterData({
+          [key]: updatedValues,
+          currentCity: validSubdistrictSelections,
+        })
+      );
+    } else {
+      dispatch(setFilterData({ [key]: updatedValues }));
+    }
+
     onFilterChange();
   };
 
@@ -97,13 +131,42 @@ export default function BiodatasPageFilters({
     })
   );
 
-  const allSubdistricts = Object.values(districtsAndUpazilas).flatMap(
-    (district) => district.upazilas
+  // Filter subdistricts based on selected districts
+  const getFilteredSubdistricts = (selectedDistricts: string[]) => {
+    if (selectedDistricts.length === 0) {
+      // If no districts are selected, show all subdistricts
+      return Object.entries(districtsAndUpazilas).flatMap(
+        ([districtName, district]) =>
+          district.upazilas.map((upazila) => ({
+            id: `${district.value}-${upazila.value}`,
+            title: `${upazila.title} (${districtName})`,
+            originalValue: upazila.value,
+          }))
+      );
+    }
+
+    // Only show subdistricts from selected districts
+    return selectedDistricts.flatMap((districtValue) => {
+      const districtEntry = Object.entries(districtsAndUpazilas).find(
+        ([name, d]) => d.value === districtValue
+      );
+      if (!districtEntry) return [];
+
+      const [districtName, district] = districtEntry;
+      return district.upazilas.map((upazila) => ({
+        id: `${districtValue}-${upazila.value}`,
+        title: upazila.title,
+        originalValue: upazila.value,
+      }));
+    });
+  };
+
+  const permanentSubdistrictOptions = getFilteredSubdistricts(
+    filters.permanentState || []
   );
-  const subdistrictOptions = allSubdistricts.map((upazila) => ({
-    id: upazila.value,
-    title: upazila.title,
-  }));
+  const presentSubdistrictOptions = getFilteredSubdistricts(
+    filters.currentState || []
+  );
 
   // Permanent Address Filter
   const permanentAddressValue = {
@@ -259,7 +322,7 @@ export default function BiodatasPageFilters({
                     filterValue={permanentAddressValue}
                     onChange={handlePermanentAddressChange}
                     districtOptions={districtOptions}
-                    subdistrictOptions={subdistrictOptions}
+                    subdistrictOptions={permanentSubdistrictOptions}
                     handleCheckboxChange={handleCheckboxChange}
                   />
                 </AccordionContent>
@@ -279,7 +342,7 @@ export default function BiodatasPageFilters({
                     filterValue={presentAddressValue}
                     onChange={handlePresentAddressChange}
                     districtOptions={districtOptions}
-                    subdistrictOptions={subdistrictOptions}
+                    subdistrictOptions={presentSubdistrictOptions}
                     handleCheckboxChange={handleCheckboxChange}
                   />
                 </AccordionContent>
@@ -333,7 +396,7 @@ export default function BiodatasPageFilters({
                 value="মাজহাব/মানহাজ"
                 title="মাজহাব/মানহাজ"
                 contentType="checkbox"
-                filterKey="madhhab"
+                filterKey="madhab"
                 options={madhhabs}
                 selectedFilters={filters}
                 handleCheckboxChange={handleCheckboxChange}
@@ -352,7 +415,10 @@ export default function BiodatasPageFilters({
                 title="বিশেষ ক্যাটাগরি"
                 contentType="checkbox"
                 filterKey="specialCategory"
-                options={searchingFilters.specialCategory}
+                options={searchingFilters.specialCategory.filter(
+                  (item) =>
+                    item.for === filters.biodataType || item.for === "both"
+                )}
                 selectedFilters={filters}
                 handleCheckboxChange={handleCheckboxChange}
               />
@@ -373,7 +439,7 @@ export default function BiodatasPageFilters({
                 title="বিশেষ ক্যাটাগরি"
                 contentType="checkbox"
                 filterKey="mySpecialCategory"
-                options={specialCatagories.filter(
+                options={beingSearchedFilters.specialCategory.filter(
                   (item) =>
                     item.for === filters.myBiodataType || item.for === "both"
                 )}
@@ -391,7 +457,7 @@ export default function BiodatasPageFilters({
             onReset();
           }}
         >
-          ফিল্টার রিসেট
+          রিসেট ফিল্টার
         </button>
       </form>
     </div>

@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AddressInfoFormData } from "@/lib/types";
+import { getBanglaDistrictAndUpazila } from "@/utils/getBanglaTitle";
 import { IBiodata } from "@/utils/mapApiToBiodataFormData";
 import { ArrowRight } from "lucide-react";
 
@@ -29,8 +30,9 @@ export default function AddressInfo({
                 {addr?.location === "bangladesh" &&
                   addr?.type === "permanent_address" && (
                     <li className="flex justify-start items-center gap-3">
-                      <ArrowRight size={19} /> {addr?.permanentHomeAddress},{" "}
-                      {addr?.city}, {addr?.state}
+                      <ArrowRight size={19} />{" "}
+                      {addr?.permanentHomeAddress || ""},{" "}
+                      {getBanglaDistrictAndUpazila(addr?.state, addr?.city)},
                     </li>
                   )}
                 {addr?.location === "foreign" &&
@@ -53,7 +55,7 @@ export default function AddressInfo({
                   addr?.type === "current_address" && (
                     <li className="flex justify-start items-center gap-3">
                       <ArrowRight size={19} /> {addr?.permanentHomeAddress},{" "}
-                      {addr?.city}, {addr?.state}
+                      {getBanglaDistrictAndUpazila(addr?.state, addr?.city)},
                     </li>
                   )}
                 {addr?.location === "foreign" &&

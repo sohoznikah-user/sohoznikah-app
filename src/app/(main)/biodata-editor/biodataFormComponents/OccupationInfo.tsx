@@ -26,6 +26,7 @@ import { occupationInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function OccupationInfo({
   biodataFormData,
@@ -63,6 +64,7 @@ export default function OccupationInfo({
     if (isValid) {
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof OccupationInfoFormData
       );

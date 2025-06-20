@@ -417,6 +417,10 @@ export const mapApiToBiodataFormData = (apiData: any): Record<string, any> => {
         apiData?.spousePreferenceInfoFormData?.[0]?.qualities ||
         apiData?.spousePreferenceInfoFormData?.qualities ||
         "",
+      blackSkinInterest:
+        apiData?.spousePreferenceInfoFormData?.[0]?.blackSkinInterest ||
+        apiData?.spousePreferenceInfoFormData?.blackSkinInterest ||
+        "",
     },
     profilePicFormData: {
       photoId: apiData?.profilePicFormData || "",

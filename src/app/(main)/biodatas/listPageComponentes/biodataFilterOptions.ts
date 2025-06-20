@@ -2,13 +2,32 @@
 
 export const searchingFilters = {
   specialCategory: [
-    { id: "bcs_cadre", title: "বিসিএস ক্যাডার", for: "both" },
     { id: "expatriate", title: "প্রবাসী", for: "both" },
+    /* address info */
     {
       id: "foreign_citizen",
       title: "ফরেইন সিটিজেন",
       for: "both",
     },
+    /* --------- */
+    { id: "bcs_cadre", title: "বিসিএস ক্যাডার", for: "both" },
+    {
+      id: "employed_BRIDE",
+      title: "চাকরিজীবী",
+      for: "BRIDE",
+    },
+    /* marrige info */
+    {
+      id: "post_marriage_job",
+      title: "বিয়ের পর চাকরি/ব্যাবসায় আগ্রহী",
+      for: "BRIDE",
+    },
+    {
+      id: "post_marriage_study",
+      title: "বিয়ের পর পড়াশোনা চালিয়ে যেতে আগ্রহী",
+      for: "BRIDE",
+    },
+    /* ----------- */
     {
       id: "social_worker",
       title: "সমাজ সেবক",
@@ -37,15 +56,22 @@ export const searchingFilters = {
       title: "শর্ট ডিভোর্সি",
       for: "both",
     },
+    /* spouse-preference-info */
+    {
+      id: "masna_interest",
+      title: "মাসনায় আগ্রহী",
+      for: "BRIDE",
+    },
+    /* ------------ */
     {
       id: "single_father",
       title: "সিঙ্গেল ফাদার",
-      for: "male",
+      for: "GROOM",
     },
     {
       id: "single_mother",
       title: "সিঙ্গেল মাদার",
-      for: "female",
+      for: "BRIDE",
     },
     {
       id: "short_height",
@@ -63,30 +89,16 @@ export const searchingFilters = {
       title: "গ্রামে বসবাসকারী",
       for: "both",
     },
+    /* marriage info */
     {
       id: "allow_wife_job",
       title: "স্ত্রীকে চাকরি/ব্যবসা করতে দিবে",
-      for: "male",
+      for: "GROOM",
     },
     {
       id: "allow_wife_study",
       title: "স্ত্রীকে পড়াশোনা করতে দিবে",
-      for: "male",
-    },
-    {
-      id: "employed_female",
-      title: "চাকরিজীবী",
-      for: "female",
-    },
-    {
-      id: "job_interest_post_marriage",
-      title: "বিয়ের পর চাকরি/ব্যাবসায় আগ্রহী",
-      for: "female",
-    },
-    {
-      id: "masna_interest",
-      title: "মাসনায় আগ্রহী",
-      for: "female",
+      for: "GROOM",
     },
   ],
 };
@@ -109,34 +121,34 @@ export const beingSearchedFilters = {
       for: "both",
     },
     {
-      id: "widowed_male",
+      id: "widowed_GROOM",
       title: "আমি বিপত্নীক",
-      for: "BRIDE",
+      for: "GROOM",
     },
     {
-      id: "widowed_female",
+      id: "widowed_BRIDE",
       title: "আমি বিধবা",
-      for: "GROOM",
+      for: "BRIDE",
     },
     {
       id: "single_father",
       title: "আমি সিঙ্গেল ফাদার (সন্তান আছে কিন্তু মা নেই বা দায়িত্বে নেই)",
-      for: "BRIDE",
+      for: "GROOM",
     },
     {
       id: "single_mother",
       title: "আমি সিঙ্গেল মাদার (সন্তান আছে কিন্তু বাবা নেই বা দায়িত্বে নেই)",
-      for: "GROOM",
-    },
-    {
-      id: "second_marriage_male",
-      title: "আমি মাসনা বা দ্বিতীয় বিবাহে আগ্রহী",
       for: "BRIDE",
     },
     {
-      id: "second_marriage_female",
-      title: "আমি দ্বিতীয় স্ত্রী বা মাসনা হতে আগ্রহী",
+      id: "second_marriage_GROOM",
+      title: "আমি মাসনা বা দ্বিতীয় বিবাহে আগ্রহী",
       for: "GROOM",
+    },
+    {
+      id: "second_marriage_BRIDE",
+      title: "আমি দ্বিতীয় স্ত্রী বা মাসনা হতে আগ্রহী",
+      for: "BRIDE",
     },
     {
       id: "short_height",
@@ -156,7 +168,7 @@ export const beingSearchedFilters = {
     {
       id: "dark_complexion",
       title: "আমার গায়ের বর্ণ গাঢ়",
-      for: "GROOM",
+      for: "BRIDE",
     },
     {
       id: "infertility",
@@ -192,17 +204,17 @@ export const beingSearchedFilters = {
     {
       id: "employed",
       title: "আমি একজন চাকরিজীবী",
-      for: "both",
+      for: "BRIDE",
     },
     {
       id: "post_marriage_job",
       title: "আমি বিয়ের পর চাকরি / ব্যাবসায় আগ্রহী",
-      for: "both",
+      for: "BRIDE",
     },
     {
       id: "post_marriage_study",
       title: "আমি বিয়ের পর পড়াশোনা করতে আগ্রহী",
-      for: "both",
+      for: "BRIDE",
     },
   ],
 };

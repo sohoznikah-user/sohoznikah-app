@@ -28,7 +28,7 @@ export default function BiodatasPageSearchByBiodataNo({
   // Initialize from initialSearchTerm
   useEffect(() => {
     if (initialSearchTerm) {
-      const [prefix, no] = initialSearchTerm.split("-");
+      const [prefix, no] = initialSearchTerm?.split("-");
       if (prefix && no) {
         setGender(prefix === "M" ? "male" : prefix === "F" ? "female" : "");
         setBiodataNo(no);

@@ -62,7 +62,7 @@ export default function SpousePreferenceInfo({
       religiousType:
         biodataFormData?.spousePreferenceInfoFormData?.religiousType || [],
       occupation:
-        biodataFormData?.spousePreferenceInfoFormData?.occupation || "",
+        biodataFormData?.spousePreferenceInfoFormData?.occupation || [],
       familyBackground:
         biodataFormData?.spousePreferenceInfoFormData?.familyBackground || [],
       secondMarriage:

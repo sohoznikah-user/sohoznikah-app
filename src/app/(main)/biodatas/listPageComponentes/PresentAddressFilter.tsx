@@ -1,3 +1,8 @@
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { FilterState } from "@/redux/features/filter/filterSlice";
@@ -18,7 +23,7 @@ interface PresentAddressFilterProps {
     all_countries?: boolean;
   }) => void;
   districtOptions: { id: string; title: string }[];
-  subdistrictOptions: { id: string; title: string }[];
+  subdistrictOptions: { id: string; title: string; originalValue: string }[];
   handleCheckboxChange: (
     key: keyof FilterState,
     value: string,
@@ -46,6 +51,20 @@ export const PresentAddressFilter: React.FC<PresentAddressFilterProps> = ({
       subdistrict: [],
       all_countries: checked,
     });
+  };
+
+  const handleSubdistrictChange = (
+    key: keyof FilterState,
+    value: string,
+    checked: boolean
+  ) => {
+    // Find the original value from the subdistrict options
+    const subdistrictOption = subdistrictOptions.find(
+      (option) => option.id === value
+    );
+    if (subdistrictOption) {
+      handleCheckboxChange(key, subdistrictOption.originalValue, checked);
+    }
   };
 
   return (
@@ -101,15 +120,51 @@ export const PresentAddressFilter: React.FC<PresentAddressFilterProps> = ({
             handleCheckboxChange={handleCheckboxChange}
           />
 
-          <FilterAccordion
+          <AccordionItem
+            className="border border-gray-300 rounded-xl text-md px-4"
             value="উপজেলা"
-            title="উপজেলা"
-            contentType="checkbox"
-            filterKey="currentCity"
-            options={subdistrictOptions}
-            selectedFilters={filters}
-            handleCheckboxChange={handleCheckboxChange}
-          />
+          >
+            <AccordionTrigger className="hover:no-underline text-md text-[#1f4f69]">
+              উপজেলা
+            </AccordionTrigger>
+            <AccordionContent className="bg-white text-[#1f4f69] space-y-2 pt-1 pb-3 px-4 shadow-sm rounded-b-xl">
+              {subdistrictOptions.length === 0 ? (
+                <div className="text-sm text-gray-500 text-center py-2">
+                  প্রথমে জেলা নির্বাচন করুন
+                </div>
+              ) : (
+                subdistrictOptions.map((option) => (
+                  <div
+                    key={`currentCity-${option.id}`}
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
+                    <Checkbox
+                      id={`currentCity-${option.id}`}
+                      checked={
+                        (filters.currentCity as string[])?.includes(
+                          option.originalValue
+                        ) || false
+                      }
+                      onCheckedChange={(checked) =>
+                        handleSubdistrictChange(
+                          "currentCity",
+                          option.id,
+                          checked as boolean
+                        )
+                      }
+                      className="text-md font-semibold cursor-pointer"
+                    />
+                    <Label
+                      className="text-md cursor-pointer"
+                      htmlFor={`currentCity-${option.id}`}
+                    >
+                      {option.title}
+                    </Label>
+                  </div>
+                ))
+              )}
+            </AccordionContent>
+          </AccordionItem>
         </div>
       )}
 

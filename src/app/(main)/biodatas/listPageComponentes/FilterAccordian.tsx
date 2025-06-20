@@ -82,9 +82,19 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
         onValueChange={(value) => handleRadioChange(key, value)}
       >
         {options.map((option) => (
-          <div key={option.id} className="flex items-center space-x-2">
-            <RadioGroupItem value={option.id} id={`${key}-${option.id}`} />
-            <Label htmlFor={`${key}-${option.id}`} className="text-md">
+          <div
+            key={option.id}
+            className="flex items-center space-x-2 cursor-pointer"
+          >
+            <RadioGroupItem
+              value={option.id}
+              id={`${key}-${option.id}`}
+              className="cursor-pointer"
+            />
+            <Label
+              htmlFor={`${key}-${option.id}`}
+              className="text-md cursor-pointer"
+            >
               {option.title}
             </Label>
           </div>
@@ -107,7 +117,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
       {options.map((option) => (
         <div
           key={`${key}-${option.id}`}
-          className="flex items-center space-x-2"
+          className="flex items-center space-x-2 cursor-pointer"
         >
           <Checkbox
             id={`${key}-${option.id}`}
@@ -117,9 +127,12 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
             onCheckedChange={(checked) =>
               handleCheckboxChange(key, option.id, checked as boolean)
             }
-            className="text-md font-semibold"
+            className="text-md font-semibold cursor-pointer"
           />
-          <Label className="text-md" htmlFor={`${key}-${option.id}`}>
+          <Label
+            className="text-md cursor-pointer"
+            htmlFor={`${key}-${option.id}`}
+          >
             {option.title}
           </Label>
         </div>
@@ -163,7 +176,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
           min={min}
           max={max}
           step={1}
-          className="w-full mb-2"
+          className="w-full mb-2 cursor-pointer"
         />
       </div>
     </AccordionContent>
@@ -174,7 +187,7 @@ export const FilterAccordion = (props: FilterAccordionProps) => {
       className={`${className ? className : "border border-gray-300"} rounded-xl px-4 max-h-60 overflow-y-auto`}
       value={value}
     >
-      <AccordionTrigger className="hover:no-underline text-[#1f4f69] text-md">
+      <AccordionTrigger className="hover:no-underline text-[#1f4f69] text-md cursor-pointer">
         {title}
       </AccordionTrigger>
       {contentType === "radio" &&

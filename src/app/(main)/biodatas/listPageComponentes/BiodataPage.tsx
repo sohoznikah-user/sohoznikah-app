@@ -47,7 +47,7 @@ const BiodataPage = () => {
       "specialCategory",
       "mySpecialCategory",
       "myMaritalStatus",
-      "madhhab",
+      "madhab",
 
       "permanentState",
       "permanentCity",
@@ -157,7 +157,7 @@ const BiodataPage = () => {
         case "permanentDistrict":
         case "currentDistrict":
         case "religiousLifestyle":
-          filterData[key] = value.split(",").filter((v) => v !== "");
+          filterData[key] = value?.split(",").filter((v) => v !== "");
           break;
 
         // STRING‐TYPE FILTERS: assign directly

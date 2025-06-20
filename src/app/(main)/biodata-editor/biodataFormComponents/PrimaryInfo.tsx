@@ -31,6 +31,7 @@ import { debounce } from "lodash";
 import { Minus, Plus } from "lucide-react";
 import { useCallback, useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function PrimaryInfo({
   biodataFormData,
@@ -162,14 +163,14 @@ export default function PrimaryInfo({
   const handleNextClick = useCallback(async () => {
     const isValid = await form.trigger();
     if (isValid) {
-      const values = form.getValues();
-      console.log("Form values before save:", values); // Debug form values
+      // const values = form.getValues();
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       const firstErrorField = Object.keys(
         form.formState.errors
       )[0] as keyof PrimaryInfoFormData;
-      console.log("Form errors:", form.formState.errors); // Debug errors
+      // console.log("Form errors:", form.formState.errors); // Debug errors
       form.setFocus(firstErrorField);
     }
   }, [form, handleSave]);

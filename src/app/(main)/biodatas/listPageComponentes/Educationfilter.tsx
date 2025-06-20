@@ -72,7 +72,9 @@ export const Educationfilter: React.FC<EducationfilterProps> = ({
             title="দ্বীনি যোগ্যতা"
             contentType="checkbox"
             filterKey="religiousEducation"
-            options={religiousEducation}
+            options={religiousEducation?.filter(
+              (item) => item.for === filters.biodataType || item.for === "both"
+            )}
             selectedFilters={filters}
             handleCheckboxChange={handleCheckboxChange}
           />

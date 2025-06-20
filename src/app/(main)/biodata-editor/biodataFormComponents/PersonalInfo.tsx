@@ -24,6 +24,7 @@ import { personalInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function PersonalInfo({
   biodataFormData,
@@ -78,6 +79,7 @@ export default function PersonalInfo({
     if (isValid) {
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof PersonalInfoFormData
       );
@@ -96,7 +98,8 @@ export default function PersonalInfo({
               <FormItem>
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
-                    {biodataFormData?.primaryInfoFormData?.biodataType === "1"
+                    {biodataFormData?.primaryInfoFormData?.biodataType ===
+                    "GROOM"
                       ? "আপনি দাড়ি রেখেছেন কি?"
                       : "আপনার কি দাড়ি পছন্দ?"}
                   </FormLabel>
@@ -104,7 +107,12 @@ export default function PersonalInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      placeholder="দাড়ি রেখেছেন কি?"
+                      placeholder={
+                        biodataFormData?.primaryInfoFormData?.biodataType ===
+                        "GROOM"
+                          ? "আপনি দাড়ি রেখেছেন কি?"
+                          : "আপনার কি দাড়ি পছন্দ?"
+                      }
                     />
                   </FormControl>
                 </div>

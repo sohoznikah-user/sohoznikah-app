@@ -163,7 +163,6 @@ export const madhhabs = [
   { id: "maliki", title: "মালিকী", for: "both" },
   { id: "hambali", title: "হাম্বলি", for: "both" },
   { id: "other_madhhab", title: "অন্যান্য", for: "both" },
-  { id: "unknown_madhhab", title: "জানা নেই", for: "both" },
 ];
 
 export const education = [
@@ -256,6 +255,11 @@ export const specialCatagories = [
     id: "religious_service",
     title: "আমি দ্বীনের খেদমতে আছি",
     for: "both",
+  },
+  {
+    id: "employed_BRIDE",
+    title: "আমি একজন চাকরিজীবী",
+    for: "BRIDE",
   },
   { id: "new_muslim", title: "আমি একজন নওমুসলিম", for: "both" },
   { id: "disabled", title: "আমি প্রতিবন্ধী", for: "both" },

@@ -15,7 +15,10 @@ import {
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
-import { getDistrictTitle, getTitleById } from "@/utils/getBanglaTitle";
+import {
+  getBanglaDistrictAndUpazila,
+  getTitleById,
+} from "@/utils/getBanglaTitle";
 import { format } from "date-fns";
 import { Heart } from "lucide-react";
 import Image from "next/image";
@@ -153,7 +156,16 @@ export default function BioCard(biodata: BiodatasPageCardProps) {
             </div>
             <div className="flex justify-between  text-md">
               <span>স্থায়ী ঠিকানা:</span>
-              <span>{getDistrictTitle(permanentAddress || "--")}</span>
+              <span>
+                {permanentAddress === "foreign" ? (
+                  "বিদেশ"
+                ) : (
+                  <>{`${getBanglaDistrictAndUpazila(
+                    permanentAddress?.split(",")[0],
+                    permanentAddress?.split(",")[1]
+                  )}`}</>
+                )}
+              </span>
             </div>
             <div className="flex justify-between  text-md">
               <span>পেশা:</span>
