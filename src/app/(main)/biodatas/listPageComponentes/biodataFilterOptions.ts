@@ -12,18 +12,18 @@ export const searchingFilters = {
     /* --------- */
     { id: "bcs_cadre", title: "বিসিএস ক্যাডার", for: "both" },
     {
-      id: "employed_BRIDE",
+      id: "employed",
       title: "চাকরিজীবী",
       for: "BRIDE",
     },
     /* marrige info */
     {
-      id: "post_marriage_job",
+      id: "careerPlan",
       title: "বিয়ের পর চাকরি/ব্যাবসায় আগ্রহী",
       for: "BRIDE",
     },
     {
-      id: "post_marriage_study",
+      id: "continueStudy",
       title: "বিয়ের পর পড়াশোনা চালিয়ে যেতে আগ্রহী",
       for: "BRIDE",
     },
@@ -91,12 +91,12 @@ export const searchingFilters = {
     },
     /* marriage info */
     {
-      id: "allow_wife_job",
+      id: "careerPlan",
       title: "স্ত্রীকে চাকরি/ব্যবসা করতে দিবে",
       for: "GROOM",
     },
     {
-      id: "allow_wife_study",
+      id: "continueStudy",
       title: "স্ত্রীকে পড়াশোনা করতে দিবে",
       for: "GROOM",
     },
@@ -161,17 +161,17 @@ export const beingSearchedFilters = {
       for: "both",
     },
     {
-      id: "village_resident",
+      id: "rural_resident",
       title: "আমি গ্রামে বসবাসকারী",
       for: "both",
     },
     {
-      id: "dark_complexion",
+      id: "blackSkinInterest",
       title: "আমার গায়ের বর্ণ গাঢ়",
       for: "BRIDE",
     },
     {
-      id: "infertility",
+      id: "infertility_issues",
       title: "আমি বন্ধ্যাত্ব সমস্যায় ভুগছি",
       for: "both",
     },
@@ -192,7 +192,7 @@ export const beingSearchedFilters = {
       for: "both",
     },
     {
-      id: "tabligh",
+      id: "tabligh_member",
       title: "আমি তাবলীগ এর সাথে যুক্ত",
       for: "both",
     },
@@ -207,12 +207,12 @@ export const beingSearchedFilters = {
       for: "BRIDE",
     },
     {
-      id: "post_marriage_job",
+      id: "careerPlan",
       title: "আমি বিয়ের পর চাকরি / ব্যাবসায় আগ্রহী",
       for: "BRIDE",
     },
     {
-      id: "post_marriage_study",
+      id: "continueStudy",
       title: "আমি বিয়ের পর পড়াশোনা করতে আগ্রহী",
       for: "BRIDE",
     },

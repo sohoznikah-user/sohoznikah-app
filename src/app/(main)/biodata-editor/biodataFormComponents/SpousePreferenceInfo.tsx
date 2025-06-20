@@ -62,7 +62,7 @@ export default function SpousePreferenceInfo({
       religiousType:
         biodataFormData?.spousePreferenceInfoFormData?.religiousType || [],
       occupation:
-        biodataFormData?.spousePreferenceInfoFormData?.occupation || [],
+        biodataFormData?.spousePreferenceInfoFormData?.occupation || "",
       familyBackground:
         biodataFormData?.spousePreferenceInfoFormData?.familyBackground || [],
       secondMarriage:
@@ -104,6 +104,7 @@ export default function SpousePreferenceInfo({
       );
     }
   };
+
   return (
     <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">

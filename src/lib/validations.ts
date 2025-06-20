@@ -330,7 +330,7 @@ export const spousePreferenceInfoFormData = z.object({
   maritalStatus: z.array(optionalString).optional(),
   specialCategory: z.array(optionalString).optional(),
   religiousType: z.array(optionalString).optional(),
-  occupation: z.array(optionalString).optional(),
+  occupation: optionalString,
   blackSkinInterest: optionalString,
   familyBackground: z.array(optionalString).optional(),
   secondMarriage: optionalString,
