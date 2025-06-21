@@ -16,6 +16,7 @@ import {
 import { BiodataFormData } from "@/lib/types";
 import { getDistrictTitle, getTitleById } from "@/utils/getBanglaTitle";
 import { IBiodata } from "@/utils/mapApiToBiodataFormData";
+import { format } from "date-fns";
 
 export default function HeaderShortBio({
   biodata,
@@ -60,7 +61,11 @@ export default function HeaderShortBio({
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>জন্মসন</div>
-            <div>{generalInfoFormData?.dateOfBirth}</div>
+            <div>
+              {generalInfoFormData?.dateOfBirth
+                ? format(new Date(generalInfoFormData?.dateOfBirth), "yyyy")
+                : "--"}
+            </div>
           </div>
           <div className="flex justify-between text-sm pb-2 border-b border-gray-100">
             <div>উচ্চতা</div>

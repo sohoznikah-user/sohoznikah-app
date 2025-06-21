@@ -13,24 +13,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   familyBackgrounds,
-  heights,
-  maritalStatuses,
-  occupationsList,
-  religiousEducation,
   religiousLifestyle,
   secondMarriageOptions,
   skinTones,
+  spouseBlackSkinInterestOptions,
   spouseLocationOptions,
+  spouseMaritalStatuses,
+  spouseReligiousEducation,
   spouseSpecialCatagories,
 } from "@/lib/consts";
 import {
@@ -70,13 +62,15 @@ export default function SpousePreferenceInfo({
       religiousType:
         biodataFormData?.spousePreferenceInfoFormData?.religiousType || [],
       occupation:
-        biodataFormData?.spousePreferenceInfoFormData?.occupation || [],
+        biodataFormData?.spousePreferenceInfoFormData?.occupation || "",
       familyBackground:
         biodataFormData?.spousePreferenceInfoFormData?.familyBackground || [],
       secondMarriage:
         biodataFormData?.spousePreferenceInfoFormData?.secondMarriage || "",
       location: biodataFormData?.spousePreferenceInfoFormData?.location || "",
       qualities: biodataFormData?.spousePreferenceInfoFormData?.qualities || "",
+      blackSkinInterest:
+        biodataFormData?.spousePreferenceInfoFormData?.blackSkinInterest || "",
     },
   });
 
@@ -110,6 +104,7 @@ export default function SpousePreferenceInfo({
       );
     }
   };
+
   return (
     <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">
@@ -130,6 +125,7 @@ export default function SpousePreferenceInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="বয়স"
                     />
                   </FormControl>
                 </div>
@@ -144,7 +140,7 @@ export default function SpousePreferenceInfo({
               <FormItem>
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
-                    কাঙ্খিত গাত্রবর্ণ:
+                    গাত্রবর্ণ:
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
@@ -185,22 +181,11 @@ export default function SpousePreferenceInfo({
                     উচ্চতা:
                   </FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889]">
-                        <SelectValue placeholder="উচ্চতা" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#f6f6f6] text-[#005889] border-none">
-                        {heights.map((x) => (
-                          <SelectItem
-                            key={x.id}
-                            className="focus:bg-transparent focus:text-[#E25A6F] p-2"
-                            value={x.id}
-                          >
-                            {x.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      {...field}
+                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="উচ্চতা"
+                    />
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -220,6 +205,7 @@ export default function SpousePreferenceInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="শিক্ষাগত যোগ্যতা"
                     />
                   </FormControl>
                 </div>
@@ -238,25 +224,32 @@ export default function SpousePreferenceInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {religiousEducation.map((x) => (
-                        <div
-                          key={x.id}
-                          className="w-1/3 flex items-center space-x-2 mb-4"
-                        >
-                          <Checkbox
-                            id={x.id}
-                            checked={field.value.includes(x.id)}
-                            onCheckedChange={(checked) => {
-                              const updatedOccupations = checked
-                                ? [...field.value, x.id]
-                                : field.value.filter((id) => id !== x.id);
+                      {spouseReligiousEducation
+                        .filter(
+                          (x) =>
+                            x.for ===
+                              biodataFormData?.primaryInfoFormData
+                                ?.biodataType || x.for === "both"
+                        )
+                        .map((x) => (
+                          <div
+                            key={x.id}
+                            className="w-1/3 flex items-center space-x-2 mb-4"
+                          >
+                            <Checkbox
+                              id={x.id}
+                              checked={field.value.includes(x.id)}
+                              onCheckedChange={(checked) => {
+                                const updatedOccupations = checked
+                                  ? [...field.value, x.id]
+                                  : field.value.filter((id) => id !== x.id);
 
-                              field.onChange(updatedOccupations);
-                            }}
-                          />
-                          <Label htmlFor={x.id}>{x.title}</Label>
-                        </div>
-                      ))}
+                                field.onChange(updatedOccupations);
+                              }}
+                            />
+                            <Label htmlFor={x.id}>{x.title}</Label>
+                          </div>
+                        ))}
                     </div>
                   </FormControl>
                 </div>
@@ -278,6 +271,7 @@ export default function SpousePreferenceInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="ঠিকানা"
                     />
                   </FormControl>
                 </div>
@@ -297,25 +291,32 @@ export default function SpousePreferenceInfo({
                   </FormLabel>
                   <FormControl>
                     <div className="w-full flex flex-wrap">
-                      {maritalStatuses.map((x) => (
-                        <div
-                          key={x.id}
-                          className="w-1/3 flex items-center space-x-2 mb-4"
-                        >
-                          <Checkbox
-                            id={x.id}
-                            checked={field.value.includes(x.id)}
-                            onCheckedChange={(checked) => {
-                              const updatedOccupations = checked
-                                ? [...field.value, x.id]
-                                : field.value.filter((id) => id !== x.id);
+                      {spouseMaritalStatuses
+                        .filter(
+                          (x) =>
+                            x.for ===
+                              biodataFormData?.primaryInfoFormData
+                                ?.biodataType || x.for === "both"
+                        )
+                        .map((x) => (
+                          <div
+                            key={x.id}
+                            className="w-1/3 flex items-center space-x-2 mb-4"
+                          >
+                            <Checkbox
+                              id={x.id}
+                              checked={field.value.includes(x.id)}
+                              onCheckedChange={(checked) => {
+                                const updatedOccupations = checked
+                                  ? [...field.value, x.id]
+                                  : field.value.filter((id) => id !== x.id);
 
-                              field.onChange(updatedOccupations);
-                            }}
-                          />
-                          <Label htmlFor={x.id}>{x.title}</Label>
-                        </div>
-                      ))}
+                                field.onChange(updatedOccupations);
+                              }}
+                            />
+                            <Label htmlFor={x.id}>{x.title}</Label>
+                          </div>
+                        ))}
                     </div>
                   </FormControl>
                 </div>
@@ -407,7 +408,7 @@ export default function SpousePreferenceInfo({
                     পেশা:
                   </FormLabel>
                   <FormControl>
-                    <div className="w-full flex flex-wrap">
+                    {/* <div className="w-full flex flex-wrap">
                       {occupationsList.map((x) => (
                         <div
                           key={x.id}
@@ -427,7 +428,12 @@ export default function SpousePreferenceInfo({
                           <Label htmlFor={x.id}>{x.title}</Label>
                         </div>
                       ))}
-                    </div>
+                    </div> */}
+                    <Input
+                      {...field}
+                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="পেশা"
+                    />
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -471,7 +477,7 @@ export default function SpousePreferenceInfo({
               </FormItem>
             )}
           />
-          {biodataFormData?.primaryInfoFormData?.biodataType === "GROOM" && (
+          {biodataFormData?.primaryInfoFormData?.biodataType === "BRIDE" && (
             <FormField
               control={form.control}
               name="secondMarriage"
@@ -489,6 +495,41 @@ export default function SpousePreferenceInfo({
                         value={field.value}
                       >
                         {secondMarriageOptions.map((x) => (
+                          <div
+                            key={x.id}
+                            className="w-1/4 flex items-center space-x-2 mb-2"
+                          >
+                            <RadioGroupItem value={x.id} id={x.id} />
+                            <Label htmlFor={x.id}>{x.title}</Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          {biodataFormData?.primaryInfoFormData?.biodataType === "GROOM" && (
+            <FormField
+              control={form.control}
+              name="blackSkinInterest"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex flex-col space-y-2">
+                    <FormLabel className="text-md space-y-1 leading-4.5">
+                      আল্লাহ যাদেরকে গাঢ় ত্বক বা কালো বর্ণ দিয়েছেন, এরকম
+                      পাত্রীর প্রতি আপনি আগ্রহী?
+                    </FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        className="w-full flex flex-wrap gap-0"
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        {spouseBlackSkinInterestOptions.map((x) => (
                           <div
                             key={x.id}
                             className="w-1/4 flex items-center space-x-2 mb-2"
@@ -546,7 +587,7 @@ export default function SpousePreferenceInfo({
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     <div>জীবনসঙ্গীর যে বৈশিষ্ট্য বা গুণাবলী আশা করেন:</div>
-                    <div className="text-xs">
+                    <div className="text-sm">
                       (অর্থাৎ কাঙ্খিত জীবনসঙ্গীর স্বভাব, দ্বীনদারিতা, চারিত্রীক
                       গুণাবলী কেমন আশা করেন। বিশেষ কোনো কার্যক্রম বা চাওয়া থাকলে
                       জানাতে পারেন।)
@@ -556,6 +597,7 @@ export default function SpousePreferenceInfo({
                     <Textarea
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="বিস্তারিত লিখুন"
                     />
                   </FormControl>
                 </div>

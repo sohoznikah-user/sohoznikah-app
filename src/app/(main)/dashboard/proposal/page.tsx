@@ -1,5 +1,7 @@
 "use client";
 
+import DashboardTitle from "@/components/shared/DashboardTitle";
+import ReusableMobileCard from "@/components/shared/ReusableMobileCard";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
 import { proposalStatusOptions } from "@/lib/consts";
@@ -246,9 +248,7 @@ const ProposalPage = () => {
   return (
     <div className="min-h-[500px] flex justify-center items-center lg:p-5 mb-10">
       <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
-          প্রাথমিক প্রস্তাবের তালিকা
-        </h1>
+        <DashboardTitle title="প্রাথমিক প্রস্তাবের তালিকা" />
         {/* <div className="flex justify-center mb-6">
           <input
             type="text"
@@ -286,6 +286,33 @@ const ProposalPage = () => {
             ? "আপনাকে প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে কোনো রেসপন্স না করলে অপরপক্ষ চাইলে প্রস্তাবটি বাতিল করতে পারবে"
             : "আপনি প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে অপরপক্ষ রেসপন্স না করলে প্রস্তাবটি বাতিল করার অপশন পাবেন। বাতিল করলে টোকেন রিফান্ড পাবেন, চাইলে অপেক্ষাও করতে পারেন"}
         </p>
+
+        {/* mobile view */}
+        <div className="flex flex-col gap-4 md:hidden sm:block">
+          {proposalData?.data?.map((item: any) => (
+            <ReusableMobileCard
+              key={item.id}
+              biodataNo={item.bioNo}
+              permanentAddress={`${
+                item.bioPermanentCity
+                  ? getUpazilaTitle(item.bioPermanentCity)
+                  : "-"
+              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
+              date={item.createdAt}
+              visibility={item.bioVisibility}
+              // onDelete={() => {
+              //   setSelectedId(item.id);
+              //   setIsModalOpen("delete");
+              // }}
+              onView={() => {
+                item.bioVisibility === "PRIVATE"
+                  ? setIsModalOpen("private")
+                  : router.push(`/biodatas/${item.biodataId}`);
+              }}
+            />
+          ))}
+        </div>
+
         <ReusableTable
           data={proposalData?.data || []}
           columns={columns}
@@ -306,6 +333,15 @@ const ProposalPage = () => {
         title="প্রস্তাবটি বাতিল করতে চান?"
         description="এই প্রস্তাবটি বাতিল করতে চান কি? বাতিল করার পর টোকেন রিফান্ড পাবেন"
       />
+
+      {/* <DeleteConfirmationModal
+        open={isModalOpen === "delete"}
+        onClose={() => handleReset()}
+        onDelete={handleDeleteFromFavourite}
+        loading={isDeleting}
+        description="আপনি কি পছন্দের তালিকা থেকে এই বায়োডাটা মুছে ফেলে চান?
+(যদি চূড়ান্ত তালিকায় রেখে থাকেন তাহলে সেখান থেকেও মুছে যাবে"
+      /> */}
     </div>
   );
 };

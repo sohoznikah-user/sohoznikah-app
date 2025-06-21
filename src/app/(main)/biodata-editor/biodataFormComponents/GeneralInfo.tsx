@@ -44,6 +44,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function GeneralInfo({
   biodataFormData,
@@ -89,6 +90,7 @@ export default function GeneralInfo({
     if (isValid) {
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof GeneralInfoFormData
       );
@@ -127,12 +129,13 @@ export default function GeneralInfo({
                           )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
+                      <PopoverContent className="w-auto p-0 border-none rounded-lg bg-white">
                         <Calendar
-                          className="bg-[#005889]"
+                          className="bg-white text-black border-gray-300 border rounded-lg"
                           classNames={{
-                            day_selected: "bg-[#E25A6F]",
-                            day_today: "bg-white text-black",
+                            day_selected: "bg-[#307DA7] text-white",
+                            day_today:
+                              "bg-gray-300  border border-[#307DA7] text-black",
                           }}
                           mode="single"
                           selected={
@@ -141,7 +144,7 @@ export default function GeneralInfo({
                           onSelect={(date) =>
                             field.onChange(date?.toISOString())
                           }
-                          initialFocus
+                          captionLayout="dropdown"
                         />
                       </PopoverContent>
                     </Popover>

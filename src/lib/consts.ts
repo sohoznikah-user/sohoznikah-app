@@ -2,6 +2,11 @@ export const biodataTypes = [
   { id: "GROOM", title: "পাত্রের বায়োডাটা" },
   { id: "BRIDE", title: "পাত্রীর বায়োডাটা" },
 ];
+export const biodataSelfTypes = [
+  { id: "GROOM", title: "আমি পাত্র" },
+  { id: "BRIDE", title: "আমি পাত্রী" },
+];
+
 export const biodataFor = [
   { id: "self", title: "নিজের জন্য" },
   { id: "other", title: " বোনের জন্য/বন্ধুর জন্য/ভাগ্নির জন্য" },
@@ -9,10 +14,17 @@ export const biodataFor = [
 
 export const maritalStatuses = [
   { id: "unmarried", title: "অবিবাহিত", for: "both" },
-  { id: "married", title: "বিবাহিত", for: "both" },
+  { id: "married", title: "বিবাহিত", for: "GROOM" },
   { id: "divorced", title: "ডিভোর্সড", for: "both" },
   { id: "widowed_male", title: "বিপত্নীক", for: "GROOM" },
   { id: "widowed_female", title: "বিধবা", for: "BRIDE" },
+];
+export const spouseMaritalStatuses = [
+  { id: "unmarried", title: "অবিবাহিত", for: "both" },
+  { id: "married", title: "বিবাহিত", for: "BRIDE" },
+  { id: "divorced", title: "ডিভোর্সড", for: "both" },
+  { id: "widowed_male", title: "বিপত্নীক", for: "BRIDE" },
+  { id: "widowed_female", title: "বিধবা", for: "GROOM" },
 ];
 
 export const religiousLifestyle = [
@@ -102,6 +114,7 @@ export const occupationsList = [
   { id: "medical_technologist", title: "মেডিকেল টেকনোলজিস্ট", for: "both" },
   { id: "medical_assistant", title: "মেডিক্যাল অ্যাসিস্ট্যান্ট", for: "both" },
   { id: "military_job", title: "সামরিক জব", for: "both" },
+  { id: "civilian_job", title: "বেসামরিক জব", for: "both" },
   { id: "paramilitary_job", title: "আধা সামরিক জব", for: "both" },
   { id: "imam", title: "ইমাম", for: "both" },
   { id: "muezzin", title: "মুয়াজ্জিন", for: "both" },
@@ -151,7 +164,6 @@ export const madhhabs = [
   { id: "maliki", title: "মালিকী", for: "both" },
   { id: "hambali", title: "হাম্বলি", for: "both" },
   { id: "other_madhhab", title: "অন্যান্য", for: "both" },
-  { id: "unknown_madhhab", title: "জানা নেই", for: "both" },
 ];
 
 export const education = [
@@ -161,7 +173,6 @@ export const education = [
   { id: "bachelor", title: "স্নাতক", for: "both" },
   { id: "masters", title: "স্নাতকোত্তর", for: "both" },
   { id: "doctoral", title: "ডক্টরাল", for: "both" },
-  { id: "bcs", title: "বি.সি.এস (BCS)", for: "both" },
   { id: "medical", title: "মেডিকেল", for: "both" },
   { id: "defense", title: "ডিফেন্স", for: "both" },
   { id: "police_law", title: "পুলিশ/আইন-শৃঙ্খলা বাহিনী", for: "both" },
@@ -184,6 +195,28 @@ export const religiousEducation = [
   { id: "adib", title: "আদিব", for: "both" },
   { id: "qari_male", title: "ক্বারী", for: "GROOM" },
   { id: "qaria_female", title: "ক্বারিয়া", for: "BRIDE" },
+  { id: "talib_quran", title: "তালিবে কুরআন", for: "both" },
+  { id: "tajwid_student", title: "তাজবীদ শিক্ষার্থী", for: "both" },
+  { id: "muallim_talim", title: "মুয়াল্লিমুন ফি তালিম", for: "both" },
+  { id: "islamic_scholar", title: "ইসলামিক স্কলার", for: "both" },
+];
+
+export const spouseReligiousEducation = [
+  { id: "hafiz_male", title: "হাফেজ", for: "BRIDE" },
+  { id: "hafiza_female", title: "হাফেজা", for: "GROOM" },
+  { id: "maulana_male", title: "মাওলানা", for: "BRIDE" },
+  { id: "alema_female", title: "আলেমা", for: "GROOM" },
+  { id: "mufti_male", title: "মুফতি", for: "BRIDE" },
+  { id: "muftia_female", title: "মুফতিয়া", for: "GROOM" },
+  { id: "muhaddis_male", title: "মুহাদ্দিস", for: "BRIDE" },
+  { id: "muhaddisa_female", title: "মুহাদ্দিসা", for: "GROOM" },
+  { id: "mufassir", title: "মুফাসসির", for: "both" },
+  { id: "faqih", title: "ফকিহ", for: "both" },
+  { id: "daee_male", title: "দা'য়ী", for: "BRIDE" },
+  { id: "daiya_female", title: "দাঈয়া", for: "GROOM" },
+  { id: "adib", title: "আদিব", for: "both" },
+  { id: "qari_male", title: "ক্বারী", for: "BRIDE" },
+  { id: "qaria_female", title: "ক্বারিয়া", for: "GROOM" },
   { id: "talib_quran", title: "তালিবে কুরআন", for: "both" },
   { id: "tajwid_student", title: "তাজবীদ শিক্ষার্থী", for: "both" },
   { id: "muallim_talim", title: "মুয়াল্লিমুন ফি তালিম", for: "both" },
@@ -215,13 +248,23 @@ export const characteristics = [
 ];
 
 export const specialCatagories = [
-  { id: "bcs_cadre", title: "আমি বিসিএস ক্যাডার", for: "both" },
+  { id: "expatriate", title: "আমি একজন প্রবাসী", for: "both" },
+
   { id: "social_worker", title: "আমি একজন সমাজ সেবক", for: "both" },
-  { id: "tabligh_member", title: "আমি তাবলীগ এর সাথে যুক্ত", for: "both" },
+  {
+    id: "tabligh_member",
+    title: "আমি তাবলীগ এর সাথে যুক্ত",
+    for: "both",
+  },
   {
     id: "religious_service",
     title: "আমি দ্বীনের খেদমতে আছি",
     for: "both",
+  },
+  {
+    id: "employed",
+    title: "আমি একজন চাকরিজীবী",
+    for: "BRIDE",
   },
   { id: "new_muslim", title: "আমি একজন নওমুসলিম", for: "both" },
   { id: "disabled", title: "আমি প্রতিবন্ধী", for: "both" },
@@ -238,7 +281,7 @@ export const specialCatagories = [
   },
   {
     id: "short_height",
-    title: "আমি স্বল্প উচ্চতার মানুষ আলহামদুলিল্লাহ",
+    title: "আমি স্বল্প উচ্চতার আলহামদুলিল্লাহ",
     for: "both",
   },
   {
@@ -259,12 +302,17 @@ export const specialCatagories = [
   {
     id: "single_father",
     title: "আমি সিঙ্গেল ফাদার-সন্তান আছে কিন্তু মা নেই বা দায়িত্বে নেই",
-    for: "BRIDE",
+    for: "GROOM",
   },
   {
     id: "single_mother",
     title: "আমি সিঙ্গেল মাদার-সন্তান আছে কিন্তু বাবা নেই বা দায়িত্বে নেই",
-    for: "GROOM",
+    for: "BRIDE",
+  },
+  {
+    id: "not_applicable",
+    title: "প্রযোজ্য নয়",
+    for: "both",
   },
 ];
 
@@ -272,8 +320,8 @@ export const spouseSpecialCatagories = [
   { id: "expatriate", title: "প্রবাসী", for: "both" },
   { id: "foreign_citizen", title: "ফরেইন সিটিজেন", for: "both" },
   { id: "social_worker", title: "সমাজ সেবক", for: "both" },
-  { id: "tabligh", title: "তাবলীগ", for: "both" },
-  { id: "deen_service", title: "দ্বীনের খেদমতকারী", for: "both" },
+  { id: "tabligh_member", title: "তাবলীগ", for: "both" },
+  { id: "religious_service", title: "দ্বীনের খেদমতকারী", for: "both" },
   { id: "new_muslim", title: "নওমুসলিম", for: "both" },
   { id: "disabled", title: "প্রতিবন্ধী", for: "both" },
   { id: "orphan", title: "এতিম", for: "both" },
@@ -285,19 +333,19 @@ export const spouseSpecialCatagories = [
   { id: "older_age", title: "বয়সে বেশি", for: "both" },
   { id: "urban_resident", title: "শহরে বসবাসকারী", for: "both" },
   { id: "rural_resident", title: "গ্রামে বসবাসকারী", for: "both" },
-  {
-    id: "allow_wife_job",
-    title: "স্ত্রীকে চাকরি/ব্যবসা করতে দিবে",
-    for: "BRIDE",
-  },
-  { id: "allow_wife_study", title: "স্ত্রীকে পড়াশোনা করতে দিবে", for: "BRIDE" },
-  { id: "employed_female", title: "চাকরিজীবী", for: "GROOM" },
-  {
-    id: "job_interest_post_marriage",
-    title: "বিয়ের পর চাকরি/ব্যাবসায় আগ্রহী",
-    for: "GROOM",
-  },
-  { id: "masna_interest", title: "মাসনায় আগ্রহী", for: "GROOM" },
+  // {
+  //   id: "careerPlan",
+  //   title: "স্ত্রীকে চাকরি/ব্যবসা করতে দিবে",
+  //   for: "BRIDE",
+  // },
+  // { id: "continueStudy", title: "স্ত্রীকে পড়াশোনা করতে দিবে", for: "BRIDE" },
+  { id: "employed", title: "চাকরিজীবী", for: "GROOM" },
+  // {
+  //   id: "job_interest_post_marriage",
+  //   title: "বিয়ের পর চাকরি/ব্যাবসায় আগ্রহী",
+  //   for: "GROOM",
+  // },
+  // { id: "masna_interest", title: "মাসনায় আগ্রহী", for: "GROOM" },
 ];
 
 export const afterMarriageStudies = [
@@ -387,6 +435,12 @@ export const spouseLocationOptions = [
   { id: "both", title: "উভয়ই", for: "both" },
 ];
 
+export const spouseBlackSkinInterestOptions = [
+  { id: "interested", title: "হ্যাঁ", for: "GROOM" },
+  { id: "not_interested", title: "না", for: "GROOM" },
+  { id: "not_sure", title: "দেখা যেতে পারে", for: "GROOM" },
+];
+
 export const secondMarriageOptions = [
   { id: "yes", title: "হ্যা", for: "both" },
   { id: "no", title: "না", for: "both" },
@@ -432,6 +486,66 @@ export const heights = [
   { id: "83", title: "৬'১১\"", for: "both" },
   { id: "84", title: "৭'", for: "both" },
   { id: "85", title: "৭ ফুটের বেশি", for: "both" },
+];
+export const ages = [
+  { id: "18", title: "১৮ বছর", for: "both" },
+  { id: "19", title: "১৯ বছর", for: "both" },
+  { id: "20", title: "২০ বছর", for: "both" },
+  { id: "21", title: "২১ বছর", for: "both" },
+  { id: "22", title: "২২ বছর", for: "both" },
+  { id: "23", title: "২৩ বছর", for: "both" },
+  { id: "24", title: "২৪ বছর", for: "both" },
+  { id: "25", title: "২৫ বছর", for: "both" },
+  { id: "26", title: "২৬ বছর", for: "both" },
+  { id: "27", title: "২৭ বছর", for: "both" },
+  { id: "28", title: "২৮ বছর", for: "both" },
+  { id: "29", title: "২৯ বছর", for: "both" },
+  { id: "30", title: "৩০ বছর", for: "both" },
+  { id: "31", title: "৩১ বছর", for: "both" },
+  { id: "32", title: "৩২ বছর", for: "both" },
+  { id: "33", title: "৩৩ বছর", for: "both" },
+  { id: "34", title: "৩৪ বছর", for: "both" },
+  { id: "35", title: "৩৫ বছর", for: "both" },
+  { id: "36", title: "৩৬ বছর", for: "both" },
+  { id: "37", title: "৩৭ বছর", for: "both" },
+  { id: "38", title: "৩৮ বছর", for: "both" },
+  { id: "39", title: "৩৯ বছর", for: "both" },
+  { id: "40", title: "৪০ বছর", for: "both" },
+  { id: "41", title: "৪১ বছর", for: "both" },
+  { id: "42", title: "৪২ বছর", for: "both" },
+  { id: "43", title: "৪৩ বছর", for: "both" },
+  { id: "44", title: "৪৪ বছর", for: "both" },
+  { id: "45", title: "৪৫ বছর", for: "both" },
+  { id: "46", title: "৪৬ বছর", for: "both" },
+  { id: "47", title: "৪৭ বছর", for: "both" },
+  { id: "48", title: "৪৮ বছর", for: "both" },
+  { id: "49", title: "৪৯ বছর", for: "both" },
+  { id: "50", title: "৫০ বছর", for: "both" },
+  { id: "51", title: "৫১ বছর", for: "both" },
+  { id: "52", title: "৫২ বছর", for: "both" },
+  { id: "53", title: "৫৩ বছর", for: "both" },
+  { id: "54", title: "৫৪ বছর", for: "both" },
+  { id: "55", title: "৫৫ বছর", for: "both" },
+  { id: "56", title: "৫৬ বছর", for: "both" },
+  { id: "57", title: "৫৭ বছর", for: "both" },
+  { id: "58", title: "৫৮ বছর", for: "both" },
+  { id: "59", title: "৫৯ বছর", for: "both" },
+  { id: "60", title: "৬০ বছর", for: "both" },
+  { id: "61", title: "৬১ বছর", for: "both" },
+  { id: "62", title: "৬২ বছর", for: "both" },
+  { id: "63", title: "৬৩ বছর", for: "both" },
+  { id: "64", title: "৬৪ বছর", for: "both" },
+  { id: "65", title: "৬৫ বছর", for: "both" },
+  { id: "66", title: "৬৬ বছর", for: "both" },
+  { id: "67", title: "৬৭ বছর", for: "both" },
+  { id: "68", title: "৬৮ বছর", for: "both" },
+  { id: "69", title: "৬৯ বছর", for: "both" },
+  { id: "70", title: "৭০ বছর", for: "both" },
+  { id: "71", title: "৭১ বছর", for: "both" },
+  { id: "72", title: "৭২ বছর", for: "both" },
+  { id: "73", title: "৭৩ বছর", for: "both" },
+  { id: "74", title: "৭৪ বছর", for: "both" },
+  { id: "75", title: "৭৫ বছর", for: "both" },
 ];
 
 export const weights = [

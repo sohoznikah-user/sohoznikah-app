@@ -13,13 +13,13 @@ const UnauthorizedPage = () => {
 
   useEffect(() => {
     dispatch(logout());
-    toast.error("You are not authorized to access this page");
+    toast.error("Unauthorized access!!!");
   }, []);
 
   return (
     <div className="flex flex-col items-center justify-center p-10">
       <h1 className="text-2xl font-bold text-center text-[#E25A6F]">
-        You are not authorized to access this page
+        You are not authorized
       </h1>
       <div className="flex gap-8 mt-8">
         <button

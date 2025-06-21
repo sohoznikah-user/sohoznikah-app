@@ -9,15 +9,15 @@ import { FilterState } from "@/redux/features/filter/filterSlice";
 import { useState } from "react";
 import { FilterAccordion } from "./FilterAccordian";
 
-interface PermanentAddressFilterProps {
+interface PresentAddressFilterProps {
   filterValue: {
-    permanent_address_type?: "bangladesh" | "foreign";
+    present_address_type?: "bangladesh" | "foreign";
     district?: string[];
     subdistrict?: string[];
     all_countries?: boolean;
   };
   onChange: (value: {
-    permanent_address_type?: "bangladesh" | "foreign";
+    present_address_type?: "bangladesh" | "foreign";
     district?: string[];
     subdistrict?: string[];
     all_countries?: boolean;
@@ -32,7 +32,7 @@ interface PermanentAddressFilterProps {
   filters: FilterState;
 }
 
-export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
+export const PresentAddressFilter: React.FC<PresentAddressFilterProps> = ({
   filters,
   filterValue,
   onChange,
@@ -41,12 +41,12 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
   handleCheckboxChange,
 }) => {
   const [activeTab, setActiveTab] = useState<"bangladesh" | "foreign">(
-    filterValue.permanent_address_type === "foreign" ? "foreign" : "bangladesh"
+    filterValue.present_address_type === "foreign" ? "foreign" : "bangladesh"
   );
 
   const handleAllCountriesToggle = (checked: boolean) => {
     onChange({
-      permanent_address_type: checked ? "foreign" : undefined,
+      present_address_type: checked ? "foreign" : undefined,
       district: [],
       subdistrict: [],
       all_countries: checked,
@@ -80,7 +80,7 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
             e.preventDefault();
             setActiveTab("bangladesh");
             onChange({
-              permanent_address_type: "bangladesh",
+              present_address_type: "bangladesh",
               all_countries: false,
             });
           }}
@@ -97,7 +97,7 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
             e.preventDefault();
             setActiveTab("foreign");
             onChange({
-              permanent_address_type: "foreign",
+              present_address_type: "foreign",
               district: [],
               subdistrict: [],
               all_countries: false,
@@ -114,7 +114,7 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
             value="জেলা"
             title="জেলা"
             contentType="checkbox"
-            filterKey="permanentState"
+            filterKey="currentState"
             options={districtOptions}
             selectedFilters={filters}
             handleCheckboxChange={handleCheckboxChange}
@@ -135,19 +135,19 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
               ) : (
                 subdistrictOptions.map((option) => (
                   <div
-                    key={`permanentCity-${option.id}`}
+                    key={`currentCity-${option.id}`}
                     className="flex items-center space-x-2 cursor-pointer"
                   >
                     <Checkbox
-                      id={`permanentCity-${option.id}`}
+                      id={`currentCity-${option.id}`}
                       checked={
-                        (filters.permanentCity as string[])?.includes(
+                        (filters.currentCity as string[])?.includes(
                           option.originalValue
                         ) || false
                       }
                       onCheckedChange={(checked) =>
                         handleSubdistrictChange(
-                          "permanentCity",
+                          "currentCity",
                           option.id,
                           checked as boolean
                         )
@@ -156,7 +156,7 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
                     />
                     <Label
                       className="text-md cursor-pointer"
-                      htmlFor={`permanentCity-${option.id}`}
+                      htmlFor={`currentCity-${option.id}`}
                     >
                       {option.title}
                     </Label>
@@ -171,14 +171,14 @@ export const PermanentAddressFilter: React.FC<PermanentAddressFilterProps> = ({
       {activeTab === "foreign" && (
         <div className="flex items-center justify-center space-x-2 mt-3">
           <Checkbox
-            id="foreign"
+            id="foreign-present"
             checked={filterValue.all_countries || false}
             onCheckedChange={(checked) =>
               handleAllCountriesToggle(Boolean(checked))
             }
             className="text-md font-semibold cursor-pointer"
           />
-          <Label className="text-md cursor-pointer" htmlFor="foreign">
+          <Label className="text-md cursor-pointer" htmlFor="foreign-present">
             সকল দেশ
           </Label>
         </div>

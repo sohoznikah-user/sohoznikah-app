@@ -45,8 +45,9 @@ const BiodataPage = () => {
       "familyStatus",
       "bloodGroup",
       "specialCategory",
-      "partnerMaritalStatus",
-      "madhhab",
+      "mySpecialCategory",
+      "myMaritalStatus",
+      "madhab",
 
       "permanentState",
       "permanentCity",
@@ -58,7 +59,7 @@ const BiodataPage = () => {
 
     const stringKeys = [
       "biodataType",
-      "partnerBiodataType",
+      "myBiodataType",
       "permanentLocation",
       "currentLocation",
     ] as const;
@@ -86,8 +87,8 @@ const BiodataPage = () => {
     const rangePairs: Array<[keyof typeof filters, keyof typeof filters]> = [
       ["ageMin", "ageMax"],
       ["heightMin", "heightMax"],
-      ["partnerAgeMin", "partnerAgeMax"],
-      ["partnerHeightMin", "partnerHeightMax"],
+      ["myAgeMin", "myAgeMax"],
+      ["myHeightMin", "myHeightMax"],
     ];
 
     rangePairs.forEach(([minKey, maxKey]) => {
@@ -156,7 +157,7 @@ const BiodataPage = () => {
         case "permanentDistrict":
         case "currentDistrict":
         case "religiousLifestyle":
-          filterData[key] = value.split(",").filter((v) => v !== "");
+          filterData[key] = value?.split(",").filter((v) => v !== "");
           break;
 
         // STRING‐TYPE FILTERS: assign directly
@@ -179,17 +180,17 @@ const BiodataPage = () => {
         case "heightMax":
           filterData.heightMax = parseInt(value) || undefined;
           break;
-        case "partnerAgeMin":
-          filterData.partnerAgeMin = parseInt(value) || undefined;
+        case "myAgeMin":
+          filterData.myAgeMin = parseInt(value) || undefined;
           break;
-        case "partnerAgeMax":
-          filterData.partnerAgeMax = parseInt(value) || undefined;
+        case "myAgeMax":
+          filterData.myAgeMax = parseInt(value) || undefined;
           break;
-        case "partnerHeightMin":
-          filterData.partnerHeightMin = parseInt(value) || undefined;
+        case "myHeightMin":
+          filterData.myHeightMin = parseInt(value) || undefined;
           break;
-        case "partnerHeightMax":
-          filterData.partnerHeightMax = parseInt(value) || undefined;
+        case "myHeightMax":
+          filterData.myHeightMax = parseInt(value) || undefined;
           break;
 
         // SEARCH‐TERM
@@ -232,7 +233,7 @@ const BiodataPage = () => {
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
-  console.log("biodatas", biodatas);
+  // console.log("biodatas", biodatas);
   return (
     <div className="relative">
       {/* Mobile Filter Button */}
@@ -306,8 +307,8 @@ const BiodataPage = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-4 min-h-[300px] text-red-500 flex justify-center items-center">
-              No biodatas found
+            <div className="text-center py-4 min-h-[400px] text-red-500 flex justify-center items-center text-lg font-semibold">
+              বায়োডাটা খুজে পাওয়া যায়নি
             </div>
           )}
         </div>

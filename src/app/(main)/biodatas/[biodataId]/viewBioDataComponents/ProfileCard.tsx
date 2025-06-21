@@ -169,6 +169,7 @@ const ProfileCard = ({
                   const target = e.target as HTMLImageElement;
                   target.src = male;
                 }}
+                className="rounded-full w-auto h-auto"
               />
               <div className="w-1"></div>
             </div>

@@ -34,6 +34,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function FamilyInfo({
   biodataFormData,
@@ -101,6 +102,7 @@ export default function FamilyInfo({
       console.log("valid");
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof FamilyInfoFormData
       );
@@ -198,7 +200,7 @@ export default function FamilyInfo({
             )}
           />
           <div className="flex flex-col space-y-4">
-            <div className="text-[#E25A6F]">
+            <div className="text-[#E25A6F] text-lg font-semibold">
               আপনার ভাই-বোনের তথ্য নিচে প্লাস বাটন চাপ দিয়ে যুক্ত করুন এবং বড়
               থেকে ছোট অনুসারে সাজিয়ে লিখুন
             </div>

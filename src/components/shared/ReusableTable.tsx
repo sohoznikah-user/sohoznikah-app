@@ -214,13 +214,9 @@ export function ReusableTable<T>({
                       key={cell.id}
                       className="mb-2 flex gap-2 justify-start items-center flex-wrap"
                     >
-                      {/* <span className="font-semibold">
-                        {flexRender(
-                          cell.column.columnDef.header,
-                          cell.getContext()
-                        )}
-                        :
-                      </span> */}
+                      <span className="font-semibold">
+                        {cell.column.columnDef.header as string}:
+                      </span>
                       <span className="ml-2">
                         {flexRender(
                           cell.column.columnDef.cell,

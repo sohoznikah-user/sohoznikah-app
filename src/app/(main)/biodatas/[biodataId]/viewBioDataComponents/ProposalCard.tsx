@@ -37,6 +37,7 @@ const ProposalCard = ({
   myBiodata: boolean;
   isAdmin?: boolean;
 }) => {
+  console.log("biodataId", biodataId);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectCurrentToken);
@@ -70,21 +71,28 @@ const ProposalCard = ({
   // create proposal
   const handleCreateProposal = async () => {
     if (!token || !user) {
+      toast.error("প্রস্তাব পাঠাতে চাইলে প্রথমে লগ ইন করতে হবে।");
+      router.push("/login");
       return;
     }
     const proposalData = {
-      biodataId: biodata?.biodata?.id,
+      biodataId: biodata?.id,
     };
     try {
       const res = await createProposal(proposalData).unwrap();
 
-      console.log("res-proposal", res);
+      // console.log("res-proposal", res);
       if (res?.success) {
         toast.success("প্রস্তাব পাঠানো হয়েছে");
       } else {
         toast.error("প্রস্তাব পাঠানো হয়নি");
       }
     } catch (error: any) {
+      if (error.message === "Not enough tokens") {
+        toast.error("আপনার পর্যাপ্ত টোকেন নেই। দয়া করে টোকেন কিনুন।");
+        router.push("/dashboard/token");
+        return;
+      }
       toast.error(error?.message || "প্রস্তাব পাঠানো হয়নি");
     } finally {
       handleReset();
@@ -97,7 +105,7 @@ const ProposalCard = ({
       return;
     }
     const contactData = {
-      biodataId: biodata?.biodata?.id,
+      biodataId: biodata?.id,
     };
     try {
       const res = await createContact(contactData).unwrap();

@@ -20,6 +20,7 @@ import { firstWordsFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function FirstWords({
   biodataFormData,
@@ -71,6 +72,7 @@ export default function FirstWords({
     if (isValid) {
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof FirstWordsFormData
       );

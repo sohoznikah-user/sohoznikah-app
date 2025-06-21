@@ -71,9 +71,11 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
         <span className="text-[13px] text-[#A1A1A1]">
           {format(date, "dd MMM yyyy")}
         </span>
-        <button onClick={onDelete} className="cursor-pointer">
-          <Trash2 className="w-5 h-5 text-[#F36B7F]" />
-        </button>
+        {onDelete && (
+          <button onClick={onDelete} className="cursor-pointer">
+            <Trash2 className="w-5 h-5 text-[#F36B7F]" />
+          </button>
+        )}
       </div>
     </div>
   );

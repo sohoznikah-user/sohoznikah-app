@@ -187,10 +187,10 @@ export default function AdminBiodataClient({
               <EducationAndOccupationInfo
                 biodata={biodata}
                 educationInfoFormData={
-                  biodata?.biodataFormData?.educationAndOccupationFormData
+                  biodata?.biodataFormData?.educationInfoFormData
                 }
                 occupationInfoFormData={
-                  biodata?.biodataFormData?.educationAndOccupationFormData
+                  biodata?.biodataFormData?.occupationInfoFormData
                 }
               />
             </div>
@@ -231,24 +231,17 @@ export default function AdminBiodataClient({
               <SpousePreferenceInfo
                 biodata={biodata}
                 spousePreferenceInfoFormData={
-                  biodata?.biodataFormData?.spousePreferenceFormData
+                  biodata?.biodataFormData?.spousePreferenceInfoFormData
                 }
               />
             </div>
           </div>
         </div>
 
-        {/* <div className=" lg:hidden flex justify-center items-center pb-20">
-          <ProposalCard
-            biodata={biodata?.biodata}
-            myBiodata={true}
-            isAdmin={true}
-          />
-        </div> */}
         {/* <FooterSection
-      biodata={biodata}
-      biodataFormData={biodata?.biodataFormData}
-    /> */}
+        biodata={biodata}
+        biodataFormData={biodata?.biodataFormData}
+      /> */}
       </div>
     </>
   );

@@ -22,6 +22,7 @@ import { marriageInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function MarriageInfo({
   biodataFormData,
@@ -93,6 +94,7 @@ export default function MarriageInfo({
     if (isValid) {
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof MarriageInfoFormData
       );
@@ -309,16 +311,16 @@ export default function MarriageInfo({
               <FormItem>
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
-                    <div>অভিভাবক আপনার বিয়েতে রাজি আছেন?</div>
-                    <div className="text-xs">
-                      (যদি অভিভাবক রাজি নাও থাকে তাহলে এর কারণ লিখুন এবং
-                      সেক্ষেত্রে আপনি কেন বিবাহে আগাচ্ছেন সেটা বিস্তারিত লিখুন।)
+                    <div>
+                      সহজনিকাহ ওয়েবসাইটে বায়োডাটা জমা দিতে আপনার অভিভাবকের
+                      অনুমতি আছে?
                     </div>
                   </FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="বিস্তারিত লিখুন"
                     />
                   </FormControl>
                 </div>
@@ -457,6 +459,7 @@ export default function MarriageInfo({
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="বিস্তারিত লিখুন"
                     />
                   </FormControl>
                 </div>
@@ -479,6 +482,7 @@ export default function MarriageInfo({
                       <Input
                         {...field}
                         className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                        placeholder="বিস্তারিত লিখুন"
                       />
                     </FormControl>
                   </div>
@@ -487,21 +491,51 @@ export default function MarriageInfo({
               )}
             />
           )}
+          {biodataType === "GROOM" && (
+            <FormField
+              control={form.control}
+              name="dowryExpectation"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex flex-col space-y-2">
+                    <FormLabel className="text-md space-y-1 leading-4.5">
+                      "বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক
+                      / উপহার / অর্থ আশা করবেন কিনা?"
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                        placeholder="বিস্তারিত লিখুন"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
           <FormField
             control={form.control}
-            name="dowryExpectation"
+            name="allowShowingPhotoOnline"
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-col space-y-2">
                   <FormLabel className="text-md space-y-1 leading-4.5">
                     {biodataType === "GROOM"
-                      ? "বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক / উপহার / অর্থ আশা করবেন কিনা?"
-                      : "বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রপক্ষকে যৌতুক / উপহার / অর্থ দিতে ইচ্ছুক?"}
+                      ? "পাত্রীপক্ষ অনলাইনে আপনার ছবি দেখতে চাইলে দেখাতে রাজি আছেন?"
+                      : "পাত্রপক্ষ অনলাইনে আপনার ছবি দেখতে চাইলে দেখাতে রাজি আছেন?"}
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder={
+                        biodataType === "GROOM"
+                          ? "পাত্রীপক্ষ অনলাইনে আপনার ছবি দেখতে চাইলে দেখাতে রাজি আছেন?"
+                          : "পাত্রপক্ষ অনলাইনে আপনার ছবি দেখতে চাইলে দেখাতে রাজি আছেন?"
+                      }
                     />
                   </FormControl>
                 </div>
@@ -509,28 +543,7 @@ export default function MarriageInfo({
               </FormItem>
             )}
           />
-          {biodataType === "GROOM" && (
-            <FormField
-              control={form.control}
-              name="allowShowingPhotoOnline"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex flex-col space-y-2">
-                    <FormLabel className="text-md space-y-1 leading-4.5">
-                      পাত্রীপক্ষ অনলাইনে আপনার ছবি দেখতে চাইলে দেখাতে রাজি আছেন?
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                      />
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+
           <FormField
             control={form.control}
             name="additionalMarriageInfo"
@@ -542,7 +555,7 @@ export default function MarriageInfo({
                       বিয়ে সংক্রান্ত আরো কিছু জানাতে চাইলে এখানে লিখুন: অন্যথায়
                       খালি রাখুন।
                     </div>
-                    <div className="text-xs">
+                    <div className="text-sm">
                       (যেমন: পাত্র-পাত্রী সাক্ষাতের ব্যাপারে, অভিভাবকদের মতামত
                       নিয়ে, কেমন বিয়ে চান, বিয়ের পর কোন কোন বিষয় ছাড় দিতে রাজি
                       নন ইত্যাদি কিছু জানানোর থাকলে লিখুন।)
@@ -552,6 +565,7 @@ export default function MarriageInfo({
                     <Textarea
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="বিস্তারিত লিখুন"
                     />
                   </FormControl>
                 </div>

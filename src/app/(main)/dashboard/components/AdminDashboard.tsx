@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/select";
 import { emailVerificationOptions, userStatusOptions } from "@/lib/consts";
 import {
+  useDeleteUserMutation,
   useGetAllUsersQuery,
   useGiveTokenMutation,
   useUpdateUserMutation,
 } from "@/redux/features/admin/userApi";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { useDeleteBiodataMutation } from "@/redux/features/biodata/biodataApi";
 import { useAppSelector, useDebounced } from "@/redux/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
@@ -50,7 +50,7 @@ export default function AdminDashboardPage() {
 
   const user = useAppSelector(selectCurrentUser);
   const debouncedSearch = useDebounced({ searchQuery: searchTerm, delay: 600 });
-  const [deleteBiodata, { isLoading: isDeleting }] = useDeleteBiodataMutation();
+  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
   const query = useMemo(
@@ -136,12 +136,12 @@ export default function AdminDashboardPage() {
   // delete biodata
   const handleDeleteBiodata = async () => {
     try {
-      const res = await deleteBiodata(selectedId).unwrap();
+      const res = await deleteUser(selectedId).unwrap();
       if (res.success) {
-        toast.success("বায়োডাটা সফলভাবে মুছে ফেলা হয়েছে");
+        toast.success(res?.message || "বায়োডাটা সফলভাবে মুছে ফেলা হয়েছে");
       }
     } catch (error) {
-      toast.error("বায়োডাটা মুছে ফেলা হয়নি");
+      toast.error(error.message || "বায়োডাটা মুছে ফেলা হয়নি");
     } finally {
       handleReset();
     }

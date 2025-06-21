@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { madhhabs, religiousIdeologies, yesNoOptions } from "@/lib/consts";
+import { madhhabs, religiousIdeologies } from "@/lib/consts";
 import {
   BiodataFormData,
   BiodataFormDataProps,
@@ -30,6 +30,7 @@ import { religiousInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function ReligiousInfo({
   biodataFormData,
@@ -81,6 +82,7 @@ export default function ReligiousInfo({
     if (isValid) {
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof ReligiousInfoFormData
       );
@@ -91,7 +93,7 @@ export default function ReligiousInfo({
     <div className="flex flex-col items-center justify-center space-y-8 mt-10">
       <div className="text-3xl text-center text-black">ধর্মীয় লাইফস্টাইল</div>
       <Form {...form}>
-        <div>
+        <div className="text-lg font-semibold">
           আপনি কি আপনার জীবনকে পরিপূর্ণ ভাবে ইসলামিক বিধি-বিধান অনুযায়ী পরিচালনা
           করেন?
         </div>
@@ -111,7 +113,11 @@ export default function ReligiousInfo({
                     >
                       <div className="border border-gray-300 p-4 rounded-3xl space-y-6 flex-1">
                         <div className="min-h-32 border border-gray-300 bg-[#f6f6f6] p-4 rounded-xl space-x-2 flex items-center justify-center">
-                          <RadioGroupItem value="general" id="general" />
+                          <RadioGroupItem
+                            value="general"
+                            id="general"
+                            className="w-5 h-5 cursor-pointer "
+                          />
                           <Label
                             htmlFor="general"
                             className="leading-5 space-y-2"
@@ -143,7 +149,11 @@ export default function ReligiousInfo({
                       </div>
                       <div className="border border-gray-300 p-4 rounded-3xl space-y-6 flex-1">
                         <div className="min-h-32 border border-gray-300 bg-[#f6f6f6] p-4 rounded-xl space-x-2 flex items-center justify-center">
-                          <RadioGroupItem value="practicing" id="practicing" />
+                          <RadioGroupItem
+                            value="practicing"
+                            id="practicing"
+                            className="w-5 h-5 cursor-pointer "
+                          />
                           <Label
                             htmlFor="practicing"
                             className="leading-5 space-y-2"
@@ -176,7 +186,11 @@ export default function ReligiousInfo({
                       </div>
                       <div className="border border-gray-300 p-4 rounded-3xl space-y-6 flex-1">
                         <div className="min-h-32 border border-gray-300 bg-[#f6f6f6] p-4 rounded-xl space-x-2 flex items-center justify-center">
-                          <RadioGroupItem value="devout" id="devout" />
+                          <RadioGroupItem
+                            value="devout"
+                            id="devout"
+                            className="w-5 h-5 cursor-pointer "
+                          />
                           <Label
                             htmlFor="devout"
                             className="leading-5 space-y-2"
@@ -301,23 +315,11 @@ export default function ReligiousInfo({
                     নিয়মিত পাঁচ ওয়াক্ত নামাজ পড়া হয় কি?
                   </FormLabel>
                   <FormControl>
-                    <RadioGroup
-                      className="w-full flex gap-4"
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
-                      {yesNoOptions.map((x) => (
-                        <div key={x.id} className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value={x.id}
-                            id={`praysFiveTimes-${x.id}`}
-                          />
-                          <Label htmlFor={`praysFiveTimes-${x.id}`}>
-                            {x.title}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
+                    <Input
+                      {...field}
+                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="নিয়মিত পাঁচ ওয়াক্ত নামাজ পড়া হয় কি?"
+                    />
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -335,26 +337,11 @@ export default function ReligiousInfo({
                       আপনার কি নামাজ কাযা হয়?
                     </FormLabel>
                     <FormControl>
-                      <RadioGroup
-                        className="w-full flex gap-4"
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        {yesNoOptions.map((x) => (
-                          <div
-                            key={x.id}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={x.id}
-                              id={`hasQazaPrayers-${x.id}`}
-                            />
-                            <Label htmlFor={`hasQazaPrayers-${x.id}`}>
-                              {x.title}
-                            </Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
+                      <Input
+                        {...field}
+                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                        placeholder="আপনার কি নামাজ কাযা হয়?"
+                      />
                     </FormControl>
                   </div>
                   <FormMessage />
@@ -372,23 +359,11 @@ export default function ReligiousInfo({
                     শুদ্ধভাবে কুরআন তেলাওয়াত করতে পারেন?
                   </FormLabel>
                   <FormControl>
-                    <RadioGroup
-                      className="w-full flex gap-4"
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
-                      {yesNoOptions.map((x) => (
-                        <div key={x.id} className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value={x.id}
-                            id={`canReciteQuranProperly-${x.id}`}
-                          />
-                          <Label htmlFor={`canReciteQuranProperly-${x.id}`}>
-                            {x.title}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
+                    <Input
+                      {...field}
+                      className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                      placeholder="শুদ্ধভাবে কুরআন তেলাওয়াত করতে পারেন?"
+                    />
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -406,26 +381,11 @@ export default function ReligiousInfo({
                       হারাম উপার্জন বা সুদ-ঘুষ থেকে বিরত আছেন কি?
                     </FormLabel>
                     <FormControl>
-                      <RadioGroup
-                        className="w-full flex gap-4"
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        {yesNoOptions.map((x) => (
-                          <div
-                            key={x.id}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={x.id}
-                              id={`avoidsHaramIncome-${x.id}`}
-                            />
-                            <Label htmlFor={`avoidsHaramIncome-${x.id}`}>
-                              {x.title}
-                            </Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
+                      <Input
+                        {...field}
+                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                        placeholder="হারাম উপার্জন বা সুদ-ঘুষ থেকে বিরত আছেন কি?"
+                      />
                     </FormControl>
                   </div>
                   <FormMessage />
@@ -447,26 +407,16 @@ export default function ReligiousInfo({
                         : "আপনি কি নিকাব সহ পর্দা করেন?"}
                     </FormLabel>
                     <FormControl>
-                      <RadioGroup
-                        className="w-full flex gap-4"
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        {yesNoOptions.map((x) => (
-                          <div
-                            key={x.id}
-                            className="flex items-center space-x-2"
-                          >
-                            <RadioGroupItem
-                              value={x.id}
-                              id={`modestDressing-${x.id}`}
-                            />
-                            <Label htmlFor={`modestDressing-${x.id}`}>
-                              {x.title}
-                            </Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
+                      <Input
+                        {...field}
+                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                        placeholder={
+                          biodataFormData?.primaryInfoFormData?.biodataType ===
+                          "GROOM"
+                            ? "টাখনুর উপরে কাপড় পরেন কিনা?"
+                            : "আপনি কি নিকাব সহ পর্দা করেন?"
+                        }
+                      />
                     </FormControl>
                   </div>
                   <FormMessage />
@@ -486,26 +436,11 @@ export default function ReligiousInfo({
                         মাহরাম/গাইরে-মাহরাম মেনে চলেন কি?
                       </FormLabel>
                       <FormControl>
-                        <RadioGroup
-                          className="w-full flex gap-4"
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          {yesNoOptions.map((x) => (
-                            <div
-                              key={x.id}
-                              className="flex items-center space-x-2"
-                            >
-                              <RadioGroupItem
-                                value={x.id}
-                                id={`followsMahramRules-${x.id}`}
-                              />
-                              <Label htmlFor={`followsMahramRules-${x.id}`}>
-                                {x.title}
-                              </Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
+                        <Input
+                          {...field}
+                          className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                          placeholder="মাহরাম/গাইরে-মাহরাম মেনে চলেন কি?"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -546,7 +481,7 @@ export default function ReligiousInfo({
                       <FormControl>
                         <Input
                           {...field}
-                          type="number"
+                          type="text"
                           className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                           placeholder="যেমন: ২০২০"
                         />

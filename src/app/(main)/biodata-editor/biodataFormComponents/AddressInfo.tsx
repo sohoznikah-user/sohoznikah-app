@@ -32,6 +32,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 // Default address object to ensure all fields are defined
 const defaultAddress = {
@@ -101,28 +102,7 @@ export default function AddressInfo({
   // Watch addresses.0.detail and append/update grown_up address
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
-      if (name === "addresses.0.detail" && value.addresses?.[0]?.detail) {
-        const detailValue = value.addresses[0].detail;
-        const grownUpIndex = fields.findIndex(
-          (field) => field.type === "grown_up"
-        );
-
-        const grownUpData = {
-          ...defaultAddress,
-          type: "grown_up",
-          detail: detailValue,
-        };
-
-        if (grownUpIndex >= 0) {
-          // Update existing grown_up address
-          update(grownUpIndex, grownUpData);
-        } else {
-          // Append new grown_up address
-          append(grownUpData);
-        }
-      }
-
-      // Sync form data to parent state
+      // Only sync form data to parent state, don't watch addresses.0.detail here
       const currentValues = biodataFormData?.addressInfoFormData;
       if (JSON.stringify(value) !== JSON.stringify(currentValues)) {
         setBiodataFormData(value as BiodataFormData);
@@ -139,12 +119,37 @@ export default function AddressInfo({
     biodataFormData?.addressInfoFormData,
   ]);
 
+  // Handle grown_up address sync on blur
+  const handleGrownUpDetailBlur = () => {
+    const detailValue = form.getValues("addresses.0.detail");
+    if (detailValue) {
+      const grownUpIndex = fields.findIndex(
+        (field) => field.type === "grown_up"
+      );
+
+      const grownUpData = {
+        ...defaultAddress,
+        type: "grown_up",
+        detail: detailValue,
+      };
+
+      if (grownUpIndex >= 0) {
+        // Update existing grown_up address
+        update(grownUpIndex, grownUpData);
+      } else {
+        // Append new grown_up address
+        append(grownUpData);
+      }
+    }
+  };
+
   // Handle next button click
   const handleNextClick = async () => {
     const isValid = await form.trigger();
     if (isValid) {
       handleSave();
     } else {
+      toast.error(JSON.stringify(form.formState.errors));
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof AddressInfoFormData
       );
@@ -271,40 +276,6 @@ export default function AddressInfo({
                                   type="text"
                                   placeholder="দেশের নাম"
                                 />
-                              </FormControl>
-                            </div>
-                            <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name={`addresses.${index}.cityzenshipStatus`}
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel className="text-md space-y-2 leading-4.5">
-                            সিটিজেনশিপ আছে?
-                          </FormLabel>
-                          <div className="flex flex-col space-y-2">
-                            <div className="flex items-center space-x-2">
-                              <FormControl>
-                                <RadioGroup
-                                  className="w-full flex flex-wrap gap-0 min-h-12"
-                                  onValueChange={field.onChange}
-                                  value={field.value || ""}
-                                >
-                                  {citizenshipOptions.map((x) => (
-                                    <div
-                                      key={x.id}
-                                      className="w-1/3 flex items-center space-x-2"
-                                    >
-                                      <RadioGroupItem value={x.id} id={x.id} />
-                                      <Label htmlFor={x.id}>{x.title}</Label>
-                                    </div>
-                                  ))}
-                                </RadioGroup>
                               </FormControl>
                             </div>
                             <FormMessage />
@@ -444,6 +415,45 @@ export default function AddressInfo({
                 />
 
                 {form.getValues(`addresses.${index}.location`) ===
+                  "foreign" && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name={`addresses.${index}.cityzenshipStatus`}
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormLabel className="text-md space-y-2 leading-4.5">
+                            সিটিজেনশিপ আছে?
+                          </FormLabel>
+                          <div className="flex flex-col space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <FormControl>
+                                <RadioGroup
+                                  className="w-full flex flex-wrap gap-0 min-h-12"
+                                  onValueChange={field.onChange}
+                                  value={field.value || ""}
+                                >
+                                  {citizenshipOptions.map((x) => (
+                                    <div
+                                      key={x.id}
+                                      className="w-1/3 flex items-center space-x-2"
+                                    >
+                                      <RadioGroupItem value={x.id} id={x.id} />
+                                      <Label htmlFor={x.id}>{x.title}</Label>
+                                    </div>
+                                  ))}
+                                </RadioGroup>
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
+                {form.getValues(`addresses.${index}.location`) ===
                   "bangladesh" && (
                   <>
                     <FormField
@@ -511,6 +521,7 @@ export default function AddressInfo({
                         className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                         type="text"
                         placeholder="(ছোটবেলা থেকে এখন পর্যন্ত কোথায় কোথায় থাকা হয়েছে তার সংক্ষিপ্ত বিবরণ দিন)"
+                        onBlur={handleGrownUpDetailBlur}
                       />
                     </FormControl>
                   </div>
