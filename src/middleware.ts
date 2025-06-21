@@ -36,7 +36,6 @@ function isProtectedRoute(pathname: string): boolean {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log("pathname", pathname);
 
   // Check if the current route is protected
   if (isProtectedRoute(pathname)) {
