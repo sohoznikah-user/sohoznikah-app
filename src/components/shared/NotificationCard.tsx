@@ -1,7 +1,6 @@
 "use client";
 import { format } from "date-fns";
 import { ChevronRight, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 interface NotificationCardProps {
@@ -23,17 +22,17 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   onDelete,
   onView,
 }) => {
-  const router = useRouter();
-  const pathname =
-    title === "UPDATE_BIODATA" || title === "NEW_BIODATA"
-      ? "/dashboard/profile"
-      : "/dashboard/notifications";
+  // const router = useRouter();
+  // const pathname =
+  //   title === "UPDATE_BIODATA" || title === "NEW_BIODATA"
+  //     ? "/dashboard/profile"
+  //     : "/dashboard/notifications";
 
   return (
     <div
       onClick={() => {
         onView();
-        router.push("/dashboard/notifications");
+        // router.push("/dashboard/notifications");
       }}
       className={` ${isRead ? "border-[#B3D6F6] border-none" : "border-[#F36B7F] border-2"} rounded-xl shadow-md p-4 flex flex-col min-w-0 cursor-pointer relative bg-white`}
     >

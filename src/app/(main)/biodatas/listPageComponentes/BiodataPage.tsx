@@ -204,7 +204,7 @@ const BiodataPage = () => {
     });
 
     if (Object.keys(filterData).length > 0) {
-      console.log("Initializing Filters from URL:", filterData);
+      // console.log("Initializing Filters from URL:", filterData);
       dispatch(setFilterData(filterData));
     }
   }, [dispatch, searchParams]);
@@ -297,7 +297,7 @@ const BiodataPage = () => {
             />
           </div>
           {isLoading ? (
-            <div className="text-center py-4 flex justify-center items-center min-h-[300px]">
+            <div className="text-center py-4 flex justify-center items-center min-h-[300px] w-full">
               <Loader2 className="w-6 h-6 animate-spin" />
             </div>
           ) : biodatas && biodatas?.data?.length > 0 ? (

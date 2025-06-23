@@ -721,3 +721,18 @@ export const biodataStatusOptions = [
   { id: "REJECTED", title: "REJECTED" },
   { id: "DELETED", title: "DELETED" },
 ];
+export const biodataStatusFilterOptions = [
+  { id: "PROCESSING", title: "PROCESSING" },
+  { id: "PENDING", title: "PENDING" },
+  { id: "APPROVED", title: "APPROVED" },
+  { id: "REJECTED", title: "REJECTED" },
+  { id: "UPDATE_REQUESTED", title: "UPDATE_REQUESTED" },
+  { id: "DELETE_REQUESTED", title: "DELETE_REQUESTED" },
+  { id: "DELETED", title: "DELETED" },
+  { id: "EDIT_PENDING", title: "EDIT_PENDING" },
+];
+export const userStatusFilterOptions = [
+  { id: "ACTIVE", title: "ACTIVE" },
+  { id: "PENDING", title: "PENDING" },
+  { id: "BLOCKED", title: "BLOCKED" },
+];

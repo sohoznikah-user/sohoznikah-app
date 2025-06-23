@@ -172,6 +172,7 @@ const ShortlistPage = () => {
               date={item.createdAt}
               isShortlisted={item.isShortlisted}
               visibility={item.bioVisibility}
+              activeTab={"myRecords"}
               onDelete={() => {
                 setSelectedId(item.id);
                 setIsModalOpen("delete");

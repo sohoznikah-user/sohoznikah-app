@@ -1,4 +1,5 @@
 // File: src/app/(main)/dashboard/DashboardLeftNav.tsx
+"use client";
 import female from "@/assets/images/female-1.svg";
 import male from "@/assets/images/male-5.svg";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
@@ -32,7 +33,7 @@ export default function DashboardLeftNav({
 
       {/* Sidebar */}
       <div
-        className={`fixed lg:static overflow-y-auto  top-0 left-0 min-h-screen max-h-full lg:h-full  py-8 pb-20 lg:pb-12 w-72 flex flex-col items-center space-y-1 bg-[#307FA7] lg:bg-[#307FA7] z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+        className={`fixed lg:static overflow-y-auto  top-0 left-0  py-10 w-72 flex flex-col items-center space-y-1 bg-[#307FA7] lg:bg-[#307FA7] z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0 overflow-y-auto pb-20 min-h-screen" : "-translate-x-full lg:translate-x-0"}`}
       >
         {/* Close button for mobile */}
         <button

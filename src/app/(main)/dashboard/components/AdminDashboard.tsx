@@ -12,7 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { emailVerificationOptions, userStatusOptions } from "@/lib/consts";
+import {
+  emailVerificationOptions,
+  userStatusFilterOptions,
+  userStatusOptions,
+} from "@/lib/consts";
 import {
   useDeleteUserMutation,
   useGetAllUsersQuery,
@@ -147,6 +151,27 @@ export default function AdminDashboardPage() {
     } finally {
       handleReset();
     }
+  };
+
+  // search
+  const handleSearchChange = (newSearchTerm: string) => {
+    // console.log("New Search Term:", newSearchTerm); // Debug
+    setSearchTerm(newSearchTerm);
+    setPagination((prev) => ({ ...prev, page: 1 }));
+  };
+
+  // filter
+  const handleFilter = (selectedFilter: string) => {
+    if (selectedFilter === "all") {
+      setFilters({});
+    } else {
+      setFilters({ status: selectedFilter });
+    }
+    setPagination((prev) => ({
+      ...prev,
+      limit: 10,
+      page: 1,
+    }));
   };
 
   // reset
@@ -336,12 +361,23 @@ export default function AdminDashboardPage() {
 
         <ReusableTable
           data={data?.data || []}
+          meta={data?.meta}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
           enablePagination
           searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
+          searchPlaceholder="Search by email"
+          filterPlaceholder="Filter by status"
+          searchable
+          filterable
+          filterOptions={userStatusFilterOptions.map((x) => ({
+            label: x.title,
+            value: x.id,
+          }))}
+          onFilterChange={handleFilter}
+          onSearchChange={handleSearchChange}
+          loading={isLoading}
         />
 
         {/* delete biodata */}

@@ -14,6 +14,7 @@ interface ReusableMobileCardProps {
   onDelete?: () => void;
   onView?: () => void;
   onShortlist?: () => void;
+  activeTab?: string;
 }
 
 const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
@@ -25,7 +26,9 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
   onDelete,
   onView,
   onShortlist,
+  activeTab,
 }) => {
+  console.log("activeTab", activeTab);
   return (
     <div
       className={`border-[#B3D6F6] border-none rounded-xl shadow-md p-4 flex justify-between min-w-0 cursor-pointer relative bg-white`}
@@ -46,7 +49,7 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
             স্থায়ী: {permanentAddress}
           </p>
         )}
-        {onShortlist && (
+        {onShortlist && activeTab === "myRecords" && (
           <div className="text-[#222] text-[15px] flex items-center justify-start gap-3">
             <p className="text-md text-[#005381]">চুড়ান্ত তালিকায় রাখুন</p>
             <button onClick={onShortlist}>
@@ -71,7 +74,7 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
         <span className="text-[13px] text-[#A1A1A1]">
           {format(date, "dd MMM yyyy")}
         </span>
-        {onDelete && (
+        {onDelete && activeTab === "myRecords" && (
           <button onClick={onDelete} className="cursor-pointer">
             <Trash2 className="w-5 h-5 text-[#F36B7F]" />
           </button>

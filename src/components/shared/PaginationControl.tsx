@@ -50,7 +50,7 @@ export function PaginationControls({
   };
 
   return (
-    <Pagination className="  text-background">
+    <Pagination className="  text-black text-sm">
       <PaginationContent className="gap-1">
         {/* Previous Button */}
         <PaginationItem>
@@ -61,8 +61,8 @@ export function PaginationControls({
             }
             className={
               currentPage === 1
-                ? "pointer-events-none opacity-50"
-                : "cursor-pointer"
+                ? "pointer-events-none opacity-50 "
+                : "cursor-pointer hover:bg-gray-500 hover:text-white"
             }
           />
         </PaginationItem>
@@ -73,7 +73,7 @@ export function PaginationControls({
             <PaginationItem>
               <PaginationLink
                 onClick={() => setPagination((prev) => ({ ...prev, page: 1 }))}
-                className="cursor-pointer"
+                className="cursor-pointer hover:bg-gray-500 hover:text-white"
               >
                 1
               </PaginationLink>
@@ -92,7 +92,7 @@ export function PaginationControls({
               onClick={() => setPagination((prev) => ({ ...prev, page }))}
               className={`cursor-pointer ${
                 page === currentPage
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                  ? "bg-white text-black hover:bg-gray-500 hover:text-white"
                   : ""
               }`}
             >
@@ -112,7 +112,7 @@ export function PaginationControls({
                 onClick={() =>
                   setPagination((prev) => ({ ...prev, page: totalPages }))
                 }
-                className="cursor-pointer"
+                className="cursor-pointer hover:bg-gray-500 hover:text-white "
               >
                 {totalPages}
               </PaginationLink>
@@ -130,7 +130,7 @@ export function PaginationControls({
             className={
               currentPage === totalPages
                 ? "pointer-events-none opacity-50"
-                : "cursor-pointer"
+                : "cursor-pointer hover:bg-gray-500 hover:text-white"
             }
           />
         </PaginationItem>

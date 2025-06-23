@@ -11,7 +11,7 @@ const Title = ({
 }) => {
   return (
     <div
-      className={`text-2xl md:text-3xl lg:text-4xl font-semibold md:py-5 py-3 mb-6 text-[#1F4F69] tracking-wide text-center flex justify-center items-center md:gap-3 gap-2 ${className}`}
+      className={`text-2xl md:text-3xl lg:text-4xl font-semibold md:py-6 py-3 text-[#1F4F69] tracking-wide text-center flex justify-center items-center md:gap-3 gap-2 ${className}`}
     >
       {leftTitle && (
         <span className=" font-semibold text-2xl md:text-3xl lg:text-4xl">

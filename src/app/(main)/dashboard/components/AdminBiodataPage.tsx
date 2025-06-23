@@ -11,7 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { biodataStatusOptions, biodataVisibilityOptions } from "@/lib/consts";
+import {
+  biodataStatusFilterOptions,
+  biodataStatusOptions,
+  biodataVisibilityOptions,
+} from "@/lib/consts";
 import {
   useDeleteBiodataMutation,
   useGetBiodatasByAdminQuery,
@@ -29,29 +33,30 @@ export default function AdminBiodataPage() {
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [selectedData, setSelectedData] = useState<any | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState<any>({});
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     total: 0,
+    sortOrder: "desc",
+    sortBy: "createdAt",
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearch = useDebounced({ searchQuery: searchTerm, delay: 600 });
   const [updatedData, setUpdatedData] = useState<any | null>({
     visibility: null,
     status: null,
   });
 
-  const debouncedSearch = useDebounced({ searchQuery: searchTerm, delay: 600 });
   const [deleteBiodata, { isLoading: isDeleting }] = useDeleteBiodataMutation();
-
   const query = useMemo(
     () => ({
       page: pagination.page,
       limit: pagination.limit,
-      sortBy: "status",
-      sortOrder: "desc",
+      sortBy: pagination.sortBy,
+      sortOrder: pagination.sortOrder,
       ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
-      ...(filters ? filters : {}),
+      ...(filters && Object.keys(filters).length > 0 ? filters : {}),
     }),
     [pagination, debouncedSearch, filters]
   );
@@ -106,6 +111,27 @@ export default function AdminBiodataPage() {
     } finally {
       handleReset();
     }
+  };
+
+  // search
+  const handleSearchChange = (newSearchTerm: string) => {
+    // console.log("New Search Term:", newSearchTerm); // Debug
+    setSearchTerm(newSearchTerm);
+    setPagination((prev) => ({ ...prev, page: 1 }));
+  };
+
+  // filter
+  const handleFilter = (selectedFilter: string) => {
+    if (selectedFilter === "all") {
+      setFilters({});
+    } else {
+      setFilters({ status: selectedFilter });
+    }
+    setPagination((prev) => ({
+      ...prev,
+      limit: 10,
+      page: 1,
+    }));
   };
 
   const handleReset = () => {
@@ -260,9 +286,20 @@ export default function AdminBiodataPage() {
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
+          meta={data?.meta}
           enablePagination
           searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
+          searchPlaceholder="Search by code"
+          filterPlaceholder="Filter by status"
+          searchable
+          filterable
+          filterOptions={biodataStatusFilterOptions.map((x) => ({
+            label: x.title,
+            value: x.id,
+          }))}
+          onFilterChange={handleFilter}
+          onSearchChange={handleSearchChange}
+          loading={isLoading}
         />
 
         <DeleteConfirmationModal

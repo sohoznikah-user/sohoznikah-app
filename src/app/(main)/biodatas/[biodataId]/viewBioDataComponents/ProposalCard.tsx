@@ -66,7 +66,7 @@ const ProposalCard = ({
     skip: !token || !user || activeTab !== "contact",
   });
 
-  // console.log("getProposal", getProposal);
+  console.log("getProposal", getProposal);
   // console.log("getContact", getContact);
   // create proposal
   const handleCreateProposal = async () => {
@@ -211,9 +211,10 @@ const ProposalCard = ({
                   {getProposal?.success ? (
                     <div className="flex flex-col items-center justify-center">
                       {/* proposal receiver */}
-                      {getProposal?.data?.receiverId === user?.userId && (
+                      {getProposal?.data?.receivedProposal && (
                         <>
-                          {getProposal?.data?.status === "PENDING" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "PENDING" && (
                             <>
                               {responseTab === "response-proposal" ? (
                                 <>
@@ -320,7 +321,8 @@ const ProposalCard = ({
                               )}
                             </>
                           )}
-                          {getProposal?.data?.status === "ACCEPTED" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "ACCEPTED" && (
                             <>
                               <h4 className="text-center text-md font-semibold mb-2 mt-1">
                                 এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
@@ -330,7 +332,8 @@ const ProposalCard = ({
                               </p>
                             </>
                           )}
-                          {getProposal?.data?.status === "REJECTED" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "REJECTED" && (
                             <>
                               <h4 className="text-center text-md font-semibold mb-2 mt-1">
                                 এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
@@ -346,7 +349,8 @@ const ProposalCard = ({
                               </button>
                             </>
                           )}
-                          {getProposal?.data?.status === "NEED_TIME" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "NEED_TIME" && (
                             <>
                               <h4 className="text-center text-md font-semibold mb-2 mt-1">
                                 এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
@@ -405,9 +409,10 @@ const ProposalCard = ({
                       )}
 
                       {/* proposal sender */}
-                      {getProposal?.data?.senderId === user?.userId && (
+                      {getProposal?.data?.sentProposal && (
                         <>
-                          {getProposal?.data?.status === "PENDING" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "PENDING" && (
                             <>
                               <h4 className="text-center text-md font-semibold mb-2 mt-2">
                                 আপনি প্রস্তাব পাঠিয়েছেন
@@ -430,7 +435,8 @@ const ProposalCard = ({
                               )}
                             </>
                           )}
-                          {getProposal?.data?.status === "ACCEPTED" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "ACCEPTED" && (
                             <>
                               <h4 className="text-center text-md font-semibold mb-2 mt-3">
                                 আপনি প্রস্তাব পাঠিয়েছেন{" "}
@@ -440,7 +446,8 @@ const ProposalCard = ({
                               </p>
                             </>
                           )}
-                          {getProposal?.data?.status === "REJECTED" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "REJECTED" && (
                             <>
                               <h4 className="text-center text-md font-semibold mb-2 mt-2">
                                 আপনি প্রস্তাব পাঠিয়েছেন{" "}
@@ -450,7 +457,8 @@ const ProposalCard = ({
                               </p>
                             </>
                           )}
-                          {getProposal?.data?.status === "NEED_TIME" && (
+                          {getProposal?.data?.sentProposal?.status ===
+                            "NEED_TIME" && (
                             <>
                               <h4 className="text-center text-md font-semibold mb-2 mt-2">
                                 আপনি প্রস্তাব পাঠিয়েছেন{" "}

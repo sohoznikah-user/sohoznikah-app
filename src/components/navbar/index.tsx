@@ -1,8 +1,6 @@
 // File: src/components/navbar/index.tsx
 "use client";
-import female from "@/assets/images/female-1.svg";
 import logo from "@/assets/images/logo.svg";
-import male from "@/assets/images/male-5.svg";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { User } from "lucide-react";
@@ -37,8 +35,6 @@ export function Navbar() {
   const router = useRouter();
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const profileImage = biodata?.biodataType === "GROOM" ? male : female;
 
   const menuItems: MenuItem[] = [
     {
@@ -122,14 +118,14 @@ export function Navbar() {
                   href="/biodata-editor"
                   className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
                 >
-                  বায়োডাটা তৈরী করুন
+                  বায়োডাটা তৈরী করুন
                 </Link>
               ) : biodata?.status === "PROCESSING" ? (
                 <Link
                   href="/biodata-editor"
                   className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
                 >
-                  বায়োডাটা সম্পূর্ণ করুন
+                  বায়োডাটা সম্পূর্ণ করুন
                 </Link>
               ) : biodata?.status === "PENDING" ||
                 biodata?.status === "EDIT_PENDING" ? (
@@ -141,14 +137,14 @@ export function Navbar() {
                   href="/biodata-editor"
                   className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
                 >
-                  এডিট সম্পূর্ণ করে পাবলিশ করুন
+                  এডিট সম্পূর্ণ করে পাবলিশ করুন
                 </Link>
               ) : biodata?.status === "APPROVED" ? (
                 <Link
                   href="/biodatas/my-biodata"
                   className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md rounded-lg"
                 >
-                  আমার বায়োডাটা
+                  আমার বায়োডাটা
                 </Link>
               ) : (
                 ""
@@ -162,7 +158,7 @@ export function Navbar() {
                 href="/biodata-editor"
                 className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-lg rounded-lg"
               >
-                বায়োডাটা তৈরী করুন
+                বায়োডাটা তৈরী করুন
               </Link>
 
               <Link
@@ -176,13 +172,6 @@ export function Navbar() {
           {user && token && (
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none cursor-pointer rounded-full border border-[#1f4f69] p-1">
-                {/* <Avatar>
-                  <AvatarImage
-                    src={biodata?.profilePic || profileImage}
-                    // alt={biodataFormData?.primaryInfoFormData?.fullName}
-                  />
-                  <AvatarFallback>{test?.name.charAt(0)}</AvatarFallback>
-                </Avatar> */}
                 <User size={24} />
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -196,7 +185,7 @@ export function Navbar() {
                   ড্যাশবোর্ড
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="focus:bg-[#E25A6F] cursor-pointer text-white hover:text-white"
+                  className="focus:bg-[#E25A6F] cursor-pointer"
                   onClick={() => {
                     dispatch(logout());
                     toast.success("Logged out successfully");
@@ -242,7 +231,7 @@ export function Navbar() {
                         className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md w-11/12 text-center"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        বায়োডাটা তৈরী করুন
+                        বায়োডাটা তৈরী করুন
                       </Link>
                     ) : biodata?.status === "PROCESSING" ? (
                       <Link
@@ -250,7 +239,7 @@ export function Navbar() {
                         className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md w-11/12 text-center"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        বায়োডাটা সম্পূর্ণ করুন
+                        বায়োডাটা সম্পূর্ণ করুন
                       </Link>
                     ) : biodata?.status === "PENDING" ||
                       biodata?.status === "EDIT_PENDING" ? (
@@ -267,7 +256,7 @@ export function Navbar() {
                         className="bg-[#E25A6F] text-white hover:bg-[#D14A5F] px-4 py-2 transition-all text-md w-11/12 text-center"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        আমার বায়োডাটা
+                        আমার বায়োডাটা
                       </Link>
                     ) : (
                       ""

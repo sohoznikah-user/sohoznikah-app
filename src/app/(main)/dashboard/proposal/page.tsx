@@ -281,7 +281,7 @@ const ProposalPage = () => {
           </button>
         </div>
 
-        <p className="text-center text-sm text-[#C65C5C] pt-6 mb-1 max-w-2xl mx-auto px-4">
+        <p className="text-center text-lg font-semibold text-[#C65C5C] pt-5 max-w-2xl mx-auto px-4">
           {activeTab === "myRecords"
             ? "আপনাকে প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে কোনো রেসপন্স না করলে অপরপক্ষ চাইলে প্রস্তাবটি বাতিল করতে পারবে"
             : "আপনি প্রস্তাব পাঠানোর পর ৭২ ঘন্টার মধ্যে অপরপক্ষ রেসপন্স না করলে প্রস্তাবটি বাতিল করার অপশন পাবেন। বাতিল করলে টোকেন রিফান্ড পাবেন, চাইলে অপেক্ষাও করতে পারেন"}

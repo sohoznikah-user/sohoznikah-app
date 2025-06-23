@@ -2,6 +2,7 @@
 
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
+import Title from "@/components/shared/Title";
 import { proposalStatusOptions } from "@/lib/consts";
 import { useGetAllContactsQuery } from "@/redux/features/admin/contactApi";
 import {
@@ -177,19 +178,9 @@ const ContactPage = () => {
   return (
     <div className="min-h-[500px] lg:p-5 flex justify-center items-center">
       <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
-          যোগাযোগ তথ্যের তালিকা
-        </h1>
-        {/* <div className="flex justify-center mb-6">
-          <input
-            type="text"
-            placeholder=""
-            className="w-full max-w-md p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div> */}
-        <div className="flex justify-center mb-3 px-4">
+        <Title leftTitle="যোগাযোগ তথ্যের তালিকা" hideCenter />
+
+        <div className="flex justify-center mb-0 px-4">
           <button
             onClick={() => setActiveTab("myRecords")}
             className={`px-6 py-2 rounded-lg font-medium transition ${

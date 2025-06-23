@@ -43,6 +43,8 @@ interface ReusableTableProps<T> {
   pagination?: Meta;
   setPagination?: React.Dispatch<React.SetStateAction<Meta>>;
   enablePagination?: boolean;
+  searchPlaceholder?: string;
+  filterPlaceholder?: string;
   caption?: string;
   searchable?: boolean;
   filterable?: boolean;
@@ -51,6 +53,7 @@ interface ReusableTableProps<T> {
   filterKey?: string;
   filterOptions?: { label: string; value: string }[];
   onFilterChange?: (val: string) => void;
+  loading?: boolean;
 }
 
 export function ReusableTable<T>({
@@ -61,12 +64,15 @@ export function ReusableTable<T>({
   setPagination,
   enablePagination = false,
   searchable = false,
+  searchPlaceholder = "Search...",
   caption,
+  filterPlaceholder = "Filter by",
   filterable = false,
   filterOptions,
   onFilterChange,
   onSearchChange,
   searchTerm,
+  loading = false,
 }: ReusableTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState("");
   const user = useAppSelector(selectCurrentUser);
@@ -114,26 +120,35 @@ export function ReusableTable<T>({
 
   return (
     <div className=" md:p-5 lg:p-6 text-black">
-      <div className="flex flex-wrap justify-between items-center gap-4">
+      <div className="flex flex-wrap justify-between items-center gap-2 mb-5">
         {/* Search */}
         {searchable && onSearchChange && (
           <Input
-            placeholder="Search..."
+            placeholder={searchPlaceholder}
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="max-w-xs text-background"
+            className="max-w-[150px] bg-white text-black border-gray-300 border"
           />
         )}
 
         {filterable && filterOptions?.length && onFilterChange && (
           <Select onValueChange={onFilterChange} defaultValue="">
-            <SelectTrigger className="w-[160px] bg-foreground">
-              <SelectValue placeholder="Filter by" />
+            <SelectTrigger className="w-[160px] bg-white border-gray-300 border text-sm">
+              <SelectValue placeholder={filterPlaceholder} />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
+            <SelectContent className="bg-white text-black border-gray-300 border text-xs">
+              <SelectItem
+                value="all"
+                className="hover:bg-gray-500 hover:text-white cursor-pointer"
+              >
+                ALL
+              </SelectItem>
               {filterOptions?.map((option) => (
-                <SelectItem key={option.label} value={option.value}>
+                <SelectItem
+                  key={option.label}
+                  value={option.value}
+                  className="hover:bg-gray-500 hover:text-white cursor-pointer"
+                >
                   {option.label}
                 </SelectItem>
               ))}
@@ -142,7 +157,7 @@ export function ReusableTable<T>({
         )}
       </div>
 
-      <div>
+      <div className={`${loading ? "opacity-50" : ""}`}>
         {/* Table for desktop */}
         <div className="overflow-x-auto hidden sm:block">
           <Table>
@@ -234,28 +249,41 @@ export function ReusableTable<T>({
         )}
       </div>
 
-      <div className="flex justify-between items-center gap-4  mt-5 text-black">
+      <div
+        className={`flex justify-between items-start gap-4  mt-5 text-black ${
+          loading ? "opacity-50" : ""
+        }`}
+      >
         {/* Limit */}
         {enablePagination && pagination && setPagination && (
-          <div className="flex items-center w-full gap-2">
-            <span className="text-sm w-28">Rows per page:</span>
-            <Select
-              value={String(pagination.limit)}
-              onValueChange={(val) =>
-                setPagination({ ...pagination, limit: Number(val), page: 1 })
-              }
-            >
-              <SelectTrigger className="w-[80px] bg-white text-black">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {[10, 20, 50, 100].map((n) => (
-                  <SelectItem key={n} value={String(n)}>
-                    {n}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex flex-col justify-center items-start w-full  text-black">
+            <div className="flex items-center w-full gap-2 text-black">
+              <span className="text-sm w-28">Rows per page:</span>
+
+              <Select
+                value={String(pagination.limit)}
+                onValueChange={(val) =>
+                  setPagination({ ...pagination, limit: Number(val), page: 1 })
+                }
+              >
+                <SelectTrigger className="w-[80px] bg-white text-black border-gray-300 border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-black border-gray-300 border">
+                  {[10, 20, 50, 100].map((n) => (
+                    <SelectItem
+                      key={n}
+                      value={String(n)}
+                      className="hover:bg-gray-500 hover:text-white text-sm cursor-pointer"
+                    >
+                      {n}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="text-sm w-28">Total: {meta?.total}</div>
           </div>
         )}
 

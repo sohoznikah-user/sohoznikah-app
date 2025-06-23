@@ -31,9 +31,10 @@ export const biodataApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.biodata],
     }),
     getBiodatasByAdmin: build.query({
-      query: () => ({
+      query: (arg: Record<string, any>) => ({
         url: `${BIODATA_URL}/all`,
         method: "GET",
+        params: arg,
       }),
       providesTags: [tagTypes.biodata],
     }),
