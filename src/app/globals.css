@@ -8,6 +8,16 @@
   width: 5px; /* Adjust the width */
 }
 
+::-webkit-scrollbar-thumb {
+  background: #1f4f69; /* Adjust the color */
+  border-radius: 10px; /* Adjust the border radius */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Adjust the background color */
+  border-radius: 10px; /* Adjust the border radius */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

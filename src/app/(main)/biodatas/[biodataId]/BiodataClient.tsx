@@ -78,21 +78,6 @@ export default function BiodataClient({
     "যেমন জীবনসঙ্গী আশা করেন": spouseRef,
   };
 
-  // Redirect to login if not authenticated
-  //   useEffect(() => {
-  //     if (!myBiodata) {
-  //       return;
-  //     }
-  //     if (myBiodata) {
-  //       if (!user || !acesstoken) {
-  //         const redirectUrl = `/my-biodata`;
-  //         router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
-  //       }
-  //     }
-  //   }, [myBiodata, user, acesstoken, router]);
-
-  // Fetch my biodata when myBiodata is true
-
   // Set biodata based on fetched data
   useEffect(() => {
     if (fetchedBiodata?.data) {

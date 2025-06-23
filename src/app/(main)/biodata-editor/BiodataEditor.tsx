@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
 import { mapBiodataFormDataToApi } from "@/utils/mapBiodataFormDataToApi";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import Breadcrumbs from "./biodataFormComponents/Breadcrumbs";
 import { steps } from "./steps";
@@ -41,6 +41,7 @@ interface BiodataEditorProps {
 }
 
 export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
+  const [savedSteps, setSavedSteps] = useState<string[]>([]);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
@@ -55,6 +56,9 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   } = useGetMyBiodataQuery(undefined, {
     skip: !user || !acesstoken,
   });
+
+  console.log("biodataFormData", biodataFormData);
+  console.log("savedSteps", savedSteps);
 
   const searchParams = useSearchParams();
   const currentStepKey = searchParams.get("step") || steps[0].key;
@@ -77,6 +81,26 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
       const mapped = mapApiToBiodataFormData(fetchedBiodata.data);
       dispatch(setAllBiodataFormData(mapped.biodataFormData));
       dispatch(setAllBiodata(mapped.biodata));
+
+      const completed = Object.entries(mapped.biodataFormData)
+        .filter(([_, val]) => {
+          // Proper check for actual content
+          return Object.values(val).some((v) => {
+            if (Array.isArray(v)) return v.length > 0;
+            if (typeof v === "object" && v !== null)
+              return Object.keys(v).length > 0;
+            return v !== "" && v !== null && v !== undefined;
+          });
+        })
+        .map(([key]) => {
+          const stepKey = Object.entries(stepKeyToStateKey).find(
+            ([, stateKey]) => stateKey === key
+          )?.[0];
+          return stepKey;
+        })
+        .filter(Boolean) as string[];
+
+      setSavedSteps(completed);
     }
   }, [fetchedBiodata, dispatch]);
 
@@ -87,11 +111,18 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
     }
   }, [fetchError]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentStepKey]);
+
   const setStep = useCallback(
     (key: string) => {
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.set("step", key);
       window.history.pushState(null, "", `?${newSearchParams.toString()}`);
+
+      // Scroll to top when step changes
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [searchParams]
   );
@@ -129,19 +160,25 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
       };
 
       const payload = mapBiodataFormDataToApi(currentStepKey, formData);
-      console.log("Saving data:", { completeBiodata, payload });
+      // console.log("Saving data:", { completeBiodata, payload });
 
       const result = await updateMyBiodata(completeBiodata).unwrap();
       if (result.success) {
-        toast.success("Biodata saved successfully!");
-        await refetch(); // Sync state again
-        setStep(currentStep.next);
+        if (stepKey === "finalWordsFormData") {
+          toast.success("বায়োডাটা পাবলিশের জন্য সফলভাবে সাবমিট হয়েছে");
+          await refetch(); // Sync state again
+          setStep(currentStep.next);
+        } else {
+          toast.success("বায়োডাটা সফলভাবে সংরক্ষণ করা হয়েছে!");
+          await refetch(); // Sync state again
+          setStep(currentStep.next);
+        }
       } else {
-        toast.error(result.message || "Failed to save biodata.");
+        toast.error(result.message || "বায়োডাটা সংরক্ষণ করতে ব্যর্থ হয়েছে!");
       }
     } catch (error: any) {
       console.error("Failed to save biodata:", error);
-      toast.error(error?.message || "Failed to create biodata.");
+      toast.error(error?.message || "বায়োডাটা সংরক্ষণ করতে ব্যর্থ হয়েছে!");
     }
   }, [
     currentStep,
@@ -160,7 +197,13 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
 
   return (
     <div className="container mx-auto p-4">
-      <Breadcrumbs currentStep={currentStepKey} setCurrentStep={setStep} />
+      <Breadcrumbs
+        currentStep={currentStepKey}
+        setCurrentStep={setStep}
+        savedSteps={savedSteps}
+        biodataCompleted={Number(biodata?.biodataCompleted) || 0}
+      />
+
       <FormComponent
         biodataFormData={biodataFormData}
         handleSave={handleSave}

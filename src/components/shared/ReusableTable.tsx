@@ -113,7 +113,7 @@ export function ReusableTable<T>({
   });
 
   return (
-    <div className=" md:p-5 lg:p-6">
+    <div className=" md:p-5 lg:p-6 text-black">
       <div className="flex flex-wrap justify-between items-center gap-4">
         {/* Search */}
         {searchable && onSearchChange && (
@@ -234,7 +234,7 @@ export function ReusableTable<T>({
         )}
       </div>
 
-      <div className="flex justify-between items-center gap-4 text-background mt-5">
+      <div className="flex justify-between items-center gap-4  mt-5 text-black">
         {/* Limit */}
         {enablePagination && pagination && setPagination && (
           <div className="flex items-center w-full gap-2">
@@ -245,7 +245,7 @@ export function ReusableTable<T>({
                 setPagination({ ...pagination, limit: Number(val), page: 1 })
               }
             >
-              <SelectTrigger className="w-[80px] bg-foreground">
+              <SelectTrigger className="w-[80px] bg-white text-black">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

@@ -57,6 +57,8 @@ export default function AdminDashboardPage() {
     () => ({
       page: pagination.page,
       limit: pagination.limit,
+      sortBy: "updatedAt",
+      sortOrder: "asc",
       ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
       ...(filters ? filters : {}),
     }),

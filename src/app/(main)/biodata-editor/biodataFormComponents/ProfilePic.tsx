@@ -73,7 +73,7 @@ export default function ProfilePic({
     if (isValid) {
       handleSave();
     } else {
-      toast.error(JSON.stringify(form.formState.errors));
+      toast.error("একটি ছবি বাছাই করুন");
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof ProfilePicFormData
       );

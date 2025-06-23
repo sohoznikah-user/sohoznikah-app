@@ -5,6 +5,7 @@ import logo from "@/assets/images/logo.svg";
 import male from "@/assets/images/male-5.svg";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -174,27 +175,28 @@ export function Navbar() {
           )}
           {user && token && (
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none cursor-pointer">
-                <Avatar>
+              <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none cursor-pointer rounded-full border border-[#1f4f69] p-1">
+                {/* <Avatar>
                   <AvatarImage
                     src={biodata?.profilePic || profileImage}
                     // alt={biodataFormData?.primaryInfoFormData?.fullName}
                   />
                   <AvatarFallback>{test?.name.charAt(0)}</AvatarFallback>
-                </Avatar>
+                </Avatar> */}
+                <User size={24} />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="mt-2 bg-[#307fa7] border-none"
+                className="mt-2 bg-[#307fa7] border-none text-white"
               >
                 <DropdownMenuItem
-                  className="focus:bg-[#E25A6F] cursor-pointer"
+                  className="focus:bg-[#E25A6F] cursor-pointer text-white hover:text-white"
                   onClick={() => router.push("/dashboard")}
                 >
                   ড্যাশবোর্ড
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="focus:bg-[#E25A6F] cursor-pointer"
+                  className="focus:bg-[#E25A6F] cursor-pointer text-white hover:text-white"
                   onClick={() => {
                     dispatch(logout());
                     toast.success("Logged out successfully");

@@ -64,7 +64,7 @@ export default function OccupationInfo({
     if (isValid) {
       handleSave();
     } else {
-      toast.error(JSON.stringify(form.formState.errors));
+      toast.error("সকল প্রশ্নের ফিল্ড পূরণ করুন");
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof OccupationInfoFormData
       );
@@ -178,7 +178,7 @@ export default function OccupationInfo({
           className="bg-[#E25A6F] text-white rounded-lg hover:bg-[#D14A5F]"
           onClick={handleNextClick}
         >
-          Next
+          Save & Next
         </Button>
       </div>
 

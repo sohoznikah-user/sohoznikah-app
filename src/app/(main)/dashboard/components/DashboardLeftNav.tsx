@@ -3,7 +3,7 @@ import female from "@/assets/images/female-1.svg";
 import male from "@/assets/images/male-5.svg";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
-import { X } from "lucide-react";
+import { User, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,18 +42,20 @@ export default function DashboardLeftNav({
           <X className="w-6 h-6" />
         </button>
 
-        <Image
-          src={
-            user?.role === "SUPER_ADMIN"
-              ? male
-              : biodata?.profilePic || profileImage
-          }
-          alt="Male"
-          width={80}
-          height={40}
-          priority
-          className="bg-[#77a1b8] p-4 rounded-full"
-        />
+        {biodata?.profilePic ? (
+          <Image
+            src={biodata?.profilePic || profileImage}
+            alt="Male"
+            width={80}
+            height={40}
+            priority
+            className="bg-[#77a1b8] p-4 rounded-full"
+          />
+        ) : (
+          <div className="bg-[#77a1b8] p-4 rounded-full">
+            <User className="w-10 h-10 text-white" />
+          </div>
+        )}
         <div className="p-2 text-center text-white">
           {biodataFormData?.primaryInfoFormData?.fullName}
         </div>

@@ -821,7 +821,7 @@ const ProposalCard = ({
         hideFooter={true}
         title="No Title"
       >
-        <div className="w-full mx-auto md:px-4 p-1">
+        <div className="">
           {/* Current Token Count */}
           <div className="text-center text-xl md:text-2xl font-semibold mb-2">
             আপনার বর্তমান টোকেন সংখ্যা:{" "}
@@ -900,7 +900,7 @@ const ProposalCard = ({
         hideFooter={true}
         title="No Title"
       >
-        <div className="max-w-[100%] mx-auto md:px-4 p-1 max-h-[80vh] overflow-y-auto flex flex-col gap-10">
+        <div className="flex flex-col gap-10">
           <PolicySection data={tokenDetailsData.slice(0, 2)} />
           <PolicySection data={tokenDetailsData.slice(2, 4)} />
           <h2 className="text-lg font-semibold text-[#AB2929] text-center">

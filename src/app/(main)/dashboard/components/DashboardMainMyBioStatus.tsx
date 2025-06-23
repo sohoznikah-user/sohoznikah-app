@@ -16,7 +16,7 @@ export default function DashboardMainMyBioStatus({
         </div>
       </div>
       <div className="flex justify-between">
-        <div>শর্টলিস্টে রেখেছেন</div>
+        <div>চূড়ান্ত তালিকায় রেখেছেন</div>
         <div className="w-6 text-center">
           {biodataAnalytics?.data?.totalShortlistSent || 0}
         </div>
@@ -33,12 +33,12 @@ export default function DashboardMainMyBioStatus({
           {biodataAnalytics?.data?.totalContactSent || 0}
         </div>
       </div>
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <div>রিপোর্ট করেছেন</div>
         <div className="w-6 text-center">
           {biodataAnalytics?.data?.totalReportSent || 0}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

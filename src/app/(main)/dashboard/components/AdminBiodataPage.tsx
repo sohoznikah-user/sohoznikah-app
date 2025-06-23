@@ -48,6 +48,8 @@ export default function AdminBiodataPage() {
     () => ({
       page: pagination.page,
       limit: pagination.limit,
+      sortBy: "status",
+      sortOrder: "desc",
       ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
       ...(filters ? filters : {}),
     }),

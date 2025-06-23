@@ -34,6 +34,7 @@ import { spousePreferenceInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function SpousePreferenceInfo({
   biodataFormData,
@@ -97,6 +98,7 @@ export default function SpousePreferenceInfo({
     if (isValid) {
       handleSave();
     } else {
+      toast.error("সকল প্রশ্নের ফিল্ড পূরণ করুন");
       form.setFocus(
         Object.keys(
           form.formState.errors
