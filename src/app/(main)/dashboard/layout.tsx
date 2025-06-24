@@ -21,6 +21,7 @@ import DashboardLeftNav from "./components/DashboardLeftNav";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectCurrentToken);
+  const emailVerified = useAppSelector((state) => state.auth.emailVerified);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,6 +33,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
     }
   }, [user, token, router]);
+
+  useEffect(() => {
+    if (!emailVerified) {
+      router.push("/verify-email");
+    }
+  }, [emailVerified, router]);
 
   const {
     data: fetchedBiodata,

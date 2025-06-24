@@ -234,7 +234,7 @@ export default function AdminBiodataPage() {
       cell: ({ row }) => (
         <Link href={`/biodata-editor/${row.original.id}`}>
           <button className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7] cursor-pointer">
-            View
+            Edit
           </button>
         </Link>
       ),
@@ -256,6 +256,11 @@ export default function AdminBiodataPage() {
       header: "Action",
       cell: ({ row }) => (
         <EditDeleteButtons
+          onView={() => {
+            setSelectedId(row.original.id);
+            setSelectedData(row.original);
+            setIsModalOpen("view");
+          }}
           onEdit={() => {
             setSelectedId(row.original.id);
             setSelectedData(row.original);
@@ -371,6 +376,41 @@ export default function AdminBiodataPage() {
               </div>
             </div>
           </form>
+        </ReusableModal>
+
+        <ReusableModal
+          open={isModalOpen === "view"}
+          onClose={() => handleReset()}
+          onConfirm={() => handleReset()}
+          title="বায়োডাটা ডিলিট ইনফরমেশন"
+          loading={isUpdating}
+          hideCancelButton
+        >
+          <div>
+            <div>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা টাইপ: {selectedData?.biodataType}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা স্ট্যাটাস: {selectedData?.status}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা ডিলিটের কারন: {selectedData?.user?.bioDeleteReason}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বিকাশ নম্বর: {selectedData?.user?.bkashNumber}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                জীবনসঙ্গীর তথ্য: {selectedData?.user?.spouseBiodata}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা ভিজিবিলিটি: {selectedData?.visibility}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা তারিখ: {selectedData?.createdAt}
+              </p>
+            </div>
+          </div>
         </ReusableModal>
       </div>
     </div>

@@ -45,7 +45,9 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { biodata, biodataFormData } = useAppSelector((state) => state.biodata);
-  const { user, acesstoken } = useAppSelector((state) => state.auth);
+  const { user, acesstoken, emailVerified } = useAppSelector(
+    (state) => state.auth
+  );
   const [updateMyBiodata, { isLoading: isUpdating }] =
     useUpdateMyBiodataMutation();
   const {
@@ -56,9 +58,6 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
   } = useGetMyBiodataQuery(undefined, {
     skip: !user || !acesstoken,
   });
-
-  console.log("biodataFormData", biodataFormData);
-  console.log("savedSteps", savedSteps);
 
   const searchParams = useSearchParams();
   const currentStepKey = searchParams.get("step") || steps[0].key;
@@ -72,6 +71,8 @@ export default function BiodataEditor({ biodataToEdit }: BiodataEditorProps) {
     if (!user || !acesstoken) {
       const redirectUrl = `/biodata-editor?step=${currentStepKey}`;
       router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
     }
   }, [user, acesstoken, router, currentStepKey]);
 

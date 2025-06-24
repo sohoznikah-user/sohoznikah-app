@@ -728,7 +728,6 @@ export const biodataStatusFilterOptions = [
   { id: "REJECTED", title: "REJECTED" },
   { id: "UPDATE_REQUESTED", title: "UPDATE_REQUESTED" },
   { id: "DELETE_REQUESTED", title: "DELETE_REQUESTED" },
-  { id: "DELETED", title: "DELETED" },
   { id: "EDIT_PENDING", title: "EDIT_PENDING" },
 ];
 export const userStatusFilterOptions = [

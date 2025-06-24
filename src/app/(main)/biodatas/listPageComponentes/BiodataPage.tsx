@@ -131,7 +131,11 @@ const BiodataPage = () => {
     ...transformFiltersForAPI(filters),
   };
 
-  const { data: biodatas, isLoading } = useGetAllBiodatasQuery(query, {
+  const {
+    data: biodatas,
+    isLoading,
+    refetch,
+  } = useGetAllBiodatasQuery(query, {
     refetchOnMountOrArgChange: true,
   });
   // Parse URL query parameters and initialize Redux state (inspired by your snippet)

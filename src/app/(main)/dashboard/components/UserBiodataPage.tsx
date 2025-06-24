@@ -34,7 +34,7 @@ export default function UserBiodataPage() {
 
     const deleteData = {
       id: biodata?.id,
-      deleteReason: bioDeleteReason,
+      bioDeleteReason: bioDeleteReason,
       bkashNumber: bkashNumber,
       spouseBiodata: spouseBiodata,
     };

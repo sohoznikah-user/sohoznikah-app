@@ -1,6 +1,7 @@
 "use client";
 
 import bkash from "@/assets/images/bkash.png";
+import { ReusableTable } from "@/components/shared/ReusableTable";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
@@ -10,11 +11,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { tokenOptions } from "@/lib/consts";
-import { useCreateTokenMutation } from "@/redux/features/admin/tokenApi";
+import {
+  useCreateTokenMutation,
+  useGetAllTokensQuery,
+} from "@/redux/features/admin/tokenApi";
 import { useAppSelector } from "@/redux/hooks";
-import { Copy, X } from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowLeft, Copy, X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -32,21 +37,21 @@ type Bundle = {
 const PREDEFINED_BUNDLES: Bundle[] = [
   {
     id: "BUNDLE1",
-    title: "বান্ডেল  ১",
+    title: "বান্ডেল ১",
     tokenTitle: "৬",
     tokenCount: 6,
     price: 250,
   },
   {
     id: "BUNDLE2",
-    title: "বান্ডেল  ২",
+    title: "বান্ডেল ২",
     tokenTitle: "১২",
     tokenCount: 12,
     price: 500,
   },
   {
     id: "BUNDLE3",
-    title: "বান্ডেল  ৩",
+    title: "বান্ডেল ৩",
     tokenTitle: "২৪",
     tokenCount: 24,
     price: 1000,
@@ -58,26 +63,42 @@ const PREDEFINED_BUNDLES: Bundle[] = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 const UserTokenPage = () => {
-  // State for selected option and custom quantity
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [transactionId, setTransactionId] = useState("");
   const [selectedOption, setSelectedOption] = useState<"custom" | string>(
     "custom"
   );
   const [customQuantity, setCustomQuantity] = useState<number>(1);
   const { biodata } = useAppSelector((state) => state.biodata);
+  const [activeTab, setActiveTab] = useState("buy");
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    total: 0,
+  });
 
-  // State to control the visibility of the payment form
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const query = useMemo(
+    () => ({
+      page: pagination.page,
+      limit: pagination.limit,
+    }),
+    [pagination]
+  );
 
-  // State for payment form inputs
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [transactionId, setTransactionId] = useState("");
+  const {
+    data: tokenData,
+    isLoading: isLoadingTokens,
+    isError,
+  } = useGetAllTokensQuery(query, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const [createToken, { isLoading }] = useCreateTokenMutation();
 
   // Handler for the "কিনুন" button
   const handleBuy = () => {
     // Show the payment form instead of directly making the API call
-    setShowPaymentForm(true);
+    setActiveTab("payment");
   };
 
   // Handler for the "Send" button in the payment form
@@ -122,16 +143,62 @@ const UserTokenPage = () => {
   };
 
   const handleReset = () => {
-    setShowPaymentForm(false);
+    setActiveTab("buy");
     setPhoneNumber("");
     setTransactionId("");
     setSelectedOption("custom");
     setCustomQuantity(1);
   };
 
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorKey: "createdAt",
+      header: "তারিখ",
+      cell: ({ row }) => {
+        const date = new Date(row.original.createdAt);
+        const formattedDate = date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return formattedDate;
+      },
+    },
+
+    {
+      accessorKey: "quantity",
+      header: "টোকেন সংখ্যা",
+      cell: ({ row }) => {
+        const tokenType = row.original.tokenType;
+        return (
+          <div className="truncate max-w-[300px]">
+            {tokenType === "BUNDLE1" ? (
+              <>{`বান্ডেল ১ (${row.original.quantity}) টি`}</>
+            ) : tokenType === "BUNDLE2" ? (
+              <>{`বান্ডেল ২ (${row.original.quantity}) টি`}</>
+            ) : tokenType === "BUNDLE3" ? (
+              <>{`বান্ডেল ৩ (${row.original.quantity}) টি`}</>
+            ) : (
+              <>{`${row.original.quantity} টি`}</>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "totalPrice",
+      header: "মোট দাম",
+      cell: ({ row }) => (
+        <div className="truncate max-w-[300px]">
+          {row.original.totalPrice ? `${row.original.totalPrice} টাকা` : "ফ্রি"}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="min-h-[500px]  flex flex-col justify-center items-center py-6 lg:pt-10 md:pt-8 pt-5 pb-20">
-      {!showPaymentForm && (
+      {activeTab === "buy" && (
         <>
           <div className="w-full max-w-4xl mx-auto mb-10 flex md:flex-row flex-col justify-center items-stretch gap-6">
             <div className="flex flex-col md:flex-row gap-6  rounded-2xl md:p-8 p-4 bg-white">
@@ -173,9 +240,22 @@ const UserTokenPage = () => {
 
           <div className="w-full max-w-3xl mx-auto">
             {/* Page Title */}
-            <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
-              টোকেন কিনুন
-            </h1>
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex-1"></div>
+              <h1 className="text-2xl font-bold text-center text-gray-800 flex-1">
+                টোকেন কিনুন
+              </h1>
+
+              <div className=" flex-1 flex justify-end">
+                <button
+                  onClick={() => setActiveTab("payment-history")}
+                  className={`
+                   inline-block  px-4 py-2 rounded-lg font-medium text-white cursor-pointer bg-[#E25A6F] hover:bg-[#CA2740]`}
+                >
+                  টোকেন হিস্ট্রি
+                </button>
+              </div>
+            </div>
 
             {/* Main White Container */}
             <div className="bg-white rounded-2xl shadow-md overflow-hidden">
@@ -345,7 +425,32 @@ const UserTokenPage = () => {
         </>
       )}
 
-      {showPaymentForm && (
+      {activeTab === "payment-history" && (
+        <div className="w-full max-w-4xl relative mx-auto bg-white rounded-2xl shadow-md overflow-hidden p-10">
+          <div className="absolute top-5 left-5">
+            <button
+              onClick={() => setActiveTab("buy")}
+              className="text-gray-500 hover:text-gray-900 cursor-pointer border border-gray-200 hover:border-gray-500 rounded-lg p-1"
+            >
+              <ArrowLeft className="w-6 h-6 " />
+            </button>
+          </div>
+
+          <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
+            টোকেন
+          </h1>
+
+          <ReusableTable
+            data={tokenData?.data || []}
+            columns={columns}
+            pagination={pagination}
+            setPagination={setPagination}
+            enablePagination
+          />
+        </div>
+      )}
+
+      {activeTab === "payment" && (
         <div className="w-full max-w-2xl">
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
             পরিশোধ করুন
@@ -353,7 +458,7 @@ const UserTokenPage = () => {
           <div className="bg-white rounded-2xl shadow-md overflow-hidden p-10 relative">
             <div className="absolute top-5 right-5">
               <button
-                onClick={() => setShowPaymentForm(false)}
+                onClick={() => setActiveTab("buy")}
                 className="text-gray-500 hover:text-gray-900 cursor-pointer border border-gray-200 hover:border-gray-500 rounded-lg p-1"
               >
                 <X className="w-6 h-6 " />

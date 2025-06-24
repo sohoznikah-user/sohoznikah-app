@@ -81,11 +81,13 @@ const LoginForm = () => {
           toast.success(result.message || "You have successfully logged in!");
           const accessToken = result.data.accessToken;
           const refreshToken = result.data.refreshToken;
+          const emailVerified = result.data.emailConfirmed;
           const decodedToken = jwtDecode<TUser>(accessToken);
 
           dispatch(
             setUser({
               user: decodedToken,
+              emailVerified: emailVerified,
               acesstoken: accessToken,
               refreshtoken: refreshToken,
             })
@@ -101,6 +103,7 @@ const LoginForm = () => {
           dispatch(
             setUser({
               user: decodedToken,
+              emailVerified: false,
               acesstoken: accessToken,
               refreshtoken: refreshToken,
             })

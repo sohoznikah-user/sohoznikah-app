@@ -19,8 +19,9 @@ import {
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { IBiodata } from "@/utils/mapApiToBiodataFormData";
-import { CircleChevronDown, Copy, Heart, Star } from "lucide-react";
+import { Copy, Heart, Star } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -39,7 +40,8 @@ const ProfileCard = ({
   // console.log("biodataId from profile card", biodataId);
   // console.log("myBiodata from profile card", myBiodata);
   // console.log("isAdmin from profile card", isAdmin);
-
+  const router = useRouter();
+  const emailVerified = useAppSelector((state) => state.auth.emailVerified);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
@@ -78,10 +80,14 @@ const ProfileCard = ({
   // console.log("shortlist", shortlist?.success);
 
   const handleFavourite = async (type: "add" | "remove") => {
-    if (!token || !user) {
-      setIsModalOpen("login");
-    }
-    if (myBiodataData?.status !== "APPROVED") {
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
+      return;
+    } else if (myBiodataData?.status !== "APPROVED") {
       toast.error(
         user?.role === "SUPER_ADMIN"
           ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
@@ -113,10 +119,14 @@ const ProfileCard = ({
     }
   };
   const handleShortlist = async (type: "add" | "remove") => {
-    if (!token || !user) {
-      setIsModalOpen("login");
-    }
-    if (myBiodataData?.status !== "APPROVED") {
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
+      return;
+    } else if (myBiodataData?.status !== "APPROVED") {
       toast.error(
         user?.role === "SUPER_ADMIN"
           ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
@@ -225,7 +235,7 @@ const ProfileCard = ({
                   onClick={handleCopyUrl}
                 />
                 {/* <Mail className="h-6 w-6" /> */}
-                <CircleChevronDown className="h-6 w-6 text-[#b52d1f]" />
+                {/* <CircleChevronDown className="h-6 w-6 text-[#b52d1f]" /> */}
               </div>
             )}
           </div>

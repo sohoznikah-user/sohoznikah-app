@@ -53,6 +53,7 @@ export default function AdminTokenPage() {
   });
   const [updateToken, { isLoading: isUpdating }] = useUpdateTokenMutation();
 
+  /* approve token */
   const handleUpdateTokenType = async () => {
     const updatedData = {
       tokenStatus: "APPROVED",

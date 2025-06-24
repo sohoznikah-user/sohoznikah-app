@@ -40,6 +40,7 @@ const ProposalCard = ({
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectCurrentToken);
+  const emailVerified = useAppSelector((state) => state.auth.emailVerified);
   const { biodata: myBiodataData } = useAppSelector(
     (state: RootState) => state.biodata
   );
@@ -70,12 +71,14 @@ const ProposalCard = ({
 
   // Create proposal
   const handleCreateProposal = async () => {
-    if (!token || !user) {
-      toast.error("প্রস্তাব পাঠাতে চাইলে প্রথমে লগ ইন করতে হবে।");
-      router.push("/login");
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
       return;
-    }
-    if (myBiodataData?.status !== "APPROVED") {
+    } else if (myBiodataData?.status !== "APPROVED") {
       toast.error(
         user?.role === "SUPER_ADMIN"
           ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
@@ -84,6 +87,7 @@ const ProposalCard = ({
       handleReset();
       return;
     }
+
     const proposalData = { biodataId: biodata?.id };
     try {
       const res = await createProposal(proposalData).unwrap();
@@ -106,11 +110,14 @@ const ProposalCard = ({
 
   // Send response to proposal
   const handleSendResponse = async () => {
-    if (!token || !user || !selectedResponse || !receivedProposal?.id) {
-      toast.error("প্রস্তাবে রেসপন্স করতে সমস্যা হয়েছে।");
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
       return;
-    }
-    if (myBiodataData?.status !== "APPROVED") {
+    } else if (myBiodataData?.status !== "APPROVED") {
       toast.error(
         user?.role === "SUPER_ADMIN"
           ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
@@ -138,12 +145,14 @@ const ProposalCard = ({
 
   // Handle need time decision
   const handleNeedTimeDecision = async () => {
-    if (!token || !user) {
-      toast.error("প্রস্তাবে রেসপন্স করতে চাইলে প্রথমে লগ ইন করতে হবে।");
-      router.push("/login");
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
       return;
-    }
-    if (myBiodataData?.status !== "APPROVED") {
+    } else if (myBiodataData?.status !== "APPROVED") {
       toast.error(
         user?.role === "SUPER_ADMIN"
           ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
@@ -174,11 +183,14 @@ const ProposalCard = ({
 
   // create contact access
   const handleCreateContact = async () => {
-    if (!token || !user) {
-      toast.error("অনুরোধ পাঠাতে চাইলে প্রথমে লগ ইন করতে হবে।");
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
       return;
-    }
-    if (myBiodataData?.status !== "APPROVED") {
+    } else if (myBiodataData?.status !== "APPROVED") {
       toast.error(
         user?.role === "SUPER_ADMIN"
           ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"

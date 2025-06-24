@@ -3,7 +3,10 @@
 import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
+import {
+  useGetBiodataByIdQuery,
+  useMarkSeenMutation,
+} from "@/redux/features/biodata/biodataApi";
 import { useAppSelector } from "@/redux/hooks";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
 import Link from "next/link";
@@ -32,15 +35,25 @@ export default function BiodataClient({
   const user = useAppSelector(selectCurrentUser);
   const acesstoken = useAppSelector(selectCurrentUser);
   const router = useRouter();
-  console.log("biodata", biodata);
 
   const {
     data: fetchedBiodata,
     isLoading: isFetchingBiodata,
     isError: isErrorBiodata,
+    isSuccess,
   } = useGetBiodataByIdQuery(biodataId, {
     skip: !biodataId || typeof biodataId !== "string",
   });
+
+  const [markSeen, { isUninitialized }] = useMarkSeenMutation();
+
+  useEffect(() => {
+    if (user && isSuccess && isUninitialized) {
+      markSeen(biodataId)
+        .unwrap()
+        .then(() => console.log("Marked as seen"));
+    }
+  }, [user, isSuccess, isUninitialized, markSeen, biodataId]);
 
   const tabs = [
     // "প্রাথমিক তথ্য",

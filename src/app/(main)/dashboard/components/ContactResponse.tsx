@@ -1,33 +1,21 @@
 "use client";
 import {
-  useCreateContactMutation,
-  useGetAllContactsQuery,
+  useGetMyContactQuery,
   useUpdateContactMutation,
 } from "@/redux/features/admin/contactApi";
-import {
-  selectCurrentToken,
-  selectCurrentUser,
-} from "@/redux/features/auth/authSlice";
-import { useAppSelector } from "@/redux/hooks";
 import { getTimeDifference } from "@/utils/getTimeDifference";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 const ContactResponse = () => {
-  const user = useAppSelector(selectCurrentUser);
-  const token = useAppSelector(selectCurrentToken);
   const [response, setResponse] = useState<string>("");
   const [id, setId] = useState<string>("");
-  const [createContact, { isLoading: isCreateContactLoading }] =
-    useCreateContactMutation();
-  const router = useRouter();
   const [updateContactResponse, { isLoading: isUpdateContactResponseLoading }] =
     useUpdateContactMutation();
 
   const type = "received";
   const { data: contactData, isLoading: isContactLoading } =
-    useGetAllContactsQuery({
+    useGetMyContactQuery({
       type,
     });
 
@@ -65,35 +53,6 @@ const ContactResponse = () => {
     }
   };
 
-  // create contact access
-  // const handleCreateContactAccess = async (biodataId: string) => {
-  //   if (!token || !user) {
-  //     toast.error("অনুরোধ পাঠাতে চাইলে প্রথমে লগ ইন করতে হবে।");
-  //     return;
-  //   }
-  //   const contactData = {
-  //     biodataId: biodataId,
-  //   };
-  //   try {
-  //     const res = await createContact(contactData).unwrap();
-  //     if (res?.success) {
-  //       toast.success("যোগাযোগ নাম্বার এর জন্য অনুরোধ পাঠানো হয়েছে");
-  //     } else {
-  //       toast.error("যোগাযোগ নাম্বার এর জন্য অনুরোধ পাঠানো হয়নি");
-  //     }
-  //   } catch (error: any) {
-  //     if (error.message === "Not enough tokens") {
-  //       toast.error("আপনার পর্যাপ্ত টোকেন নেই। দয়া করে টোকেন কিনুন।");
-  //       router.push("/dashboard/token");
-  //       return;
-  //     } else if (error.message === "Unique constraint violation.") {
-  //       toast.error("আপনি একই বায়োডাটার জন্য অনুরোধ পাঠাতে পারবেন না");
-  //       return;
-  //     }
-  //     toast.error(error?.message || "অনুরোধ পাঠানো হয়নি");
-  //   }
-  // };
-
   return (
     <div className=" w-[96%] mx-5 flex flex-col gap-4">
       {filterdContactData?.map((item: any) => (
@@ -108,9 +67,9 @@ const ContactResponse = () => {
             </h1>
             <div className="flex gap-2 items-center ">
               <button
-                className={`bg-transparent border border-black text-black hover:bg-gray-500 hover:text-white px-4 py-1 rounded-full cursor-pointer ${
-                  response === "YES"
-                    ? "bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
+                className={`border border-black text-black hover:bg-[#016ca7] hover:text-white px-4 py-1 rounded-full cursor-pointer ${
+                  id === item?.id && response === "YES"
+                    ? " bg-[#016ca7] text-white"
                     : ""
                 }`}
                 onClick={() => {
@@ -121,9 +80,9 @@ const ContactResponse = () => {
                 হ্যাঁ
               </button>
               <button
-                className={`bg-transparent border border-black text-black hover:bg-gray-500 hover:text-white px-4 py-1 rounded-full cursor-pointer ${
-                  response === "NO"
-                    ? "bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
+                className={` border border-black text-black hover:bg-[#016ca7] hover:text-white px-4 py-1 rounded-full cursor-pointer ${
+                  id === item?.id && response === "NO"
+                    ? " bg-[#016ca7] text-white"
                     : ""
                 }`}
                 onClick={() => {

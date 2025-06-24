@@ -8,6 +8,7 @@ import { clearBiodataFormData } from "../biodata/biodataSlice";
 
 type TAuthState = {
   user: TUser | null;
+  emailVerified: boolean;
   acesstoken: string | null;
   refreshtoken: string | null;
 };
@@ -19,6 +20,7 @@ const storedUser = decodeToken(storedAccessToken); // Decode user from token
 
 const initialState: TAuthState = {
   user: storedUser,
+  emailVerified: false,
   acesstoken: storedAccessToken,
   refreshtoken: storedRefreshToken,
 };
@@ -28,9 +30,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<TAuthState>) => {
-      const { user, acesstoken, refreshtoken } = action.payload;
+      const { user, acesstoken, refreshtoken, emailVerified } = action.payload;
       state.user = user;
       state.acesstoken = acesstoken;
+      state.emailVerified = emailVerified;
       state.refreshtoken = refreshtoken;
       if (acesstoken && refreshtoken) {
         setCookie(authAccessKey, acesstoken); // Store token in cookies
@@ -39,6 +42,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
+      state.emailVerified = false;
       state.acesstoken = null;
       state.refreshtoken = null;
       clearBiodataFormData();

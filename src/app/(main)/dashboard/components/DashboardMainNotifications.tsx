@@ -77,7 +77,11 @@ export default function NotificationsPage() {
     } catch (error) {
       toast.error("নোটিফিকেশন পড়া হয়নি");
     } finally {
-      if (type === "TOKEN_CREATED" || type === "TOKEN_APPROVED") {
+      if (
+        type === "TOKEN_CREATED" ||
+        type === "TOKEN_APPROVED" ||
+        type === "TOKEN_GIVEN"
+      ) {
         router.push(`/dashboard/token`);
       } else if (
         type === "NEW_BIODATA" ||
@@ -92,7 +96,7 @@ export default function NotificationsPage() {
       } else if (type === "NEW_PROPOSAL" || type === "PROPOSAL_RESPONSE") {
         router.push(`/dashboard/proposal`);
       } else {
-        router.push(`/dashboard/notifications`);
+        router.push(`/dashboard/notification`);
       }
     }
   };

@@ -10,8 +10,8 @@ import { steps } from "../steps";
 interface BreadcrumbsProps {
   currentStep: string;
   setCurrentStep: (step: string) => void;
-  savedSteps: string[];
-  biodataCompleted: number;
+  savedSteps?: string[];
+  biodataCompleted?: number;
 }
 
 export default function Breadcrumbs({

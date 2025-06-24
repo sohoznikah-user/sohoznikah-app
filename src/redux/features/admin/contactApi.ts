@@ -36,6 +36,13 @@ export const contactApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.contact],
     }),
+    getMyContact: build.query({
+      query: () => ({
+        url: `${URL}/my-contact`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.contact],
+    }),
 
     updateContact: build.mutation({
       query: ({ id, updatedData }) => ({
@@ -59,6 +66,7 @@ export const {
   useCreateContactMutation,
   useGetAllContactsQuery,
   useGetContactByBiodataIdQuery,
+  useGetMyContactQuery,
   useGetContactByIdQuery,
   useUpdateContactMutation,
   useDeleteContactMutation,
