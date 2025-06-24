@@ -125,7 +125,7 @@ const ShortlistPage = () => {
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
           <button
-            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+            className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
             onClick={() => {
               row?.original.bioVisibility === "PRIVATE"
                 ? setIsModalOpen("private")

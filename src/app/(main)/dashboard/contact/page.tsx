@@ -117,7 +117,7 @@ const ContactPage = () => {
             cell: ({ row }) => (
               <div>
                 <button
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
                       ? setIsModalOpen("private")
@@ -160,7 +160,7 @@ const ContactPage = () => {
             cell: ({ row }) => (
               <div>
                 <button
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
                       ? setIsModalOpen("private")

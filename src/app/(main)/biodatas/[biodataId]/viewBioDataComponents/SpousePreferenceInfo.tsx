@@ -20,7 +20,7 @@ export default function SpousePreferenceInfo({
   biodata: IBiodata;
   spousePreferenceInfoFormData: SpousePreferenceInfoFormData;
 }) {
-  console.log("spousePreferenceInfoFormData", spousePreferenceInfoFormData);
+  // console.log("spousePreferenceInfoFormData", spousePreferenceInfoFormData);
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black max-w-full min-w-auto mx-auto">
       <>

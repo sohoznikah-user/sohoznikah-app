@@ -4,16 +4,11 @@ import DashboardTitle from "@/components/shared/DashboardTitle";
 import ReusableMobileCard from "@/components/shared/ReusableMobileCard";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
-import { proposalStatusOptions } from "@/lib/consts";
 import {
   useCancelProposalMutation,
   useGetAllProposalsQuery,
 } from "@/redux/features/admin/proposalApi";
-import {
-  getDistrictTitle,
-  getTitleById,
-  getUpazilaTitle,
-} from "@/utils/getBanglaTitle";
+import { getDistrictTitle, getUpazilaTitle } from "@/utils/getBanglaTitle";
 import { getTimeDifference } from "@/utils/getTimeDifference";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
@@ -176,7 +171,7 @@ const ProposalPage = () => {
             cell: ({ row }) => (
               <div>
                 <button
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
                       ? setIsModalOpen("private")
@@ -192,15 +187,27 @@ const ProposalPage = () => {
             id: "status",
             header: "আপনার রেসপন্স",
             cell: ({ row }) => {
-              const status = getTitleById(
-                proposalStatusOptions,
-                row?.original?.status
-              );
               return (
                 <div>
-                  <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-                    {status}
-                  </button>
+                  {row?.original?.status === "PENDING" ? (
+                    <p className="text-center px-3 py-1 border-blue-500 border-2 rounded-lg text-blue-500 text-md font-semibold">
+                      পেন্ডিং
+                    </p>
+                  ) : row?.original?.status === "ACCEPTED" ? (
+                    <p className="text-center px-3 py-1 border-green-500 border-2 rounded-lg text-green-500 text-md font-semibold">
+                      আগ্রহী
+                    </p>
+                  ) : row?.original?.status === "REJECTED" ? (
+                    <p className="text-center px-3 py-1 border-red-500 border-2 rounded-lg text-red-500 text-md font-semibold">
+                      অনাগ্রহী
+                    </p>
+                  ) : row?.original?.status === "NEED_TIME" ? (
+                    <p className="text-center px-3 py-1 border-yellow-500 border-2 rounded-lg text-yellow-500 text-md font-semibold">
+                      সময় নিতে ইচ্ছুক
+                    </p>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             },
@@ -213,7 +220,7 @@ const ProposalPage = () => {
             cell: ({ row }) => (
               <div>
                 <button
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
                       ? setIsModalOpen("private")
@@ -229,15 +236,27 @@ const ProposalPage = () => {
             id: "viewCont",
             header: "অপর পক্ষের রেসপন্স",
             cell: ({ row }) => {
-              const status = getTitleById(
-                proposalStatusOptions,
-                row?.original?.status
-              );
               return (
                 <div>
-                  <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition">
-                    {status}
-                  </button>
+                  {row?.original?.status === "PENDING" ? (
+                    <p className="text-center px-3 py-1 border-blue-500 border-2 rounded-lg text-blue-500 text-md font-semibold">
+                      পেন্ডিং
+                    </p>
+                  ) : row?.original?.status === "ACCEPTED" ? (
+                    <p className="text-center px-3 py-1 border-green-500 border-2 rounded-lg text-green-500 text-md font-semibold">
+                      আগ্রহী
+                    </p>
+                  ) : row?.original?.status === "REJECTED" ? (
+                    <p className="text-center px-3 py-1 border-red-500 border-2 rounded-lg text-red-500 text-md font-semibold">
+                      অনাগ্রহী
+                    </p>
+                  ) : row?.original?.status === "NEED_TIME" ? (
+                    <p className="text-center px-3 py-1 border-yellow-500 border-2 rounded-lg text-yellow-500 text-md font-semibold">
+                      সময় নিতে ইচ্ছুক
+                    </p>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             },
@@ -300,15 +319,16 @@ const ProposalPage = () => {
               }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
               date={item.createdAt}
               visibility={item.bioVisibility}
-              // onDelete={() => {
-              //   setSelectedId(item.id);
-              //   setIsModalOpen("delete");
-              // }}
+              activeTab={activeTab}
               onView={() => {
                 item.bioVisibility === "PRIVATE"
                   ? setIsModalOpen("private")
                   : router.push(`/biodatas/${item.biodataId}`);
               }}
+              myResponse={item.status}
+              otherResponse={item.status}
+              isCancelled={item.isCancelled}
+              expiredAt={item.expiredAt}
             />
           ))}
         </div>

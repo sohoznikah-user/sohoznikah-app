@@ -412,8 +412,8 @@ const UserTokenPage = () => {
             </div>
 
             {/* Bkash Number */}
-            <div className="mb-4 mt-6 flex justify-start items-center gap-5">
-              <div className="w-[45%]">
+            <div className="mb-4 mt-6 flex md:flex-row flex-col justify-start items-center md:gap-5 gap-2">
+              <div className="w-full md:w-[45%]">
                 <p className="text-gray-700 mb-2">
                   এই নম্বরে বিকাশ{" "}
                   <span className="text-[#AD0000] font-semibold">
@@ -422,7 +422,7 @@ const UserTokenPage = () => {
                   করুন:
                 </p>
               </div>
-              <div className=" flex items-center justify-end bg-white px-3 py-6 border border-gray-300 rounded-lg w-[55%] relative gap-5">
+              <div className=" flex items-center justify-end bg-white px-3 py-6 border border-gray-300 rounded-lg w-full md:w-[55%] relative gap-5">
                 <div className="absolute left-3 top-1">
                   <Image src={bkash} alt="copy" width={40} height={30} />
                 </div>
@@ -453,7 +453,7 @@ const UserTokenPage = () => {
                 যে নম্বর থেকে সেন্ড মানি করেছেন:
               </label>
               <input
-                type="number"
+                type="text"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-[55%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

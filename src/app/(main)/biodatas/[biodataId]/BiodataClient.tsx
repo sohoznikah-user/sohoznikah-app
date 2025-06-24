@@ -13,11 +13,9 @@ import { toast } from "sonner";
 import AddressInfo from "./viewBioDataComponents/AddressInfo";
 import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
 import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
-import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
 import HeaderSection from "./viewBioDataComponents/HeaderSection";
 import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
 import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
-import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
 import ProposalCard from "./viewBioDataComponents/ProposalCard";
 import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
 import SpousePreferenceInfo from "./viewBioDataComponents/SpousePreferenceInfo";
@@ -45,8 +43,8 @@ export default function BiodataClient({
   });
 
   const tabs = [
-    "প্রাথমিক তথ্য",
-    "সাধারণ তথ্য",
+    // "প্রাথমিক তথ্য",
+    // "সাধারণ তথ্য",
     "ঠিকানা",
     "শিক্ষা ও পেশা",
     "পারিবারিক তথ্য",
@@ -56,8 +54,8 @@ export default function BiodataClient({
     "যেমন জীবনসঙ্গী আশা করেন",
   ];
 
-  const primaryInfoRef = useRef<HTMLDivElement>(null);
-  const generalInfoRef = useRef<HTMLDivElement>(null);
+  // const primaryInfoRef = useRef<HTMLDivElement>(null);
+  // const generalInfoRef = useRef<HTMLDivElement>(null);
   const addressRef = useRef<HTMLDivElement>(null);
   const educationRef = useRef<HTMLDivElement>(null);
   const familyRef = useRef<HTMLDivElement>(null);
@@ -67,8 +65,8 @@ export default function BiodataClient({
   const spouseRef = useRef<HTMLDivElement>(null);
 
   const tabRefMap: Record<string, React.RefObject<HTMLDivElement>> = {
-    "প্রাথমিক তথ্য": primaryInfoRef,
-    "সাধারণ তথ্য": generalInfoRef,
+    // "প্রাথমিক তথ্য": primaryInfoRef,
+    // "সাধারণ তথ্য": generalInfoRef,
     ঠিকানা: addressRef,
     "শিক্ষা ও পেশা": educationRef,
     "পারিবারিক তথ্য": familyRef,
@@ -157,7 +155,7 @@ export default function BiodataClient({
           </Tabs>
 
           <div className="lg:max-w-5xl w-full lg:mx-auto space-y-6 text-md ">
-            <div ref={primaryInfoRef}>
+            {/* <div ref={primaryInfoRef}>
               <PrimaryInfo
                 biodata={biodata?.biodata}
                 primaryInfoFormData={
@@ -172,7 +170,7 @@ export default function BiodataClient({
                   biodata?.biodataFormData?.generalInfoFormData
                 }
               />
-            </div>
+            </div> */}
             <div ref={addressRef}>
               <AddressInfo
                 biodata={biodata}
@@ -246,6 +244,18 @@ export default function BiodataClient({
             />
           </div>
         )}
+
+        <div className=" flex-col justify-center items-center gap-4 py-12 hidden lg:flex">
+          <h2 className="text-2xl font-semibold text-[#AD0000]">
+            বায়োডাটা পছন্দ হয়েছে?
+          </h2>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className={`rounded-xl py-3 px-4 z-10 w-full text-md font-semibold text-white bg-gradient-to-r to-[#e25a6f] from-[#016ca7] max-w-sm cursor-pointer`}
+          >
+            প্রস্তাব পাঠান বা যোগাযোগ করুন
+          </button>
+        </div>
         {/* <FooterSection
         biodata={biodata}
         biodataFormData={biodata?.biodataFormData}

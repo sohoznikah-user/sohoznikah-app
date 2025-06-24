@@ -165,9 +165,7 @@ export default function AdminBiodataPage() {
         return (
           <div className="truncate max-w-[300px]">
             {biodataType === "BRIDE" ? (
-              <Badge className="bg-blue-500 text-white dark:bg-blue-600">
-                পাত্রী
-              </Badge>
+              <Badge className="bg-[#307FA7] text-white">পাত্রী</Badge>
             ) : (
               <Badge variant="destructive">পাত্র</Badge>
             )}
@@ -198,9 +196,7 @@ export default function AdminBiodataPage() {
                 {status}
               </Badge>
             ) : status === "UPDATE_REQUESTED" ? (
-              <Badge className="bg-blue-500 text-white dark:bg-blue-600">
-                {status}
-              </Badge>
+              <Badge className="bg-[#307FA7] text-white">{status}</Badge>
             ) : status === "DELETE_REQUESTED" ? (
               <Badge className="bg-red-500 text-white dark:bg-red-600">
                 {status}
@@ -237,7 +233,7 @@ export default function AdminBiodataPage() {
       header: "ইডিট বায়োডাটা",
       cell: ({ row }) => (
         <Link href={`/biodata-editor/${row.original.id}`}>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer">
+          <button className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7] cursor-pointer">
             View
           </button>
         </Link>
@@ -248,7 +244,7 @@ export default function AdminBiodataPage() {
       header: "ভিউ বায়োডাটা",
       cell: ({ row }) => (
         <Link href={`/dashboard/biodata/${row.original.id}`}>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer">
+          <button className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7] cursor-pointer">
             View
           </button>
         </Link>

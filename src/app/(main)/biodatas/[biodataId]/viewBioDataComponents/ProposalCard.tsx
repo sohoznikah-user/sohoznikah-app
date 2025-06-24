@@ -37,7 +37,6 @@ const ProposalCard = ({
   myBiodata: boolean;
   isAdmin?: boolean;
 }) => {
-  console.log("biodataId", biodataId);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectCurrentToken);
@@ -66,22 +65,28 @@ const ProposalCard = ({
     skip: !token || !user || activeTab !== "contact",
   });
 
-  console.log("getProposal", getProposal);
-  // console.log("getContact", getContact);
-  // create proposal
+  const sentProposal = getProposal?.data?.sentProposal;
+  const receivedProposal = getProposal?.data?.receivedProposal;
+
+  // Create proposal
   const handleCreateProposal = async () => {
     if (!token || !user) {
       toast.error("প্রস্তাব পাঠাতে চাইলে প্রথমে লগ ইন করতে হবে।");
       router.push("/login");
       return;
     }
-    const proposalData = {
-      biodataId: biodata?.id,
-    };
+    if (myBiodataData?.status !== "APPROVED") {
+      toast.error(
+        user?.role === "SUPER_ADMIN"
+          ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
+          : "বায়োডাটা তৈরী এবং এপ্রুভ করা থাকতে হবে"
+      );
+      handleReset();
+      return;
+    }
+    const proposalData = { biodataId: biodata?.id };
     try {
       const res = await createProposal(proposalData).unwrap();
-
-      // console.log("res-proposal", res);
       if (res?.success) {
         toast.success("প্রস্তাব পাঠানো হয়েছে");
       } else {
@@ -98,10 +103,88 @@ const ProposalCard = ({
       handleReset();
     }
   };
+
+  // Send response to proposal
+  const handleSendResponse = async () => {
+    if (!token || !user || !selectedResponse || !receivedProposal?.id) {
+      toast.error("প্রস্তাবে রেসপন্স করতে সমস্যা হয়েছে।");
+      return;
+    }
+    if (myBiodataData?.status !== "APPROVED") {
+      toast.error(
+        user?.role === "SUPER_ADMIN"
+          ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
+          : "বায়োডাটা তৈরী এবং এপ্রুভ করা থাকতে হবে"
+      );
+      handleReset();
+      return;
+    }
+    try {
+      const res = await updateProposal({
+        id: receivedProposal.id,
+        updatedData: { response: selectedResponse },
+      }).unwrap();
+      if (res?.success) {
+        toast.success("প্রস্তাব রেসপন্স করা হয়েছে");
+      } else {
+        toast.error("প্রস্তাব রেসপন্স করা হয়নি");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "কোনো কিছু ভুল হয়েছে। পুনরায় চেষ্টা করুন");
+    } finally {
+      handleReset();
+    }
+  };
+
+  // Handle need time decision
+  const handleNeedTimeDecision = async () => {
+    if (!token || !user) {
+      toast.error("প্রস্তাবে রেসপন্স করতে চাইলে প্রথমে লগ ইন করতে হবে।");
+      router.push("/login");
+      return;
+    }
+    if (myBiodataData?.status !== "APPROVED") {
+      toast.error(
+        user?.role === "SUPER_ADMIN"
+          ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
+          : "বায়োডাটা তৈরী এবং এপ্রুভ করা থাকতে হবে"
+      );
+      handleReset();
+      return;
+    }
+    if (!needTimeDecision || !receivedProposal?.id) {
+      toast.error("সিদ্ধান্ত সিলেক্ট করুন অথবা প্রস্তাব আইডি পাওয়া যায়নি।");
+      return;
+    }
+    try {
+      const res = await updateProposal({
+        id: receivedProposal.id,
+        updatedData: { response: needTimeDecision },
+      }).unwrap();
+      if (res?.success) {
+        toast.success("প্রস্তাব রেসপন্স করা হয়েছে");
+        setNeedTimeDecision("");
+      } else {
+        toast.error("প্রস্তাব রেসপন্স করা হয়নি");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "প্রস্তাব রেসপন্স করা হয়নি");
+    }
+  };
+
   // create contact access
-  const handleCreateContactAccess = async () => {
+  const handleCreateContact = async () => {
     if (!token || !user) {
       toast.error("অনুরোধ পাঠাতে চাইলে প্রথমে লগ ইন করতে হবে।");
+      return;
+    }
+    if (myBiodataData?.status !== "APPROVED") {
+      toast.error(
+        user?.role === "SUPER_ADMIN"
+          ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
+          : "বায়োডাটা তৈরী এবং এপ্রুভ করা থাকতে হবে"
+      );
+      handleReset();
       return;
     }
     const contactData = {
@@ -125,32 +208,8 @@ const ProposalCard = ({
       setIsModalOpen(null);
     }
   };
-  // send response to proposal
-  const handleSendResponse = async () => {
-    if (!token || !user || !selectedResponse) {
-      return;
-    }
-    try {
-      const res = await updateProposal({
-        id: getProposal?.data?.id,
-        updatedData: {
-          response: selectedResponse,
-        },
-      }).unwrap();
-      if (res?.success) {
-        toast.success("প্রস্তাব রেসপন্স করা হয়েছে");
-      } else {
-        toast.error("প্রস্তাব রেসপন্স করা হয়নি");
-      }
-    } catch (error: any) {
-      toast.error(error?.message || "কোনো কিছু ভুল হয়েছে। পুনরায় চেষ্টা করুন");
-    } finally {
-      handleReset();
-    }
-  };
 
-  // console.log({ user, token });
-  // reset state
+  // Reset state
   const handleReset = () => {
     setIsModalOpen(null);
     setResponseTab(null);
@@ -158,20 +217,10 @@ const ProposalCard = ({
     setNeedTimeDecision("");
   };
 
-  const proposalTimeLeft = getTimeDifference(
-    getProposal?.data?.expiredAt || new Date().toISOString(),
-    new Date().toISOString()
-  );
-  const contactTimeLeft = getTimeDifference(
-    getContact?.data?.contactExpiredAt || new Date().toISOString(),
-    new Date().toISOString()
-  );
-  // console.log("timeLeft", timeLeft);
   return (
     <>
-      {/* Proposal  & contact card*/}
-      <Card className="bg-white text-black border-none rounded-4xl h-full   md:max-w-[450px] w-full min-w-auto">
-        <CardContent className=" h-full lg:px-10 p-5">
+      <Card className="bg-white text-black border-none rounded-4xl h-full md:max-w-[450px] w-full min-w-auto">
+        <CardContent className="h-full lg:px-10 p-5">
           {myBiodata || isAdmin || myBiodataData?.id === biodataId ? (
             <div className="flex justify-center items-center h-full">
               <h3 className="text-2xl font-semibold text-center mb-2 text-[#b52d1f]">
@@ -182,13 +231,13 @@ const ProposalCard = ({
             </div>
           ) : (
             <div className="flex flex-col space-y-2 items-center mt-2">
-              {/* Buttons */}
+              {/* Tabs */}
               <div className="flex justify-between mb-4 mt-1 w-full gap-2">
                 <button
-                  className={` rounded-xl py-1 px-2 z-10 w-full text-md font-semibold cursor-pointer ${
+                  className={`rounded-xl py-1 px-2 z-10 w-full text-md font-semibold cursor-pointer ${
                     activeTab === "proposal"
-                      ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7] z-10"
-                      : "text-[#989898] border border-[#989898] z-0"
+                      ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
+                      : "text-[#989898] border border-[#989898]"
                   }`}
                   onClick={() => setActiveTab("proposal")}
                 >
@@ -197,8 +246,8 @@ const ProposalCard = ({
                 <button
                   className={`py-1 rounded-xl px-2 w-full text-md font-semibold cursor-pointer ${
                     activeTab === "contact"
-                      ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7] z-10"
-                      : "text-[#989898] border border-[#989898] z-0"
+                      ? "text-white bg-gradient-to-r from-[#e25a6f] to-[#016ca7]"
+                      : "text-[#989898] border border-[#989898]"
                   }`}
                   onClick={() => setActiveTab("contact")}
                 >
@@ -207,316 +256,216 @@ const ProposalCard = ({
               </div>
 
               {activeTab === "proposal" && (
-                <>
-                  {getProposal?.success ? (
-                    <div className="flex flex-col items-center justify-center">
-                      {/* proposal receiver */}
-                      {getProposal?.data?.receivedProposal && (
+                <div className="flex flex-col items-center justify-center">
+                  {receivedProposal &&
+                  (receivedProposal.status === "PENDING" ||
+                    receivedProposal.status === "NEED_TIME") ? (
+                    // Actionable Received Proposal Logic
+                    <>
+                      {receivedProposal.status === "PENDING" ? (
                         <>
-                          {getProposal?.data?.sentProposal?.status ===
-                            "PENDING" && (
+                          {responseTab === "response-proposal" ? (
                             <>
-                              {responseTab === "response-proposal" ? (
-                                <>
-                                  <div className="flex items-center gap-3 justify-start ">
-                                    <ArrowLeft
-                                      className="w-6 h-6 cursor-pointer hover:text-[#e25a6f] text-[#016CA7] "
-                                      onClick={() => setResponseTab(null)}
-                                    />{" "}
-                                    <p className="text-lg font-semibold">
-                                      প্রস্তাবে রেসপন্স করুন
-                                    </p>
-                                  </div>
-                                  {/* Radio group and Send button */}
-
-                                  <div className="flex flex-col items-center mt-2 mb-2">
-                                    <div className="flex flex-col gap-2 w-full max-w-xs">
-                                      <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                          type="radio"
-                                          name="proposalResponse"
-                                          value="ACCEPTED"
-                                          checked={
-                                            selectedResponse === "ACCEPTED"
-                                          }
-                                          onChange={() =>
-                                            setSelectedResponse("ACCEPTED")
-                                          }
-                                          className="accent-[#016CA7] w-5 h-5"
-                                        />
-                                        <span className="text-md font-medium text-[#00476E]">
-                                          আগ্রহী
-                                        </span>
-                                      </label>
-                                      <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                          type="radio"
-                                          name="proposalResponse"
-                                          value="REJECTED"
-                                          checked={
-                                            selectedResponse === "REJECTED"
-                                          }
-                                          onChange={() =>
-                                            setSelectedResponse("REJECTED")
-                                          }
-                                          className="accent-[#016CA7] w-5 h-5"
-                                        />
-                                        <span className="text-md font-medium text-[#00476E]">
-                                          অনাগ্রহী
-                                        </span>
-                                      </label>
-                                      <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                          type="radio"
-                                          name="proposalResponse"
-                                          value="NEED_TIME"
-                                          checked={
-                                            selectedResponse === "NEED_TIME"
-                                          }
-                                          onChange={() =>
-                                            setSelectedResponse("NEED_TIME")
-                                          }
-                                          className="accent-[#016CA7] w-5 h-5 bg-gray-200"
-                                        />
-                                        <span className="text-md font-medium text-[#00476E]">
-                                          সময় নিতে চাই
-                                        </span>
-                                      </label>
-                                    </div>
-                                    <button
-                                      className="mt-3 bg-[#e25a6f] text-white px-4 py-1 rounded-md font-semibold text-md shadow hover:bg-[#d14a5f] transition-all cursor-pointer"
-                                      onClick={() => handleSendResponse()}
-                                      disabled={!selectedResponse}
-                                    >
-                                      Send
-                                    </button>
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <h4 className="text-center text-md font-semibold mb-2 mt-1">
-                                    এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
-                                  </h4>
-                                  <p className="text-center text-sm font-medium mb-2 mt-0 text-[#A53521]">
-                                    ৭২ ঘন্টার মধ্যে রেসপন্স না করলে অপরপক্ষ
-                                    চাইলে প্রস্তাব বাতিল করতে পারবেন।{" "}
-                                  </p>
-                                  <button
-                                    onClick={() =>
-                                      setResponseTab("response-proposal")
-                                    }
-                                    className="bg-[#e25a6f] text-white px-4 py-2 rounded-md cursor-pointer "
-                                  >
-                                    রেসপন্স করুন
-                                  </button>
-
-                                  <p className="text-center text-sm font-semibold mt-3 text-[#575757]">
-                                    সময় বাকি আছে:{" "}
-                                    <span className="text-[#28AB00]">
-                                      {proposalTimeLeft}
-                                    </span>{" "}
-                                    ঘন্টা
-                                  </p>
-                                </>
-                              )}
-                            </>
-                          )}
-                          {getProposal?.data?.sentProposal?.status ===
-                            "ACCEPTED" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-1">
-                                এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
-                              </h4>
-                              <p className="text-center text-md font-semibold mb-2 mt-4 text-[#28AB00] border border-[#28AB00] rounded-md px-6 py-2 max-w-52 mx-auto">
-                                আপনি এই প্রস্তাবে আগ্রহ প্রকাশ করেছেন
-                              </p>
-                            </>
-                          )}
-                          {getProposal?.data?.sentProposal?.status ===
-                            "REJECTED" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-1">
-                                এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
-                              </h4>
-                              <p className="text-center text-md font-semibold mb-2 mt-2 text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
-                                আপনি এই প্রস্তাবে অনাগ্রহ প্রকাশ করেছেন
-                              </p>
-                              <button
-                                className="mt-2 bg-[#e25a6f] text-white px-4 py-1 rounded-md font-semibold text-md shadow hover:bg-[#d14a5f] transition-all cursor-pointer"
-                                onClick={() => handleCreateProposal()}
-                              >
-                                আমি প্রস্তাব পাঠাতে চাই
-                              </button>
-                            </>
-                          )}
-                          {getProposal?.data?.sentProposal?.status ===
-                            "NEED_TIME" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-1">
-                                এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
-                              </h4>
-                              <p className="text-center text-md font-semibold text-[#915E00] border border-[#915E00] rounded-md px-6 py-1 max-w-52 mx-auto">
-                                আপনি এই প্রস্তাবে সিদ্ধান্ত নিতে সময় নিচ্ছেন
-                              </p>
-                              <div className="flex justify-between items-center mt-4 gap-2">
-                                <div className="relative w-40">
-                                  <select
-                                    className="block w-full appearance-none bg-white border border-gray-300 rounded-md py-2 pl-4 pr-8 text-md text-gray-500 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 shadow-sm cursor-pointer"
-                                    value={needTimeDecision}
-                                    onChange={(e) =>
-                                      setNeedTimeDecision(e.target.value)
-                                    }
-                                  >
-                                    <option value="" disabled>
-                                      সিলেক্ট করুন
-                                    </option>
-                                    <option value="ACCEPTED">আগ্রহী</option>
-                                    <option value="REJECTED">অনাগ্রহী</option>
-                                  </select>
-                                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
-                                    ▼
-                                  </span>
+                              <div className="flex items-center gap-3 justify-start">
+                                <ArrowLeft
+                                  className="w-6 h-6 cursor-pointer hover:text-[#e25a6f] text-[#016CA7]"
+                                  onClick={() => setResponseTab(null)}
+                                />
+                                <p className="text-lg font-semibold">
+                                  প্রস্তাবে রেসপন্স করুন
+                                </p>
+                              </div>
+                              <div className="flex flex-col items-center mt-2 mb-2">
+                                <div className="flex flex-col gap-2 w-full max-w-xs">
+                                  <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="proposalResponse"
+                                      value="ACCEPTED"
+                                      checked={selectedResponse === "ACCEPTED"}
+                                      onChange={() =>
+                                        setSelectedResponse("ACCEPTED")
+                                      }
+                                      className="accent-[#016CA7] w-5 h-5"
+                                    />
+                                    <span className="text-md font-medium text-[#00476E]">
+                                      আগ্রহী
+                                    </span>
+                                  </label>
+                                  <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="proposalResponse"
+                                      value="REJECTED"
+                                      checked={selectedResponse === "REJECTED"}
+                                      onChange={() =>
+                                        setSelectedResponse("REJECTED")
+                                      }
+                                      className="accent-[#016CA7] w-5 h-5"
+                                    />
+                                    <span className="text-md font-medium text-[#00476E]">
+                                      অনাগ্রহী
+                                    </span>
+                                  </label>
+                                  <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="proposalResponse"
+                                      value="NEED_TIME"
+                                      checked={selectedResponse === "NEED_TIME"}
+                                      onChange={() =>
+                                        setSelectedResponse("NEED_TIME")
+                                      }
+                                      className="accent-[#016CA7] w-5 h-5"
+                                    />
+                                    <span className="text-md font-medium text-[#00476E]">
+                                      সময় নিতে চাই
+                                    </span>
+                                  </label>
                                 </div>
                                 <button
-                                  className="bg-[#e25a6f] px-5 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f] flex items-center justify-center"
-                                  disabled={!needTimeDecision}
-                                  onClick={async () => {
-                                    if (!needTimeDecision) {
-                                      toast.error("সিলেক্ট করুন");
-                                      return;
-                                    }
-
-                                    await updateProposal({
-                                      id: getProposal?.data?.id,
-                                      updatedData: {
-                                        response: needTimeDecision,
-                                      },
-                                    });
-                                    setNeedTimeDecision("");
-                                  }}
+                                  className="mt-3 bg-[#e25a6f] text-white px-4 py-1 rounded-md font-semibold text-md shadow hover:bg-[#d14a5f] transition-all cursor-pointer"
+                                  onClick={handleSendResponse}
+                                  disabled={
+                                    !selectedResponse || isUpdateProposalLoading
+                                  }
                                 >
-                                  <Send
-                                    className="h-6 w-6"
-                                    fill="white"
-                                    stroke="#e25a6f"
-                                    strokeOpacity={0.5}
-                                  />
+                                  Send
                                 </button>
                               </div>
                             </>
+                          ) : (
+                            <>
+                              <h4 className="text-center text-md font-semibold mb-2 mt-1">
+                                এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
+                              </h4>
+                              <p className="text-center text-sm font-medium mb-2 mt-0 text-[#A53521]">
+                                ৭২ ঘন্টার মধ্যে রেসপন্স না করলে অপরপক্ষ চাইলে
+                                প্রস্তাব বাতিল করতে পারবেন।
+                              </p>
+                              <button
+                                onClick={() =>
+                                  setResponseTab("response-proposal")
+                                }
+                                className="bg-[#e25a6f] text-white px-4 py-2 rounded-md cursor-pointer"
+                              >
+                                রেসপন্স করুন
+                              </button>
+                              <p className="text-center text-sm font-semibold mt-3 text-[#575757]">
+                                সময় বাকি আছে:{" "}
+                                <span className="text-[#28AB00]">
+                                  {getTimeDifference(
+                                    receivedProposal.expiredAt,
+                                    new Date().toISOString()
+                                  )}
+                                </span>{" "}
+                                ঘন্টা
+                              </p>
+                            </>
                           )}
                         </>
-                      )}
-
-                      {/* proposal sender */}
-                      {getProposal?.data?.sentProposal && (
+                      ) : receivedProposal.status === "NEED_TIME" ? (
                         <>
-                          {getProposal?.data?.sentProposal?.status ===
-                            "PENDING" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-2">
-                                আপনি প্রস্তাব পাঠিয়েছেন
-                              </h4>
-                              {getProposal?.data?.status === "PENDING" && (
-                                <>
-                                  <p className="text-center text-sm font-medium mb-2 mt-2 text-[#A53521]">
-                                    ৭২ ঘন্টার মধ্যে উত্তর না আসলে প্রস্তাব বাতিল
-                                    করতে পারবেন এবং টোকেন রিফান্ড পাবেন।
-                                  </p>
-
-                                  <p className="text-center text-sm font-semibold mt-1 text-[#575757]">
-                                    প্রস্তাব বাতিলের সময় বাকি আছে:{" "}
-                                    <span className="text-[#28AB00]">
-                                      {proposalTimeLeft}
-                                    </span>{" "}
-                                    ঘন্টা
-                                  </p>
-                                </>
-                              )}
-                            </>
-                          )}
-                          {getProposal?.data?.sentProposal?.status ===
-                            "ACCEPTED" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-3">
-                                আপনি প্রস্তাব পাঠিয়েছেন{" "}
-                              </h4>
-                              <p className="text-center text-md font-semibold mb-2 mt-4 text-[#28AB00] border border-[#28AB00] rounded-md px-6 py-2 max-w-52 mx-auto">
-                                আপনার প্রস্তাবে আগ্রহ প্রকাশ করেছেন
-                              </p>
-                            </>
-                          )}
-                          {getProposal?.data?.sentProposal?.status ===
-                            "REJECTED" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-2">
-                                আপনি প্রস্তাব পাঠিয়েছেন{" "}
-                              </h4>
-                              <p className="text-center text-md font-semibold mb-2 mt-4 text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
-                                আপনার প্রস্তাবে আগ্রহী নয়{" "}
-                              </p>
-                            </>
-                          )}
-                          {getProposal?.data?.sentProposal?.status ===
-                            "NEED_TIME" && (
-                            <>
-                              <h4 className="text-center text-md font-semibold mb-2 mt-2">
-                                আপনি প্রস্তাব পাঠিয়েছেন{" "}
-                              </h4>
-                              <p className="text-center text-md font-semibold text-[#915E00] border border-[#915E00] rounded-md px-6 py-2 max-w-52 mx-auto mt-4">
-                                প্রস্তাবে সিদ্ধান্ত নিতে সময় নিচ্ছেন{" "}
-                              </p>
-                              {/* <div className="flex justify-between items-center mt-4 gap-2">
-                                <div className="relative w-40">
-                                  <select
-                                    className="block w-full appearance-none bg-white border border-gray-300 rounded-md py-2 pl-4 pr-8 text-md text-gray-500 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 shadow-sm cursor-pointer"
-                                    value={needTimeDecision}
-                                    onChange={(e) =>
-                                      setNeedTimeDecision(e.target.value)
-                                    }
-                                  >
-                                    <option value="" disabled>
-                                      সিলেক্ট করুন
-                                    </option>
-                                    <option value="ACCEPTED">আগ্রহী</option>
-                                    <option value="REJECTED">অনাগ্রহী</option>
-                                  </select>
-                                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
-                                    ▼
-                                  </span>
-                                </div>
-                                <button
-                                  className="bg-[#e25a6f] px-5 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f] flex items-center justify-center"
-                                  disabled={!needTimeDecision}
-                                  onClick={async () => {
-                                    if (!needTimeDecision) {
-                                      toast.error("সিলেক্ট করুন");
-                                      return;
-                                    }
-
-                                    await updateProposal({
-                                      id: getProposal?.data?.id,
-                                      updatedData: {
-                                        response: needTimeDecision,
-                                      },
-                                    });
-                                    setNeedTimeDecision("");
-                                  }}
-                                >
-                                  <Send
-                                    className="h-6 w-6"
-                                    fill="white"
-                                    stroke="#e25a6f"
-                                    strokeOpacity={0.5}
-                                  />
-                                </button>
-                              </div> */}
-                            </>
-                          )}
+                          <p className="text-center text-md font-semibold text-[#915E00] border border-[#915E00] rounded-md px-6 py-1 max-w-52 mx-auto">
+                            আপনি এই প্রস্তাবে সিদ্ধান্ত নিতে সময় নিচ্ছেন
+                          </p>
+                          <div className="flex justify-between items-center mt-4 gap-2">
+                            <div className="relative w-40">
+                              <select
+                                className="block w-full appearance-none bg-white border border-gray-300 rounded-md py-2 pl-4 pr-8 text-md text-gray-500 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 shadow-sm cursor-pointer"
+                                value={needTimeDecision}
+                                onChange={(e) =>
+                                  setNeedTimeDecision(e.target.value)
+                                }
+                              >
+                                <option value="" disabled>
+                                  সিলেক্ট করুন
+                                </option>
+                                <option value="ACCEPTED">আগ্রহী</option>
+                                <option value="REJECTED">অনাগ্রহী</option>
+                              </select>
+                              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
+                                ▼
+                              </span>
+                            </div>
+                            <button
+                              className="bg-[#e25a6f] px-5 py-2 rounded-xl cursor-pointer hover:bg-[#d14a5f] flex items-center justify-center"
+                              disabled={
+                                !needTimeDecision || isUpdateProposalLoading
+                              }
+                              onClick={handleNeedTimeDecision}
+                            >
+                              <Send
+                                className="h-6 w-6"
+                                fill="white"
+                                stroke="#e25a6f"
+                                strokeOpacity={0.5}
+                              />
+                            </button>
+                          </div>
                         </>
-                      )}
-                    </div>
+                      ) : null}
+                    </>
+                  ) : sentProposal ? (
+                    // Sent Proposal Logic
+                    <>
+                      {sentProposal.status === "PENDING" ? (
+                        <>
+                          <p className="text-center text-sm font-medium mb-2 mt-2 text-[#A53521]">
+                            ৭২ ঘন্টার মধ্যে উত্তর না আসলে প্রস্তাব বাতিল করতে
+                            পারবেন এবং টোকেন রিফান্ড পাবেন।
+                          </p>
+                          <p className="text-center text-sm font-semibold mt-1 text-[#575757]">
+                            প্রস্তাব বাতিলের সময় বাকি আছে:{" "}
+                            <span className="text-[#28AB00]">
+                              {getTimeDifference(
+                                sentProposal.expiredAt,
+                                new Date().toISOString()
+                              )}
+                            </span>{" "}
+                            ঘন্টা
+                          </p>
+                        </>
+                      ) : sentProposal.status === "ACCEPTED" ? (
+                        <>
+                          <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                            আপনি প্রস্তাব পাঠিয়েছেন
+                          </h4>
+                          <p className="text-center text-md font-semibold mb-2 text-[#28AB00] border border-[#28AB00] rounded-md px-6 py-2 max-w-52 mx-auto">
+                            আপনার প্রস্তাবে আগ্রহ প্রকাশ করেছেন
+                          </p>
+                        </>
+                      ) : sentProposal.status === "REJECTED" ? (
+                        <>
+                          <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                            আপনি প্রস্তাব পাঠিয়েছেন
+                          </h4>
+                          <p className="text-center text-md font-semibold mb-2 text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
+                            আপনার প্রস্তাবে আগ্রহী নয়
+                          </p>
+                        </>
+                      ) : sentProposal.status === "NEED_TIME" ? (
+                        <>
+                          <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                            আপনি প্রস্তাব পাঠিয়েছেন
+                          </h4>
+                          <p className="text-center text-md font-semibold text-[#915E00] border border-[#915E00] rounded-md px-6 py-2 max-w-52 mx-auto ">
+                            প্রস্তাবে সিদ্ধান্ত নিতে সময় নিচ্ছেন
+                          </p>
+                        </>
+                      ) : sentProposal.status === "TOKEN_WITHDRAWN" ? (
+                        <>
+                          <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                            আপনি প্রস্তাব পাঠিয়েছেন
+                          </h4>
+                          <p className="text-center text-md font-semibold mb-2 text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
+                            আপনি প্রস্তাব বাতিল করেছেন এবং টোকেন রিফান্ড পেয়েছেন
+                          </p>
+                        </>
+                      ) : null}
+                    </>
                   ) : (
+                    // Option to Send a New Proposal
                     <>
                       <div className="text-2xl font-semibold text-center mb-2 mt-3 text-[#b52d1f]">
                         আপনি আগ্রহী?
@@ -524,8 +473,7 @@ const ProposalCard = ({
                       <div className="text-black text-center text-md font-bold mb-3 mt-1">
                         অপরপক্ষ আপনার প্রতি আগ্রহী কিনা জানতে
                       </div>
-                      {/* Proposal section */}
-                      <div className="flex items-center justify-between w-full  rounded-xl mt-2">
+                      <div className="flex items-center justify-between w-full rounded-xl mt-2">
                         <div className="flex flex-col">
                           <div className="font-bold text-md text-black">
                             প্রাথমিক প্রস্তাব পাঠান
@@ -550,28 +498,58 @@ const ProposalCard = ({
                           />
                         </div>
                       </div>
-
                       <div className="flex items-center justify-center gap-6 mt-2">
                         <button
                           className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
-                          onClick={() => {
-                            setIsModalOpen("token");
-                          }}
+                          onClick={() => setIsModalOpen("token")}
                         >
                           টোকেন সম্পর্কে
                         </button>
                         <button
                           className="text-sm text-center text-[#2563EB] hover:underline mt-2 font-medium cursor-pointer"
-                          onClick={() => {
-                            setIsModalOpen("token-details");
-                          }}
+                          onClick={() => setIsModalOpen("token-details")}
                         >
                           বিস্তারিত জানুন
                         </button>
                       </div>
                     </>
                   )}
-                </>
+                  {/* Display non-actionable received proposal status if it exists */}
+                  {receivedProposal &&
+                    receivedProposal.status !== "PENDING" &&
+                    receivedProposal.status !== "NEED_TIME" && (
+                      <div className="mt-2">
+                        {receivedProposal.status === "ACCEPTED" ? (
+                          <>
+                            <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                              এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
+                            </h4>
+                            <p className="text-center text-md font-semibold text-[#28AB00] border border-[#28AB00] rounded-md px-6 py-2 max-w-52 mx-auto">
+                              আপনি এই প্রস্তাবে আগ্রহ প্রকাশ করেছেন
+                            </p>
+                          </>
+                        ) : receivedProposal.status === "REJECTED" ? (
+                          <>
+                            <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                              এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
+                            </h4>
+                            <p className="text-center text-md font-semibold text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
+                              আপনি এই প্রস্তাবে অনাগ্রহ প্রকাশ করেছেন
+                            </p>
+                          </>
+                        ) : receivedProposal.status === "TOKEN_WITHDRAWN" ? (
+                          <>
+                            <h4 className="text-center text-md font-semibold mb-2 mt-2">
+                              এই বায়োডাটা থেকে আপনার কাছে প্রস্তাব এসেছে
+                            </h4>
+                            <p className="text-center text-md font-semibold text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
+                              এই প্রস্তাবটি বাতিল হয়েছে
+                            </p>
+                          </>
+                        ) : null}
+                      </div>
+                    )}
+                </div>
               )}
               {activeTab === "contact" && (
                 <>
@@ -597,7 +575,10 @@ const ProposalCard = ({
                             <p className="text-center text-sm font-semibold mt-1 text-[#575757]">
                               সময় বাকি আছে:{" "}
                               <span className="text-[#28AB00]">
-                                {contactTimeLeft}
+                                {getTimeDifference(
+                                  getContact?.data?.contactExpiredAt,
+                                  new Date().toISOString()
+                                )}
                               </span>{" "}
                               ঘন্টা
                             </p>
@@ -813,7 +794,7 @@ const ProposalCard = ({
         open={isModalOpen === "createContact"}
         onClose={() => setIsModalOpen(null)}
         loading={isLoading}
-        onConfirm={() => handleCreateContactAccess()}
+        onConfirm={() => handleCreateContact()}
         confirmText="অনুরোধ পাঠান"
         cancelText="বাতিল"
         title={`যোগাযোগ নম্বর দেখার জন্য অনুরোধ পাঠাতে চান?`}
