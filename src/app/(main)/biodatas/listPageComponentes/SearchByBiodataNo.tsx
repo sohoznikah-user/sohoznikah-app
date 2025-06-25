@@ -79,13 +79,13 @@ export default function BiodatasPageSearchByBiodataNo({
 
   return (
     <form
-      className="flex items-center space-x-4"
+      className="flex items-center md:space-x-4 space-x-2"
       onSubmit={(e) => {
         e.preventDefault();
         handleSearch();
       }}
     >
-      <div className="md:w-28 flex-1">
+      <div className="md:w-28 w-24">
         <Select onValueChange={handleGenderChange} value={gender}>
           <SelectTrigger className="text-[#1f4f69] text-md border-gray-300 px-1">
             <SelectValue placeholder="পাত্র/পাত্রী" />

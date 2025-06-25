@@ -139,7 +139,7 @@ const ProposalPage = () => {
         return (
           <div>
             {row?.original?.isCancelled ? (
-              <button className="bg-red-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-red-600 transition">
+              <button className="bg-[#E25A6F] text-white px-3 py-1 rounded-lg transition">
                 প্রস্তাবটি বাতিল করা হয়েছে
               </button>
             ) : timeLeft === "00:00" ? (
@@ -154,8 +154,13 @@ const ProposalPage = () => {
               </button>
             ) : (
               <>
-                <span>{timeLeft}</span>
-                <span>ঘন্টা</span>
+                {row?.original?.status === "PENDING" && (
+                  <>
+                    {" "}
+                    <span>{timeLeft}</span>
+                    <span>ঘন্টা</span>
+                  </>
+                )}
               </>
             )}
           </div>
@@ -324,6 +329,10 @@ const ProposalPage = () => {
                 item.bioVisibility === "PRIVATE"
                   ? setIsModalOpen("private")
                   : router.push(`/biodatas/${item.biodataId}`);
+              }}
+              onCancel={() => {
+                setSelectedId(item.id);
+                setIsModalOpen("cancel");
               }}
               myResponse={item.status}
               otherResponse={item.status}

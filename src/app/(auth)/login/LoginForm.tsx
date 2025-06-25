@@ -127,7 +127,7 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onFinish)} className="space-y-4">
       <div>
-        <Label htmlFor="email">Email/Mobile Number</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
           className="border border-gray-300"
           id="email"

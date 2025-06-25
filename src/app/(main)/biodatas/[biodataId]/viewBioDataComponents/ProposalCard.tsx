@@ -10,6 +10,7 @@ import {
   useGetContactByBiodataIdQuery,
 } from "@/redux/features/admin/contactApi";
 import {
+  useCancelProposalMutation,
   useCreateProposalMutation,
   useGetProposalByBiodataIdQuery,
   useUpdateProposalMutation,
@@ -47,6 +48,7 @@ const ProposalCard = ({
   const [activeTab, setActiveTab] = useState<"proposal" | "contact">(
     "proposal"
   );
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [responseTab, setResponseTab] = useState<string | null>(null);
   const [selectedResponse, setSelectedResponse] = useState<string | null>(null);
   const [needTimeDecision, setNeedTimeDecision] = useState<string>("");
@@ -57,6 +59,8 @@ const ProposalCard = ({
     useUpdateProposalMutation();
   const [createContact, { isLoading: isCreateContactLoading }] =
     useCreateContactMutation();
+  const [cancelProposal, { isLoading: isCancelling }] =
+    useCancelProposalMutation();
 
   const { data: getProposal } = useGetProposalByBiodataIdQuery(biodataId, {
     skip: !token || !user || activeTab !== "proposal",
@@ -221,12 +225,33 @@ const ProposalCard = ({
     }
   };
 
+  // cancel proposal
+  const handleCancelProposal = async () => {
+    if (!selectedId) {
+      toast.error("প্রস্তাবটি নির্বাচন করুন");
+      return;
+    }
+
+    try {
+      const response = await cancelProposal(selectedId).unwrap();
+      if (response.success) {
+        toast.success("প্রস্তাবটি বাতিল করা হয়েছে");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.message || "প্রস্তাবটি বাতিল করা হয়নি");
+    } finally {
+      handleReset();
+    }
+  };
+
   // Reset state
   const handleReset = () => {
     setIsModalOpen(null);
     setResponseTab(null);
     setSelectedResponse(null);
     setNeedTimeDecision("");
+    setSelectedId(null);
   };
 
   return (
@@ -423,20 +448,46 @@ const ProposalCard = ({
                     <>
                       {sentProposal.status === "PENDING" ? (
                         <>
-                          <p className="text-center text-sm font-medium mb-2 mt-2 text-[#A53521]">
+                          <p className="text-center text-md font-medium mb-2 mt-2 text-[#A53521]">
                             ৭২ ঘন্টার মধ্যে উত্তর না আসলে প্রস্তাব বাতিল করতে
                             পারবেন এবং টোকেন রিফান্ড পাবেন।
                           </p>
-                          <p className="text-center text-sm font-semibold mt-1 text-[#575757]">
-                            প্রস্তাব বাতিলের সময় বাকি আছে:{" "}
-                            <span className="text-[#28AB00]">
-                              {getTimeDifference(
-                                sentProposal.expiredAt,
-                                new Date().toISOString()
-                              )}
-                            </span>{" "}
-                            ঘন্টা
-                          </p>
+
+                          <>
+                            {getTimeDifference(
+                              sentProposal.expiredAt,
+                              new Date().toISOString()
+                            ) === "00:00" ? (
+                              <>
+                                <p className="text-center text-sm font-semibold mt-2 mb-1 text-gray-500">
+                                  উত্তরের জন্য অপেক্ষা করতে পারেন। চাইলে
+                                  প্রস্তাবটি বাতিলও করতে পারেন। তবে বাতিল করলে
+                                  পুনরায় আর প্রস্তাব পাঠাতে পারবেন না। বাতিল
+                                  করলে ১টি টোকেন রিফান্ড পাবেন
+                                </p>
+                                <button
+                                  className="bg-[#E25A6F] cursor-pointer text-white px-4 py-2 rounded-lg  hover:bg-red-600 transition mt-2"
+                                  onClick={() => {
+                                    setSelectedId(sentProposal?.id);
+                                    setIsModalOpen("cancel");
+                                  }}
+                                >
+                                  প্রস্তাব বাতিল করুন
+                                </button>{" "}
+                              </>
+                            ) : (
+                              <p className="text-center text-sm font-semibold mt-1 text-[#575757]">
+                                প্রস্তাব বাতিলের সময় বাকি আছে:{" "}
+                                <span className="text-[#28AB00]">
+                                  {getTimeDifference(
+                                    sentProposal.expiredAt,
+                                    new Date().toISOString()
+                                  )}
+                                </span>{" "}
+                                ঘন্টা
+                              </p>
+                            )}
+                          </>
                         </>
                       ) : sentProposal.status === "ACCEPTED" ? (
                         <>
@@ -470,8 +521,9 @@ const ProposalCard = ({
                           <h4 className="text-center text-md font-semibold mb-2 mt-2">
                             আপনি প্রস্তাব পাঠিয়েছেন
                           </h4>
-                          <p className="text-center text-md font-semibold mb-2 text-[#CC001F] border border-[#CC001F] rounded-md px-6 py-2 max-w-52 mx-auto">
-                            আপনি প্রস্তাব বাতিল করেছেন এবং টোকেন রিফান্ড পেয়েছেন
+                          <p className="text-center text-md font-semibold mb-2 text-[#CC001F]  rounded-md px-6 py-2 mt-2 border border-[#CC001F]">
+                            আপনি প্রস্তাবটি বাতিল করেছেন <br /> এবং <br /> ১টি
+                            টোকেন রিফান্ড পেয়েছেন।
                           </p>
                         </>
                       ) : null}
@@ -811,6 +863,16 @@ const ProposalCard = ({
         cancelText="বাতিল"
         title={`যোগাযোগ নম্বর দেখার জন্য অনুরোধ পাঠাতে চান?`}
         description={`অনুরোধ পাঠাতে চাইলে অনুরোধ পাঠান বাটনে ক্লিক করতে হবে। ২টি টোকেন খরচ হবে।`}
+      />
+
+      {/* Modal for cancel proposal */}
+      <ReusableModal
+        open={isModalOpen === "cancel"}
+        onClose={() => handleReset()}
+        onConfirm={() => handleCancelProposal()}
+        loading={isCancelling}
+        title="প্রস্তাবটি বাতিল করতে চান?"
+        description="এই প্রস্তাবটি বাতিল করতে চান কি? বাতিল করার পর টোকেন রিফান্ড পাবেন"
       />
 
       {/* Modal for token */}

@@ -1,15 +1,11 @@
 "use client";
 
+import ReusableMobileCard from "@/components/shared/ReusableMobileCard";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
 import Title from "@/components/shared/Title";
-import { proposalStatusOptions } from "@/lib/consts";
 import { useGetAllContactsQuery } from "@/redux/features/admin/contactApi";
-import {
-  getDistrictTitle,
-  getTitleById,
-  getUpazilaTitle,
-} from "@/utils/getBanglaTitle";
+import { getDistrictTitle, getUpazilaTitle } from "@/utils/getBanglaTitle";
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -133,10 +129,6 @@ const ContactPage = () => {
             id: "status",
             header: "যোগাযোগ নম্বর দেখুন",
             cell: ({ row }) => {
-              const status = getTitleById(
-                proposalStatusOptions,
-                row?.original?.status
-              );
               return (
                 <div>
                   <button
@@ -201,6 +193,34 @@ const ContactPage = () => {
           >
             আমার যোগাযোগ তথ্য যারা কিনেছে
           </button>
+        </div>
+
+        {/* mobile view */}
+        <div className="flex flex-col gap-4 md:hidden sm:block mt-5">
+          {contactData?.data?.map((item: any) => (
+            <ReusableMobileCard
+              key={item.id}
+              biodataNo={item.bioNo}
+              permanentAddress={`${
+                item.bioPermanentCity
+                  ? getUpazilaTitle(item.bioPermanentCity)
+                  : "-"
+              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
+              date={item.createdAt}
+              visibility={item.bioVisibility}
+              activeTab={activeTab}
+              onView={() => {
+                item.bioVisibility === "PRIVATE"
+                  ? setIsModalOpen("private")
+                  : router.push(`/biodatas/${item.biodataId}`);
+              }}
+              onViewContact={() => {
+                setSelectedData(item);
+                setIsModalOpen("showContacts");
+              }}
+              myResponse={item.status}
+            />
+          ))}
         </div>
 
         <ReusableTable

@@ -15,6 +15,8 @@ interface ReusableMobileCardProps {
   onDelete?: () => void;
   onView?: () => void;
   onShortlist?: () => void;
+  onViewContact?: () => void;
+  onCancel?: () => void;
   activeTab?: string;
   myResponse?: string;
   otherResponse?: string;
@@ -30,14 +32,16 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
   date,
   onDelete,
   onView,
+  onViewContact,
   onShortlist,
   activeTab,
   myResponse,
   otherResponse,
   isCancelled,
   expiredAt,
+  onCancel,
 }) => {
-  console.log("activeTab", activeTab);
+  // console.log("activeTab", activeTab);
   const timeLeft = getTimeDifference(expiredAt, new Date().toISOString());
 
   return (
@@ -71,8 +75,8 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
           </div>
         )}
 
-        <div className="">
-          <>
+        <div className="flex justify-between">
+          <div className="">
             {activeTab === "myRecords" && myResponse && (
               <div className="text-md text-[#005381] flex items-center justify-start gap-2 flex-1">
                 আপনার রেসপন্স:
@@ -121,35 +125,6 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
                 )}
               </div>
             )}
-          </>
-
-          <div className="flex items-center justify-end gap-2">
-            {isCancelled ? (
-              <button className="bg-red-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-red-600 transition">
-                প্রস্তাবটি বাতিল করা হয়েছে
-              </button>
-            ) : timeLeft === "00:00" ? (
-              <button
-                className="bg-red-500 cursor-pointer text-white px-4 py-1 rounded hover:bg-red-600 transition"
-                onClick={() => {
-                  // setSelectedId(row?.original?.id);
-                  // setIsModalOpen("cancel");
-                }}
-              >
-                প্রস্তাবটি বাতিল করুন
-              </button>
-            ) : (
-              <>
-                {myResponse === "PENDING" || otherResponse === "PENDING" ? (
-                  <div className="flex items-center justify-end gap-2">
-                    <span>সময় বাকি আছে:</span>{" "}
-                    <span className="text-[#009F69E0]">{timeLeft} ঘন্টা</span>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </>
-            )}
           </div>
         </div>
       </div>
@@ -157,11 +132,48 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
         {onView && (
           <button
             onClick={onView}
-            className="text-md bg-[#E25A6F] text-white px-3 py-1 rounded-md cursor-pointer"
+            className="text-md bg-[#E25A6F] text-white px-3 py-1 rounded-lg cursor-pointer"
           >
             বায়োডাটা দেখুন
           </button>
         )}
+
+        {activeTab === "myRecords" && onViewContact && (
+          <button
+            onClick={onViewContact}
+            className="bg-[#129900] text-white px-4 py-1 rounded-lg hover:bg-[#129900ee] transition cursor-pointer"
+          >
+            যোগাযোগ নম্বর
+          </button>
+        )}
+
+        <div className="">
+          {isCancelled ? (
+            <button className="bg-red-500 cursor-pointer text-white px-3 py-1 rounded hover:bg-red-600 transition ml-auto">
+              প্রস্তাবটি বাতিল করা হয়েছে
+            </button>
+          ) : timeLeft === "00:00" ? (
+            <button
+              className="bg-red-500 cursor-pointer text-white px-4 py-1 rounded hover:bg-red-600 transition ml-auto"
+              onClick={() => {
+                onCancel?.();
+              }}
+            >
+              প্রস্তাবটি বাতিল করুন
+            </button>
+          ) : (
+            <>
+              {myResponse === "PENDING" || otherResponse === "PENDING" ? (
+                <div className="flex items-center justify-end gap-2 ml-auto">
+                  <span>সময় বাকি আছে:</span>{" "}
+                  <span className="text-[#009F69E0]">{timeLeft} ঘন্টা</span>
+                </div>
+              ) : (
+                ""
+              )}
+            </>
+          )}
+        </div>
       </div>
       <div className="absolute top-5 -translate-y-1/2 right-4 flex items-center gap-2">
         <span className="text-[13px] text-[#A1A1A1]">

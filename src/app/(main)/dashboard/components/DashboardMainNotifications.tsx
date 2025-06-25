@@ -93,7 +93,11 @@ export default function NotificationsPage() {
         router.push(`/dashboard/shortlist`);
       } else if (type === "FAVOURITE_CREATED") {
         router.push(`/dashboard/favourite`);
-      } else if (type === "NEW_PROPOSAL" || type === "PROPOSAL_RESPONSE") {
+      } else if (
+        type === "NEW_PROPOSAL" ||
+        type === "PROPOSAL_RESPONSE" ||
+        type === "PROPOSAL_CANCELLED"
+      ) {
         router.push(`/dashboard/proposal`);
       } else {
         router.push(`/dashboard/notification`);
