@@ -53,6 +53,7 @@ export default function AdminTokenPage() {
   });
   const [updateToken, { isLoading: isUpdating }] = useUpdateTokenMutation();
 
+  /* approve token */
   const handleUpdateTokenType = async () => {
     const updatedData = {
       tokenStatus: "APPROVED",
@@ -105,9 +106,7 @@ export default function AdminTokenPage() {
                 {tokenType}
               </Badge>
             ) : tokenType === "BUNDLE3" ? (
-              <Badge className="bg-blue-500 text-white dark:bg-blue-600">
-                {tokenType}
-              </Badge>
+              <Badge className="bg-[#307FA7] text-white">{tokenType}</Badge>
             ) : (
               <Badge className="bg-red-500 text-white dark:bg-red-600">
                 {tokenType}

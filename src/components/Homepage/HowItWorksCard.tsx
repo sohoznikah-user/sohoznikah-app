@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface HowItWorksCardProps {
   step: string;
@@ -23,13 +24,13 @@ const HowItWorksCard = ({
       <h3 className="text-xl font-bold text-[#3B3B3B] mb-2">{title}</h3>
       <p className="text-md text-[#555] mb-4">{description}</p>
       {links.map((link, idx) => (
-        <a
+        <Link
           key={idx}
           href={link.href}
-          className="text-sm text-[#D17A8A] font-semibold underline mb-2 pt-2 last:mb-0"
+          className="text-sm text-[#D17A8A] font-semibold underline mb-2 pt-2 last:mb-0 cursor-pointer z-20"
         >
           {link.label}
-        </a>
+        </Link>
       ))}
     </div>
     <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-10 md:w-[380px] md:h-[137px] w-[300px] h-[100px]">

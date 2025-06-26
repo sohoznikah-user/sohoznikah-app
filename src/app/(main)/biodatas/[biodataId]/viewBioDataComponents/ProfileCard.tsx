@@ -19,8 +19,9 @@ import {
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { IBiodata } from "@/utils/mapApiToBiodataFormData";
-import { CircleChevronDown, Copy, Heart, Star } from "lucide-react";
+import { Copy, Heart, Star } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -39,7 +40,8 @@ const ProfileCard = ({
   // console.log("biodataId from profile card", biodataId);
   // console.log("myBiodata from profile card", myBiodata);
   // console.log("isAdmin from profile card", isAdmin);
-
+  const router = useRouter();
+  const emailVerified = useAppSelector((state) => state.auth.emailVerified);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
@@ -78,8 +80,21 @@ const ProfileCard = ({
   // console.log("shortlist", shortlist?.success);
 
   const handleFavourite = async (type: "add" | "remove") => {
-    if (!token || !user) {
-      setIsModalOpen("login");
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
+      return;
+    } else if (myBiodataData?.status !== "APPROVED") {
+      toast.error(
+        user?.role === "SUPER_ADMIN"
+          ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
+          : "বায়োডাটা তৈরী এবং এপ্রুভ করা থাকতে হবে"
+      );
+      handleReset();
+      return;
     }
     try {
       const res = await createFavourite({
@@ -87,11 +102,14 @@ const ProfileCard = ({
       }).unwrap();
       if (res?.success) {
         if (res?.statusCode === 201) {
-          toast.success("ফেভারিট লিস্টে যোগ করা হয়েছে");
+          toast.success("পছন্দের তালিকায় যোগ করা হয়েছে");
           setIsFavourite(true);
         } else if (res?.statusCode === 200) {
-          toast.error("ফেভারিট লিস্ট থেকে মুছে ফেলা হয়েছে।");
+          toast.error("পছন্দের তালিকা থেকে মুছে ফেলা হয়েছে।");
           setIsFavourite(false);
+          if (isShortlisted) {
+            setIsShortlisted(false);
+          }
         }
       }
     } catch (error) {
@@ -101,8 +119,21 @@ const ProfileCard = ({
     }
   };
   const handleShortlist = async (type: "add" | "remove") => {
-    if (!token || !user) {
-      setIsModalOpen("login");
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
+      return;
+    } else if (myBiodataData?.status !== "APPROVED") {
+      toast.error(
+        user?.role === "SUPER_ADMIN"
+          ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
+          : "বায়োডাটা তৈরী এবং এপ্রুভ করা থাকতে হবে"
+      );
+      handleReset();
+      return;
     }
     try {
       const res = await createShortlist({
@@ -111,10 +142,11 @@ const ProfileCard = ({
       if (res?.success) {
         if (res?.statusCode === 201) {
           toast.success("চুড়ান্ত তালিকায় যোগ করা হয়েছে");
+          setIsShortlisted(true);
           setIsFavourite(true);
         } else if (res?.statusCode === 200) {
           toast.error("চুড়ান্ত তালিকা থেকে মুছে ফেলা হয়েছে");
-          setIsFavourite(false);
+          setIsShortlisted(false);
         }
       }
     } catch (error) {
@@ -136,8 +168,6 @@ const ProfileCard = ({
 
   const handleReset = () => {
     setIsModalOpen(null);
-    setIsFavourite(false);
-    setIsShortlisted(false);
   };
 
   const status = biodata?.status === "APPROVED" ? "Verified" : "Unverified";
@@ -205,7 +235,7 @@ const ProfileCard = ({
                   onClick={handleCopyUrl}
                 />
                 {/* <Mail className="h-6 w-6" /> */}
-                <CircleChevronDown className="h-6 w-6 text-[#b52d1f]" />
+                {/* <CircleChevronDown className="h-6 w-6 text-[#b52d1f]" /> */}
               </div>
             )}
           </div>
@@ -227,10 +257,14 @@ const ProfileCard = ({
         onConfirm={() => handleFavourite(isFavourite ? "remove" : "add")}
         confirmText={isFavourite ? "মুছে ফেলুন" : "যোগ করন"}
         cancelText="বাতিল"
-        title={`আপনি কি ফেভারিট ${
-          isFavourite ? "লিস্ট থেকে মুছে ফেলতে" : "লিস্টে যোগ করতে"
+        title={`আপনি কি পছন্দের ${
+          isFavourite ? "তালিকা থেকে মুছে ফেলতে" : "তালিকায় যোগ করতে"
         } চান?`}
-        description={`ফেভারিট  ${isFavourite ? "লিস্ট থেকে মুছে ফেলতে মুছে ফেলুন" : "লিস্টে যোগ করতে চাইলে যোগ করুন"} বাটনে ক্লিক করতে হবে।`}
+        description={
+          isFavourite
+            ? "চূড়ান্ত তালিকায় যুক্ত থাকলে সেখান থেকেও মুছে যাবে।"
+            : ""
+        }
       />
 
       {/* Modal for shortlist */}
@@ -244,7 +278,7 @@ const ProfileCard = ({
         title={`আপনি কি চুড়ান্ত  ${
           isShortlisted ? "তালিকা থেকে মুছে ফেলতে" : "তালিকায় যোগ করতে"
         } চান?`}
-        description={`চুড়ান্ত ${isShortlisted ? "তালিকা থেকে মুছে ফেলতে মুছে ফেলুন" : "তালিকায় যোগ করতে যোগ করুন"} বাটনে ক্লিক করতে হবে।`}
+        description={`${isShortlisted ? "" : "একইসাথে পছন্দের তালিকাতেও যুক্ত হবে"}`}
       />
     </>
   );

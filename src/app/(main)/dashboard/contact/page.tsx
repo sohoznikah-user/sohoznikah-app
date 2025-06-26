@@ -1,14 +1,11 @@
 "use client";
 
+import ReusableMobileCard from "@/components/shared/ReusableMobileCard";
 import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
-import { proposalStatusOptions } from "@/lib/consts";
+import Title from "@/components/shared/Title";
 import { useGetAllContactsQuery } from "@/redux/features/admin/contactApi";
-import {
-  getDistrictTitle,
-  getTitleById,
-  getUpazilaTitle,
-} from "@/utils/getBanglaTitle";
+import { getDistrictTitle, getUpazilaTitle } from "@/utils/getBanglaTitle";
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -116,7 +113,7 @@ const ContactPage = () => {
             cell: ({ row }) => (
               <div>
                 <button
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
                       ? setIsModalOpen("private")
@@ -132,10 +129,6 @@ const ContactPage = () => {
             id: "status",
             header: "যোগাযোগ নম্বর দেখুন",
             cell: ({ row }) => {
-              const status = getTitleById(
-                proposalStatusOptions,
-                row?.original?.status
-              );
               return (
                 <div>
                   <button
@@ -159,7 +152,7 @@ const ContactPage = () => {
             cell: ({ row }) => (
               <div>
                 <button
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition cursor-pointer"
+                  className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
                       ? setIsModalOpen("private")
@@ -177,19 +170,9 @@ const ContactPage = () => {
   return (
     <div className="min-h-[500px] lg:p-5 flex justify-center items-center">
       <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
-          যোগাযোগ তথ্যের তালিকা
-        </h1>
-        {/* <div className="flex justify-center mb-6">
-          <input
-            type="text"
-            placeholder=""
-            className="w-full max-w-md p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div> */}
-        <div className="flex justify-center mb-3 px-4">
+        <Title leftTitle="যোগাযোগ তথ্যের তালিকা" hideCenter />
+
+        <div className="flex justify-center mb-0 px-4">
           <button
             onClick={() => setActiveTab("myRecords")}
             className={`px-6 py-2 rounded-lg font-medium transition ${
@@ -210,6 +193,34 @@ const ContactPage = () => {
           >
             আমার যোগাযোগ তথ্য যারা কিনেছে
           </button>
+        </div>
+
+        {/* mobile view */}
+        <div className="flex flex-col gap-4 md:hidden sm:block mt-5">
+          {contactData?.data?.map((item: any) => (
+            <ReusableMobileCard
+              key={item.id}
+              biodataNo={item.bioNo}
+              permanentAddress={`${
+                item.bioPermanentCity
+                  ? getUpazilaTitle(item.bioPermanentCity)
+                  : "-"
+              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
+              date={item.createdAt}
+              visibility={item.bioVisibility}
+              activeTab={activeTab}
+              onView={() => {
+                item.bioVisibility === "PRIVATE"
+                  ? setIsModalOpen("private")
+                  : router.push(`/biodatas/${item.biodataId}`);
+              }}
+              onViewContact={() => {
+                setSelectedData(item);
+                setIsModalOpen("showContacts");
+              }}
+              myResponse={item.status}
+            />
+          ))}
         </div>
 
         <ReusableTable
@@ -234,46 +245,83 @@ const ContactPage = () => {
       >
         <>
           {selectedData?.contacts?.length > 0 ? (
-            <div className="w-full mt-2 mb-2 border border-gray-300 rounded-md bg-white">
-              <div className="grid grid-cols-8 border-b border-gray-200">
-                <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-3">
-                  নাম
-                </div>
-                <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-2">
-                  সম্পর্ক
-                </div>
-                <div className="py-1 px-3 text-center font-semibold text-[#016CA7] col-span-3">
-                  মোবাইল নম্বর
-                </div>
+            <>
+              <div className="flex items-center gap-3 justify-center mb-2  w-full">
+                <p className="text-lg font-semibold text-center">
+                  {selectedData?.fullName}
+                </p>
               </div>
-              {selectedData.contacts?.map((contact: any, idx: number) => (
-                <div
-                  key={idx}
-                  className="grid grid-cols-8 border-b last:border-b-0 border-gray-100"
-                >
-                  <div className="py-2 px-3 text-center text-black col-span-3">
-                    {contact.fullName}
+              <div className="w-full  mt-2 mb-2 border border-gray-300 rounded-md bg-white">
+                <div className="grid grid-cols-5 border-b border-gray-200">
+                  <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-2">
+                    সম্পর্ক
                   </div>
-                  <div className="py-2 px-3 text-center text-black col-span-2">
-                    {contact.relation}
-                  </div>
-                  <div className="py-2 px-3 flex items-center justify-center gap-2 col-span-3 text-center">
-                    <span className="text-black">{contact.phoneNumber}</span>
-                    <button
-                      className="ml-1 p-1 rounded hover:bg-gray-100 cursor-pointer"
-                      onClick={() => {
-                        navigator.clipboard.writeText(contact.phoneNumber);
-                        toast.success("নম্বর কপি করা হয়েছে");
-                      }}
-                      title="Copy"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </button>
+                  <div className="py-1 px-3 text-center font-semibold text-[#016CA7] col-span-3">
+                    মোবাইল নম্বর
                   </div>
                 </div>
-              ))}
-            </div>
+                {selectedData?.contacts?.map((contact: any, idx: number) => (
+                  <div
+                    key={idx}
+                    className="grid grid-cols-5 border-b last:border-b-0 border-gray-100"
+                  >
+                    <div className="py-2 px-3 text-center text-black col-span-2">
+                      {contact.relation}
+                    </div>
+                    <div className="py-2 px-3 flex items-center justify-center gap-2 col-span-3 text-center">
+                      <span className="text-black">{contact.phoneNumber}</span>
+                      <button
+                        className="ml-1 p-1 rounded hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          navigator.clipboard.writeText(contact.phoneNumber);
+                          toast.success("নম্বর কপি করা হয়েছে");
+                        }}
+                        title="Copy"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
+            // <div className="w-full mt-2 mb-2 border border-gray-300 rounded-md bg-white">
+            //   <div className="grid grid-cols-8 border-b border-gray-200">
+            //     <div className="py-1 px-3 text-center font-semibold text-[#016CA7] border-r border-gray-200 col-span-2">
+            //       সম্পর্ক
+            //     </div>
+            //     <div className="py-1 px-3 text-center font-semibold text-[#016CA7] col-span-3">
+            //       মোবাইল নম্বর
+            //     </div>
+            //   </div>
+            //   {selectedData.contacts?.map((contact: any, idx: number) => (
+            //     <div
+            //       key={idx}
+            //       className="grid grid-cols-8 border-b last:border-b-0 border-gray-100"
+            //     >
+            //       <div className="py-2 px-3 text-center text-black col-span-3">
+            //         {contact.fullName}
+            //       </div>
+            //       <div className="py-2 px-3 text-center text-black col-span-2">
+            //         {contact.relation}
+            //       </div>
+            //       <div className="py-2 px-3 flex items-center justify-center gap-2 col-span-3 text-center">
+            //         <span className="text-black">{contact.phoneNumber}</span>
+            //         <button
+            //           className="ml-1 p-1 rounded hover:bg-gray-100 cursor-pointer"
+            //           onClick={() => {
+            //             navigator.clipboard.writeText(contact.phoneNumber);
+            //             toast.success("নম্বর কপি করা হয়েছে");
+            //           }}
+            //           title="Copy"
+            //         >
+            //           <Copy className="w-4 h-4" />
+            //         </button>
+            //       </div>
+            //     </div>
+            //   ))}
+            // </div>
             <div className="flex items-center gap-3 justify-start ">
               <p className="text-lg font-semibold">
                 অপর পক্ষ এখনো রাজি হয়নি। রাজি হলে তারপর আপনি যোগাযোগ নম্বর দেখতে

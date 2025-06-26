@@ -22,7 +22,7 @@ export default async function BiodataEditorPage({
     : null;
 
   return (
-    <main className="flex-grow">
+    <main className="flex-grow min-h-screen bg-[#f1f1f1]">
       <div className="text-[#1f4f69] flex flex-col items-center justify-center mt-4 mb-12">
         <BiodataEditor biodataToEdit={biodataToEdit} />
       </div>

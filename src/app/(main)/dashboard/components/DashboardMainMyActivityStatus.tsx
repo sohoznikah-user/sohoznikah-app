@@ -24,7 +24,7 @@ export default function DashboardMainMyActivityStatus({
         </div>
       </div>
       <div className="flex justify-between">
-        <div>শর্টলিস্টে রেখেছে</div>
+        <div>চূড়ান্ত তালিকায় রেখেছে</div>
         <div className="w-6 text-center">
           {biodataAnalytics?.data?.totalShortlistReceived || 0}
         </div>
@@ -41,12 +41,12 @@ export default function DashboardMainMyActivityStatus({
           {biodataAnalytics?.data?.totalContactReceived || 0}
         </div>
       </div>
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <div>রিপোর্ট এসেছে</div>
         <div className="w-6 text-center">
           {biodataAnalytics?.data?.totalReportReceived || 0}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

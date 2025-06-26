@@ -3,7 +3,10 @@
 import Loading from "@/app/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { useGetBiodataByIdQuery } from "@/redux/features/biodata/biodataApi";
+import {
+  useGetBiodataByIdQuery,
+  useMarkSeenMutation,
+} from "@/redux/features/biodata/biodataApi";
 import { useAppSelector } from "@/redux/hooks";
 import { mapApiToBiodataFormData } from "@/utils/mapApiToBiodataFormData";
 import Link from "next/link";
@@ -13,11 +16,9 @@ import { toast } from "sonner";
 import AddressInfo from "./viewBioDataComponents/AddressInfo";
 import EducationAndOccupationInfo from "./viewBioDataComponents/EducationAndOccupationInfo";
 import FamilyInfo from "./viewBioDataComponents/FamilyInfo";
-import GeneralInfo from "./viewBioDataComponents/GeneralInfo";
 import HeaderSection from "./viewBioDataComponents/HeaderSection";
 import MarriageInfo from "./viewBioDataComponents/MarriageInfo";
 import PersonalInfo from "./viewBioDataComponents/PersonalInfo";
-import PrimaryInfo from "./viewBioDataComponents/PrimaryInfo";
 import ProposalCard from "./viewBioDataComponents/ProposalCard";
 import ReligiousInfo from "./viewBioDataComponents/ReligiousInfo";
 import SpousePreferenceInfo from "./viewBioDataComponents/SpousePreferenceInfo";
@@ -34,19 +35,29 @@ export default function BiodataClient({
   const user = useAppSelector(selectCurrentUser);
   const acesstoken = useAppSelector(selectCurrentUser);
   const router = useRouter();
-  console.log("biodata", biodata);
 
   const {
     data: fetchedBiodata,
     isLoading: isFetchingBiodata,
     isError: isErrorBiodata,
+    isSuccess,
   } = useGetBiodataByIdQuery(biodataId, {
     skip: !biodataId || typeof biodataId !== "string",
   });
 
+  const [markSeen, { isUninitialized }] = useMarkSeenMutation();
+
+  useEffect(() => {
+    if (user && isSuccess && isUninitialized) {
+      markSeen(biodataId)
+        .unwrap()
+        .then(() => console.log("Marked as seen"));
+    }
+  }, [user, isSuccess, isUninitialized, markSeen, biodataId]);
+
   const tabs = [
-    "প্রাথমিক তথ্য",
-    "সাধারণ তথ্য",
+    // "প্রাথমিক তথ্য",
+    // "সাধারণ তথ্য",
     "ঠিকানা",
     "শিক্ষা ও পেশা",
     "পারিবারিক তথ্য",
@@ -56,8 +67,8 @@ export default function BiodataClient({
     "যেমন জীবনসঙ্গী আশা করেন",
   ];
 
-  const primaryInfoRef = useRef<HTMLDivElement>(null);
-  const generalInfoRef = useRef<HTMLDivElement>(null);
+  // const primaryInfoRef = useRef<HTMLDivElement>(null);
+  // const generalInfoRef = useRef<HTMLDivElement>(null);
   const addressRef = useRef<HTMLDivElement>(null);
   const educationRef = useRef<HTMLDivElement>(null);
   const familyRef = useRef<HTMLDivElement>(null);
@@ -67,8 +78,8 @@ export default function BiodataClient({
   const spouseRef = useRef<HTMLDivElement>(null);
 
   const tabRefMap: Record<string, React.RefObject<HTMLDivElement>> = {
-    "প্রাথমিক তথ্য": primaryInfoRef,
-    "সাধারণ তথ্য": generalInfoRef,
+    // "প্রাথমিক তথ্য": primaryInfoRef,
+    // "সাধারণ তথ্য": generalInfoRef,
     ঠিকানা: addressRef,
     "শিক্ষা ও পেশা": educationRef,
     "পারিবারিক তথ্য": familyRef,
@@ -77,21 +88,6 @@ export default function BiodataClient({
     "বিয়ে সংক্রান্ত তথ্য": marriageRef,
     "যেমন জীবনসঙ্গী আশা করেন": spouseRef,
   };
-
-  // Redirect to login if not authenticated
-  //   useEffect(() => {
-  //     if (!myBiodata) {
-  //       return;
-  //     }
-  //     if (myBiodata) {
-  //       if (!user || !acesstoken) {
-  //         const redirectUrl = `/my-biodata`;
-  //         router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
-  //       }
-  //     }
-  //   }, [myBiodata, user, acesstoken, router]);
-
-  // Fetch my biodata when myBiodata is true
 
   // Set biodata based on fetched data
   useEffect(() => {
@@ -172,7 +168,7 @@ export default function BiodataClient({
           </Tabs>
 
           <div className="lg:max-w-5xl w-full lg:mx-auto space-y-6 text-md ">
-            <div ref={primaryInfoRef}>
+            {/* <div ref={primaryInfoRef}>
               <PrimaryInfo
                 biodata={biodata?.biodata}
                 primaryInfoFormData={
@@ -187,7 +183,7 @@ export default function BiodataClient({
                   biodata?.biodataFormData?.generalInfoFormData
                 }
               />
-            </div>
+            </div> */}
             <div ref={addressRef}>
               <AddressInfo
                 biodata={biodata}
@@ -261,6 +257,18 @@ export default function BiodataClient({
             />
           </div>
         )}
+
+        <div className=" flex-col justify-center items-center gap-4 py-12 hidden lg:flex">
+          <h2 className="text-2xl font-semibold text-[#AD0000]">
+            বায়োডাটা পছন্দ হয়েছে?
+          </h2>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className={`rounded-xl py-3 px-4 z-10 w-full text-md font-semibold text-white bg-gradient-to-r to-[#e25a6f] from-[#016ca7] max-w-sm cursor-pointer`}
+          >
+            প্রস্তাব পাঠান বা যোগাযোগ করুন
+          </button>
+        </div>
         {/* <FooterSection
         biodata={biodata}
         biodataFormData={biodata?.biodataFormData}

@@ -166,7 +166,7 @@ export default function PrimaryInfo({
       // const values = form.getValues();
       handleSave();
     } else {
-      toast.error(JSON.stringify(form.formState.errors));
+      toast.error("সকল প্রশ্নের ফিল্ড পূরণ করুন");
       const firstErrorField = Object.keys(
         form.formState.errors
       )[0] as keyof PrimaryInfoFormData;

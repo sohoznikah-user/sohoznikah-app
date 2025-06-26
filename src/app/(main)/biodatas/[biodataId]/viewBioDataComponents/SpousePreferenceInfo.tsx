@@ -5,9 +5,11 @@ import {
   education,
   familyBackgrounds,
   heights,
+  maritalStatuses,
   occupationsList,
   religiousLifestyle,
   skinTones,
+  spouseSpecialCatagories,
 } from "@/lib/consts";
 import { SpousePreferenceInfoFormData } from "@/lib/types";
 import { getTitleById } from "@/utils/getBanglaTitle";
@@ -20,7 +22,7 @@ export default function SpousePreferenceInfo({
   biodata: IBiodata;
   spousePreferenceInfoFormData: SpousePreferenceInfoFormData;
 }) {
-  console.log("spousePreferenceInfoFormData", spousePreferenceInfoFormData);
+  // console.log("spousePreferenceInfoFormData", spousePreferenceInfoFormData);
   return (
     <Card className="border-gray-200 bg-[#fcfcfc] text-black max-w-full min-w-auto mx-auto">
       <>
@@ -89,7 +91,10 @@ export default function SpousePreferenceInfo({
               <div className="flex items-center space-x-2">
                 <div className="w-1/2">বৈবাহিক অবস্থা:</div>
                 <div className="w-1/2 pl-2 border-l border-gray-200">
-                  অবিবাহিত, ডিভোর্সড
+                  {getTitleById(
+                    maritalStatuses,
+                    spousePreferenceInfoFormData?.maritalStatus
+                  )}
                 </div>
               </div>
             )}
@@ -99,7 +104,10 @@ export default function SpousePreferenceInfo({
                   আপনি কোন কোন বিশেষ ক্যাটাগরিতে আগ্রহী?
                 </div>
                 <div className="w-1/2 pl-2 border-l border-gray-200">
-                  ফরেইন সিটিজেন, শর্ট ডিভোর্সড
+                  {getTitleById(
+                    spouseSpecialCatagories,
+                    spousePreferenceInfoFormData?.specialCategory
+                  )}
                 </div>
               </div>
             )}

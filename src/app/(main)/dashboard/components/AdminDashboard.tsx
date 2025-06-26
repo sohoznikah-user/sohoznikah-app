@@ -12,7 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { emailVerificationOptions, userStatusOptions } from "@/lib/consts";
+import {
+  emailVerificationOptions,
+  userStatusFilterOptions,
+  userStatusOptions,
+} from "@/lib/consts";
 import {
   useDeleteUserMutation,
   useGetAllUsersQuery,
@@ -57,6 +61,8 @@ export default function AdminDashboardPage() {
     () => ({
       page: pagination.page,
       limit: pagination.limit,
+      sortBy: "updatedAt",
+      sortOrder: "asc",
       ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
       ...(filters ? filters : {}),
     }),
@@ -147,6 +153,27 @@ export default function AdminDashboardPage() {
     }
   };
 
+  // search
+  const handleSearchChange = (newSearchTerm: string) => {
+    // console.log("New Search Term:", newSearchTerm); // Debug
+    setSearchTerm(newSearchTerm);
+    setPagination((prev) => ({ ...prev, page: 1 }));
+  };
+
+  // filter
+  const handleFilter = (selectedFilter: string) => {
+    if (selectedFilter === "all") {
+      setFilters({});
+    } else {
+      setFilters({ status: selectedFilter });
+    }
+    setPagination((prev) => ({
+      ...prev,
+      limit: 10,
+      page: 1,
+    }));
+  };
+
   // reset
   const handleReset = () => {
     setSelectedData(null);
@@ -195,9 +222,7 @@ export default function AdminDashboardPage() {
         return (
           <div className="truncate max-w-[300px]">
             {emailConfirmed === true ? (
-              <Badge className="bg-blue-500 text-white dark:bg-blue-600">
-                সনাক্ত
-              </Badge>
+              <Badge className="bg-[#307FA7] text-white">সনাক্ত</Badge>
             ) : (
               <Badge variant="destructive">নন সনাক্ত</Badge>
             )}
@@ -273,7 +298,7 @@ export default function AdminDashboardPage() {
       header: "ভিউ বায়োডাটা",
       cell: ({ row }) => (
         <Link href={`/dashboard/biodata/${row.original.biodatas?.id}`}>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer">
+          <button className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 cursor-pointer">
             View
           </button>
         </Link>
@@ -284,7 +309,7 @@ export default function AdminDashboardPage() {
       header: "ইডিট বায়োডাটা",
       cell: ({ row }) => (
         <Link href={`/biodata-editor/${row.original.biodatas?.id}`}>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer">
+          <button className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 cursor-pointer">
             Edit
           </button>
         </Link>
@@ -295,7 +320,7 @@ export default function AdminDashboardPage() {
       header: "টোকেন দিন",
       cell: ({ row }) => (
         <button
-          className="bg-blue-500 text-white px-1 py-1 rounded hover:bg-blue-600 cursor-pointer"
+          className="bg-[#307FA7] text-white px-1 py-1 rounded hover:bg-[#307FA7]/80 cursor-pointer"
           onClick={() => {
             setSelectedId(row.original.id);
             setIsModalOpen("giveToken");
@@ -334,12 +359,23 @@ export default function AdminDashboardPage() {
 
         <ReusableTable
           data={data?.data || []}
+          meta={data?.meta}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
           enablePagination
           searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
+          searchPlaceholder="Search by email"
+          filterPlaceholder="Filter by status"
+          searchable
+          filterable
+          filterOptions={userStatusFilterOptions.map((x) => ({
+            label: x.title,
+            value: x.id,
+          }))}
+          onFilterChange={handleFilter}
+          onSearchChange={handleSearchChange}
+          loading={isLoading}
         />
 
         {/* delete biodata */}

@@ -34,6 +34,7 @@ import { spousePreferenceInfoFormData } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function SpousePreferenceInfo({
   biodataFormData,
@@ -97,6 +98,7 @@ export default function SpousePreferenceInfo({
     if (isValid) {
       handleSave();
     } else {
+      toast.error("সকল প্রশ্নের ফিল্ড পূরণ করুন");
       form.setFocus(
         Object.keys(
           form.formState.errors
@@ -485,7 +487,7 @@ export default function SpousePreferenceInfo({
                 <FormItem>
                   <div className="flex flex-col space-y-2">
                     <FormLabel className="text-md space-y-1 leading-4.5">
-                      মাসনা বা দ্বিতীয় বিবাহে আগ্রহী এমন পাত্রের প্রতি আগ্রহী
+                      মাসনা বা দ্বিতীয় বিবাহে আগ্রহী এমন পাত্রের প্রতি আগ্রহী
                       আছেন?
                     </FormLabel>
                     <FormControl>
@@ -500,7 +502,16 @@ export default function SpousePreferenceInfo({
                             className="w-1/4 flex items-center space-x-2 mb-2"
                           >
                             <RadioGroupItem value={x.id} id={x.id} />
-                            <Label htmlFor={x.id}>{x.title}</Label>
+                            <Label
+                              htmlFor={x.id}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                field.onChange(x.id);
+                              }}
+                              className="cursor-pointer"
+                            >
+                              {x.title}
+                            </Label>
                           </div>
                         ))}
                       </RadioGroup>
@@ -520,7 +531,7 @@ export default function SpousePreferenceInfo({
                 <FormItem>
                   <div className="flex flex-col space-y-2">
                     <FormLabel className="text-md space-y-1 leading-4.5">
-                      আল্লাহ যাদেরকে গাঢ় ত্বক বা কালো বর্ণ দিয়েছেন, এরকম
+                      আল্লাহ যাদেরকে গাঢ় ত্বক বা কালো বর্ণ দিয়েছেন, এরকম
                       পাত্রীর প্রতি আপনি আগ্রহী?
                     </FormLabel>
                     <FormControl>
@@ -535,7 +546,16 @@ export default function SpousePreferenceInfo({
                             className="w-1/4 flex items-center space-x-2 mb-2"
                           >
                             <RadioGroupItem value={x.id} id={x.id} />
-                            <Label htmlFor={x.id}>{x.title}</Label>
+                            <Label
+                              htmlFor={x.id}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                field.onChange(x.id);
+                              }}
+                              className="cursor-pointer"
+                            >
+                              {x.title}
+                            </Label>
                           </div>
                         ))}
                       </RadioGroup>
@@ -568,7 +588,16 @@ export default function SpousePreferenceInfo({
                           className="w-1/4 flex items-center space-x-2 mb-2"
                         >
                           <RadioGroupItem value={x.id} id={x.id} />
-                          <Label htmlFor={x.id}>{x.title}</Label>
+                          <Label
+                            htmlFor={x.id}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              field.onChange(x.id);
+                            }}
+                            className="cursor-pointer"
+                          >
+                            {x.title}
+                          </Label>
                         </div>
                       ))}
                     </RadioGroup>

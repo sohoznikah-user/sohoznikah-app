@@ -11,7 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { biodataStatusOptions, biodataVisibilityOptions } from "@/lib/consts";
+import {
+  biodataStatusFilterOptions,
+  biodataStatusOptions,
+  biodataVisibilityOptions,
+} from "@/lib/consts";
 import {
   useDeleteBiodataMutation,
   useGetBiodatasByAdminQuery,
@@ -29,27 +33,30 @@ export default function AdminBiodataPage() {
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const [selectedData, setSelectedData] = useState<any | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState<any>({});
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     total: 0,
+    sortOrder: "desc",
+    sortBy: "createdAt",
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearch = useDebounced({ searchQuery: searchTerm, delay: 600 });
   const [updatedData, setUpdatedData] = useState<any | null>({
     visibility: null,
     status: null,
   });
 
-  const debouncedSearch = useDebounced({ searchQuery: searchTerm, delay: 600 });
   const [deleteBiodata, { isLoading: isDeleting }] = useDeleteBiodataMutation();
-
   const query = useMemo(
     () => ({
       page: pagination.page,
       limit: pagination.limit,
+      sortBy: pagination.sortBy,
+      sortOrder: pagination.sortOrder,
       ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
-      ...(filters ? filters : {}),
+      ...(filters && Object.keys(filters).length > 0 ? filters : {}),
     }),
     [pagination, debouncedSearch, filters]
   );
@@ -106,6 +113,27 @@ export default function AdminBiodataPage() {
     }
   };
 
+  // search
+  const handleSearchChange = (newSearchTerm: string) => {
+    // console.log("New Search Term:", newSearchTerm); // Debug
+    setSearchTerm(newSearchTerm);
+    setPagination((prev) => ({ ...prev, page: 1 }));
+  };
+
+  // filter
+  const handleFilter = (selectedFilter: string) => {
+    if (selectedFilter === "all") {
+      setFilters({});
+    } else {
+      setFilters({ status: selectedFilter });
+    }
+    setPagination((prev) => ({
+      ...prev,
+      limit: 10,
+      page: 1,
+    }));
+  };
+
   const handleReset = () => {
     setSelectedData(null);
     setSelectedId(null);
@@ -137,9 +165,7 @@ export default function AdminBiodataPage() {
         return (
           <div className="truncate max-w-[300px]">
             {biodataType === "BRIDE" ? (
-              <Badge className="bg-blue-500 text-white dark:bg-blue-600">
-                পাত্রী
-              </Badge>
+              <Badge className="bg-[#307FA7] text-white">পাত্রী</Badge>
             ) : (
               <Badge variant="destructive">পাত্র</Badge>
             )}
@@ -170,9 +196,7 @@ export default function AdminBiodataPage() {
                 {status}
               </Badge>
             ) : status === "UPDATE_REQUESTED" ? (
-              <Badge className="bg-blue-500 text-white dark:bg-blue-600">
-                {status}
-              </Badge>
+              <Badge className="bg-[#307FA7] text-white">{status}</Badge>
             ) : status === "DELETE_REQUESTED" ? (
               <Badge className="bg-red-500 text-white dark:bg-red-600">
                 {status}
@@ -209,8 +233,8 @@ export default function AdminBiodataPage() {
       header: "ইডিট বায়োডাটা",
       cell: ({ row }) => (
         <Link href={`/biodata-editor/${row.original.id}`}>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer">
-            View
+          <button className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7] cursor-pointer">
+            Edit
           </button>
         </Link>
       ),
@@ -220,7 +244,7 @@ export default function AdminBiodataPage() {
       header: "ভিউ বায়োডাটা",
       cell: ({ row }) => (
         <Link href={`/dashboard/biodata/${row.original.id}`}>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer">
+          <button className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7] cursor-pointer">
             View
           </button>
         </Link>
@@ -232,6 +256,11 @@ export default function AdminBiodataPage() {
       header: "Action",
       cell: ({ row }) => (
         <EditDeleteButtons
+          onView={() => {
+            setSelectedId(row.original.id);
+            setSelectedData(row.original);
+            setIsModalOpen("view");
+          }}
           onEdit={() => {
             setSelectedId(row.original.id);
             setSelectedData(row.original);
@@ -258,9 +287,20 @@ export default function AdminBiodataPage() {
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
+          meta={data?.meta}
           enablePagination
           searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
+          searchPlaceholder="Search by code"
+          filterPlaceholder="Filter by status"
+          searchable
+          filterable
+          filterOptions={biodataStatusFilterOptions.map((x) => ({
+            label: x.title,
+            value: x.id,
+          }))}
+          onFilterChange={handleFilter}
+          onSearchChange={handleSearchChange}
+          loading={isLoading}
         />
 
         <DeleteConfirmationModal
@@ -336,6 +376,41 @@ export default function AdminBiodataPage() {
               </div>
             </div>
           </form>
+        </ReusableModal>
+
+        <ReusableModal
+          open={isModalOpen === "view"}
+          onClose={() => handleReset()}
+          onConfirm={() => handleReset()}
+          title="বায়োডাটা ডিলিট ইনফরমেশন"
+          loading={isUpdating}
+          hideCancelButton
+        >
+          <div>
+            <div>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা টাইপ: {selectedData?.biodataType}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা স্ট্যাটাস: {selectedData?.status}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা ডিলিটের কারন: {selectedData?.user?.bioDeleteReason}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বিকাশ নম্বর: {selectedData?.user?.bkashNumber}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                জীবনসঙ্গীর তথ্য: {selectedData?.user?.spouseBiodata}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা ভিজিবিলিটি: {selectedData?.visibility}
+              </p>
+              <p className="text-md font-semibold mb-2 ">
+                বায়োডাটা তারিখ: {selectedData?.createdAt}
+              </p>
+            </div>
+          </div>
         </ReusableModal>
       </div>
     </div>

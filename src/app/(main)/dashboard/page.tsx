@@ -10,7 +10,7 @@ import DashboardRightSection from "./components/DashboardRightSection";
 export default function DashboardPage() {
   const user = useAppSelector(selectCurrentUser);
   return (
-    <div className="relative">
+    <div className="">
       {user?.role === "SUPER_ADMIN" || user?.role === "ADMIN" ? (
         <AdminDashboard />
       ) : (

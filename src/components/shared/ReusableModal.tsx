@@ -71,7 +71,11 @@ export const ReusableModal = ({
           </DialogHeader>
         )}
 
-        {children && <div className="p-2">{children}</div>}
+        {children && (
+          <div className="max-w-[100%] w-full mx-auto lg:px-4 md:px-3 p-2 max-h-[80vh] overflow-y-auto">
+            {children}
+          </div>
+        )}
 
         {!hideFooter && (
           <DialogFooter className="flex justify-center">

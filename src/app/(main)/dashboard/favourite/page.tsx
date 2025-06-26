@@ -261,6 +261,7 @@ const FavouritePage = () => {
               date={item.createdAt}
               isShortlisted={item.isShortlisted}
               visibility={item.bioVisibility}
+              activeTab={activeTab}
               onDelete={() => {
                 setSelectedId(item.id);
                 setIsModalOpen("delete");

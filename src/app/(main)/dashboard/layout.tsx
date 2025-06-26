@@ -21,6 +21,7 @@ import DashboardLeftNav from "./components/DashboardLeftNav";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const user = useAppSelector(selectCurrentUser);
   const token = useAppSelector(selectCurrentToken);
+  const emailVerified = useAppSelector((state) => state.auth.emailVerified);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,6 +33,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
     }
   }, [user, token, router]);
+
+  useEffect(() => {
+    if (!emailVerified) {
+      router.push("/verify-email");
+    }
+  }, [emailVerified, router]);
 
   const {
     data: fetchedBiodata,
@@ -63,7 +70,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <main className="flex justify-stretch flex-grow bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF] h-full">
+    <main
+      className="flex justify-stretch flex-grow bg-gradient-to-r from-[#FFEFF5] to-[#E4F1FF] text-black 
+     h-full"
+    >
       {/* Dashboard Toggle Button - Only visible on mobile */}
       <button
         className="fixed top-5 right-4 z-50 lg:hidden  p-2 rounded-lg cursor-pointer"

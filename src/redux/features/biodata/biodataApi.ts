@@ -31,9 +31,10 @@ export const biodataApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.biodata],
     }),
     getBiodatasByAdmin: build.query({
-      query: () => ({
+      query: (arg: Record<string, any>) => ({
         url: `${BIODATA_URL}/all`,
         method: "GET",
+        params: arg,
       }),
       providesTags: [tagTypes.biodata],
     }),
@@ -58,6 +59,14 @@ export const biodataApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.biodata],
     }),
+    markSeen: build.mutation<void, string>({
+      query: (id) => ({
+        url: `/biodata/${id}/seen`,
+        method: "POST",
+      }),
+      invalidatesTags: [tagTypes.biodata],
+    }),
+
     updateMyBiodata: build.mutation({
       query: (updatedData) => ({
         url: `${BIODATA_URL}/my-biodata`,
@@ -106,6 +115,7 @@ export const {
   useGetBiodataByIdQuery,
   useGetBiodataByIdByAdminQuery,
   useGetMyBiodataQuery,
+  useMarkSeenMutation,
   useUpdateMyBiodataMutation,
   useUpdateBiodataStatusMutation,
   useUpdateBiodataMutation,

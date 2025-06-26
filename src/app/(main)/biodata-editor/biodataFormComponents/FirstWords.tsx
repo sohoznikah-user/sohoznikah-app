@@ -72,7 +72,7 @@ export default function FirstWords({
     if (isValid) {
       handleSave();
     } else {
-      toast.error(JSON.stringify(form.formState.errors));
+      toast.error("সকল প্রশ্নের ফিল্ড পূরণ করুন");
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof FirstWordsFormData
       );

@@ -34,7 +34,7 @@ export default function UserBiodataPage() {
 
     const deleteData = {
       id: biodata?.id,
-      deleteReason: bioDeleteReason,
+      bioDeleteReason: bioDeleteReason,
       bkashNumber: bkashNumber,
       spouseBiodata: spouseBiodata,
     };
@@ -87,7 +87,27 @@ export default function UserBiodataPage() {
   };
 
   return (
-    <div className=" w-full flex flex-col space-y-2 rounded-xl lg:p-5 mb-20">
+    <div
+      className=" w-full flex flex-col space-y-2 rounded-xl lg:p-5 mb-20
+    
+    relative"
+    >
+      <div
+        className={`absolute lg:top-5 md:top-2 top-0 lg:left-5 md:left-4 left-0 px-4 py-2 rounded-lg text-center ${
+          biodata?.status === "APPROVED"
+            ? "bg-[#17BA82] text-white"
+            : biodata?.status === "PENDING"
+              ? "bg-[#FFD255] text-black"
+              : "bg-[#D75656] text-white"
+        }`}
+      >
+        {biodata?.status === "APPROVED"
+          ? "Approved"
+          : biodata?.status === "PENDING"
+            ? "Pending"
+            : "Unapproved"}
+      </div>
+
       <div className="text-[#005381] text-center text-2xl font-semibold">
         বায়োডাটা
       </div>
@@ -97,7 +117,7 @@ export default function UserBiodataPage() {
       <div className="flex flex-col md:flex-col lg:flex-row gap-5 text-black mt-4 ">
         {/* Biodata Status */}
         <div className="flex flex-col md:flex-row lg:flex-row justify-between items-center  gap-4 bg-[#F5F4FC] p-4 rounded-2xl w-full md:w-2/3 lg:w-1/2 mx-auto flex-wrap">
-          <div className="flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl min-w-60 w-full">
+          <div className="flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl min-w-60 w-full ">
             <div className="text-lg">বায়োডাটা স্ট্যাটাস</div>
             <div className="flex">
               <div
@@ -125,13 +145,13 @@ export default function UserBiodataPage() {
           <div className="w-full flex flex-col items-center bg-[#e7ecf6] p-6 space-y-6 rounded-xl min-w-60">
             <div className="text-lg">বায়োডাটা সম্পূর্ণতা</div>
             <Slider
-              value={[70]}
+              value={[Number(biodata?.biodataCompleted || 0)]}
               min={0}
               max={100}
               step={1}
               className="w-full"
             />
-            <div>৭০%</div>
+            <div>{biodata?.biodataCompleted || 0}%</div>
           </div>
         </div>
 
@@ -165,12 +185,12 @@ export default function UserBiodataPage() {
       <ReusableModal
         open={isModalOpen === "delete"}
         onClose={() => setIsModalOpen(null)}
-        // title="বায়োডাটা ডিলিট করা হবে"
+        title="No Title"
         // description="আপনি কি বায়োডাটা ডিলিট করতে চান?"
         onConfirm={() => console.log("delete")}
         hideFooter
       >
-        <div className="flex flex-col items-center justify-center w-full p-4">
+        <div className="flex flex-col items-center justify-center">
           <div className="text-xl font-semibold mb-2 text-center">
             বায়োডাটা ডিলিট করুন
           </div>

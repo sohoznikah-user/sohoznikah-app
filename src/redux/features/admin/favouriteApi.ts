@@ -12,7 +12,11 @@ export const favouriteApi = baseApi.injectEndpoints({
         method: "POST",
         data: favouriteData,
       }),
-      invalidatesTags: [tagTypes.favourite],
+      invalidatesTags: [
+        tagTypes.favourite,
+        tagTypes.shortlist,
+        tagTypes.biodata,
+      ],
     }),
     getAllFavourites: build.query({
       query: (arg: Record<string, any>) => ({

@@ -38,10 +38,10 @@ export interface BiodatasPageCardProps {
   maritalStatus: string;
   biodataType: string;
   isFavourite: boolean;
+  isSeen: boolean;
 }
 
 export default function BioCard(biodata: BiodatasPageCardProps) {
-  console.log("biodata from card", biodata);
   const {
     id,
     code,
@@ -53,12 +53,15 @@ export default function BioCard(biodata: BiodatasPageCardProps) {
     maritalStatus,
     permanentAddress,
     isFavourite,
+    isSeen,
   } = biodata;
 
   const router = useRouter();
   const token = useAppSelector(selectCurrentToken);
   const user = useAppSelector(selectCurrentUser);
+  const emailVerified = useAppSelector((state) => state.auth.emailVerified);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
+  const myBiodataData = useAppSelector((state) => state.biodata.biodata);
 
   const [createFavourite, { isLoading }] = useCreateFavouriteMutation();
 
@@ -71,7 +74,20 @@ export default function BioCard(biodata: BiodatasPageCardProps) {
   };
 
   const handleFavourite = async (type: "add" | "remove") => {
-    if (!token || !user) {
+    if (!user || !token) {
+      const redirectUrl = `/biodatas`;
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+    } else if (!emailVerified) {
+      router.push("/verify-email");
+      toast.error("আপনার ইমেইলটি ভেরিফাই করুন।");
+      return;
+    } else if (myBiodataData?.status !== "APPROVED") {
+      toast.error(
+        user?.role === "SUPER_ADMIN"
+          ? "আপনি সুপার অ্যাডমিন। আপনার এখানে এক্সেস নেই।"
+          : "বায়োডাটা তৈরী এবং এপ্রুভ করা থাকতে হবে"
+      );
+      handleReset();
       return;
     }
     const favouriteData = {
@@ -127,7 +143,9 @@ export default function BioCard(biodata: BiodatasPageCardProps) {
             </div>
             <div className="w-1/3 flex flex-col items-end space-y-2">
               <Badge className="text-[#00b754]">Verified</Badge>
-              {/* <Badge className="text-[#016ca7]">Seen</Badge> */}
+              {token && user && isSeen && (
+                <Badge className="text-[#00b754]">Seen</Badge>
+              )}
             </div>
           </div>
 

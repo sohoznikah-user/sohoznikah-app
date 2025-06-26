@@ -66,7 +66,8 @@ export default function NotificationsPage() {
     }
   };
 
-  const handleViewNotification = async (id: any) => {
+  const handleViewNotification = async (id: any, type: string) => {
+    console.log(id, type);
     if (!id) return;
     try {
       const res = await viewData({ id, updatedData: {} }).unwrap();
@@ -75,6 +76,32 @@ export default function NotificationsPage() {
       }
     } catch (error) {
       toast.error("নোটিফিকেশন পড়া হয়নি");
+    } finally {
+      if (
+        type === "TOKEN_CREATED" ||
+        type === "TOKEN_APPROVED" ||
+        type === "TOKEN_GIVEN"
+      ) {
+        router.push(`/dashboard/token`);
+      } else if (
+        type === "NEW_BIODATA" ||
+        type === "UPDATE_BIODATA" ||
+        type === "APPROVED_BIODATA"
+      ) {
+        router.push(`/dashboard/biodata`);
+      } else if (type === "SHORTLIST_CREATED") {
+        router.push(`/dashboard/shortlist`);
+      } else if (type === "FAVOURITE_CREATED") {
+        router.push(`/dashboard/favourite`);
+      } else if (
+        type === "NEW_PROPOSAL" ||
+        type === "PROPOSAL_RESPONSE" ||
+        type === "PROPOSAL_CANCELLED"
+      ) {
+        router.push(`/dashboard/proposal`);
+      } else {
+        router.push(`/dashboard/notification`);
+      }
     }
   };
 
@@ -125,7 +152,7 @@ export default function NotificationsPage() {
       header: "তারিখ",
       cell: ({ row }) => {
         return (
-          <div className="w-28">
+          <div className=" text-center">
             {format(new Date(row.original.createdAt), "dd MMM yyyy")}
           </div>
         );
@@ -136,23 +163,10 @@ export default function NotificationsPage() {
       header: "বিস্তারিত",
       cell: ({ row }) => (
         <button
-          className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 cursor-pointer"
+          className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
-            handleViewNotification(row?.original?.id);
-            (row.original.type === "TOKEN_CREATED" ||
-              row.original.type === "TOKEN_APPROVED") &&
-              router.push(`/dashboard/token`);
-            (row.original.type === "NEW_BIODATA" ||
-              row.original.type === "UPDATE_BIODATA") &&
-              router.push(`/dashboard/biodata`);
-            row.original.type === "SHORTLIST_CREATED" &&
-              router.push(`/dashboard/shortlist`);
-            row.original.type === "FAVOURITE_CREATED" &&
-              router.push(`/dashboard/favourite`);
-            (row.original.type === "NEW_PROPOSAL" ||
-              row.original.type === "PROPOSAL_RESPONSE") &&
-              router.push(`/dashboard/proposal`);
+            handleViewNotification(row?.original?.id, row?.original?.type);
           }}
         >
           View
@@ -178,27 +192,29 @@ export default function NotificationsPage() {
       <div className="w-full max-w-6xl md:bg-[#F5F4FC]  rounded-lg  md:shadow-lg py-6 lg:pt-10 md:pt-8 pt-5 ">
         <DashboardTitle title="নোটিফিকেশন" />
 
-        <div className="flex flex-col gap-4 md:hidden sm:block">
-          {data?.data?.map((item: any) => (
-            <NotificationCard
-              key={item.id}
-              title={item.type}
-              message={item.message}
-              date={item.createdAt}
-              type={item.type}
-              isRead={item.isRead}
-              onDelete={() => {
-                setSelectedId(item.id);
-                setIsModalOpen("delete");
-              }}
-              onView={() => {
-                handleViewNotification(item.id);
-                setSelectedData(item);
-                setIsModalOpen("view");
-              }}
-            />
-          ))}
-        </div>
+        {user && user?.role === "USER" && (
+          <div className="flex flex-col gap-4 md:hidden sm:block">
+            {data?.data?.map((item: any) => (
+              <NotificationCard
+                key={item.id}
+                title={item.type}
+                message={item.message}
+                date={item.createdAt}
+                type={item.type}
+                isRead={item.isRead}
+                onDelete={() => {
+                  setSelectedId(item.id);
+                  setIsModalOpen("delete");
+                }}
+                onView={() => {
+                  handleViewNotification(item.id, item.type);
+                  setSelectedData(item);
+                  setIsModalOpen("view");
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         <ReusableTable
           data={data?.data}
