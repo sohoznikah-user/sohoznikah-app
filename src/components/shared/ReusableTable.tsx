@@ -43,6 +43,7 @@ interface ReusableTableProps<T> {
   pagination?: Meta;
   setPagination?: React.Dispatch<React.SetStateAction<Meta>>;
   enablePagination?: boolean;
+  enableMobileView?: boolean;
   searchPlaceholder?: string;
   filterPlaceholder?: string;
   caption?: string;
@@ -63,6 +64,7 @@ export function ReusableTable<T>({
   pagination = { page: 1, limit: 10, total: 0 },
   setPagination,
   enablePagination = false,
+  enableMobileView = false,
   searchable = false,
   searchPlaceholder = "Search...",
   caption,
@@ -216,7 +218,9 @@ export function ReusableTable<T>({
         </div>
 
         {/* Cards for mobile */}
-        {(user?.role === "SUPER_ADMIN" || user?.role === "ADMIN") && (
+        {(user?.role === "SUPER_ADMIN" ||
+          user?.role === "ADMIN" ||
+          enableMobileView) && (
           <div className="block sm:hidden">
             {table.getRowModel()?.rows?.length ? (
               table.getRowModel().rows.map((row) => (

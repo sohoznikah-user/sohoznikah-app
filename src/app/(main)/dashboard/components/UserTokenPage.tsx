@@ -197,7 +197,7 @@ const UserTokenPage = () => {
   ];
 
   return (
-    <div className="min-h-[500px]  flex flex-col justify-center items-center py-6 lg:pt-10 md:pt-8 pt-5 pb-20">
+    <div className="min-h-[500px]  flex flex-col justify-center items-center py-6 lg:pt-10 md:pt-8 pt-5 text-blackpb-20">
       {activeTab === "buy" && (
         <>
           <div className="w-full max-w-4xl mx-auto mb-10 flex md:flex-row flex-col justify-center items-stretch gap-6">
@@ -309,15 +309,18 @@ const UserTokenPage = () => {
                     onValueChange={(val) => setCustomQuantity(Number(val))}
                     value={String(customQuantity)}
                   >
-                    <SelectTrigger className="h-10 w-20 bg-white border border-gray-300 rounded-lg text-center">
-                      <SelectValue placeholder="১" className="text-center" />
+                    <SelectTrigger className="h-10 w-20 bg-white border border-gray-300 rounded-lg text-center text-black">
+                      <SelectValue
+                        placeholder="১"
+                        className="text-center text-black"
+                      />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border border-gray-200 rounded-lg">
+                    <SelectContent className="bg-white border border-gray-200 rounded-lg text-black">
                       {tokenOptions.map((opt) => (
                         <SelectItem
                           key={opt.id}
                           value={String(opt.id)}
-                          className="p-2 text-gray-700 hover:bg-gray-100"
+                          className="p-2  text-black"
                         >
                           {opt.title}
                         </SelectItem>
@@ -446,6 +449,7 @@ const UserTokenPage = () => {
             pagination={pagination}
             setPagination={setPagination}
             enablePagination
+            enableMobileView
           />
         </div>
       )}
@@ -561,7 +565,7 @@ const UserTokenPage = () => {
                 type="text"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="w-[55%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-[55%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 text-black focus:ring-blue-500"
               />
             </div>
 
@@ -574,7 +578,7 @@ const UserTokenPage = () => {
                 value={transactionId}
                 onChange={(e) => setTransactionId(e.target.value)}
                 placeholder="TrxID"
-                className="w-[70%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-[70%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
               />
             </div>
 

@@ -423,7 +423,10 @@ export default function PrimaryInfo({
 
             <div className="space-y-2">
               {fields.map((field, index) => (
-                <div className="flex space-x-2 items-center" key={field.id}>
+                <div
+                  className="flex flex-wrap space-x-2 space-y-2 items-center md:flex-nowrap"
+                  key={field.id}
+                >
                   <FormField
                     control={form.control}
                     name={`guardianContacts.${index}.relation`}
@@ -432,7 +435,7 @@ export default function PrimaryInfo({
                         <FormControl>
                           <Input
                             {...field}
-                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                            className="md:p-6 p-5 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                             placeholder="সম্পর্ক (যেমন: বাবা, মা)"
                           />
                         </FormControl>
@@ -448,7 +451,7 @@ export default function PrimaryInfo({
                         <FormControl>
                           <Input
                             {...field}
-                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                            className="md:p-6 p-5 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                             placeholder="অভিভাবকের নাম"
                           />
                         </FormControl>
@@ -465,7 +468,7 @@ export default function PrimaryInfo({
                           <Input
                             {...field}
                             type="tel"
-                            className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
+                            className="md:p-6 p-5 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                             placeholder="অভিভাবকের মোবাইল নম্বর"
                           />
                         </FormControl>

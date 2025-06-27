@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { citizenshipOptions, locations, locationTypes } from "@/lib/consts";
 import { districtsAndUpazilas } from "@/lib/districtsAndUpazilas";
 import {
@@ -149,7 +150,7 @@ export default function AddressInfo({
     if (isValid) {
       handleSave();
     } else {
-      toast.error("সকল প্রশ্নের ফিল্ড পূরণ করুন");
+      toast.error("সকল প্রশ্নের ফিল্ড পূরণ করুন");
       form.setFocus(
         Object.keys(form.formState.errors)[0] as keyof AddressInfoFormData
       );
@@ -515,13 +516,14 @@ export default function AddressInfo({
                 <div className="flex flex-col space-y-2">
                   <div className="flex items-center space-x-2">
                     <FormControl>
-                      <Input
+                      <Textarea
                         {...field}
                         value={field.value || ""}
-                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
-                        type="text"
+                        className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white text-wrap"
                         placeholder="(ছোটবেলা থেকে এখন পর্যন্ত কোথায় কোথায় থাকা হয়েছে তার সংক্ষিপ্ত বিবরণ দিন)"
                         onBlur={handleGrownUpDetailBlur}
+                        rows={2}
+                        maxLength={1000}
                       />
                     </FormControl>
                   </div>

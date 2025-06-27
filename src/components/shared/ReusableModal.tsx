@@ -85,7 +85,7 @@ export const ReusableModal = ({
                   <Button
                     variant="outline"
                     onClick={onClose}
-                    className="text-white border-gray-300 text-md"
+                    className="bg-gray-700 hover:bg-gray-900 text-white hover:text-white border-gray-300 text-md"
                   >
                     {cancelText}
                   </Button>

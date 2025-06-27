@@ -142,9 +142,9 @@ export default function BioCard(biodata: BiodatasPageCardProps) {
               />
             </div>
             <div className="w-1/3 flex flex-col items-end space-y-2">
-              <Badge className="text-[#00b754]">Verified</Badge>
+              {/* <Badge className="text-[#00b754]">Verified</Badge> */}
               {token && user && isSeen && (
-                <Badge className="text-[#00b754]">Seen</Badge>
+                <Badge className="text-[#00b754] bg-white">Seen</Badge>
               )}
             </div>
           </div>

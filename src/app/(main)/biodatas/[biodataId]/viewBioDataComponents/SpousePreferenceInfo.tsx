@@ -9,6 +9,8 @@ import {
   occupationsList,
   religiousLifestyle,
   skinTones,
+  spouseLocationOptions,
+  spouseReligiousEducation,
   spouseSpecialCatagories,
 } from "@/lib/consts";
 import { SpousePreferenceInfoFormData } from "@/lib/types";
@@ -71,11 +73,14 @@ export default function SpousePreferenceInfo({
                 </div>
               </div>
             )}
-            {spousePreferenceInfoFormData?.qualities && (
+            {spousePreferenceInfoFormData?.religiousEducationalQualification && (
               <div className="flex items-center space-x-2">
-                <div className="w-1/2">বিশেষ শিক্ষাগত যোগ্যতা:</div>
+                <div className="w-1/2">দ্বীনি শিক্ষাগত যোগ্যতা:</div>
                 <div className="w-1/2 pl-2 border-l border-gray-200 ">
-                  {spousePreferenceInfoFormData?.qualities}
+                  {getTitleById(
+                    spouseReligiousEducation,
+                    spousePreferenceInfoFormData?.religiousEducationalQualification
+                  )}
                 </div>
               </div>
             )}
@@ -169,22 +174,31 @@ export default function SpousePreferenceInfo({
               দেখা যেতে পারে
             </div>
           </div> */}
-            <div className="flex items-center space-x-2">
-              <div className="w-1/2">
-                জীবনসঙ্গী নির্বাচনে শহর নাকি গ্রাম, কোনটিকে প্রাধান্য দিবেন?
+
+            {spousePreferenceInfoFormData?.location && (
+              <div className="flex items-center space-x-2">
+                <div className="w-1/2">
+                  জীবনসঙ্গী নির্বাচনে শহর নাকি গ্রাম, কোনটিকে প্রাধান্য দিবেন?
+                </div>
+                <div className="w-1/2 pl-2 border-l border-gray-200">
+                  {getTitleById(
+                    spouseLocationOptions,
+                    spousePreferenceInfoFormData?.location
+                  )}
+                </div>
               </div>
-              <div className="w-1/2 pl-2 border-l border-gray-200">
-                {spousePreferenceInfoFormData?.address}
+            )}
+
+            {spousePreferenceInfoFormData?.qualities && (
+              <div className="flex items-center space-x-2">
+                <div className="w-1/2">
+                  জীবনসঙ্গীর যে বৈশিষ্ট্য বা গুণাবলী আশা করেন:
+                </div>
+                <div className="w-1/2 pl-2 border-l border-gray-200">
+                  {spousePreferenceInfoFormData?.qualities}
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-1/2">
-                {spousePreferenceInfoFormData?.qualities}
-              </div>
-              <div className="w-1/2 pl-2 border-l border-gray-200">
-                {spousePreferenceInfoFormData?.qualities}
-              </div>
-            </div>
+            )}
           </CardContent>
         )}
       </>

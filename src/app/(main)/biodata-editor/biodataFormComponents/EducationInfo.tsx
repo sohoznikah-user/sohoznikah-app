@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { degreeTypes, educationTypes, religiousEducation } from "@/lib/consts";
 import {
   BiodataFormData,
@@ -430,10 +431,11 @@ export default function EducationInfo({
                     খালি রাখুন।
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <Textarea
                       {...field}
                       className="p-6 bg-[#f6f6f6] border-none shadow-none rounded-xl text-[#005889] selection:bg-[#E25A6F] selection:text-white"
                       placeholder="শিক্ষা সম্পর্কিত অতিরিক্ত তথ্য"
+                      rows={2}
                     />
                   </FormControl>
                 </div>

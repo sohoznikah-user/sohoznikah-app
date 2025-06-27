@@ -56,7 +56,7 @@ export default function AdminTokenPage() {
   /* approve token */
   const handleUpdateTokenType = async () => {
     const updatedData = {
-      tokenStatus: "APPROVED",
+      tokenStatus: tokenType,
       userId: selectedData?.userId,
     };
     try {
