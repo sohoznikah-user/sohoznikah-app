@@ -58,6 +58,16 @@ export function Footer() {
           <div>
             &copy; {new Date().getFullYear()} সহজনিকাহ. All Rights Reserved.
           </div>
+          <div>
+            কারিগরি সহায়তায় -{" "}
+            <a
+              href="https://mobassher.vercel.app"
+              target="_blank"
+              className="hover:underline text-semibold text-"
+            >
+              মোঃ মোবাশ্বের হোসেন
+            </a>
+          </div>
         </div>
         <div className="min-w-72 flex flex-col space-y-4">
           <div className="underline text-xl">যোগাযোগ</div>

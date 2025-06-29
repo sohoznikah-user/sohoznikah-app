@@ -9,6 +9,8 @@ import {
   useDeleteShortlistMutation,
   useGetAllShortlistsQuery,
 } from "@/redux/features/admin/shortlistApi";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { getDistrictTitle, getUpazilaTitle } from "@/utils/getBanglaTitle";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
@@ -26,7 +28,7 @@ const ShortlistPage = () => {
     total: 0,
   });
   const router = useRouter();
-
+  const user = useAppSelector(selectCurrentUser);
   const { data: shortlistData, isLoading } = useGetAllShortlistsQuery({
     page: pagination.page,
     limit: pagination.limit,
@@ -159,32 +161,34 @@ const ShortlistPage = () => {
         <DashboardTitle title="চুড়ান্ত তালিকা" />
 
         {/* mobile view */}
-        <div className="flex flex-col gap-4 md:hidden sm:block">
-          {shortlistData?.data?.map((item: any) => (
-            <ReusableMobileCard
-              key={item.id}
-              biodataNo={item.bioNo}
-              permanentAddress={`${
-                item.bioPermanentCity
-                  ? getUpazilaTitle(item.bioPermanentCity)
-                  : "-"
-              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
-              date={item.createdAt}
-              isShortlisted={item.isShortlisted}
-              visibility={item.bioVisibility}
-              activeTab={"myRecords"}
-              onDelete={() => {
-                setSelectedId(item.id);
-                setIsModalOpen("delete");
-              }}
-              onView={() => {
-                item.bioVisibility === "PRIVATE"
-                  ? setIsModalOpen("private")
-                  : router.push(`/biodatas/${item.biodataId}`);
-              }}
-            />
-          ))}
-        </div>
+        {user?.role === "USER" && (
+          <div className="flex flex-col gap-4 md:hidden sm:block">
+            {shortlistData?.data?.map((item: any) => (
+              <ReusableMobileCard
+                key={item.id}
+                biodataNo={item.bioNo}
+                permanentAddress={`${
+                  item.bioPermanentCity
+                    ? getUpazilaTitle(item.bioPermanentCity)
+                    : "-"
+                }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
+                date={item.createdAt}
+                isShortlisted={item.isShortlisted}
+                visibility={item.bioVisibility}
+                activeTab={"myRecords"}
+                onDelete={() => {
+                  setSelectedId(item.id);
+                  setIsModalOpen("delete");
+                }}
+                onView={() => {
+                  item.bioVisibility === "PRIVATE"
+                    ? setIsModalOpen("private")
+                    : router.push(`/biodatas/${item.biodataId}`);
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         {/* desktop & tablet view */}
         <ReusableTable

@@ -8,6 +8,8 @@ import {
   useCancelProposalMutation,
   useGetAllProposalsQuery,
 } from "@/redux/features/admin/proposalApi";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { getDistrictTitle, getUpazilaTitle } from "@/utils/getBanglaTitle";
 import { getTimeDifference } from "@/utils/getTimeDifference";
 import { ColumnDef } from "@tanstack/react-table";
@@ -26,6 +28,7 @@ const ProposalPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
+  const user = useAppSelector(selectCurrentUser);
   const router = useRouter();
 
   const type = activeTab === "myRecords" ? "received" : "sent";
@@ -92,7 +95,7 @@ const ProposalPage = () => {
         <div>
           {row?.original?.bioNo}{" "}
           {row?.original.bioVisibility === "PRIVATE" && (
-            <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-sm">
+            <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs">
               প্রাইভেট
             </span>
           )}
@@ -179,7 +182,9 @@ const ProposalPage = () => {
                   className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
-                      ? setIsModalOpen("private")
+                      ? router.push(
+                          `/biodatas/private/${row?.original?.biodataId}`
+                        )
                       : router.push(`/biodatas/${row?.original?.biodataId}`);
                   }}
                 >
@@ -228,7 +233,9 @@ const ProposalPage = () => {
                   className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
-                      ? setIsModalOpen("private")
+                      ? router.push(
+                          `/biodatas/private/${row?.original?.biodataId}`
+                        )
                       : router.push(`/biodatas/${row?.original?.biodataId}`);
                   }}
                 >
@@ -312,35 +319,37 @@ const ProposalPage = () => {
         </p>
 
         {/* mobile view */}
-        <div className="flex flex-col gap-4 md:hidden sm:block">
-          {proposalData?.data?.map((item: any) => (
-            <ReusableMobileCard
-              key={item.id}
-              biodataNo={item.bioNo}
-              permanentAddress={`${
-                item.bioPermanentCity
-                  ? getUpazilaTitle(item.bioPermanentCity)
-                  : "-"
-              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
-              date={item.createdAt}
-              visibility={item.bioVisibility}
-              activeTab={activeTab}
-              onView={() => {
-                item.bioVisibility === "PRIVATE"
-                  ? setIsModalOpen("private")
-                  : router.push(`/biodatas/${item.biodataId}`);
-              }}
-              onCancel={() => {
-                setSelectedId(item.id);
-                setIsModalOpen("cancel");
-              }}
-              myResponse={item.status}
-              otherResponse={item.status}
-              isCancelled={item.isCancelled}
-              expiredAt={item.expiredAt}
-            />
-          ))}
-        </div>
+        {user?.role === "USER" && (
+          <div className="flex flex-col gap-4 md:hidden sm:block">
+            {proposalData?.data?.map((item: any) => (
+              <ReusableMobileCard
+                key={item.id}
+                biodataNo={item.bioNo}
+                permanentAddress={`${
+                  item.bioPermanentCity
+                    ? getUpazilaTitle(item.bioPermanentCity)
+                    : "-"
+                }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
+                date={item.createdAt}
+                visibility={item.bioVisibility}
+                activeTab={activeTab}
+                onView={() => {
+                  item.bioVisibility === "PRIVATE"
+                    ? router.push(`/biodatas/private/${item.biodataId}`)
+                    : router.push(`/biodatas/${item.biodataId}`);
+                }}
+                onCancel={() => {
+                  setSelectedId(item.id);
+                  setIsModalOpen("cancel");
+                }}
+                myResponse={item.status}
+                otherResponse={item.status}
+                isCancelled={item.isCancelled}
+                expiredAt={item.expiredAt}
+              />
+            ))}
+          </div>
+        )}
 
         <ReusableTable
           data={proposalData?.data || []}

@@ -1,6 +1,6 @@
 // File: src/app/(main)/biodatas/[id]/page.tsx
 
-import BiodataClient from "@/app/(main)/biodatas/[biodataId]/BiodataClient";
+import PrivateBiodataClient from "./PrivateBiodataClient";
 
 export default async function BiodataPage({
   params,
@@ -13,6 +13,6 @@ export default async function BiodataPage({
   if (!biodataId || typeof biodataId !== "string") {
     return <div>Invalid Biodata ID</div>;
   } else {
-    return <BiodataClient biodataId={biodataId} />;
+    return <PrivateBiodataClient biodataId={biodataId} />;
   }
 }

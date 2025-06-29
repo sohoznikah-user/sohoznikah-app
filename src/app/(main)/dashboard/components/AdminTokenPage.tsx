@@ -214,6 +214,7 @@ export default function AdminTokenPage() {
           enablePagination
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
+          enableMobileView
         />
 
         <ReusableModal

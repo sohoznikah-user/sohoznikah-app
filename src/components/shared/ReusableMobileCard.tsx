@@ -50,10 +50,10 @@ const ReusableMobileCard: React.FC<ReusableMobileCardProps> = ({
     >
       <div className={` flex flex-col justify-between gap-1`}>
         {biodataNo && (
-          <p className="text-md relative font-semibold pb-0.5">
+          <p className="text-md font-semibold pb-0.5 flex items-center">
             <span className="text-[#005381]">বায়োডাটা নং:</span> {biodataNo}
             {visibility === "PRIVATE" && (
-              <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-sm absolute top-0 right-0">
+              <span className="bg-yellow-200 text-yellow-800 px-1 py-0.5 rounded text-xs ml-2">
                 প্রাইভেট
               </span>
             )}

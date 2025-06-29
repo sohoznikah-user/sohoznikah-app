@@ -5,6 +5,8 @@ import { ReusableModal } from "@/components/shared/ReusableModal";
 import { ReusableTable } from "@/components/shared/ReusableTable";
 import Title from "@/components/shared/Title";
 import { useGetAllContactsQuery } from "@/redux/features/admin/contactApi";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { getDistrictTitle, getUpazilaTitle } from "@/utils/getBanglaTitle";
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy } from "lucide-react";
@@ -24,6 +26,7 @@ const ContactPage = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedData, setSelectedData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
+  const user = useAppSelector(selectCurrentUser);
   const router = useRouter();
 
   const type = activeTab === "myRecords" ? "sent" : "received";
@@ -116,7 +119,9 @@ const ContactPage = () => {
                   className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
-                      ? setIsModalOpen("private")
+                      ? router.push(
+                          `/biodatas/private/${row?.original?.biodataId}`
+                        )
                       : router.push(`/biodatas/${row?.original?.biodataId}`);
                   }}
                 >
@@ -155,7 +160,9 @@ const ContactPage = () => {
                   className="bg-[#307FA7] text-white px-4 py-1 rounded hover:bg-[#307FA7]/80 transition cursor-pointer"
                   onClick={() => {
                     row?.original.bioVisibility === "PRIVATE"
-                      ? setIsModalOpen("private")
+                      ? router.push(
+                          `/biodatas/private/${row?.original?.biodataId}`
+                        )
                       : router.push(`/biodatas/${row?.original?.biodataId}`);
                   }}
                 >
@@ -196,32 +203,34 @@ const ContactPage = () => {
         </div>
 
         {/* mobile view */}
-        <div className="flex flex-col gap-4 md:hidden sm:block mt-5">
-          {contactData?.data?.map((item: any) => (
-            <ReusableMobileCard
-              key={item.id}
-              biodataNo={item.bioNo}
-              permanentAddress={`${
-                item.bioPermanentCity
-                  ? getUpazilaTitle(item.bioPermanentCity)
-                  : "-"
-              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
-              date={item.createdAt}
-              visibility={item.bioVisibility}
-              activeTab={activeTab}
-              onView={() => {
-                item.bioVisibility === "PRIVATE"
-                  ? setIsModalOpen("private")
-                  : router.push(`/biodatas/${item.biodataId}`);
-              }}
-              onViewContact={() => {
-                setSelectedData(item);
-                setIsModalOpen("showContacts");
-              }}
-              myResponse={item.status}
-            />
-          ))}
-        </div>
+        {user?.role === "USER" && (
+          <div className="flex flex-col gap-4 md:hidden sm:block mt-5">
+            {contactData?.data?.map((item: any) => (
+              <ReusableMobileCard
+                key={item.id}
+                biodataNo={item.bioNo}
+                permanentAddress={`${
+                  item.bioPermanentCity
+                    ? getUpazilaTitle(item.bioPermanentCity)
+                    : "-"
+                }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
+                date={item.createdAt}
+                visibility={item.bioVisibility}
+                activeTab={activeTab}
+                onView={() => {
+                  item.bioVisibility === "PRIVATE"
+                    ? router.push(`/biodatas/private/${item.biodataId}`)
+                    : router.push(`/biodatas/${item.biodataId}`);
+                }}
+                onViewContact={() => {
+                  setSelectedData(item);
+                  setIsModalOpen("showContacts");
+                }}
+                myResponse={item.status}
+              />
+            ))}
+          </div>
+        )}
 
         <ReusableTable
           data={contactData?.data || []}

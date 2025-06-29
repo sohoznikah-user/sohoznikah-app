@@ -12,6 +12,8 @@ import {
   useGetAllFavouritesQuery,
 } from "@/redux/features/admin/favouriteApi";
 import { useCreateShortlistMutation } from "@/redux/features/admin/shortlistApi";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { getDistrictTitle, getUpazilaTitle } from "@/utils/getBanglaTitle";
 import { ColumnDef } from "@tanstack/react-table";
 import { CircleCheck } from "lucide-react";
@@ -30,6 +32,7 @@ const FavouritePage = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<string | null>(null);
   const router = useRouter();
+  const user = useAppSelector(selectCurrentUser);
   // Determine the type based on the active tab
   const type = activeTab === "myRecords" ? "sent" : "received";
 
@@ -248,40 +251,42 @@ const FavouritePage = () => {
         </div>
 
         {/* mobile view */}
-        <div className="flex flex-col gap-4 md:hidden sm:block">
-          {data?.data?.map((item: any) => (
-            <ReusableMobileCard
-              key={item.id}
-              biodataNo={item.bioNo}
-              permanentAddress={`${
-                item.bioPermanentCity
-                  ? getUpazilaTitle(item.bioPermanentCity)
-                  : "-"
-              }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
-              date={item.createdAt}
-              isShortlisted={item.isShortlisted}
-              visibility={item.bioVisibility}
-              activeTab={activeTab}
-              onDelete={() => {
-                setSelectedId(item.id);
-                setIsModalOpen("delete");
-              }}
-              onShortlist={() => {
-                if (item.isShortlisted) {
-                  toast.error("এই বায়োডাটাটি চুড়ান্ত তালিকায় রয়েছে");
-                  return;
-                }
-                setSelectedId(item.biodataId);
-                setIsModalOpen("shortlist");
-              }}
-              onView={() => {
-                item.bioVisibility === "PRIVATE"
-                  ? setIsModalOpen("private")
-                  : router.push(`/biodatas/${item.biodataId}`);
-              }}
-            />
-          ))}
-        </div>
+        {user?.role === "USER" && (
+          <div className="flex flex-col gap-4 md:hidden sm:block">
+            {data?.data?.map((item: any) => (
+              <ReusableMobileCard
+                key={item.id}
+                biodataNo={item.bioNo}
+                permanentAddress={`${
+                  item.bioPermanentCity
+                    ? getUpazilaTitle(item.bioPermanentCity)
+                    : "-"
+                }, ${item.bioPermanentState ? getDistrictTitle(item.bioPermanentState) : "-"} `}
+                date={item.createdAt}
+                isShortlisted={item.isShortlisted}
+                visibility={item.bioVisibility}
+                activeTab={activeTab}
+                onDelete={() => {
+                  setSelectedId(item.id);
+                  setIsModalOpen("delete");
+                }}
+                onShortlist={() => {
+                  if (item.isShortlisted) {
+                    toast.error("এই বায়োডাটাটি চুড়ান্ত তালিকায় রয়েছে");
+                    return;
+                  }
+                  setSelectedId(item.biodataId);
+                  setIsModalOpen("shortlist");
+                }}
+                onView={() => {
+                  item.bioVisibility === "PRIVATE"
+                    ? setIsModalOpen("private")
+                    : router.push(`/biodatas/${item.biodataId}`);
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         {/* desktop & tablet view */}
         <ReusableTable
